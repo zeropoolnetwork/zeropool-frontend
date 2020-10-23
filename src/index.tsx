@@ -10,7 +10,7 @@ import './index.css';
 
 import { store, history, persistedStore } from 'shared/state';
 
-import { WellcomePageComponent } from 'wellcome/containers/wellcome-page/wellcome-page.component';
+import { WellcomePageComponent } from 'wellcome/containers/WellcomePage/WellcomePage';
 
 ReactDOM.render(
   <React.StrictMode>
