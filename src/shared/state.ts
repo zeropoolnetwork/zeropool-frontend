@@ -24,7 +24,6 @@ const composeEnhancers = devToolsCompose || compose;
 //#endregion
 
 //#region Setup Epics
-
 const epicMiddleware = createEpicMiddleware();
 
 const rootEpic = combineEpics(
@@ -33,8 +32,6 @@ const rootEpic = combineEpics(
   // alertsEpics,
   // notificationsEpics,
 );
-
-epicMiddleware.run(rootEpic);
 //#endregion 
 
 //#region Setup Reducers
@@ -49,18 +46,18 @@ export const createRootReducer = (history: History) =>
     wellcomePage: wellcomePageReducer,
     // walletPage: walletPageReducer,
     router: connectRouter(history),
-    shared: combineReducers({
-      // alerts: alertsReducer,
-      // notifications: notificationsReducer,
-      // menuBar: menuBarReducer,
-    })
+    // shared: combineReducers({
+    //   // alerts: alertsReducer,
+    //   // notifications: notificationsReducer,
+    //   // menuBar: menuBarReducer,
+    // })
   });
 //#endregion
 
 //#region Setup Persisted Store
 const persistConfig: PersistConfig<RootState> = {
   key: 'root',
-  version: 1,
+  version: 0,
   storage,
   migrate: createMigrate(stateMigrations, { debug: false }),
   whitelist: ['wellcomePage'],
@@ -78,3 +75,5 @@ export const store = createStore(
 
 export const persistedStore = persistStore(store);
 //#endregion
+
+epicMiddleware.run(rootEpic);
