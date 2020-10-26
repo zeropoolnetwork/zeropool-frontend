@@ -1,5 +1,5 @@
 {
-  "// Example:": "npx generate-react-cli component Hello --path src/wellcome/components",
+  "// Example:": "npx generate-react-cli component Hello --path src/welcome/components",
   "usesTypeScript": true,
   "usesCssModule": false,
   "cssPreprocessor": "scss",

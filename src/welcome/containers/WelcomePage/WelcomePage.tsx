@@ -4,18 +4,18 @@ import * as React from 'react';
 import { push } from 'connected-react-router';
 import { cn } from '@bem-react/classname';
 
-import './WellcomePage.scss';
+import './WelcomePage.scss';
 import logo from 'assets/images/guy-fawkes-thanks.png';
 
-import { StepOne } from 'wellcome/components/StepOne/StepOne';
-import { StepTwo } from 'wellcome/components/StepTwo/StepTwo';
-import { StepFour } from 'wellcome/components/StepFour/StepFour';
-import { StepThree } from 'wellcome/components/StepThree/StepThree';
-import { ImportAccount } from 'wellcome/components/ImportAccount/ImportAccount';
+import { StepOne } from 'welcome/components/StepOne/StepOne';
+import { StepTwo } from 'welcome/components/StepTwo/StepTwo';
+import { StepFour } from 'welcome/components/StepFour/StepFour';
+import { StepThree } from 'welcome/components/StepThree/StepThree';
+import { ImportAccount } from 'welcome/components/ImportAccount/ImportAccount';
 
-const css = cn('WellcomePage');
+const css = cn('WelcomePage');
 
-export const WellcomePage = () => {
+export const WelcomePage = () => {
   let match = useRouteMatch();
   const dispatch = useDispatch();
 
@@ -24,10 +24,10 @@ export const WellcomePage = () => {
       <header className={css('Header')}>
         <img src={logo} className={css('Logo')} alt="logo" />
         <h1 className={css('Greeting')}>
-          Wellcome to ZeroPool
+          Welcome to ZeroPool
         </h1>
         <p className={css('Description')}>
-          Please create account or import existing one using secret phrase
+          Please create an account or import an existing one using a secret phrase
         </p>
       </header>
 

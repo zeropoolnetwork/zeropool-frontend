@@ -1,18 +1,18 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import { WellcomePage } from './WellcomePage';
+import { WelcomePage } from './WelcomePage';
 
-describe('Wellcome Page', () => {
+describe('Welcome Page', () => {
   it('renders greetengs', () => {
 
-    const { getByText } = render(<WellcomePage />);
-    const linkElement = getByText(/Wellcome to ZeroPool/i);
+    const { getByText } = render(<WelcomePage />);
+    const linkElement = getByText(/Welcome to ZeroPool/i);
     expect(linkElement).toBeInTheDocument();
   })
 
   it('should render description', () => {
-    const { getByText } = render(<WellcomePage />);
+    const { getByText } = render(<WelcomePage />);
     const linkElement = getByText(/Please/i);
     expect(linkElement).toBeInTheDocument();
   });

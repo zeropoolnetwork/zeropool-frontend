@@ -17,8 +17,8 @@ export const StepTwo: React.FC<StepTwoProps> = () => {
       <h1> StepTwo </h1>
 
       <p>
-        By clicking you confirming that this secret phrase
-        is stored on paper or using other method.
+        By continuing, you confirm that you have stored the secret phrase
+        on paper or using another safe method.
       </p>
 
       <button

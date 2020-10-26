@@ -6,8 +6,8 @@ import { combineEpics, createEpicMiddleware } from 'redux-observable';
 import { persistStore, persistReducer, createMigrate } from 'redux-persist';
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 
-import { wellcomePageReducer } from 'wellcome/state/wellcome-page.reducers';
-import { wellcomePageEpics } from 'wellcome/state/wellcome-page.epics';
+import { welcomePageReducer } from 'welcome/state/welcome-page.reducers';
+import { welcomePageEpics } from 'welcome/state/welcome-page.epics';
 
 import { stateMigrations } from 'shared/state-migrations';
 
@@ -27,7 +27,7 @@ const composeEnhancers = devToolsCompose || compose;
 const epicMiddleware = createEpicMiddleware();
 
 const rootEpic = combineEpics(
-  wellcomePageEpics,
+  welcomePageEpics,
   // walletPageEpics,
   // alertsEpics,
   // notificationsEpics,
@@ -43,7 +43,7 @@ export const history = createBrowserHistory();
 
 export const createRootReducer = (history: History) =>
   combineReducers({
-    wellcomePage: wellcomePageReducer,
+    welcomePage: welcomePageReducer,
     // walletPage: walletPageReducer,
     router: connectRouter(history),
     // shared: combineReducers({
@@ -60,7 +60,7 @@ const persistConfig: PersistConfig<RootState> = {
   version: 0,
   storage,
   migrate: createMigrate(stateMigrations, { debug: false }),
-  whitelist: ['wellcomePage'],
+  whitelist: ['welcomePage'],
 };
 
 const persistedReducer = persistReducer(
