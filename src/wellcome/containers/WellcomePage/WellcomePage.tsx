@@ -1,64 +1,66 @@
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as React from 'react';
+import { Button } from '@material-ui/core';
 import { push } from 'connected-react-router';
 import { cn } from '@bem-react/classname';
 
 import './WellcomePage.scss';
 import logo from 'assets/images/guy-fawkes-thanks.png';
 
-import { StepOne } from 'wellcome/components/StepOne/StepOne';
-import { StepTwo } from 'wellcome/components/StepTwo/StepTwo';
-import { StepFour } from 'wellcome/components/StepFour/StepFour';
-import { StepThree } from 'wellcome/components/StepThree/StepThree';
-import { ImportAccount } from 'wellcome/components/ImportAccount/ImportAccount';
+import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
 
-const css = cn('WellcomePage');
+export const componentId = 'WellcomePage';
+
+const css = cn(componentId);
+const test = testIdBuilder(componentId);
 
 export const WellcomePage = () => {
-  let match = useRouteMatch();
   const dispatch = useDispatch();
 
   return (
-    <div className={css()}>
-      <header className={css('Header')}>
-        <img src={logo} className={css('Logo')} alt="logo" />
-        <h1 className={css('Greeting')}>
+    <div className={css()} data-testid={test()}>
+      <header className={css('Header')} data-testid={test('Header')}>
+        <img src={logo} className={css('Logo')} data-testid={test('Logo')} alt="logo" />
+
+        <h1 className={css('Greeting')} data-testid={test('Greeting')} >
           Wellcome to ZeroPool
         </h1>
-        <p className={css('Description')}>
+
+        <p className={css('Description')} data-testid={test('Description')}>
           Please create account or import existing one using secret phrase
         </p>
       </header>
 
-      <ul>
-        <li>
-          <button
-            className={css('ActionButton')}
-            onClick={() => dispatch(push('/create-account-step1'))}
-          >
-            Create
-          </button>
-        </li>
+      <Button
+        variant="contained"
+        color="primary"
+        className={css('Button')}
+        data-testid={test('CreateButton')}
+        onClick={() => dispatch(push('/create-account-step1'))}
+        disableElevation
+      >
+        Create
+      </Button>
 
-        <li>
-          <button
-            className={css('ActionButton')}
-            onClick={() => dispatch(push('/import-account'))}
-          >
-            Import
-          </button>
-        </li>
+      <Button
+        variant="outlined"
+        color="primary"
+        className={css('Button')}
+        data-testid={test('ImportButton')}
+        onClick={() => dispatch(push('/import-account'))}
+      >
+        Import
+      </Button>
 
-        <li>
-          <button
-            className={css('ActionButton')}
-            onClick={() => dispatch(push('/about'))}
-          >
-            About
-          </button>
-        </li>
-      </ul>
+      <Button
+        variant="outlined"
+        color="primary"
+        className={css('Button')}
+        data-testid={test('AboutButton')}
+        onClick={() => dispatch(push('/about'))}
+      >
+        About
+      </Button>
     </div>
   );
 }

@@ -5,7 +5,12 @@ import { useDispatch } from 'react-redux';
 
 import './StepFour.scss';
 
-const css = cn('StepFour');
+import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
+
+export const componentId = 'StepFour';
+
+const css = cn(componentId);
+const test = testIdBuilder(componentId);
 
 interface StepFourProps { }
 
@@ -13,7 +18,7 @@ export const StepFour: React.FC<StepFourProps> = () => {
   const dispatch = useDispatch();
 
   return (
-    <div className={css()} data-testid="StepFour">
+    <div className={css()} data-testid={test()}>
       <h1> StepFour </h1>
 
       <p>

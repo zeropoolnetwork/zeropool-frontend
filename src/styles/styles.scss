@@ -1,0 +1,13 @@
+@import "~fontsource-exo-2/index.css";
+@import './colors';
+@import './sizes';
+@import './mixins';
+
+html body {
+  color: $text-color;
+  font-family: "Exo 2", "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+h1 { 
+  font-size: 40px;
+}
