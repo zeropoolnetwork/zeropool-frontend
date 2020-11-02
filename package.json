@@ -7,7 +7,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
-    "test:coverage": "react-scripts test --env=jest-environment-jsdom-sixteen --coverage",
+    "test:coverage": "react-scripts test --env=jest-environment-jsdom-sixteen --coverage --watch=false",
+    "test:coverage:watch": "react-scripts test --env=jest-environment-jsdom-sixteen --coverage",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
@@ -28,6 +29,7 @@
     "redux": "^4.0.5",
     "redux-observable": "^1.2.0",
     "redux-persist": "^6.0.0",
+    "reselect": "^4.0.0",
     "typesafe-actions": "^5.1.0",
     "typescript": "~3.7.2"
   },

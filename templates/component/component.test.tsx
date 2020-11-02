@@ -1,13 +1,21 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { cleanup, render } from '@testing-library/react';
 
-import { TemplateName } from './TemplateName';
+import { TemplateName, componentId, TemplateNameProps } from './TemplateName';
 
 describe('TemplateName', () => {
-  it('renders greetengs', () => {
+  let outputSpy: jest.Mock;
+  let component: React.ReactElement<TemplateNameProps>;
+  afterEach(cleanup);
 
-    const { getByText } = render(<TemplateName />);
-    const linkElement = getByText(/TemplateName/i);
-    expect(linkElement).toBeInTheDocument();
+  beforeEach(() => {
+    outputSpy = jest.fn();
+    component = <TemplateName />;
+  });
+
+  it('should render component', () => {
+    const { getByTestId } = render(component);
+
+    expect(getByTestId(componentId)).toBeInTheDocument();
   })
 });

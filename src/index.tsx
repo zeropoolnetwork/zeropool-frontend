@@ -2,23 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { Router, Route } from 'react-router-dom';
+import { Router, Route, Redirect } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
 import { ConnectedRouter } from 'connected-react-router';
 import { Container, ThemeProvider } from '@material-ui/core';
 
 import './index.css';
 
-import { store, history, persistedStore } from 'shared/state';
+import { store, history, persistedStore } from 'state';
 
-import { ImportAccount } from 'wellcome/components/ImportAccount/ImportAccount';
-import { WellcomePage } from 'wellcome/containers/WellcomePage/WellcomePage';
+import { CreateAccountPage } from 'register/containers/CreateAccount/CreateAccountPage';
 import { WalletPage } from 'wallet/containers/WalletPage/WalletPage';
 import { AboutPage } from 'about/components/AboutPage/AboutPage';
-import { StepThree } from 'wellcome/components/StepThree/StepThree';
-import { StepFour } from 'wellcome/components/StepFour/StepFour';
-import { StepOne } from 'wellcome/components/StepOne/StepOne';
-import { StepTwo } from 'wellcome/components/StepTwo/StepTwo';
 import { theme } from 'theme';
 
 ReactDOM.render(
@@ -29,14 +24,10 @@ ReactDOM.render(
           <PersistGate persistor={persistedStore}>
             <ConnectedRouter history={history}>
               <Router history={history}>
-                <Route path="/" exact component={WellcomePage} />
+                <Route path="/" exact component={CreateAccountPage} />
+                <Route path="/about" exact component={AboutPage} />
                 <Route path="/wallet" exact component={WalletPage} />
-                <Route path={"/create-account-step1"} exact component={StepOne} />
-                <Route path={"/create-account-step2"} exact component={StepTwo} />
-                <Route path={"/create-account-step3"} exact component={StepThree} />
-                <Route path={"/create-account-step4"} exact component={StepFour} />
-                <Route path={"/import-account"} exact component={ImportAccount} />
-                <Route path={"/about"} exact component={AboutPage} />
+                <Route path="/zeropool" exact ><Redirect to="/" /></Route>
               </Router>
             </ConnectedRouter>
           </PersistGate>

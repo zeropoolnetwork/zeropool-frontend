@@ -1,0 +1,31 @@
+@import '../../../styles/styles.scss';
+
+.Wellcome {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  padding: 0 2rem;
+  
+  // need to owerwrite 'MuiButton-root' class
+  &-Button.MuiButton-root {
+    margin-bottom: $margin-bottom-normal;
+    max-width: 400px;
+    min-width: 200px;
+    width: 50vw;
+  }
+
+  &-Header {
+    margin-bottom: $margin-bottom-normal;
+    text-align: center;
+  }
+
+  &-Logo {
+    width: 50vw;
+    max-width: 300px;
+    position: relative;
+    left: -15px;
+  }
+
+}
