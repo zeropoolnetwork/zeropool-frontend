@@ -1,3 +1,45 @@
+@import '../../../styles/styles.scss';
+
 .StepHeader {
   display: flex;
+  flex-wrap: wrap;
+  background-color: $navigation-panel-background-color;
+
+  &-Button, &-Text {
+    flex: 1;
+  }
+
+  &-Button.MuiButton-root {
+    color: $navigation-panel-text-color;
+    font-size: 35px;
+    max-width: 50px;
+    z-index: 1;
+
+    &:hover {
+      background-color: initial;
+      color: white;
+      // cursor: pointer;
+    }
+  }
+
+  &-Icon.MuiSvgIcon-root {
+    font-size: 35px;
+  }
+
+  &-Text {
+    color: $navigation-panel-text-color;
+    left: -5vw;
+    position: relative;
+    text-align: center;
+    z-index: 0;
+  }
+
+  &-Progress.MuiMobileStepper-root {
+    flex: 0 0 100%; /* flex-grow, flex-shrink, flex-basis */
+    padding: 0;
+
+    .MuiLinearProgress-root {
+      width: 100%;
+    }
+  }
 }

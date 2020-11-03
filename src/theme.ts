@@ -19,5 +19,11 @@ export const theme = createMuiTheme({
         fontFamily: '"Exo 2", "Roboto", "Helvetica", "Arial", sans-serif',
       },
     },
+
+    MuiLinearProgress: {
+      colorPrimary: {
+        backgroundColor: '#eee',
+      }
+    }
   },
 });

@@ -1,5 +1,4 @@
 import { RegisterStage } from "../models/register-stage";
-import { getShowSteps } from "../register.selectors";
 
 interface registerStageStateSlice {
   stage: RegisterStage | undefined;

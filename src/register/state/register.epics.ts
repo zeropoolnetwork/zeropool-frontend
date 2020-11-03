@@ -11,7 +11,7 @@ import { RootState } from "state";
 
 type Actions = ActionType<typeof registerActions>;
 
-const test1$: Epic = (
+const finishImportAccount$: Epic = (
   action$: Observable<Actions>,
   state$: Observable<RootState>,
 ) =>
@@ -23,7 +23,7 @@ const test1$: Epic = (
     ignoreElements(),
   );
 
-const test2$: Epic = (
+const finishRegister$: Epic = (
   action$: Observable<Actions>,
   state$: Observable<RootState>,
 ) =>
@@ -32,9 +32,10 @@ const test2$: Epic = (
     tap(payload => {
       console.log(payload);
     }),
+    ignoreElements(),
   );
 
 export const registerEpics: Epic = combineEpics(
-  test1$,
-  test2$,
+  finishImportAccount$,
+  finishRegister$,
 )

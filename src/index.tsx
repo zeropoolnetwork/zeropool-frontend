@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { Router, Route, Redirect } from 'react-router-dom';
-import * as serviceWorker from './serviceWorker';
+import { ThemeProvider } from '@material-ui/core';
 import { ConnectedRouter } from 'connected-react-router';
-import { Container, ThemeProvider } from '@material-ui/core';
+import { Router, Route, Redirect } from 'react-router-dom';
 
 import './index.css';
+import * as serviceWorker from './serviceWorker';
 
 import { store, history, persistedStore } from 'state';
 
@@ -17,24 +17,22 @@ import { AboutPage } from 'about/components/AboutPage/AboutPage';
 import { theme } from 'theme';
 
 ReactDOM.render(
-  <Container>
-    <ThemeProvider theme={theme}>
-      <React.StrictMode>
-        <Provider store={store}>
-          <PersistGate persistor={persistedStore}>
-            <ConnectedRouter history={history}>
-              <Router history={history}>
-                <Route path="/" exact component={CreateAccountPage} />
-                <Route path="/about" exact component={AboutPage} />
-                <Route path="/wallet" exact component={WalletPage} />
-                <Route path="/zeropool" exact ><Redirect to="/" /></Route>
-              </Router>
-            </ConnectedRouter>
-          </PersistGate>
-        </Provider>
-      </React.StrictMode>
-    </ThemeProvider>
-  </Container>,
+  <ThemeProvider theme={theme}>
+    <React.StrictMode>
+      <Provider store={store}>
+        <PersistGate persistor={persistedStore}>
+          <ConnectedRouter history={history}>
+            <Router history={history}>
+              <Route path="/" exact component={CreateAccountPage} />
+              <Route path="/about" exact component={AboutPage} />
+              <Route path="/wallet" exact component={WalletPage} />
+              <Route path="/zeropool" exact ><Redirect to="/" /></Route>
+            </Router>
+          </ConnectedRouter>
+        </PersistGate>
+      </Provider>
+    </React.StrictMode>
+  </ThemeProvider>,
   document.getElementById('root')
 );
 

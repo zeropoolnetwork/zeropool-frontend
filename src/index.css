@@ -17,5 +17,13 @@ section {
   align-items: center;
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin: 0 40px 20px;
+}
+
+section h1 {
+  text-align: center;
+}
+
+.hidden {
+  display: none;
 }

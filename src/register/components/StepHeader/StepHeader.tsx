@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from '@bem-react/classname';
-import { Button, MobileStepper } from '@material-ui/core';
+import { ArrowBack } from '@material-ui/icons';
+import { Button, MobileStepper, Tooltip } from '@material-ui/core';
 
 import './StepHeader.scss';
 
@@ -18,26 +19,32 @@ export interface StepHeaderProps {
 }
 
 export const StepHeader: React.FC<StepHeaderProps> = ({ step, total, onBack }) => {
-  const backButton =
-    <Button
-      className={css('Button')}
-      data-testid={test('BackButton')}
-      onClick={onBack}
-    >back</Button>
 
   return (
     <div className={css()} data-testid={test()}>
-      <span className={css('Text')} data-testid={test('Text')}>
+      <Tooltip title="Step back" placement="top-end">
+        <Button
+          className={css('Button')}
+          data-testid={test('BackButton')}
+          onClick={onBack}
+          disableRipple
+        >
+          <ArrowBack className={css('Icon')} />
+        </Button>
+      </Tooltip>
+
+      <p className={css('Text')} data-testid={test('Text')}>
         Step {step} of {total}
-      </span>
+      </p>
 
       <MobileStepper
+        className={css('Progress')}
         variant="progress"
-        steps={total}
+        steps={total + 1}
         position="static"
-        activeStep={step}
-        backButton={backButton}
-        nextButton={<span></span>}
+        activeStep={step - 1}
+        backButton={<span className="hidden">back</span>}
+        nextButton={<span className="hidden">next</span>}
       />
     </div>
   )

@@ -51,7 +51,7 @@ export const Wellcome: React.FC<WellcomeProps> = ({ onCreate, onImport, onAbout 
         data-testid={test('ImportButton')}
         onClick={onImport}
       >
-        Import existed account
+        Import existed
       </Button>
 
       <Button
