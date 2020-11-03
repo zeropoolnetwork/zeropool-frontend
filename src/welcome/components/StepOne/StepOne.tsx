@@ -17,8 +17,8 @@ export const StepOne: React.FC<StepOneProps> = () => {
       <h1> StepOne </h1>
 
       <p>
-        Secret phrase should consist of 12 words. Store it carefully.
-        If you loose it, than you will loose access to all your
+        Your secret phrase consists of 12 words. Store it carefully.
+        If you loose it, you will loose access to all of your
         associated wallets!
       </p>
 
@@ -33,7 +33,7 @@ export const StepOne: React.FC<StepOneProps> = () => {
         className={css('ActionButton')}
         onClick={() => dispatch(push('/create-account-step2'))}
       >
-        Generate secret phrase
+        Generate a secret phrase
       </button>
     </div>
   )

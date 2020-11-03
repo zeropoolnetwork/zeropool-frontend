@@ -10,14 +10,14 @@ import './index.css';
 
 import { store, history, persistedStore } from 'shared/state';
 
-import { ImportAccount } from 'wellcome/components/ImportAccount/ImportAccount';
-import { WellcomePage } from 'wellcome/containers/WellcomePage/WellcomePage';
+import { ImportAccount } from 'welcome/components/ImportAccount/ImportAccount';
+import { WelcomePage } from 'welcome/containers/WelcomePage/WelcomePage';
 import { WalletPage } from 'wallet/containers/WalletPage/WalletPage';
 import { AboutPage } from 'about/components/AboutPage/AboutPage';
-import { StepThree } from 'wellcome/components/StepThree/StepThree';
-import { StepFour } from 'wellcome/components/StepFour/StepFour';
-import { StepOne } from 'wellcome/components/StepOne/StepOne';
-import { StepTwo } from 'wellcome/components/StepTwo/StepTwo';
+import { StepThree } from 'welcome/components/StepThree/StepThree';
+import { StepFour } from 'welcome/components/StepFour/StepFour';
+import { StepOne } from 'welcome/components/StepOne/StepOne';
+import { StepTwo } from 'welcome/components/StepTwo/StepTwo';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -25,7 +25,7 @@ ReactDOM.render(
       <PersistGate persistor={persistedStore}>
         <ConnectedRouter history={history}>
           <Router history={history}>
-            <Route path="/" exact component={WellcomePage} />
+            <Route path="/" exact component={WelcomePage} />
             <Route path="/wallet" exact component={WalletPage} />
             <Route path={"/create-account-step1"} exact component={StepOne} />
             <Route path={"/create-account-step2"} exact component={StepTwo} />

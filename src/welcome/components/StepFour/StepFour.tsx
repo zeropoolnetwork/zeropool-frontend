@@ -17,7 +17,7 @@ export const StepFour: React.FC<StepFourProps> = () => {
       <h1> StepFour </h1>
 
       <p>
-        Final step. Please generate password to be used
+        Finally, please choose a password to be used
         to export your account secret in the future.
       </p>
 

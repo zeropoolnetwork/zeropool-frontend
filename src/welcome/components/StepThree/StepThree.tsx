@@ -18,7 +18,7 @@ export const StepThree: React.FC<StepThreeProps> = () => {
 
       <p>
         Please confirm your secret phrase.
-        We want to be sure that you saved id correctly.
+        We want to be sure that you saved it correctly.
       </p>
 
       <button
