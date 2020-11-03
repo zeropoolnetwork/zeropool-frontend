@@ -20,12 +20,14 @@ export const StepTwo: React.FC<StepTwoProps> = ({ seed, onSubmit }) => {
 
   return (
     <div className={css()} data-testid="StepTwo">
-      <h1> {seed} </h1>
+      <section>
+        <h1> {seed} </h1>
 
-      <p>
-        By clicking you confirming that this secret phrase
-        is stored on paper or using other method.
-      </p>
+        <p>
+          By clicking you confirming that this secret phrase
+          is stored on paper or using other method.
+        </p>
+      </section>
 
       <Button
         color="primary"

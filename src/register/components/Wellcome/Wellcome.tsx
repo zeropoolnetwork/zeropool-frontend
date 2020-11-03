@@ -21,7 +21,7 @@ export const Wellcome: React.FC<WellcomeProps> = ({ onCreate, onImport, onAbout 
 
   return (
     <div className={css()} data-testid={test()}>
-      <header className={css('Header')} data-testid={test('Header')}>
+      <section>
         <img src={guy} className={css('Logo')} data-testid={test('Logo')} alt="logo" />
 
         <h1 className={css('Greeting')} data-testid={test('Greeting')} >
@@ -31,7 +31,7 @@ export const Wellcome: React.FC<WellcomeProps> = ({ onCreate, onImport, onAbout 
         <p className={css('Description')} data-testid={test('Description')}>
           Please create account or import existing one using secret phrase
         </p>
-      </header>
+      </section>
 
       <Button
         color="primary"

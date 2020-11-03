@@ -16,9 +16,8 @@
     width: 50vw;
   }
 
-  &-Header {
-    margin-bottom: $margin-bottom-normal;
-    text-align: center;
+  &-Greeting {
+    margin-bottom: 10px;
   }
 
   &-Logo {
@@ -27,5 +26,4 @@
     position: relative;
     left: -15px;
   }
-
 }

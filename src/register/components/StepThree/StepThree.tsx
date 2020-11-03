@@ -19,12 +19,14 @@ export const StepThree: React.FC<StepThreeProps> = ({ seed, onConfirm }) => {
 
   return (
     <div className={css()} data-testid="StepThree">
-      <h1> {seed} </h1>
+      <section>
+        <h1> {seed} </h1>
 
-      <p>
-        Please confirm your secret phrase.
-        We want to be sure that you saved id correctly.
-      </p>
+        <p>
+          Please confirm your secret phrase.
+          We want to be sure that you saved id correctly.
+        </p>
+      </section>
 
       <Button
         color="primary"

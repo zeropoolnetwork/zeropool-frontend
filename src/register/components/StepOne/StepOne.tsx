@@ -19,13 +19,15 @@ export const StepOne: React.FC<StepOneProps> = ({ onGenerate }) => {
 
   return (
     <div className={css()} data-testid={test()}>
-      <h1> StepOne </h1>
+      <section>
+        <h1> StepOne </h1>
 
-      <p>
-        Secret phrase should consist of 12 words. Store it carefully.
-        If you loose it, than you will loose access to all your
-        associated wallets!
-      </p>
+        <p>
+          Secret phrase should consist of 12 words. Store it carefully.
+          If you loose it, than you will loose access to all your
+          associated wallets!
+       </p>
+      </section>
 
       <Button
         color="primary"

@@ -11,22 +11,22 @@ export const componentId = 'StepHeader';
 const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
-interface StepHeaderProps {
+export interface StepHeaderProps {
   step: number;
   total: number;
   onBack: () => void;
 }
 
 export const StepHeader: React.FC<StepHeaderProps> = ({ step, total, onBack }) => {
+  const backButton =
+    <Button
+      className={css('Button')}
+      data-testid={test('BackButton')}
+      onClick={onBack}
+    >back</Button>
 
   return (
     <div className={css()} data-testid={test()}>
-      <Button
-        className={css('Button')}
-        data-testid={test('BackButton')}
-        onClick={onBack}
-      ></Button>
-
       <span className={css('Text')} data-testid={test('Text')}>
         Step {step} of {total}
       </span>
@@ -36,7 +36,7 @@ export const StepHeader: React.FC<StepHeaderProps> = ({ step, total, onBack }) =
         steps={total}
         position="static"
         activeStep={step}
-        backButton={<span></span>}
+        backButton={backButton}
         nextButton={<span></span>}
       />
     </div>

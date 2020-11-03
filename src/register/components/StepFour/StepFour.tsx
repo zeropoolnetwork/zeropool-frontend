@@ -20,12 +20,14 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
 
   return (
     <div className={css()} data-testid={test()}>
-      <h1> Password: {password} </h1>
+      <section>
+        <h1> Password: {password} </h1>
 
-      <p>
-        Final step. Please generate password to be used
-        to export your account secret in the future.
-      </p>
+        <p>
+          Final step. Please generate password to be used
+          to export your account secret in the future.
+        </p>
+      </section>
 
       <Button
         color="primary"

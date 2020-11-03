@@ -22,14 +22,15 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
 
   return (
     <div className={css()} data-testid={test()}>
-      <h1> ImportAccount </h1>
-
+      <section>
+        <h1> ImportAccount </h1>
+      </section>
       <Button
         color="primary"
         data-testid={test('ImportButton')}
         disableElevation
         onClick={() => onImport({ seed, password })}
-        variant="outlined"
+        variant="contained"
       >
         Import
       </Button>
@@ -39,7 +40,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
         data-testid={test('BackButton')}
         disableElevation
         onClick={onBack}
-        variant="contained"
+        variant="outlined"
       >
         Back
       </Button>
