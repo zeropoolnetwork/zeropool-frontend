@@ -2,42 +2,37 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { Router, Route } from 'react-router-dom';
-import * as serviceWorker from './serviceWorker';
+import { ThemeProvider } from '@material-ui/core';
 import { ConnectedRouter } from 'connected-react-router';
+import { Router, Route, Redirect } from 'react-router-dom';
 
 import './index.css';
+import * as serviceWorker from './serviceWorker';
 
-import { store, history, persistedStore } from 'shared/state';
+import { store, history, persistedStore } from 'state';
 
-import { ImportAccount } from 'welcome/components/ImportAccount/ImportAccount';
-import { WelcomePage } from 'welcome/containers/WelcomePage/WelcomePage';
+import { CreateAccountPage } from 'register/containers/CreateAccount/CreateAccountPage';
 import { WalletPage } from 'wallet/containers/WalletPage/WalletPage';
 import { AboutPage } from 'about/components/AboutPage/AboutPage';
-import { StepThree } from 'welcome/components/StepThree/StepThree';
-import { StepFour } from 'welcome/components/StepFour/StepFour';
-import { StepOne } from 'welcome/components/StepOne/StepOne';
-import { StepTwo } from 'welcome/components/StepTwo/StepTwo';
+import { theme } from 'theme';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate persistor={persistedStore}>
-        <ConnectedRouter history={history}>
-          <Router history={history}>
-            <Route path="/" exact component={WelcomePage} />
-            <Route path="/wallet" exact component={WalletPage} />
-            <Route path={"/create-account-step1"} exact component={StepOne} />
-            <Route path={"/create-account-step2"} exact component={StepTwo} />
-            <Route path={"/create-account-step3"} exact component={StepThree} />
-            <Route path={"/create-account-step4"} exact component={StepFour} />
-            <Route path={"/import-account"} exact component={ImportAccount} />
-            <Route path={"/about"} exact component={AboutPage} />
-          </Router>
-        </ConnectedRouter>
-      </PersistGate>
-    </Provider>
-  </React.StrictMode>,
+  <ThemeProvider theme={theme}>
+    <React.StrictMode>
+      <Provider store={store}>
+        <PersistGate persistor={persistedStore}>
+          <ConnectedRouter history={history}>
+            <Router history={history}>
+              <Route path="/" exact component={CreateAccountPage} />
+              <Route path="/about" exact component={AboutPage} />
+              <Route path="/wallet" exact component={WalletPage} />
+              <Route path="/zeropool" exact ><Redirect to="/" /></Route>
+            </Router>
+          </ConnectedRouter>
+        </PersistGate>
+      </Provider>
+    </React.StrictMode>
+  </ThemeProvider>,
   document.getElementById('root')
 );
 
