@@ -5,40 +5,40 @@ import { RegisterStage } from './models/register-stage';
 import { generateSeed } from './helpers/seed.helper';
 import { getPreviousStage } from './helpers/stage.helper';
 
-export interface registerState {
+export interface RegisterState {
   stage: RegisterStage | undefined;
-  seed: string[] | undefined;
+  seed: string[];
   seedConfirmed: boolean;
   showSteps: boolean;
 }
 
-const initialState: registerState = {
+export const initialRegisterState: RegisterState = {
   stage: undefined,
-  seed: undefined,
+  seed: [],
   seedConfirmed: false,
   showSteps: false,
 };
 
 export const registerReducer = createReducer<
-  registerState,
+  RegisterState,
   ActionType<typeof actions>
->(initialState)
+>(initialRegisterState)
   .handleAction(actions.stepBack, state => ({
     ...state,
-    ...getPreviousStage(state.stage),
+    ...getPreviousStage(state),
   }))
   .handleAction(actions.startRegisterAccount, state => ({
     ...state,
     showSteps: true,
     stage: RegisterStage.STEP1,
   }))
-  .handleAction(actions.generateSeed, (state, useExistedIfPresent) => ({
+  .handleAction(actions.generateSeed, state => ({
     ...state,
-    seed: useExistedIfPresent ? (state.seed || generateSeed()) : generateSeed(),
+    seed: generateSeed(),
     seedConfirmed: false,
     stage: RegisterStage.STEP2,
   }))
-  .handleAction(actions.submitSeed, (state) => ({
+  .handleAction(actions.submitSeed, state => ({
     ...state,
     seedConfirmed: false,
     stage: RegisterStage.STEP3,

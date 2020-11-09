@@ -6,6 +6,8 @@ import './StepOne.scss';
 
 import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
 
+import { SeedPanel } from 'register/components/SeedPanel/SeedPanel';
+
 export const componentId = 'StepOne';
 
 const css = cn(componentId);
@@ -20,7 +22,7 @@ export const StepOne: React.FC<StepOneProps> = ({ onGenerate }) => {
   return (
     <div className={css()} data-testid={test()}>
       <section>
-        <h1> StepOne </h1>
+        <SeedPanel seed={[]} />
 
         <p>
           Your secret phrase consists of 12 words. Store it carefully.

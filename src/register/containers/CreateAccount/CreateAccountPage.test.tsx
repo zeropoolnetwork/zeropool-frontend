@@ -1,7 +1,7 @@
 import React from 'react';
 import { push } from 'connected-react-router';
+import { render } from '@testing-library/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { cleanup, fireEvent, render } from '@testing-library/react';
 
 import { CreateAccountPage, componentId } from './CreateAccountPage';
 import { mockAppState } from 'common/helpers/test/app-state.helper';

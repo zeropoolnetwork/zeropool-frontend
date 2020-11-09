@@ -1,0 +1,30 @@
+@import '../../../styles/styles.scss';
+
+
+.SeedTag {
+  background-color: $blue-primary;
+  border: $grey-light 1px solid;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  margin: 2px;
+  padding: 3px 20px 5px 20px;
+  position: relative;
+  user-select: none;
+
+
+  &_Placeholder {
+    background-color: $blue-light;
+    border-style: dashed; 
+    color: $blue-light;
+    cursor: default;
+  }
+
+  &-Number {
+    font-size: 12px;
+    color: $blue-dark;
+    left: 5px;
+    position: absolute;
+  }
+}

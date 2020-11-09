@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { cn } from '@bem-react/classname';
 import { Button } from '@material-ui/core';
 
@@ -6,21 +6,24 @@ import './StepThree.scss';
 
 import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
 
+import { SeedPanel } from 'register/components/SeedPanel/SeedPanel';
+
 export const componentId = 'StepThree';
 
 const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
 export interface StepThreeProps {
-  seed: string[] | undefined;
+  seed: string[];
   onConfirm: () => void;
 }
 export const StepThree: React.FC<StepThreeProps> = ({ seed, onConfirm }) => {
+  const [buttonDisabled, setButtonDisabled] = useState(true);
 
   return (
     <div className={css()} data-testid="StepThree">
       <section>
-        <h1> {seed} </h1>
+        <SeedPanel seed={seed} check onCheck={(success: boolean) => setButtonDisabled(!success)} />
 
         <p>
           Please confirm your secret phrase.
@@ -30,8 +33,9 @@ export const StepThree: React.FC<StepThreeProps> = ({ seed, onConfirm }) => {
 
       <Button
         color="primary"
-        className={css('Button')}
+        className={css('Button', { Disabled: buttonDisabled })}
         data-testid={test('ConfirmButton')}
+        disabled={buttonDisabled}
         disableElevation
         onClick={onConfirm}
         variant="contained"

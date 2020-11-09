@@ -1,20 +1,24 @@
-import { RegisterStage } from "../models/register-stage";
+import { RegisterStage } from "register/state/models/register-stage";
+import { RegisterState } from "../register.reducer";
 
 interface registerStageStateSlice {
   stage: RegisterStage | undefined;
   showSteps: boolean;
+  seed: string[];
 }
 
-export const getPreviousStage = (currentStage?: RegisterStage): registerStageStateSlice => {
-  if (currentStage === RegisterStage.IMPORT) {
+export const getPreviousStage = (state: RegisterState): registerStageStateSlice => {
+  if (state.stage === RegisterStage.IMPORT) {
     return {
       stage: undefined,
       showSteps: false,
+      seed: [],
     }
   }
 
   return {
-    stage: currentStage === RegisterStage.STEP1 ? undefined : Number(currentStage) - 1,
-    showSteps: [1, undefined].includes(currentStage) ? false : true,
+    stage: state.stage === RegisterStage.STEP1 ? undefined : Number(state.stage) - 1,
+    showSteps: [1, undefined].includes(state.stage) ? false : true,
+    seed: state.stage === RegisterStage.STEP2 ? [] : state.seed,
   }
 } 

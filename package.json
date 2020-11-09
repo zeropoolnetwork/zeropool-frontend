@@ -1,8 +1,8 @@
 {
-  "name": "zeropool-front",
+  "name": "zeropool",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://antonpegov.github.io/zeropool-front",
+  "homepage": "http://zeropoolnetwork.github.io/zeropool-frontend",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -34,7 +34,8 @@
     "redux-persist": "^6.0.0",
     "reselect": "^4.0.0",
     "typesafe-actions": "^5.1.0",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.2",
+    "wallet.ts": "1.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",

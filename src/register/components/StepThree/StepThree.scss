@@ -1,5 +1,13 @@
+@import '../../../styles/styles.scss';
+
 .StepThree {
   align-items: center;
   display: flex;
   flex-direction: column;
+
+  &-Button {
+    &_Disabled.MuiButton-root {
+      background-color: $grey-light;
+    }
+  }
 }
