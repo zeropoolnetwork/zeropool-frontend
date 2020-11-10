@@ -16,7 +16,14 @@ You will also see any lint errors in the console.
 
 Launches the test runner in the interactive watch mode.<br />
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.<br />
-Also available: 'yarn test:coverage' and 'yarn test:coverage:watch'
+
+### `yarn test:coverage`
+
+Build the test coverage report.
+
+### `yarn storybook`
+
+Run Storybook.
 
 ### `yarn build`
 

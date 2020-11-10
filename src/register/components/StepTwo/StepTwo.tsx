@@ -39,7 +39,7 @@ export const StepTwo: React.FC<StepTwoProps> = ({ seed, onSubmit }) => {
         onClick={onSubmit}
         variant="contained"
       >
-        Next
+        Submit
       </Button>
     </div>
   )

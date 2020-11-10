@@ -7,8 +7,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
-    "test:coverage": "react-scripts test --env=jest-environment-jsdom-sixteen --coverage --watch=false",
-    "test:coverage:watch": "react-scripts test --env=jest-environment-jsdom-sixteen --coverage",
+    "test:coverage": "react-scripts test --env=jest-environment-jsdom-sixteen --coverage --watchAll=false",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
@@ -73,6 +72,14 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/about/**/*.{js,jsx,ts,tsx}",
+      "src/common/**/*.{js,jsx,ts,tsx}",
+      "src/register/**/*.{js,jsx,ts,tsx}",
+      "src/wallet/**/*.{js,jsx,ts,tsx}"
     ]
   }
 }

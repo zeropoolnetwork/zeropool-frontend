@@ -76,7 +76,7 @@ export const SeedPanel: React.FC<SeedPanelProps> = ({ seed, check, onCheck }) =>
           )) : null}
         {confirmedSeed.length === seed.length && !success ?
           <div className={css('Warning')} data-testid={test('Warning')}>
-            Phrases are not the same!
+            The phrases do not match!
           </div>
           : null}
       </div>

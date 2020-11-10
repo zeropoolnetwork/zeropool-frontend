@@ -8,6 +8,7 @@ describe('SeedPanel', () => {
   let outputSpy: jest.Mock;
   let component: React.ReactElement<SeedPanelProps>;
   let seed = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+
   afterEach(cleanup);
 
   beforeEach(() => {
