@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from '@material-ui/core';
 import { ConnectedRouter } from 'connected-react-router';
-import { Router, Route, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import './index.css';
 import * as serviceWorker from './serviceWorker';
@@ -22,7 +22,7 @@ ReactDOM.render(
       <Provider store={store}>
         <PersistGate persistor={persistedStore}>
           <ConnectedRouter history={history}>
-            <Router history={history}>
+            <Router>
               <Route path="/" exact component={CreateAccountPage} />
               <Route path="/about" exact component={AboutPage} />
               <Route path="/wallet" exact component={WalletPage} />
