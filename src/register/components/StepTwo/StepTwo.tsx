@@ -26,7 +26,7 @@ export const StepTwo: React.FC<StepTwoProps> = ({ seed, onSubmit }) => {
         <SeedPanel seed={seed} />
 
         <p>
-          By continuing, you confirm that you have stored the secret phrase
+          By submiting, you confirm that you have stored the secret phrase
           on paper or using another safe method.
         </p>
       </section>

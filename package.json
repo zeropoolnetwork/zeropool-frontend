@@ -2,7 +2,7 @@
   "name": "zeropool",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://zeropoolnetwork.github.io/zeropool-frontend",
+  "homepage": "http://zeropoolnetwork.github.io/zeropool-frontend/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
