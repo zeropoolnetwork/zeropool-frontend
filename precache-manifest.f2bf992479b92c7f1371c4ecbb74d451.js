@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "de85c291645674a66720a76994060d19",
+    "revision": "7f631049d9c60b8462e389b254200f02",
     "url": "/zeropool-frontend/index.html"
   },
   {
-    "revision": "f00812ffd7e0f4cb7dae",
+    "revision": "73f5932e84a3a3c3f16a",
     "url": "/zeropool-frontend/static/css/2.3b47889b.chunk.css"
   },
   {
-    "revision": "04f18d8f08a9720b22a9",
-    "url": "/zeropool-frontend/static/css/main.52fa4ada.chunk.css"
+    "revision": "b95c70f3e602ef186650",
+    "url": "/zeropool-frontend/static/css/main.4287b7bb.chunk.css"
   },
   {
-    "revision": "f00812ffd7e0f4cb7dae",
-    "url": "/zeropool-frontend/static/js/2.690d4709.chunk.js"
+    "revision": "73f5932e84a3a3c3f16a",
+    "url": "/zeropool-frontend/static/js/2.69490c76.chunk.js"
   },
   {
     "revision": "4586b14bb7527f79d37af1d410f4bc2e",
-    "url": "/zeropool-frontend/static/js/2.690d4709.chunk.js.LICENSE.txt"
+    "url": "/zeropool-frontend/static/js/2.69490c76.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "04f18d8f08a9720b22a9",
-    "url": "/zeropool-frontend/static/js/main.9d3cd682.chunk.js"
+    "revision": "b95c70f3e602ef186650",
+    "url": "/zeropool-frontend/static/js/main.34cc7f69.chunk.js"
   },
   {
     "revision": "3085f2a1cd69fe0ce2a0",
