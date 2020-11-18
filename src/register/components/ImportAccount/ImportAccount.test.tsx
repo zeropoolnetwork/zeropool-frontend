@@ -1,52 +1,36 @@
-import React from 'react';
-import { cleanup, fireEvent, render } from '@testing-library/react';
+import React, { ReactElement } from 'react';
 
 import { componentId, ImportAccount, ImportAccountProps } from './ImportAccount';
+
+import { createClientRender, queryByAttribute } from 'common/util/render';
+import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
+
+const test = testIdBuilder(componentId);
+const getById = queryByAttribute.bind(null, 'id');
 
 describe('ImportAccount', () => {
   let outputSpy: jest.Mock;
   let component: React.ReactElement<ImportAccountProps>;
-  afterEach(cleanup);
+  const render = createClientRender({ strict: false });
 
   beforeEach(() => {
     outputSpy = jest.fn();
     component = <ImportAccount onImport={outputSpy} onBack={outputSpy} />;
   });
 
-  it('should render component', () => {
-    const { getByTestId } = render(component);
+  const setup = (component: ReactElement) => {
+    const utils = render(component);
+    const root = utils.getByTestId(test());
+    const password = getById(utils.container, test('Password'));
+    const confirm = getById(utils.container, test('Confirm'));
+    const submit = utils.getByTestId(test('Import'));
 
-    expect(getByTestId(componentId)).toBeInTheDocument();
-  });
+    return { root, password, confirm, submit, ...utils, utils }
+  }
 
-  describe('Back button', () => {
-    it('should render', () => {
-      const { getByTestId } = render(component);
+  it('renders', () => {
+    const { getByTestId } = setup(component);
 
-      expect(getByTestId(`${componentId}-BackButton`)).toBeInTheDocument();
-    });
-
-    it('should call onCreate prop callback when clicked', () => {
-      const { getByTestId } = render(component);
-      fireEvent.click(getByTestId(`${componentId}-BackButton`));
-
-      expect(outputSpy).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('Import button', () => {
-    it('should render', () => {
-      const { getByTestId } = render(component);
-
-      expect(getByTestId(`${componentId}-ImportButton`)).toBeInTheDocument();
-    });
-
-    it('should call onCreate prop callback when clicked', () => {
-      const { getByTestId } = render(component);
-      fireEvent.click(getByTestId(`${componentId}-ImportButton`));
-
-      expect(outputSpy).toHaveBeenCalledTimes(1);
-    });
+    expect(getByTestId(test())).toBeInTheDocument();
   });
 });
-

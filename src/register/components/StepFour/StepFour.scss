@@ -1,5 +1,21 @@
+@import '../../../styles/styles.scss';
+
 .StepFour {
   align-items: center;
   display: flex;
   flex-direction: column;
+
+  &-Form {
+    display: grid;
+    margin-top: $margin-normal;
+  }
+
+  &-FormControl.MuiFormControl-root {
+    margin-bottom: $margin-normal;
+  }
+
+  &-Button.MuiButton-root {
+    display: block;
+    margin: auto;
+  }
 }

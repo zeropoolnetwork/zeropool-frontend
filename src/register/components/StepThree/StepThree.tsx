@@ -21,7 +21,7 @@ export const StepThree: React.FC<StepThreeProps> = ({ seed, onConfirm }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
   return (
-    <div className={css()} data-testid="StepThree">
+    <div className={css()} data-testid={test()}>
       <section>
         <SeedPanel seed={seed} check onCheck={(success: boolean) => setButtonDisabled(!success)} />
 

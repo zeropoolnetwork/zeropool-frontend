@@ -1,8 +1,27 @@
+@import '../../../styles/styles.scss';
+
 .ImportAccount {
   align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100vh;
-  padding: 0 2rem;;
+
+  &-Form {
+    display: grid;
+    width: 60vw;
+  }
+
+  &-FormControl.MuiFormControl-root {
+    margin-bottom: $margin-normal;
+  }
+
+  &-Button.MuiButton-root {
+    display: block;
+    margin: 0 auto $margin-normal;
+    min-width: 100px;
+
+    &:nth-of-type(1) {
+      margin-top: $margin-normal;
+    }
+  }
 }

@@ -3,7 +3,6 @@ import { Story } from '@storybook/react/types-6-0';
 
 import { SeedPanel } from './SeedPanel';
 
-// This default export determines where your story goes in the story list
 const decoratorCss = { align: 'senter', padding: '3rem' };
 
 export default {
