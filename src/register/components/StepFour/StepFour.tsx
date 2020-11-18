@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { cn } from '@bem-react/classname';
 import { useForm } from 'react-hook-form';
+import { DevTool } from '@hookform/devtools';
 
 import './StepFour.scss';
 
 import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
 import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment, InputLabel } from '@material-ui/core';
 import { Close, Visibility, VisibilityOff } from '@material-ui/icons';
-
 export const componentId = 'StepFour';
 
 const css = cn(componentId);
@@ -41,15 +41,11 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
 
-  const onSubmit = () => {
-    debugger;
-    handleSubmit(onRegister);
-  }
-
   return (
     <div className={css()} data-testid={test()}>
+      {process.env.NODE_ENV !== 'production' && <DevTool control={control} />}
       <section>
-        <form onSubmit={onSubmit} className={css('Form')}>
+        <form onSubmit={handleSubmit(onRegister)} className={css('Form')}>
           <FormControl className={css('FormControl')} error={!!errors['password']}>
             <InputLabel htmlFor="password">Password</InputLabel>
 
@@ -58,7 +54,6 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
               inputProps={{ 'data-testid': test('Password') }}
               inputRef={register(PasswordInputParams)}
               name="password"
-              value={password}
               onChange={() => setPassword(control.getValues()['password'])}
               type={showPassword ? 'text' : 'password'}
               endAdornment={
@@ -100,7 +95,6 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
                 validate: value => value === control.getValues()['password']
               })}
               name="confirm"
-              value={passwordConfirm}
               onChange={() => setPasswordConfirm(control.getValues()['confirm'])}
               type={showPassword ? 'text' : 'password'}
               endAdornment={
