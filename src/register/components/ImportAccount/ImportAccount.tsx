@@ -10,6 +10,7 @@ import './ImportAccount.scss';
 import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
 
 import { SeedPanel } from 'register/components/SeedPanel/SeedPanel';
+import { validateSeed } from 'register/state/helpers/seed.helper';
 
 export const componentId = 'ImportAccount';
 
@@ -27,6 +28,11 @@ const PasswordInputParams = {
     message: "Use at least 8 characters"
   }
 }
+
+const seedInputParamsFactory = (seed: string[]): any => ({
+  required: "Required",
+  validate: (value: string[]) => validateSeed(seed)
+});
 
 interface FormData {
   seed: string;
@@ -52,14 +58,14 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
       {process.env.NODE_ENV !== 'production' && <DevTool control={control} />}
       <section>
         <SeedPanel seed={seed} />
-        <form onSubmit={handleSubmit((data: FormData) => onImport({ ...data, seed }))} className={css('Form')}>
+        <form onSubmit={handleSubmit((data: FormData) => onImport({ password: data.password, seed }))} className={css('Form')}>
           <FormControl className={css('FormControl')} error={!!errors['seed']}>
             <InputLabel htmlFor="seed">Secret phrase</InputLabel>
 
             <Input id="seed"
               className={css('Seed')}
               inputProps={{ 'data-testid': test('Seed') }}
-              inputRef={register()}
+              inputRef={register(seedInputParamsFactory(seed)) as any}
               name="seed"
               onChange={() => setSeed(control.getValues()['seed'].split(/[ ,.]+/).filter((str) => !!str))}
               type={'text'}
@@ -72,15 +78,16 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                       onMouseDown={(event) => event.preventDefault()}
                     >
                       <Close />
-                    </IconButton> : null
+                    </IconButton> : <span></span>
                   }
                 </InputAdornment>
               }
             />
 
-            {errors['password'] ?
-              <FormHelperText data-testid={test('SeedError')}>{errors['seed']?.message}</FormHelperText>
-              : null
+            {errors['seed'] ?
+              <FormHelperText data-testid={test('SeedError')}>
+                {errors['seed'].message || 'Input 12 uniq words divided with comas or spaces'}
+              </FormHelperText> : null
             }
           </FormControl>
 
@@ -103,7 +110,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                       onMouseDown={(event) => event.preventDefault()}
                     >
                       <Close />
-                    </IconButton> : null
+                    </IconButton> : <span></span>
                   }
 
                   <IconButton
@@ -118,8 +125,9 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
             />
 
             {errors['password'] ?
-              <FormHelperText data-testid={test('PasswordError')}>{errors['password'].message}</FormHelperText>
-              : null
+              <FormHelperText data-testid={test('PasswordError')}>
+                {errors['password'].message}
+              </FormHelperText> : null
             }
           </FormControl>
 

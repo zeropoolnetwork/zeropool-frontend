@@ -1,9 +1,10 @@
 import { Observable } from "rxjs";
-import { ActionType } from 'typesafe-actions';
 import { Epic, combineEpics } from "redux-observable";
-import { tap, ignoreElements } from 'rxjs/operators';
+import { ActionType, isActionOf } from 'typesafe-actions';
+import { tap, ignoreElements, withLatestFrom, filter, map } from 'rxjs/operators';
 
 import { registerActions } from "register/state/register.actions";
+import { getRegisterSeed } from "register/state/register.selectors";
 
 import { filterActions } from 'common/operators/filter-actions.operator';
 
@@ -17,8 +18,8 @@ const finishImportAccount$: Epic = (
 ) =>
   action$.pipe(
     filterActions(registerActions.finishImportAccount),
-    tap(payload => {
-      console.log(payload);
+    tap(action => {
+      console.log((action as any).payload);
     }),
     ignoreElements(),
   );
@@ -28,9 +29,13 @@ const finishRegister$: Epic = (
   state$: Observable<RootState>,
 ) =>
   action$.pipe(
-    filterActions(registerActions.finishRegister),
-    tap(payload => {
-      console.log(payload);
+    filter(isActionOf(registerActions.finishRegister)),
+    withLatestFrom(state$.pipe(map(getRegisterSeed))),
+    tap(([action, seed]) => {
+      console.log({
+        password: (action as any).payload,
+        seed,
+      });
     }),
     ignoreElements(),
   );

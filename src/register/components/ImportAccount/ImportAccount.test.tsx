@@ -21,11 +21,12 @@ describe('ImportAccount', () => {
   const setup = (component: ReactElement) => {
     const utils = render(component);
     const root = utils.getByTestId(test());
+    const seed = getById(utils.container, test('Seed'));
     const password = getById(utils.container, test('Password'));
     const confirm = getById(utils.container, test('Confirm'));
     const submit = utils.getByTestId(test('Import'));
 
-    return { root, password, confirm, submit, ...utils, utils }
+    return { root, seed, password, confirm, submit, ...utils }
   }
 
   it('renders', () => {

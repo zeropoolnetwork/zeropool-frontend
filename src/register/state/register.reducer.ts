@@ -55,7 +55,12 @@ export const registerReducer = createReducer<
   }))
   .handleAction(actions.startImportAccount, state => ({
     ...state,
-    hideSteps: true,
+    showSteps: false,
     stage: RegisterStage.IMPORT,
+  }))
+  .handleAction(actions.finishImportAccount, state => ({
+    ...state,
+    showSteps: false,
+    stage: undefined,
   }));
 
