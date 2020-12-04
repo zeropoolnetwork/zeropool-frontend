@@ -9,8 +9,8 @@ import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
 
 import { StepOne } from 'register/components/StepOne/StepOne';
 import { StepTwo } from 'register/components/StepTwo/StepTwo';
-import { StepFour } from 'register/components/StepFour/StepFour';
 import { Welcome } from 'register/components/Welcome/Welcome';
+import { StepFour } from 'register/components/StepFour/StepFour';
 import { StepThree } from 'register/components/StepThree/StepThree';
 import { StepHeader } from 'register/components/StepHeader/StepHeader';
 import { ImportAccount } from 'register/components/ImportAccount/ImportAccount';
@@ -40,10 +40,10 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
       case RegisterStage.STEP3:
         return <StepThree seed={seed} onConfirm={() => dispatch(actions.confirmSeed())} />
       case RegisterStage.STEP4:
-        return <StepFour onRegister={(data: { password: string }) => dispatch(actions.finishRegister(data))} />
+        return <StepFour onRegister={data => dispatch(actions.finishRegister(data.password))} />
       case RegisterStage.IMPORT:
         return <ImportAccount
-          onImport={(data: { seed: string[], password: string }) => dispatch(actions.finishImportAccount(data))}
+          onImport={data => dispatch(actions.finishImportAccount(data))}
           onBack={() => dispatch(actions.stepBack())} />
       default:
         return <Welcome
