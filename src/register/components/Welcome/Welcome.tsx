@@ -41,7 +41,7 @@ export const Welcome: React.FC<WelcomeProps> = ({ onCreate, onImport, onAbout })
         onClick={onCreate}
         variant="contained"
       >
-        Create new account
+        Create new wallet
       </Button>
 
       <Button
@@ -51,7 +51,7 @@ export const Welcome: React.FC<WelcomeProps> = ({ onCreate, onImport, onAbout })
         data-testid={test('ImportButton')}
         onClick={onImport}
       >
-        Import existed
+        Import existing
       </Button>
 
       <Button
