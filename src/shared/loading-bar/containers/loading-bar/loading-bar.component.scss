@@ -1,0 +1,39 @@
+@mixin fullScreen {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.LoadingBar {
+  @include fullScreen();
+  background: #fff;
+  opacity: 0.5;
+  z-index: 10000;
+
+  &-SpinnerContainer {
+    @include fullScreen();
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+  }
+
+  &-Spinner {
+    height: 6.375rem;
+    width: 12.063rem;
+    background: url('./preloader.gif') no-repeat;
+    background-size: contain;
+  }
+}

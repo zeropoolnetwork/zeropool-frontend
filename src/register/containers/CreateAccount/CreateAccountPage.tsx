@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import './CreateAccountPage.scss';
 
-import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
 import { StepOne } from 'register/components/StepOne/StepOne';
 import { StepTwo } from 'register/components/StepTwo/StepTwo';

@@ -2,8 +2,8 @@ import React, { ReactElement } from 'react';
 
 import { componentId, ImportAccount, ImportAccountProps } from './ImportAccount';
 
-import { createClientRender, queryByAttribute } from 'common/util/render';
-import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
+import { createClientRender, queryByAttribute } from 'shared/util/render';
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
 const test = testIdBuilder(componentId);
 const getById = queryByAttribute.bind(null, 'id');

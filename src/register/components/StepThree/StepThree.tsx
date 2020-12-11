@@ -4,7 +4,7 @@ import { Button } from '@material-ui/core';
 
 import './StepThree.scss';
 
-import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
 import { SeedPanel } from 'register/components/SeedPanel/SeedPanel';
 

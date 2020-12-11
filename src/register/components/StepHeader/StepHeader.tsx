@@ -5,7 +5,7 @@ import { Button, MobileStepper, Tooltip } from '@material-ui/core';
 
 import './StepHeader.scss';
 
-import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
 export const componentId = 'StepHeader';
 

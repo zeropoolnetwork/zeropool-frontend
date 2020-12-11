@@ -21,7 +21,8 @@
     "noImplicitThis": true,
     "strictNullChecks": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "suppressImplicitAnyIndexErrors": true,
   },
   "include": [
     "src"
