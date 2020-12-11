@@ -3,7 +3,7 @@ import { cn } from '@bem-react/classname';
 
 import './TemplateName.scss';
 
-import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
 export const componentId = 'TemplateName';
 

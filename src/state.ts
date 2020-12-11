@@ -10,6 +10,9 @@ import { registerReducer } from 'register/state/register.reducer';
 import { registerEpics } from 'register/state/register.epics';
 
 import { stateMigrations } from 'state-migrations';
+import { walletReducer } from 'wallet/state/wallet.reducer';
+import { walletEpics } from 'wallet/state/wallet.epics';
+import { loadingBarReducer } from 'shared/loading-bar/state/loading-bar.reducer';
 
 //#region Setup Devtools 
 declare global {
@@ -28,7 +31,7 @@ const epicMiddleware = createEpicMiddleware();
 
 const rootEpic = combineEpics(
   registerEpics,
-  // walletPageEpics,
+  walletEpics,
   // alertsEpics,
   // notificationsEpics,
 );
@@ -44,13 +47,14 @@ export const history = createBrowserHistory();
 export const createRootReducer = (history: History) =>
   combineReducers({
     register: registerReducer,
-    // walletPage: walletPageReducer,
+    wallet: walletReducer,
     router: connectRouter(history),
-    // shared: combineReducers({
-    //   // alerts: alertsReducer,
-    //   // notifications: notificationsReducer,
-    //   // menuBar: menuBarReducer,
-    // })
+    shared: combineReducers({
+      loadingBar: loadingBarReducer,
+      //   // alerts: alertsReducer,
+      //   // notifications: notificationsReducer,
+      //   // menuBar: menuBarReducer,
+    })
   });
 //#endregion
 

@@ -5,7 +5,7 @@ import { cn } from '@bem-react/classname';
 import './Welcome.scss';
 import guy from 'assets/images/guy-fawkes-thanks.png';
 
-import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
 export const componentId = 'Welcome';
 export interface WelcomeProps {

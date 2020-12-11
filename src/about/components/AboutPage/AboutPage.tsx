@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import './AboutPage.scss';
 import logo from 'assets/logo.svg';
 
-import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
 export const componentId = 'AboutPage';
 

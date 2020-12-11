@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { CreateAccountPage, componentId } from './CreateAccountPage';
-import { mockAppState } from 'common/helpers/test/app-state.helper';
+import { mockAppState } from 'shared/helpers/test/app-state.helper';
 
 //#region Mocks
 const useSelectorMock = useSelector as jest.Mock;

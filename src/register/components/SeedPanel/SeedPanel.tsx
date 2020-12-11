@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 
 import './SeedPanel.scss';
 
-import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
-import { shuffleArray } from 'common/util/shuffle';
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
+import { shuffleArray } from 'shared/util/shuffle';
 
 import { SeedTag } from 'register/components/SeedTag/SeedTag';
 

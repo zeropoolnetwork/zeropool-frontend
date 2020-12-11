@@ -5,7 +5,7 @@ import { DevTool } from '@hookform/devtools';
 
 import './StepFour.scss';
 
-import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment, InputLabel } from '@material-ui/core';
 import { Close, Visibility, VisibilityOff } from '@material-ui/icons';
 export const componentId = 'StepFour';

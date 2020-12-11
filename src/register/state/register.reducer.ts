@@ -1,9 +1,9 @@
 import { ActionType, createReducer } from 'typesafe-actions';
 
 import { registerActions as actions } from 'register/state/register.actions';
-import { RegisterStage } from './models/register-stage';
-import { generateSeed } from './helpers/seed.helper';
-import { getPreviousStage } from './helpers/stage.helper';
+import { getPreviousStage } from 'register/state/helpers/stage.helper';
+import { RegisterStage } from 'register/state/models/register-stage';
+import { generateSeed } from 'register/state/helpers/seed.helper';
 
 export interface RegisterState {
   stage: RegisterStage | undefined;

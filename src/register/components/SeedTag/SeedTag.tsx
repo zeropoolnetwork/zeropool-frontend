@@ -3,8 +3,8 @@ import { cn } from '@bem-react/classname';
 
 import './SeedTag.scss';
 
-import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
-import { shuffleString } from 'common/util/shuffle';
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
+import { shuffleString } from 'shared/util/shuffle';
 
 export const componentId = 'SeedTag';
 

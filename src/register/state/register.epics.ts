@@ -6,7 +6,7 @@ import { tap, ignoreElements, withLatestFrom, filter, map } from 'rxjs/operators
 import { registerActions } from "register/state/register.actions";
 import { getRegisterSeed } from "register/state/register.selectors";
 
-import { filterActions } from 'common/operators/filter-actions.operator';
+import { filterActions } from 'shared/operators/filter-actions.operator';
 
 import { RootState } from "state";
 

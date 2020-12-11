@@ -7,7 +7,7 @@ import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment,
 
 import './ImportAccount.scss';
 
-import { testIdBuilder } from 'common/helpers/test/test-id-builder.helper';
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
 import { SeedPanel } from 'register/components/SeedPanel/SeedPanel';
 import { validateSeed } from 'register/state/helpers/seed.helper';
