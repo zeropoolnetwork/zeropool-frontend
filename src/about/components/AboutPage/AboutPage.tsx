@@ -14,9 +14,11 @@ export const componentId = 'AboutPage';
 const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
-interface AboutPageProps { }
+interface AboutPageProps {
+  showBackButton: boolean;
+}
 
-export const AboutPage: React.FC<AboutPageProps> = () => {
+export const AboutPage: React.FC<AboutPageProps> = ({ showBackButton = true }) => {
   const dispatch = useDispatch();
 
   return (
@@ -38,17 +40,18 @@ export const AboutPage: React.FC<AboutPageProps> = () => {
         and still developed as product with strong scientific base.
       </p>
 
-      <p className={css('Button')}>
-        <Button
-          color="primary"
-          data-testid={test('BackButton')}
-          disableElevation
-          onClick={() => dispatch(push('/'))}
-          variant="outlined"
-        >
-          Back
-        </Button>
-      </p>
+      {showBackButton ?
+        <p className={css('Button')}>
+          <Button
+            color="primary"
+            data-testid={test('BackButton')}
+            disableElevation
+            onClick={() => dispatch(push('/'))}
+            variant="outlined"
+          >
+            Back
+          </Button>
+        </p> : null}
     </div>
   )
 };

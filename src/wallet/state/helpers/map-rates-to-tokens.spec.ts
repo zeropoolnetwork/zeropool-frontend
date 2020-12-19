@@ -42,8 +42,8 @@ fdescribe('`mapRatesToTokens` helper', () => {
     ];
 
     const expectedResult: Record<Token['name'], number> = {
-      Ethereum: 568.7484600532758,
-      Bitcoin: 18361.83383635072,
+      ETH: 568.7484600532758,
+      BTC: 18361.83383635072,
     };
 
     expect(mapRatesToTokens(rates, tokens)).toStrictEqual(expectedResult);

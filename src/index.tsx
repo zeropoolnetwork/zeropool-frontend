@@ -10,12 +10,14 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 
 import { store, history, persistedStore } from 'state';
-
+import { http, setupInterceptors } from 'shared/http/http';
 import { CreateAccountPage } from 'register/containers/CreateAccount/CreateAccountPage';
 import { LoadingBar } from 'shared/loading-bar/containers/loading-bar/loading-bar.component';
 import { WalletPage } from 'wallet/containers/WalletPage/WalletPage';
 import { AboutPage } from 'about/components/AboutPage/AboutPage';
 import { theme } from 'theme';
+
+setupInterceptors(http(), store);
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>

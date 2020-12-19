@@ -1,13 +1,31 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { WalletPage } from './WalletPage';
+import { componentId, WalletPage } from './WalletPage';
+
+import { mockAppState } from 'shared/helpers/test/app-state.helper';
+
+//#region Mocks
+const useSelectorMock = useSelector as jest.Mock;
+const useDispatchMock = useDispatch as jest.Mock;
+const dispatchSpy = jest.fn();
+
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux'),
+  useSelector: jest.fn(),
+  useDispatch: jest.fn(),
+}));
 
 describe('WalletPage', () => {
-  it('renders greetengs', () => {
+  beforeEach(() => {
+    useSelectorMock.mockImplementation(selectorFn => selectorFn(mockAppState));
+    useDispatchMock.mockReturnValue(dispatchSpy);
+  });
 
-    const { getByText } = render(<WalletPage />);
-    const linkElement = getByText(/WalletPage/i);
-    expect(linkElement).toBeInTheDocument();
+  it('WalletPage', () => {
+    const { getByTestId } = render(<WalletPage />);
+
+    expect(getByTestId(componentId)).toBeInTheDocument();
   })
 });
