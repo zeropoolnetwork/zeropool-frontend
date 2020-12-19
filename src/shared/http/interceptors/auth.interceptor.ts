@@ -20,7 +20,7 @@ export const authInterceptor = (store: Store<RootState>) => (
   const provider: { authHeader: string, authValue: string } = providers[Provider[context.provider]];
 
   authHeaders[provider.authHeader] = provider.authValue;
-
+  debugger;
   return {
     ...request,
     headers: {

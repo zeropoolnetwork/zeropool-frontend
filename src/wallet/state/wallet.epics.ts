@@ -1,7 +1,7 @@
 import { Observable } from "rxjs";
 import { ActionType } from 'typesafe-actions';
 import { Epic, combineEpics } from "redux-observable";
-import { tap, ignoreElements, switchMapTo, map, withLatestFrom } from 'rxjs/operators';
+import { switchMapTo, map, withLatestFrom, mapTo } from 'rxjs/operators';
 
 import { filterActions } from 'shared/operators/filter-actions.operator';
 
@@ -20,7 +20,7 @@ const openWallet$: Epic = (
 ) =>
   action$.pipe(
     filterActions(walletActions.openWallet),
-    switchMapTo(walletActions.getRates),
+    mapTo(walletActions.getRates()),
   )
 
 const getRates$: Epic = (
@@ -34,11 +34,6 @@ const getRates$: Epic = (
       map(([{ status, data }, tokens]) => mapRatesToTokens(data, tokens)),
       map(data => walletActions.getRatesSuccess(data))
     )),
-    tap(action => {
-      console.log((action as any).payload);
-    }),
-
-    ignoreElements(),
   );
 
 export const walletEpics: Epic = combineEpics(

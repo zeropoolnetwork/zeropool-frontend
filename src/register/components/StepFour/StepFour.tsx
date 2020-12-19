@@ -129,7 +129,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
 
           <p>
             Finally, please choose a password to be used
-            to export your secret phrase in the future.
+            to export your secret frase in the future.
           </p>
 
           <p>

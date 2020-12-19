@@ -4,6 +4,7 @@ import { render } from '@testing-library/react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { CreateAccountPage, componentId } from './CreateAccountPage';
+
 import { mockAppState } from 'shared/helpers/test/app-state.helper';
 
 //#region Mocks
@@ -31,9 +32,10 @@ describe('CreateAccountPage', () => {
     useDispatchMock.mockReturnValue(dispatchSpy);
     pushMock.mockImplementation(pushSpy);
   });
-  it('renders', () => {
 
+  it('renders', () => {
     const { getByTestId } = render(<CreateAccountPage />);
+
     expect(getByTestId(componentId)).toBeInTheDocument();
   })
 });

@@ -1,0 +1,40 @@
+@import '../../../styles/styles.scss';
+
+.Token {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0 0 15px;
+  
+  &-Rates {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-Name {
+    font-weight: bold;
+  }
+
+  &-Rate {
+    color: grey;
+    font-size: 12px;
+    text-shadow: none;
+  }
+
+  &-Amounts {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-TokenAmount {
+    font-weight: bold;
+
+  }
+
+  &-FiatAmount {
+    align-self: flex-end;
+    color: grey;
+    font-size: 12px;
+    text-shadow: none;
+  }
+}

@@ -47,6 +47,8 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
           onBack={() => dispatch(actions.stepBack())} />
       default:
         return <Welcome
+          // TODO: remove next line after API is connected
+          onMockedLogin={() => dispatch(push('/wallet'))}
           onCreate={() => dispatch(actions.startRegisterAccount())}
           onImport={() => dispatch(actions.startImportAccount())}
           onAbout={() => dispatch(push('/about'))}
