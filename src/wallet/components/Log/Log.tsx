@@ -1,22 +1,22 @@
 import React from 'react';
 import { cn } from '@bem-react/classname';
 
-import './Manage.scss';
+import './Log.scss';
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
-export const componentId = 'Manage';
+export const componentId = 'Log';
 
 const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
-export interface ManageProps { }
+export interface LogProps { }
 
-export const Manage: React.FC<ManageProps> = () => {
+export const Log: React.FC<LogProps> = () => {
 
   return (
     <div className={css()} data-testid={test()}>
-      <h1> Manage wallet page is under construction...</h1>
+      <h1> Log </h1>
     </div>
   )
 };

@@ -4,11 +4,7 @@
   color: $primary;
   display: flex;
   flex-direction: column;
-  min-width: 300px;
+  min-width: 370px;
+  position: relative;
   text-shadow: 2px 2px 2px #ccc;
-  
-  &-Total {
-    font-weight: bold;
-    text-align: center;
-  }
 }

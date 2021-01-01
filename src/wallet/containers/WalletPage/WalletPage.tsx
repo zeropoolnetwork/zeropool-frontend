@@ -1,28 +1,26 @@
-import { AppBar, Toolbar, IconButton, Typography, SwipeableDrawer, Badge, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton, SwipeableDrawer, Badge, List, ListItem, ListItemIcon, ListItemText, makeStyles, Tooltip } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import BuildOutlinedIcon from '@material-ui/icons/BuildOutlined';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
-import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import MenuIcon from '@material-ui/icons/Menu';
 import Divider from '@material-ui/core/Divider';
 import { cn } from '@bem-react/classname';
 
-import './WalletPage.scss';
-
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
 import { AboutPage } from 'about/components/AboutPage/AboutPage';
 
-import { getCurrentView, getDisplayedTokens, getSupportedTokensRecord, getUsdRates, getWalleAmounts, getWalletName } from 'wallet/state/wallet.selectors';
+import { getCurrentView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getWalleAmounts } from 'wallet/state/wallet.selectors';
 import { walletActions } from 'wallet/state/wallet.actions';
+import { WalletHeader } from 'wallet/components/WalletHeader/WalletHeader';
 import { WalletView } from 'wallet/state/models/wallet-view';
 import { Balance } from 'wallet/components/Balance/Balance';
-import { Manage } from 'wallet/components/Manage/Manage';
-import { Add } from 'wallet/components/Add/Add';
+import { Wallets } from 'wallet/components/Wallets/Wallets';
+import { Address } from 'wallet/components/Address/Address';
 
 export const componentId = 'WalletPage';
 
@@ -31,17 +29,65 @@ const test = testIdBuilder(componentId);
 
 interface WalletPageProps { }
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  toolbar: {
+    alignItems: 'flex-start',
+    flexDirection: 'column',
+    paddingTop: theme.spacing(1),
+    minHeight: 150,
+    paddingBottom: '0',
+  },
+  toolbarHeader: {
+    display: 'flex',
+    borderBottom: `${theme.palette.grey[600]} 1px solid`,
+    width: '100%',
+  },
+  toolbarHeaderItems: {
+    display: 'flex',
+    flexGrow: 1,
+    justifyContent: 'flex-end',
+  },
+  toolbarBody: {
+    margin: 'auto',
+    position: 'relative',
+    width: '100%',
+  },
+  title: {
+    flexGrow: 1,
+    alignSelf: 'flex-end',
+  },
+  drower: {},
+  drowerItem: {
+    paddingRight: '20px'
+  },
+  drowerItemIcon: {
+    color: theme.palette.grey[600],
+  },
+  drowerItemText: {},
+  wrapper: {
+    display: 'flex',
+    margin: '50px auto'
+  }
+
+}));
+
 export const WalletPage: React.FC<WalletPageProps> = () => {
-  const name = useSelector(getWalletName);
-  const amounts = useSelector(getWalleAmounts);
-  const rates = useSelector(getUsdRates);
-  const tokens = useSelector(getDisplayedTokens);
-  const tokensRecord = useSelector(getSupportedTokensRecord);
-  const view = useSelector(getCurrentView);
+  const [state, setState] = useState({ drower: false });
   const dispatch = useDispatch();
-  const [state, setState] = useState({
-    drower: false,
-  });
+  const classes = useStyles();
+  const view = useSelector(getCurrentView);
+  const rates = useSelector(getUsdRates);
+  const tokens = useSelector(getSupportedTokens);
+  const amounts = useSelector(getWalleAmounts);
+  const tokensRecord = useSelector(getSupportedTokensRecord);
 
   const toggleDrawer = (open?: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
@@ -58,20 +104,20 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
     setState({ ...state, drower: open === undefined ? !state.drower : open })
   }
 
-  const drowerMenu =
+  const drowerMenu = () => (
     <div
-      className={css('DrowerMenu')}
+      className={classes.drower}
       role="presentation"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        {[WalletView.Balance, WalletView.Add, WalletView.Manage].map((text, index) => (
-          <ListItem className={css('DrowerMenu-Item')} button key={text} onClick={() => dispatch(walletActions.menu(text))}>
-            <ListItemIcon className={css('DrowerMenu-ItemIcon')}>
-              {[<AttachMoneyOutlinedIcon />, <AddOutlinedIcon />, <BuildOutlinedIcon />][index]}
+        {[WalletView.Balance, WalletView.Wallets].map((text, index) => (
+          <ListItem className={classes.drowerItem} button key={text} onClick={() => dispatch(walletActions.menu(text))}>
+            <ListItemIcon className={classes.drowerItemIcon}>
+              {[<AttachMoneyOutlinedIcon />, <BuildOutlinedIcon />][index]}
             </ListItemIcon>
-            <ListItemText className={css('DrowerMenu-ItemText')} primary={text} />
+            <ListItemText className={classes.drowerItemText} primary={text} />
           </ListItem>
         ))}
       </List>
@@ -88,18 +134,23 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
           </ListItem>
         ))}
       </List>
-    </div >;
+    </div >
+  );
 
   const components = () => {
     switch (view) {
-      case WalletView.Add:
-        return <Add />
-      case WalletView.Manage:
-        return <Manage />
+      case WalletView.Wallets:
+        return <Wallets />
+      case WalletView.Address:
+        return <Address />
       case WalletView.About:
         return <AboutPage showBackButton={false} />
       default:
-        return <Balance amounts={amounts} rates={rates} tokens={tokens[name]} tokensRecord={tokensRecord} />
+        return <Balance
+          amounts={amounts}
+          rates={rates}
+          tokens={tokens.map(i => i.symbol)}
+          tokensRecord={tokensRecord} />
     }
   }
 
@@ -108,32 +159,44 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   }, [dispatch]);
 
   return (
-    <div className={css()} data-testid={test()}>
+    <div className={classes.root} data-testid={test()}>
       <AppBar position="static" className={css('AppBar')}>
-        <Toolbar>
-          <IconButton
-            className={css('MenuButton')}
-            onClick={toggleDrawer()}
-            color="inherit"
-            aria-label="menu"
-            edge="start"
-          >
-            <MenuIcon />
-          </IconButton>
+        <Toolbar className={classes.toolbar}>
+          <div className={classes.toolbarHeader}>
+            <IconButton
+              onClick={toggleDrawer()}
+              color="inherit"
+              aria-label="menu"
+              edge="start"
+            >
+              <MenuIcon />
+            </IconButton>
 
-          <Typography variant="h6" className={css('Title')}>
-            {name}
-          </Typography>
+            <div className={classes.toolbarHeaderItems}>
+              <Tooltip title="No new messages" placement="bottom">
+                <IconButton aria-label="show 0 new notifications" color="inherit">
+                  <Badge badgeContent={0} color="secondary" title="No new messages">
+                    <NotificationsIcon />
+                  </Badge>
+                </IconButton>
+              </Tooltip>
+            </div>
+          </div>
 
-          <IconButton aria-label="show 17 new notifications" color="inherit">
-            <Badge badgeContent={17} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          <div className={classes.toolbarBody}>
+            <WalletHeader
+              view={view}
+              tokenAmount={5}
+              tokenRate={750}
+              tokenSymbol={'ETH'}
+              fiatValue={3250.43}
+              onBackClick={() => dispatch(walletActions.headerBack())}
+            />
+          </div>
         </Toolbar>
       </AppBar>
 
-      <div className={css('Wrapper')}>
+      <div className={classes.wrapper}>
         {components()}
       </div>
 
@@ -142,7 +205,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
       >
-        {drowerMenu}
+        {drowerMenu()}
       </SwipeableDrawer>
     </div>
   )

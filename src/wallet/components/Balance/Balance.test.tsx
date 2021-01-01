@@ -3,10 +3,13 @@ import { cleanup, render } from '@testing-library/react';
 
 import { Balance, componentId, BalanceProps } from './Balance';
 
+
 describe('Balance', () => {
   let outputSpy: jest.Mock;
   let component: React.ReactElement<BalanceProps>;
   afterEach(cleanup);
+
+  jest.mock('wallet/components/TokenRow/TokenRow', () => () => <span>TokenRow</span>);
 
   beforeEach(() => {
     outputSpy = jest.fn();

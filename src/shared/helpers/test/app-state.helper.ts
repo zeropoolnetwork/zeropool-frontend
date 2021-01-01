@@ -1,6 +1,8 @@
 import { RegisterState } from "register/state/register.reducer";
-import { RootState } from "state";
 import { WalletState } from "wallet/state/wallet.reducer";
+import { Token } from "shared/models/token";
+
+const testToken: Token = { id: 1, symbol: 'testSymbol', name: 'testName' };
 
 export const mockAppState: {
   register: Partial<RegisterState>,
@@ -10,7 +12,9 @@ export const mockAppState: {
     stage: undefined,
   },
   wallet: {
-    walletName: 'Test Wallet',
-    displayedTokens: { 'Test Wallet': [] },
+    amounts: { testToken: 1 },
+    supportedTokens: [testToken],
+    supportedTokensRecord: { [testToken.symbol]: testToken },
+    usdRates: { testSymbol: 111 },
   }
 };

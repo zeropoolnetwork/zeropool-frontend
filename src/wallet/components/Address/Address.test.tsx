@@ -1,21 +1,16 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
 
-import { Token as TokenModel } from 'shared/models/token';
+import { Address, componentId, AddressProps } from './Address';
 
-import { Token, componentId, TokenProps } from './Token';
-
-describe('Token', () => {
+describe('Address', () => {
   let outputSpy: jest.Mock;
-  let component: React.ReactElement<TokenProps>;
-
-  const token: TokenModel = { name: 'Test', id: 1, symbol: 'TST' }
-
+  let component: React.ReactElement<AddressProps>;
   afterEach(cleanup);
 
   beforeEach(() => {
     outputSpy = jest.fn();
-    component = <Token amount={1} token={token} rate={500} />;
+    component = <Address />;
   });
 
   it('should render component', () => {

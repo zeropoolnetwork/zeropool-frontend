@@ -9,7 +9,8 @@
       "customTemplates": {
         "component": "templates/component/component.tsx",
         "style": "templates/component/component.scss",
-        "test": "templates/component/component.test.tsx"
+        "test": "templates/component/component.test.tsx",
+        "stories": "templates/component/component.stories.tsx"
       },
       "path": "src/components",
       "withLazy": false,

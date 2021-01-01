@@ -8,6 +8,9 @@ export const theme = createMuiTheme({
       disabledBackground: 'set color of background here',
       disabled: 'set color of text here',
     },
+    primary: {
+      main: COLOR_PRIMARY,
+    }
   },
 
   typography: {
