@@ -1,0 +1,19 @@
+.Icon {
+  display: flex;
+  height: 60px;
+  left: 0;
+  position: absolute;
+  width: 60px;
+
+  &_ETH {
+    background: url('../../../assets/images/ETH.png') no-repeat;
+  }
+
+  &_WAVES {
+    background: url('../../../assets/images/WAVES.png') no-repeat;
+  }
+
+  &_NEAR {
+    background: url('../../../assets/images/NEAR.png') no-repeat;
+  }
+}

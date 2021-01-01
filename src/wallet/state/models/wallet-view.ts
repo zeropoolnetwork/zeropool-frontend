@@ -1,7 +1,7 @@
 export enum WalletView {
   Balance = 'Balance',
-  Add = 'Add',
-  Manage = 'Manage',
+  Wallets = 'Wallets',
+  Address = 'Address',
   Help = 'Help',
   About = 'About',
 }

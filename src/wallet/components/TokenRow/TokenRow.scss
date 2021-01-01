@@ -1,10 +1,13 @@
 @import '../../../styles/styles.scss';
 
+$fiatFontSize: 12px;
+
 .Token {
   display: flex;
   flex-direction: row;
+  font-size: 20px;
   justify-content: space-between;
-  margin: 0 0 15px;
+  margin: 0 0 33px 66px;
   
   &-Rates {
     display: flex;
@@ -17,7 +20,7 @@
 
   &-Rate {
     color: grey;
-    font-size: 12px;
+    font-size: $fiatFontSize;
     text-shadow: none;
   }
 
@@ -34,7 +37,7 @@
   &-FiatAmount {
     align-self: flex-end;
     color: grey;
-    font-size: 12px;
+    font-size: $fiatFontSize;
     text-shadow: none;
   }
 }

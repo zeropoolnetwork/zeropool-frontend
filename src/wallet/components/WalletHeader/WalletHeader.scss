@@ -1,0 +1,22 @@
+.WalletHeader {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+
+  &-BackButton {
+    color: white !important;
+    left: -20px;
+    position: absolute !important;
+    top: -15px;
+  }
+
+  &-Title {
+    margin: auto;
+  }
+
+  &-Amount {
+    font-size: 30px;
+    margin: auto;
+
+  }
+}

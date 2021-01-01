@@ -10,5 +10,6 @@ export const walletActions = {
   getRates: create('@wallet/getRates')<void>(),
   getRatesSuccess: create('@wallet/getRatesSuccess')<Record<Token['name'], number>>(),
 
+  headerBack: create('@wallet/header/back')<void>(),
   menu: create('@wallet/menu')<WalletView>(),
 };

@@ -11,24 +11,14 @@ export const getCurrentView = createSelector(
   state => state.currentView,
 );
 
-export const getWalletName = createSelector(
-  getWalletState,
-  state => state.walletName,
-);
-
 export const getWalleAmounts = createSelector(
   getWalletState,
-  state => state.walletAmounts,
+  state => state.amounts,
 );
 
 export const getSupportedTokens = createSelector(
   getWalletState,
   state => state.supportedTokens,
-);
-
-export const getDisplayedTokens = createSelector(
-  getWalletState,
-  state => state.displayedTokens,
 );
 
 export const getSupportedTokensRecord = createSelector(

@@ -2,27 +2,31 @@ import React from 'react';
 import { cn } from '@bem-react/classname';
 import NumberFormat from 'react-number-format';
 
-import './Token.scss';
+import './TokenRow.scss';
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
-import { Token as TokenModel } from 'shared/models/token';
+import { IconOption } from 'shared/components/Icon/IconOption';
+import { Token } from 'shared/models/token';
+import { Icon } from 'shared/components/Icon/Icon';
 
 export const componentId = 'Token';
 
 const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
-export interface TokenProps {
+export interface TokenRowProps {
   amount: number;
   rate: number;
-  token: TokenModel;
+  token: Token;
 }
 
-export const Token: React.FC<TokenProps> = ({ amount = 0, token, rate }) => {
+export const TokenRow: React.FC<TokenRowProps> = ({ amount = 0, token, rate }) => {
 
   return (
     <div className={css()} data-testid={test()}>
       <div className={css('Rates')}>
+        <Icon icon={token.symbol as IconOption} />
+        
         <span className={css('Name')}>{token.name}</span>
 
         <NumberFormat
@@ -35,6 +39,7 @@ export const Token: React.FC<TokenProps> = ({ amount = 0, token, rate }) => {
           decimalScale={2}
         />
       </div>
+
       <div className={css('Amounts')}>
         <NumberFormat
           className={css('TokenAmount')}
