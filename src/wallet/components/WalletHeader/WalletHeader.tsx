@@ -26,6 +26,13 @@ export interface WalletHeaderProps {
 
 
 export const WalletHeader: React.FC<WalletHeaderProps> = ({ tokenAmount, view, fiatValue, tokenRate, tokenName, onBackClick }) => {
+  const headerLabel: Record<WalletView, (name?: string) => string> = {
+    [WalletView.Balance]: () => ('Overall balance'),
+    [WalletView.Wallets]: (name) => (`${name} wallets`),
+    [WalletView.Address]: () => '',
+    [WalletView.About]: () => ('About'),
+    [WalletView.Help]: () => ('Help'),
+  };
 
   return (
     <div className={css()} data-testid={test()}>
@@ -59,15 +66,6 @@ export const WalletHeader: React.FC<WalletHeaderProps> = ({ tokenAmount, view, f
           />
         }
       </div>
-
     </div>
   )
-};
-
-export const headerLabel: Record<WalletView, (name?: string) => string> = {
-  [WalletView.Balance]: () => ('Overall balance'),
-  [WalletView.Wallets]: (name) => (`${name} wallets`),
-  [WalletView.Address]: () => '',
-  [WalletView.About]: () => ('About'),
-  [WalletView.Help]: () => ('Help'),
 };
