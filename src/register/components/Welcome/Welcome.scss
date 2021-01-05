@@ -1,13 +1,14 @@
-@import '../../../styles/styles.scss';
+@import "../../../styles/styles.scss";
 
 .Welcome {
   align-items: center;
+  background-color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
   height: 100vh;
   padding: 0 2rem;
-  
+
   // need to owerwrite 'MuiButton-root' class
   &-Button.MuiButton-root {
     margin-bottom: $margin-bottom-normal;
