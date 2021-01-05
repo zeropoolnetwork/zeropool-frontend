@@ -3,7 +3,6 @@ import { cn } from '@bem-react/classname';
 
 import './Icon.scss';
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 import { IconOption } from 'shared/components/Icon/IconOption';
 
 export const componentId = 'Icon';
