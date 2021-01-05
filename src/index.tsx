@@ -14,7 +14,7 @@ import { http, setupInterceptors } from 'shared/http/http';
 import { CreateAccountPage } from 'register/containers/CreateAccount/CreateAccountPage';
 import { LoadingBar } from 'shared/loading-bar/containers/loading-bar/loading-bar.component';
 import { WalletPage } from 'wallet/containers/WalletPage/WalletPage';
-import { AboutPage } from 'about/components/AboutPage/AboutPage';
+import { AboutPage } from 'shared/components/AboutPage/AboutPage';
 import { theme } from 'theme';
 
 setupInterceptors(http(), store);

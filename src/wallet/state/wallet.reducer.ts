@@ -6,6 +6,7 @@ import { Token } from 'shared/models/token';
 import { recordFromArray } from 'shared/util/from';
 
 import { walletActions as actions } from 'wallet/state/wallet.actions';
+import { navigationHelper } from 'wallet/state/helpers/navigation.helper';
 import { WalletView } from 'wallet/state/models/wallet-view';
 
 export const initialWalletName = 'Main wallet';
@@ -39,6 +40,10 @@ export const walletReducer = createReducer<
   .handleAction(actions.menu, (state, { payload }) => ({
     ...state,
     currentView: payload,
+  }))
+  .handleAction(actions.headerBack, state => ({
+    ...state,
+    currentView: navigationHelper.handleBackClick(state.currentView),
   }))
   .handleAction(actions.getRatesSuccess, (state, { payload }) => ({
     ...state,
