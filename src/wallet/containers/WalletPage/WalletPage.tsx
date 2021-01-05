@@ -12,12 +12,13 @@ import { cn } from '@bem-react/classname';
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
-import { AboutPage } from 'about/components/AboutPage/AboutPage';
+import { AboutPage } from 'shared/components/AboutPage/AboutPage';
 
 import { getCurrentView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getWalleAmounts } from 'wallet/state/wallet.selectors';
 import { walletActions } from 'wallet/state/wallet.actions';
 import { WalletHeader } from 'wallet/components/WalletHeader/WalletHeader';
 import { WalletView } from 'wallet/state/models/wallet-view';
+import { HelpPage } from 'shared/components/HelpPage/HelpPage';
 import { Balance } from 'wallet/components/Balance/Balance';
 import { Wallets } from 'wallet/components/Wallets/Wallets';
 import { Address } from 'wallet/components/Address/Address';
@@ -66,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drower: {},
   drowerItem: {
-    paddingRight: '20px'
+    paddingRight: '20px',
   },
   drowerItemIcon: {
     color: theme.palette.grey[600],
@@ -74,7 +75,10 @@ const useStyles = makeStyles((theme) => ({
   drowerItemText: {},
   wrapper: {
     display: 'flex',
-    margin: '50px auto'
+    margin: '50px auto',
+  },
+  AboutPage: {
+    height: '50vh',
   }
 
 }));
@@ -145,6 +149,8 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
         return <Address />
       case WalletView.About:
         return <AboutPage showBackButton={false} />
+      case WalletView.Help:
+        return <HelpPage />
       default:
         return <Balance
           amounts={amounts}
@@ -159,7 +165,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   }, [dispatch]);
 
   return (
-    <div className={classes.root} data-testid={test()}>
+    <div className={classes.root} data-testid={test()} id={componentId}>
       <AppBar position="static" className={css('AppBar')}>
         <Toolbar className={classes.toolbar}>
           <div className={classes.toolbarHeader}>
@@ -189,6 +195,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
               tokenAmount={5}
               tokenRate={750}
               tokenSymbol={'ETH'}
+              tokenName={'Ethereum'}
               fiatValue={3250.43}
               onBackClick={() => dispatch(walletActions.headerBack())}
             />

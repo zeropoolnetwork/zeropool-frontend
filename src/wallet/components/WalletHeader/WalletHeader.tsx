@@ -20,11 +20,12 @@ export interface WalletHeaderProps {
   view: WalletView;
   tokenRate?: number;
   tokenSymbol?: string;
+  tokenName?:string;
   onBackClick: () => void;
 }
 
 
-export const WalletHeader: React.FC<WalletHeaderProps> = ({ tokenAmount, view, fiatValue, tokenRate, tokenSymbol, onBackClick }) => {
+export const WalletHeader: React.FC<WalletHeaderProps> = ({ tokenAmount, view, fiatValue, tokenRate, tokenName, onBackClick }) => {
 
   return (
     <div className={css()} data-testid={test()}>
@@ -42,21 +43,21 @@ export const WalletHeader: React.FC<WalletHeaderProps> = ({ tokenAmount, view, f
         : null}
 
       <div className={css('Title')}>
-        {[WalletView.Balance, WalletView.Wallets].includes(view) ?
-          headerLabel[view]()
-          : null}
+        {headerLabel[view](tokenName)}
       </div>
 
       <div className={css('Amount')}>
-        <NumberFormat
-          className={css('FiatAmount')}
-          data-testid={test('FiatAmount')}
-          value={fiatValue}
-          displayType={'text'}
-          thousandSeparator={true}
-          suffix={' $'}
-          decimalScale={2}
-        />
+        {[WalletView.About, WalletView.Help].includes(view) ? null : 
+          <NumberFormat
+            className={css('FiatAmount')}
+            data-testid={test('FiatAmount')}
+            value={fiatValue}
+            displayType={'text'}
+            thousandSeparator={true}
+            suffix={' $'}
+            decimalScale={2}
+          />
+        }
       </div>
 
     </div>
@@ -67,6 +68,6 @@ export const headerLabel: Record<WalletView, (name?: string) => string> = {
   [WalletView.Balance]: () => ('Overall balance'),
   [WalletView.Wallets]: (name) => (`${name} wallets`),
   [WalletView.Address]: () => '',
-  [WalletView.About]: () => 'About',
-  [WalletView.Help]: () => 'Help',
+  [WalletView.About]: () => ('About'),
+  [WalletView.Help]: () => ('Help'),
 };
