@@ -7,10 +7,10 @@ import { initialWalletState, walletReducer, WalletState } from "./wallet.reducer
 describe('wallet reducer', () => {
   const initialState: WalletState = deepFreeze(initialWalletState);
 
-  it('handles `openWallet` action', () => {
+  it('handles `openBalance` action', () => {
     const state = walletReducer(
       initialState,
-      actions.openWallet(),
+      actions.openBalanceView(),
     );
 
     expect(state.isPrivate).toBe(false);

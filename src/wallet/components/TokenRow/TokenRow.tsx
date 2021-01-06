@@ -16,14 +16,15 @@ const test = testIdBuilder(componentId);
 
 export interface TokenRowProps {
   amount: number;
+  onSelectToken: (token: Token) => void;
   rate: number;
   token: Token;
 }
 
-export const TokenRow: React.FC<TokenRowProps> = ({ amount = 0, token, rate }) => {
+export const TokenRow: React.FC<TokenRowProps> = ({ amount = 0, token, rate, onSelectToken }) => {
 
   return (
-    <div className={css()} data-testid={test()}>
+    <div className={css()} data-testid={test()} onClick={() => onSelectToken(token)}>
       <div className={css('Rates')}>
         <Icon icon={token.symbol as IconOption} />
         

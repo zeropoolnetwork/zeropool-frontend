@@ -10,15 +10,16 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Divider from '@material-ui/core/Divider';
 import { cn } from '@bem-react/classname';
 
+import { Token } from 'shared/models/token';
+import { HelpPage } from 'shared/components/HelpPage/HelpPage';
+import { AboutPage } from 'shared/components/AboutPage/AboutPage';
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
-import { AboutPage } from 'shared/components/AboutPage/AboutPage';
-
-import { getCurrentView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getWalleAmounts } from 'wallet/state/wallet.selectors';
+import { getActiveToken, getActiveView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getWalleAmounts } from 'wallet/state/wallet.selectors';
+import { WalletHeader, WalletHeaderMode } from 'wallet/components/WalletHeader/WalletHeader';
 import { walletActions } from 'wallet/state/wallet.actions';
-import { WalletHeader } from 'wallet/components/WalletHeader/WalletHeader';
+import { totalHelper } from 'wallet/state/helpers/total.helper';
 import { WalletView } from 'wallet/state/models/wallet-view';
-import { HelpPage } from 'shared/components/HelpPage/HelpPage';
 import { Balance } from 'wallet/components/Balance/Balance';
 import { Wallets } from 'wallet/components/Wallets/Wallets';
 import { Address } from 'wallet/components/Address/Address';
@@ -87,7 +88,8 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   const [state, setState] = useState({ drower: false });
   const dispatch = useDispatch();
   const classes = useStyles();
-  const view = useSelector(getCurrentView);
+  const view = useSelector(getActiveView);
+  const token = useSelector(getActiveToken);
   const rates = useSelector(getUsdRates);
   const tokens = useSelector(getSupportedTokens);
   const amounts = useSelector(getWalleAmounts);
@@ -154,14 +156,27 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
       default:
         return <Balance
           amounts={amounts}
+          onSelectToken={(token: Token) => dispatch(walletActions.openWalletsView(token))}
           rates={rates}
           tokens={tokens.map(i => i.symbol)}
           tokensRecord={tokensRecord} />
     }
   }
 
+  const walletHeaderMode = view === WalletView.Balance ? 
+    WalletHeaderMode.Balance : [WalletView.Help, WalletView.About].includes(view) ? 
+      WalletHeaderMode.Info : WalletHeaderMode.Normal;
+
+  const walletHeaderLabel: Record<WalletView, string> = {
+    [WalletView.Balance]: 'Overall balance',
+    [WalletView.Wallets]: `${token?.name} wallets`,
+    [WalletView.Address]: 'x12345',
+    [WalletView.About]: 'About',
+    [WalletView.Help]: 'Help',
+  };
+  
   useEffect(() => {
-    dispatch(walletActions.openWallet());
+    dispatch(walletActions.openBalanceView());
   }, [dispatch]);
 
   return (
@@ -192,11 +207,13 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
           <div className={classes.toolbarBody}>
             <WalletHeader
               view={view}
-              tokenAmount={5}
-              tokenRate={750}
-              tokenSymbol={'ETH'}
-              tokenName={'Ethereum'}
-              fiatValue={3250.43}
+              mode={walletHeaderMode}
+              label={walletHeaderLabel[view]}
+              fiatValue={walletHeaderMode === WalletHeaderMode.Balance ? totalHelper(amounts, rates) : 0}
+              tokenAmount={token ? amounts[token.symbol] : undefined}
+              tokenRate={token ? rates[token.symbol] : undefined}
+              tokenSymbol={token?.symbol}
+              tokenName={token?.name}
               onBackClick={() => dispatch(walletActions.headerBack())}
             />
           </div>

@@ -14,7 +14,8 @@ export const mockAppState: {
   },
   wallet: {
     amounts: { testToken: 1 },
-    currentView: WalletView.About,
+    activeView: WalletView.About,
+    activeToken: testToken,
     supportedTokens: [testToken],
     supportedTokensRecord: { [testToken.symbol]: testToken },
     usdRates: { testSymbol: 111 },
