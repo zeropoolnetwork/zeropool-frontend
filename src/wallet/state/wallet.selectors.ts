@@ -6,9 +6,14 @@ import { WalletState } from "wallet/state/wallet.reducer";
 
 export const getWalletState = (state: RootState): WalletState => state.wallet;
 
-export const getCurrentView = createSelector(
+export const getActiveView = createSelector(
   getWalletState,
-  state => state.currentView,
+  state => state.activeView,
+);
+
+export const getActiveToken = createSelector(
+  getWalletState,
+  state => state.activeToken,
 );
 
 export const getWalleAmounts = createSelector(

@@ -31,10 +31,10 @@ async function start() {
             <ConnectedRouter history={history}>
               <Router history={history}>
                 <Switch>
-                  <Route path="/wellcome" exact component={CreateAccountPage} />
+                  <Route path="/welcome" exact component={CreateAccountPage} />
                   <Route path="/about" exact component={AboutPage} />
                   <Route path="/wallet" exact component={WalletPage} />
-                  <Route><Redirect to="/wellcome" /></Route>
+                  <Route><Redirect to="/welcome" /></Route>
                 </Switch>
               </Router>
             </ConnectedRouter>

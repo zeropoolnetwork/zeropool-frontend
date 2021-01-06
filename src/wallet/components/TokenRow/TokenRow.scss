@@ -1,14 +1,15 @@
-@import '../../../styles/styles.scss';
+@import "../../../styles/styles.scss";
 
 $fiatFontSize: 12px;
 
 .Token {
   display: flex;
+  cursor: pointer;
   flex-direction: row;
   font-size: 20px;
   justify-content: space-between;
   margin: 0 0 33px 66px;
-  
+
   &-Rates {
     display: flex;
     flex-direction: column;
@@ -31,7 +32,6 @@ $fiatFontSize: 12px;
 
   &-TokenAmount {
     font-weight: bold;
-
   }
 
   &-FiatAmount {

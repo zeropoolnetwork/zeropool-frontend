@@ -5,7 +5,9 @@ import { Token } from 'shared/models/token';
 import { WalletView } from 'wallet/state/models/wallet-view';
 
 export const walletActions = {
-  openWallet: create('@wallet/openWallet')<boolean | void>(),
+  openBalanceView: create('@wallet/openBalanceView')<void>(),
+  openWalletsView: create('@wallet/openWalletsView')<Token>(),
+  openAddressView: create('@wallet/openAddressView')<Token>(),
 
   getRates: create('@wallet/getRates')<void>(),
   getRatesSuccess: create('@wallet/getRatesSuccess')<Record<Token['name'], number>>(),

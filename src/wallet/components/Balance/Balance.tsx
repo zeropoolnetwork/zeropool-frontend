@@ -15,16 +15,18 @@ const test = testIdBuilder(componentId);
 
 export interface BalanceProps {
   amounts: Record<Token['symbol'], number>;
+  onSelectToken: (token: Token) => void;
   rates: Record<string, number>;
   tokens: string[];
   tokensRecord: Record<string, Token>
 }
 
-export const Balance: React.FC<BalanceProps> = ({ amounts, rates, tokens, tokensRecord }) => {
+export const Balance: React.FC<BalanceProps> = ({ amounts, rates, tokens, tokensRecord, onSelectToken }) => {
   return (
     <div className={css()} data-testid={test()}>
       {tokens.map((tokenSymbol, index) =>
         <TokenRow
+          onSelectToken={onSelectToken}
           amount={amounts[tokenSymbol]}
           token={tokensRecord[tokenSymbol]}
           rate={rates[tokenSymbol]}

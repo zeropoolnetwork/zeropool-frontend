@@ -12,7 +12,8 @@ import { WalletView } from 'wallet/state/models/wallet-view';
 export const initialWalletName = 'Main wallet';
 
 export interface WalletState {
-  currentView: WalletView;
+  activeView: WalletView;
+  activeToken: Token | null;
   amounts: Record<Token['symbol'], number>;
   isPrivate?: boolean;
   supportedTokens: Token[];
@@ -21,7 +22,8 @@ export interface WalletState {
 }
 
 export const initialWalletState: WalletState = {
-  currentView: WalletView.Balance,
+  activeView: WalletView.Balance,
+  activeToken: null,
   amounts: { 'ETH': 2.3425, 'NEAR': 15 },
   isPrivate: false,
   supportedTokens: supportedTokens,
@@ -33,17 +35,28 @@ export const walletReducer = createReducer<
   WalletState,
   ActionType<typeof actions>
 >(initialWalletState)
-  .handleAction(actions.openWallet, (state, { payload }) => ({
-    ...state,
-    isPrivate: payload || false,
-  }))
   .handleAction(actions.menu, (state, { payload }) => ({
     ...state,
-    currentView: payload,
+    activeView: payload,
   }))
   .handleAction(actions.headerBack, state => ({
     ...state,
-    currentView: navigationHelper.handleBackClick(state.currentView),
+    activeView: navigationHelper.handleBackClick(state.activeView),
+  }))
+  .handleAction(actions.openBalanceView, state => ({
+    ...state,
+    activeToken: null,
+    activeView: WalletView.Balance,
+  }))
+  .handleAction(actions.openWalletsView, (state, { payload }) => ({
+    ...state,
+    activeView: WalletView.Wallets,
+    activeToken: payload,
+  }))
+  .handleAction(actions.openAddressView, (state, { payload }) => ({
+    ...state,
+    activeView: WalletView.Address,
+    activeAddress: payload,
   }))
   .handleAction(actions.getRatesSuccess, (state, { payload }) => ({
     ...state,

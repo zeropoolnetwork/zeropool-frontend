@@ -16,8 +16,10 @@ const test = testIdBuilder(componentId);
 
 export interface WalletHeaderProps {
   tokenAmount?: number;
-  fiatValue: number;
+  fiatValue?: number;
   view: WalletView;
+  label: string;
+  mode: WalletHeaderMode;
   tokenRate?: number;
   tokenSymbol?: string;
   tokenName?:string;
@@ -25,18 +27,10 @@ export interface WalletHeaderProps {
 }
 
 
-export const WalletHeader: React.FC<WalletHeaderProps> = ({ tokenAmount, view, fiatValue, tokenRate, tokenName, onBackClick }) => {
-  const headerLabel: Record<WalletView, (name?: string) => string> = {
-    [WalletView.Balance]: () => ('Overall balance'),
-    [WalletView.Wallets]: (name) => (`${name} wallets`),
-    [WalletView.Address]: () => '',
-    [WalletView.About]: () => ('About'),
-    [WalletView.Help]: () => ('Help'),
-  };
-
+export const WalletHeader: React.FC<WalletHeaderProps> = ({ mode, tokenAmount, label, view, fiatValue, tokenRate, tokenName, onBackClick }) => {
   return (
     <div className={css()} data-testid={test()}>
-      {view !== WalletView.Balance ?
+      {mode !== WalletHeaderMode.Balance ?
         <Tooltip title="Step back" placement="bottom">
           <Button
             className={css('BackButton')}
@@ -50,7 +44,7 @@ export const WalletHeader: React.FC<WalletHeaderProps> = ({ tokenAmount, view, f
         : null}
 
       <div className={css('Title')}>
-        {headerLabel[view](tokenName)}
+        {label}
       </div>
 
       <div className={css('Amount')}>
@@ -69,3 +63,9 @@ export const WalletHeader: React.FC<WalletHeaderProps> = ({ tokenAmount, view, f
     </div>
   )
 };
+
+export enum WalletHeaderMode {
+  Info,     // show title text only
+  Balance,  // show title text and total
+  Normal,   // use all props
+}

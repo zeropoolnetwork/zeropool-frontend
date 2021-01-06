@@ -14,12 +14,12 @@ import { RootState } from "state";
 
 type Actions = ActionType<typeof walletActions>;
 
-const openWallet$: Epic = (
+const openBalance$: Epic = (
   action$: Observable<Actions>,
   state$: Observable<RootState>,
 ) =>
   action$.pipe(
-    filterActions(walletActions.openWallet),
+    filterActions(walletActions.openBalanceView),
     mapTo(walletActions.getRates()),
   )
 
@@ -38,5 +38,5 @@ const getRates$: Epic = (
 
 export const walletEpics: Epic = combineEpics(
   getRates$,
-  openWallet$,
+  openBalance$,
 )
