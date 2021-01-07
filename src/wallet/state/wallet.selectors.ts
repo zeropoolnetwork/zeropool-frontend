@@ -16,9 +16,14 @@ export const getActiveToken = createSelector(
   state => state.activeToken,
 );
 
-export const getWalleAmounts = createSelector(
+export const getAmounts = createSelector(
   getWalletState,
   state => state.amounts,
+);
+
+export const getWallets = createSelector(
+  getWalletState,
+  state => state.wallets,
 );
 
 export const getSupportedTokens = createSelector(

@@ -1,0 +1,55 @@
+@import "../../../styles/styles.scss";
+
+.WalletRow {
+  display: flex;
+  cursor: pointer;
+  flex-direction: column;
+  font-size: 20px;
+  margin: 0 0 33px 66px;
+  min-height: 40px;
+  position: relative;
+  transition: all 0.4s ease;
+
+  &_Expanded {
+    min-height: 80px;
+  }
+
+  &-Main {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  &-Icon {
+    left: -60px;
+  }
+
+  &-Values {
+    flex-grow: 1;
+  }
+
+  &-WalletName {
+    font-weight: bold;
+  }
+
+  &-WalletAmount {
+    color: grey;
+    font-size: $fiatFontSize;
+    text-shadow: none;
+  }
+
+  &-Expander {
+    height: 40px;
+    width: 40px;
+  }
+
+  &-Buttons {
+    transition: all 0.4s ease-in;
+    height: 40px;
+
+    &_Hidden {
+      opacity: 0;
+      height: 0;
+    }
+  }
+}

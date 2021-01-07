@@ -9,7 +9,7 @@ import { IconOption } from 'shared/components/Icon/IconOption';
 import { Token } from 'shared/models/token';
 import { Icon } from 'shared/components/Icon/Icon';
 
-export const componentId = 'Token';
+export const componentId = 'TokenRow';
 
 const css = cn(componentId);
 const test = testIdBuilder(componentId);

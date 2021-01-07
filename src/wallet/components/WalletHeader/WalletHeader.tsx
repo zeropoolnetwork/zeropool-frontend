@@ -1,13 +1,15 @@
 import React from 'react';
 import { cn } from '@bem-react/classname';
+import NumberFormat from 'react-number-format';
+import { ArrowBack } from '@material-ui/icons';
+import { Tooltip, Button } from '@material-ui/core';
 
 import './WalletHeader.scss';
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
-import { Tooltip, Button } from '@material-ui/core';
-import { ArrowBack } from '@material-ui/icons';
+
 import { WalletView } from 'wallet/state/models/wallet-view';
-import NumberFormat from 'react-number-format';
+import { WalletHeaderMode } from 'wallet/components/WalletHeader/WalletHeaderMode';
 
 export const componentId = 'WalletHeader';
 
@@ -63,9 +65,3 @@ export const WalletHeader: React.FC<WalletHeaderProps> = ({ mode, tokenAmount, l
     </div>
   )
 };
-
-export enum WalletHeaderMode {
-  Info,     // show title text only
-  Balance,  // show title text and total
-  Normal,   // use all props
-}

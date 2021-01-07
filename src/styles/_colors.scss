@@ -1,8 +1,6 @@
 $primary: #020941;
 
-$text-color: #333;
-
-$blue-primary: #2699FB;
+$blue-primary: #2699fb;
 $blue-secondary: #84c6ff;
 $blue-light: #c4e1fa;
 $blue-dark: #3f51b5;
@@ -10,10 +8,17 @@ $blue-dark: #3f51b5;
 $red-primary: #f50057;
 
 $grey-primary: #707070;
-$grey-light: #b3b3b3;
+$grey-light: #ccc;
+
+$text-color: #333;
+$text-shadow-color: $grey-light;
+
+$button-color: white;
+$button-background-color: $primary;
+$button-border-color: $blue-primary;
+$button-shadow-color: $grey-light;
 
 $navigation-panel-background-color: $grey-primary;
 $navigation-panel-text-color: #eee;
-$navigation-panel-icon-hover-color: #1EA7FD;
+$navigation-panel-icon-hover-color: #1ea7fd;
 $navigation-panel-icon-color: $blue-primary;
-
