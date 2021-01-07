@@ -10,7 +10,11 @@ describe('Wallets', () => {
 
   beforeEach(() => {
     outputSpy = jest.fn();
-    component = <Wallets />;
+    component = <Wallets 
+      rate={111}
+      token={{id: 1, name: '111', symbol: '1'}}
+      wallets={[]}
+    />;
   });
 
   it('should render component', () => {

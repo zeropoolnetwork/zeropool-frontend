@@ -1,16 +1,16 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
 
-import { Address, componentId, AddressProps } from './Address';
+import { ExpandButton, componentId, ExpendButtonProps } from './ExpandButton';
 
-describe('Address', () => {
+describe('ExpandButton', () => {
   let outputSpy: jest.Mock;
-  let component: React.ReactElement<AddressProps>;
+  let component: React.ReactElement<ExpendButtonProps>;
   afterEach(cleanup);
 
   beforeEach(() => {
     outputSpy = jest.fn();
-    component = <Address />;
+    component = <ExpandButton />;
   });
 
   it('should render component', () => {

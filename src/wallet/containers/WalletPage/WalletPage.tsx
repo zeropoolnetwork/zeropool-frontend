@@ -15,14 +15,14 @@ import { HelpPage } from 'shared/components/HelpPage/HelpPage';
 import { AboutPage } from 'shared/components/AboutPage/AboutPage';
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
-import { getActiveToken, getActiveView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getWalleAmounts } from 'wallet/state/wallet.selectors';
-import { WalletHeader, WalletHeaderMode } from 'wallet/components/WalletHeader/WalletHeader';
+import { getActiveToken, getActiveView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getAmounts, getWallets } from 'wallet/state/wallet.selectors';
+import { WalletHeader } from 'wallet/components/WalletHeader/WalletHeader';
+import { WalletHeaderMode } from "wallet/components/WalletHeader/WalletHeaderMode";
 import { walletActions } from 'wallet/state/wallet.actions';
 import { totalHelper } from 'wallet/state/helpers/total.helper';
 import { WalletView } from 'wallet/state/models/wallet-view';
 import { Balance } from 'wallet/components/Balance/Balance';
 import { Wallets } from 'wallet/components/Wallets/Wallets';
-import { Address } from 'wallet/components/Address/Address';
 
 export const componentId = 'WalletPage';
 
@@ -92,8 +92,9 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   const token = useSelector(getActiveToken);
   const rates = useSelector(getUsdRates);
   const tokens = useSelector(getSupportedTokens);
-  const amounts = useSelector(getWalleAmounts);
+  const amounts = useSelector(getAmounts);
   const tokensRecord = useSelector(getSupportedTokensRecord);
+  const wallets = useSelector(getWallets);
 
   const toggleDrawer = (open?: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
@@ -146,9 +147,10 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   const components = () => {
     switch (view) {
       case WalletView.Wallets:
-        return <Wallets />
-      case WalletView.Address:
-        return <Address />
+        return <Wallets 
+          wallets={wallets} 
+          token={token || tokens[0]} 
+          rate={rates[token?.symbol || tokens[0].symbol]}/>
       case WalletView.About:
         return <AboutPage showBackButton={false} />
       case WalletView.Help:

@@ -1,22 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { cn } from '@bem-react/classname';
 
 import './Wallets.scss';
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
+import { Address } from 'shared/models/address';
+import { Token } from 'shared/models/token';
+
+import { WalletRow } from 'wallet/components/WalletRow/WalletRow';
 
 export const componentId = 'Wallets';
 
 const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
-export interface WalletsProps { }
+export interface WalletsProps { 
+  rate: number;
+  token: Token;
+  wallets: {address: Address, amount: number, name: string}[];
+}
 
-export const Wallets: React.FC<WalletsProps> = () => {
+export const Wallets: React.FC<WalletsProps> = ({wallets, rate, token}) => {
+  const [rollUpSignal, setRollUpSignal] = useState(0);
 
   return (
     <div className={css()} data-testid={test()}>
-      <h1> Wallets page is under construction </h1>
+      {wallets.map((wallet, index) =>
+        <WalletRow
+          rollUp={rollUpSignal}
+          wallet={wallet}
+          token={token}
+          rate={rate}
+          key={index}
+
+          onReceiveClick={() => true}
+          onSendClick={() => true}
+          onEditClick={() => true}
+          onRollUpClick={() => setRollUpSignal(rollUpSignal+1)}
+        />
+      )}
     </div>
   )
 };

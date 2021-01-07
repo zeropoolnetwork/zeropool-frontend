@@ -1,14 +1,13 @@
 @import "../../../styles/styles.scss";
 
-$fiatFontSize: 12px;
-
-.Token {
+.TokenRow {
   display: flex;
   cursor: pointer;
   flex-direction: row;
   font-size: 20px;
   justify-content: space-between;
   margin: 0 0 33px 66px;
+  min-height: 40px;
 
   &-Rates {
     display: flex;

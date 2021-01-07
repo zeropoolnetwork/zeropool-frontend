@@ -1,0 +1,25 @@
+@import "../../../styles/styles.scss";
+
+.ExpandButton {
+  display: flex;
+
+  button {
+    background: $button-background-color;
+    box-shadow: 2px 2px 4px $button-shadow-color;
+    border: 1px solid $button-border-color;
+    color: $button-color;
+    padding: 6px;
+    transition: all 0.4s ease;
+  }
+
+  button:hover {
+    background-color: $button-background-color;
+  }
+
+  &_Expended {
+    button {
+      transform: rotateZ(90deg);
+      box-shadow: 2px -2px 4px $button-shadow-color;
+    }
+  }
+}
