@@ -14,4 +14,8 @@ export const walletActions = {
 
   headerBack: create('@wallet/header/back')<void>(),
   menu: create('@wallet/menu')<WalletView>(),
+
+  receive: create('@wallet/receive')<void>(),
+  send: create('@wallet/send')<void>(),
+  edit: create('@wallet/edit')<void>(),
 };

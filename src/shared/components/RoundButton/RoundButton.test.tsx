@@ -1,16 +1,16 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
 
-import { ExpandButton, componentId, ExpendButtonProps } from './ExpandButton';
+import { RoundButton, componentId, RoundButtonProps } from './RoundButton';
 
-describe('ExpandButton', () => {
+describe('RoundButton', () => {
   let outputSpy: jest.Mock;
-  let component: React.ReactElement<ExpendButtonProps>;
+  let component: React.ReactElement<RoundButtonProps>;
   afterEach(cleanup);
 
   beforeEach(() => {
     outputSpy = jest.fn();
-    component = <ExpandButton click={jest.fn} expanded={false}/>;
+    component = <RoundButton>test</RoundButton>;
   });
 
   it('should render component', () => {

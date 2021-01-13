@@ -4,16 +4,15 @@
   display: flex;
 
   button {
-    background: $button-background-color;
-    box-shadow: 2px 2px 4px $button-shadow-color;
-    border: 1px solid $button-border-color;
-    color: $button-color;
-    padding: 6px;
-    transition: all 0.4s ease;
-  }
+    @include round-button();
+    margin: 0 !important;
+    padding: 8px !important;
 
-  button:hover {
-    background-color: $button-background-color;
+    svg {
+      left: 1px;
+      position: relative;
+      width: 22px;
+    }
   }
 
   &_Expended {

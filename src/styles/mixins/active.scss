@@ -1,0 +1,5 @@
+@mixin active($color) {
+  &:active {
+    color: $color !important;
+  }
+}

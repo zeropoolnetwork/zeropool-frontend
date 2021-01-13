@@ -7,7 +7,6 @@
   font-size: 20px;
   margin: 0 0 33px 66px;
   min-height: 40px;
-  position: relative;
   transition: all 0.4s ease;
 
   &_Expanded {
@@ -39,17 +38,19 @@
   }
 
   &-Expander {
-    height: 40px;
+    height: 39px;
     width: 40px;
   }
 
   &-Buttons {
     transition: all 0.4s ease-in;
-    height: 40px;
+    height: 50px;
+    padding: 20px 0;
 
     &_Hidden {
-      opacity: 0;
       height: 0;
+      opacity: 0;
+      padding: 0px 0;
     }
   }
 }
