@@ -1,0 +1,45 @@
+@import "../../../styles/styles.scss";
+
+.RoundButton {
+  display: inline-flex;
+  position: relative;
+  height: 75px;
+
+  &_NoLabel {
+    height: 60px;
+  }
+
+  &-Button {
+    @include round-button();
+    @include hover($blue-light);
+    @include active($blue-secondary);
+
+    svg {
+      width: 22px;
+    }
+  }
+
+  &-Label {
+    font-size: 12px;
+    position: absolute;
+    text-align: center;
+    text-shadow: none;
+    width: 100%;
+
+    &_Bottom {
+      bottom: 0;
+    }
+
+    &_Top {
+      top: 0;
+    }
+
+    &_Left {
+      left: 0;
+    }
+
+    &_Right {
+      right: 0;
+    }
+  }
+}

@@ -16,13 +16,13 @@ import { AboutPage } from 'shared/components/AboutPage/AboutPage';
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
 import { getActiveToken, getActiveView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getAmounts, getWallets } from 'wallet/state/wallet.selectors';
-import { WalletHeader } from 'wallet/components/WalletHeader/WalletHeader';
+import { Wallets, WalletsButtonsHandler } from 'wallet/components/Wallets/Wallets';
 import { WalletHeaderMode } from "wallet/components/WalletHeader/WalletHeaderMode";
 import { walletActions } from 'wallet/state/wallet.actions';
+import { WalletHeader } from 'wallet/components/WalletHeader/WalletHeader';
 import { totalHelper } from 'wallet/state/helpers/total.helper';
 import { WalletView } from 'wallet/state/models/wallet-view';
 import { Balance } from 'wallet/components/Balance/Balance';
-import { Wallets } from 'wallet/components/Wallets/Wallets';
 
 export const componentId = 'WalletPage';
 
@@ -144,13 +144,21 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
     </div >
   );
 
+  const walletsButtonHandler: WalletsButtonsHandler = {
+    onReceiveClick: () => dispatch(walletActions.receive()),
+    onSendClick: () => dispatch(walletActions.send()),
+    onEditClick: () => dispatch(walletActions.edit()),
+  }
+
   const components = () => {
     switch (view) {
       case WalletView.Wallets:
         return <Wallets 
-          wallets={wallets} 
+          handler={walletsButtonHandler}
+          rate={rates[token?.symbol || tokens[0].symbol]}
           token={token || tokens[0]} 
-          rate={rates[token?.symbol || tokens[0].symbol]}/>
+          wallets={wallets}
+        />
       case WalletView.About:
         return <AboutPage showBackButton={false} />
       case WalletView.Help:

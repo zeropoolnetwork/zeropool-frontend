@@ -14,13 +14,19 @@ export const componentId = 'Wallets';
 const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
+export interface WalletsButtonsHandler {
+  onReceiveClick: () => void;
+  onSendClick: () => void;
+  onEditClick: () => void;
+};
 export interface WalletsProps { 
+  handler: WalletsButtonsHandler;
   rate: number;
   token: Token;
   wallets: {address: Address, amount: number, name: string}[];
-}
+};
 
-export const Wallets: React.FC<WalletsProps> = ({wallets, rate, token}) => {
+export const Wallets: React.FC<WalletsProps> = ({handler, wallets, rate, token}) => {
   const [rollUpSignal, setRollUpSignal] = useState(0);
 
   return (
@@ -33,9 +39,9 @@ export const Wallets: React.FC<WalletsProps> = ({wallets, rate, token}) => {
           rate={rate}
           key={index}
 
-          onReceiveClick={() => true}
-          onSendClick={() => true}
-          onEditClick={() => true}
+          onReceiveClick={handler.onReceiveClick}
+          onSendClick={handler.onSendClick}
+          onEditClick={handler.onEditClick}
           onRollUpClick={() => setRollUpSignal(rollUpSignal+1)}
         />
       )}
