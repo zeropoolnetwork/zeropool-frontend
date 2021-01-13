@@ -43,9 +43,10 @@
   }
 
   &-Buttons {
-    transition: all 0.4s ease-in;
     height: 50px;
+    margin: -15px;
     padding: 20px 0;
+    transition: all 0.2s ease-out;
 
     &_Hidden {
       height: 0;
