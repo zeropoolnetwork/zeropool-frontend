@@ -8,7 +8,6 @@ import './WalletHeader.scss';
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
-import { WalletView } from 'wallet/state/models/wallet-view';
 import { WalletHeaderMode } from 'wallet/components/WalletHeader/WalletHeaderMode';
 
 export const componentId = 'WalletHeader';
@@ -16,23 +15,22 @@ export const componentId = 'WalletHeader';
 const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
-export interface WalletHeaderProps {
-  tokenAmount?: number;
-  fiatValue?: number;
-  view: WalletView;
-  label: string;
-  mode: WalletHeaderMode;
-  tokenRate?: number;
-  tokenSymbol?: string;
-  tokenName?:string;
-  onBackClick: () => void;
+export type WalletHeaderProps = {
+  fiatValue?: number
+  hideBackButton?: boolean
+  label: string
+  mode: WalletHeaderMode
+  tokenAmount?: number
+  tokenName?:string
+  tokenSymbol?: string
+
+  onBackClick: () => void
 }
 
-
-export const WalletHeader: React.FC<WalletHeaderProps> = ({ mode, tokenAmount, label, view, fiatValue, tokenRate, tokenName, onBackClick }) => {
+export const WalletHeader: React.FC<WalletHeaderProps> = ({ mode, tokenAmount, label, fiatValue, hideBackButton, tokenName, onBackClick }) => {
   return (
     <div className={css()} data-testid={test()}>
-      {mode !== WalletHeaderMode.Balance ?
+      {!hideBackButton ?
         <Tooltip title="Step back" placement="bottom">
           <Button
             className={css('BackButton')}
@@ -50,7 +48,7 @@ export const WalletHeader: React.FC<WalletHeaderProps> = ({ mode, tokenAmount, l
       </div>
 
       <div className={css('Amount')}>
-        {[WalletView.About, WalletView.Help].includes(view) ? null : 
+        {mode === WalletHeaderMode.Info ? null : 
           <NumberFormat
             className={css('FiatAmount')}
             data-testid={test('FiatAmount')}

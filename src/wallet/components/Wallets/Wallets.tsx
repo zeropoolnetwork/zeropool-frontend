@@ -8,6 +8,7 @@ import { Address } from 'shared/models/address';
 import { Token } from 'shared/models/token';
 
 import { WalletRow } from 'wallet/components/WalletRow/WalletRow';
+import { Wallet } from 'wallet/state/models/wallet';
 
 export const componentId = 'Wallets';
 
@@ -15,9 +16,9 @@ const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
 export interface WalletsButtonsHandler {
-  onReceiveClick: () => void;
-  onSendClick: () => void;
-  onEditClick: () => void;
+  onReceiveClick: (wallet: Wallet) => void;
+  onSendClick: (wallet: Wallet) => void;
+  onEditClick: (wallet: Wallet) => void;
 };
 export interface WalletsProps { 
   handler: WalletsButtonsHandler;

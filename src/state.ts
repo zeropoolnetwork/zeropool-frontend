@@ -47,7 +47,7 @@ export const history = createBrowserHistory();
 export const createRootReducer = (history: History) =>
   combineReducers({
     register: registerReducer,
-    wallet: walletReducer,
+    account: walletReducer,
     router: connectRouter(history),
     shared: combineReducers({
       loadingBar: loadingBarReducer,

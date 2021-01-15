@@ -7,29 +7,29 @@ import React, { useEffect, useState } from 'react';
 import './WalletRow.scss';
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
+import { RoundButton } from 'shared/components/RoundButton/RoundButton';
 import { IconOption } from 'shared/components/Icon/IconOption';
-import { Address } from 'shared/models/address';
 import { Token } from 'shared/models/token';
 import { Icon } from 'shared/components/Icon/Icon';
 
 import { ExpandButton } from 'wallet/components/ExpandButton/ExpandButton';
-import { RoundButton } from 'shared/components/RoundButton/RoundButton';
+import { Wallet } from 'wallet/state/models/wallet';
 
 export const componentId = 'WalletRow';
 
 const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
-export interface WalletRowProps { 
-  rollUp: number;
-  rate: number;
-  token: Token;
-  wallet: {address: Address, amount: number, name: string};
+export type WalletRowProps = { 
+  rollUp: number
+  rate: number
+  token: Token
+  wallet: Wallet
 
-  onReceiveClick: () => void;
-  onSendClick: () => void;
-  onEditClick: () => void;
-  onRollUpClick: () => void;
+  onReceiveClick: (wallet: Wallet) => void
+  onSendClick: (wallet: Wallet) => void
+  onEditClick: (wallet: Wallet) => void
+  onRollUpClick: () => void
 }
 
 export const WalletRow: React.FC<WalletRowProps> = ({token, wallet, rate, rollUp, onReceiveClick, onSendClick, onEditClick, onRollUpClick}) => {
@@ -38,13 +38,13 @@ export const WalletRow: React.FC<WalletRowProps> = ({token, wallet, rate, rollUp
   
   const showButtonsHandler = () => {
     if (showButtons) {
-      setShowButtons(false);
+      setShowButtons(false)
     } else {
       onRollUpClick();
       setToBeOpened(true);
     }
   }
-
+  
   useEffect(() => {
     if(toBeOpened) {
       setToBeOpened(false);
@@ -69,15 +69,15 @@ export const WalletRow: React.FC<WalletRowProps> = ({token, wallet, rate, rollUp
       </div>
 
       <div className={css('Buttons', {Hidden: !showButtons})}>
-        <RoundButton className={css('Button1')} label={'Send'} onClick={onSendClick}>
+        <RoundButton className={css('Button1')} label={'Send'} onClick={() => onSendClick(wallet)}>
           <VerticalAlignTopIcon />
         </RoundButton>
         
-        <RoundButton className={css('Button2')} label={'Receive'} onClick={onReceiveClick}>
+        <RoundButton className={css('Button2')} label={'Receive'} onClick={() => onReceiveClick(wallet)}>
           <VerticalAlignBottomIcon />
         </RoundButton>
 
-        <RoundButton className={css('Button2')} label={'Edit'} onClick={onEditClick}>
+        <RoundButton className={css('Button2')} label={'Edit'} onClick={() => onEditClick(wallet)}>
           <SettingsIcon />
         </RoundButton>
       </div>

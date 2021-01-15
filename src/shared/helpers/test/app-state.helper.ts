@@ -7,12 +7,12 @@ const testToken: Token = { id: 1, symbol: 'testSymbol', name: 'testName' };
 
 export const mockAppState: {
   register: Partial<RegisterState>,
-  wallet: Partial<WalletState>,
+  account: Partial<WalletState>,
 } = {
   register: {
     stage: undefined,
   },
-  wallet: {
+  account: {
     amounts: { testToken: 1 },
     activeView: WalletView.About,
     activeToken: testToken,
