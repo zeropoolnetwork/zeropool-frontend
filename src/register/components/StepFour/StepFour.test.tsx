@@ -4,7 +4,7 @@ import { queryByAttribute, act } from '@testing-library/react';
 import { StepFour, componentId, StepFourProps } from './StepFour';
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
-import { createClientRender, fireEvent } from 'shared/util/render';
+import { createClientRender, fireEvent } from 'shared/util/render.js';
 
 const test = testIdBuilder(componentId);
 const getById = queryByAttribute.bind(null, 'id');

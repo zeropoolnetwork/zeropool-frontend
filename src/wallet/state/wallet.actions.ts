@@ -3,11 +3,15 @@ import { createAction as create } from 'typesafe-actions';
 import { Token } from 'shared/models/token';
 
 import { WalletView } from 'wallet/state/models/wallet-view';
+import { Wallet } from 'wallet/state/models/wallet';
 
 export const walletActions = {
   openBalanceView: create('@wallet/openBalanceView')<void>(),
   openWalletsView: create('@wallet/openWalletsView')<Token>(),
   openAddressView: create('@wallet/openAddressView')<Token>(),
+  openReceiveView: create('@wallet/openReceiveView')<Wallet>(),
+  openSendInitialView: create('@wallet/openSendInitialView')<Wallet>(),
+  openSendConfirmView: create('@wallet/openSendConfirmView')<Wallet>(),
 
   getRates: create('@wallet/getRates')<void>(),
   getRatesSuccess: create('@wallet/getRatesSuccess')<Record<Token['name'], number>>(),
@@ -15,7 +19,5 @@ export const walletActions = {
   headerBack: create('@wallet/header/back')<void>(),
   menu: create('@wallet/menu')<WalletView>(),
 
-  receive: create('@wallet/receive')<void>(),
-  send: create('@wallet/send')<void>(),
-  edit: create('@wallet/edit')<void>(),
+  edit: create('@wallet/edit')<Wallet>(),
 };

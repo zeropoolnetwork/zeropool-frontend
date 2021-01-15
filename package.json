@@ -83,10 +83,10 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/about/**/*.{js,jsx,ts,tsx}",
-      "src/shared/**/*.{js,jsx,ts,tsx}",
-      "src/register/**/*.{js,jsx,ts,tsx}",
-      "src/wallet/**/*.{js,jsx,ts,tsx}"
+      "src/shared/**/*.{ts,tsx}",
+      "src/register/**/*.{ts,tsx}",
+      "src/wallet/**/*.{ts,tsx}",
+      "!src/**/*.stories.tsx"
     ]
   }
 }

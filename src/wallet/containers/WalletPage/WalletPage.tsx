@@ -15,7 +15,7 @@ import { HelpPage } from 'shared/components/HelpPage/HelpPage';
 import { AboutPage } from 'shared/components/AboutPage/AboutPage';
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
-import { getActiveToken, getActiveView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getAmounts, getWallets } from 'wallet/state/wallet.selectors';
+import { getActiveToken, getActiveView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getAmounts, getWallets, getActiveWallet } from 'wallet/state/wallet.selectors';
 import { Wallets, WalletsButtonsHandler } from 'wallet/components/Wallets/Wallets';
 import { WalletHeaderMode } from "wallet/components/WalletHeader/WalletHeaderMode";
 import { walletActions } from 'wallet/state/wallet.actions';
@@ -23,6 +23,8 @@ import { WalletHeader } from 'wallet/components/WalletHeader/WalletHeader';
 import { totalHelper } from 'wallet/state/helpers/total.helper';
 import { WalletView } from 'wallet/state/models/wallet-view';
 import { Balance } from 'wallet/components/Balance/Balance';
+import { Send } from 'wallet/components/Send/Send';
+import { Wallet } from 'wallet/state/models/wallet';
 
 export const componentId = 'WalletPage';
 
@@ -94,6 +96,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   const tokens = useSelector(getSupportedTokens);
   const amounts = useSelector(getAmounts);
   const tokensRecord = useSelector(getSupportedTokensRecord);
+  const wallet = useSelector(getActiveWallet);
   const wallets = useSelector(getWallets);
 
   const toggleDrawer = (open?: boolean) => (
@@ -145,9 +148,9 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   );
 
   const walletsButtonHandler: WalletsButtonsHandler = {
-    onReceiveClick: () => dispatch(walletActions.receive()),
-    onSendClick: () => dispatch(walletActions.send()),
-    onEditClick: () => dispatch(walletActions.edit()),
+    onReceiveClick: (wallet: Wallet) => dispatch(walletActions.openReceiveView(wallet)),
+    onSendClick: (wallet: Wallet) => dispatch(walletActions.openSendInitialView(wallet)),
+    onEditClick: (wallet: Wallet) => dispatch(walletActions.edit(wallet)),
   }
 
   const components = () => {
@@ -157,7 +160,10 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
           handler={walletsButtonHandler}
           rate={rates[token?.symbol || tokens[0].symbol]}
           token={token || tokens[0]} 
-          wallets={wallets}
+          wallets={wallets || []}
+        />
+      case WalletView.Send:
+        return <Send
         />
       case WalletView.About:
         return <AboutPage showBackButton={false} />
@@ -173,13 +179,15 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
     }
   }
 
-  const walletHeaderMode = view === WalletView.Balance ? 
-    WalletHeaderMode.Balance : [WalletView.Help, WalletView.About].includes(view) ? 
-      WalletHeaderMode.Info : WalletHeaderMode.Normal;
+  const walletHeaderMode = [WalletView.Help, WalletView.About].includes(view) ? 
+    WalletHeaderMode.Info : WalletHeaderMode.Balance;
 
-  const walletHeaderLabel: Record<WalletView, string> = {
+  const walletHeaderLabels: Record<WalletView, string> = {
     [WalletView.Balance]: 'Overall balance',
     [WalletView.Wallets]: `${token?.name} wallets`,
+    [WalletView.Receive]: `${wallet?.name}`,
+    [WalletView.Send]: `${wallet?.name}`,
+    [WalletView.SendConfirmation]: `${wallet?.name}`,
     [WalletView.Address]: 'x12345',
     [WalletView.About]: 'About',
     [WalletView.Help]: 'Help',
@@ -216,12 +224,11 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
 
           <div className={classes.toolbarBody}>
             <WalletHeader
-              view={view}
               mode={walletHeaderMode}
-              label={walletHeaderLabel[view]}
-              fiatValue={walletHeaderMode === WalletHeaderMode.Balance ? totalHelper(amounts, rates) : 0}
+              label={walletHeaderLabels[view]}
+              hideBackButton={view === WalletView.Balance}
+              fiatValue={walletHeaderMode === WalletHeaderMode.Info ? undefined : totalHelper(amounts, rates, token?.symbol)}
               tokenAmount={token ? amounts[token.symbol] : undefined}
-              tokenRate={token ? rates[token.symbol] : undefined}
               tokenSymbol={token?.symbol}
               tokenName={token?.name}
               onBackClick={() => dispatch(walletActions.headerBack())}

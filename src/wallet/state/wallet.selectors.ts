@@ -4,7 +4,7 @@ import { RootState } from "state";
 
 import { WalletState } from "wallet/state/wallet.reducer";
 
-export const getWalletState = (state: RootState): WalletState => state.wallet;
+export const getWalletState = (state: RootState): WalletState => state.account;
 
 export const getActiveView = createSelector(
   getWalletState,
@@ -16,6 +16,11 @@ export const getActiveToken = createSelector(
   state => state.activeToken,
 );
 
+export const getActiveWallet = createSelector(
+  getWalletState,
+  state => state.activeWallet,
+);
+
 export const getAmounts = createSelector(
   getWalletState,
   state => state.amounts,
@@ -23,7 +28,7 @@ export const getAmounts = createSelector(
 
 export const getWallets = createSelector(
   getWalletState,
-  state => state.wallets,
+  state => state.activeToken ? state.wallets[state.activeToken.symbol] : null,
 );
 
 export const getSupportedTokens = createSelector(
