@@ -13,7 +13,7 @@ describe('wallet reducer', () => {
       actions.openBalanceView(),
     );
 
-    expect(state.isPrivate).toBe(false);
+    expect(state.activeToken).toBe(null);
   });
 
   it('handles `getRates` action', () => {

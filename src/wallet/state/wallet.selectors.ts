@@ -45,3 +45,8 @@ export const getUsdRates = createSelector(
   getWalletState,
   state => state.usdRates,
 );
+
+export const getSendData = createSelector(
+  getWalletState,
+  state => state.send,
+);

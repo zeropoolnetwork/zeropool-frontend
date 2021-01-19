@@ -1,7 +1,7 @@
 import { Token } from 'shared/models/token';
 import { mapRatesToTokens } from './map-rates-to-tokens';
 
-fdescribe('`mapRatesToTokens` helper', () => {
+describe('`mapRatesToTokens` helper', () => {
   it('maps rates to tokens and returns apropriate record', () => {
     const rates = [
       {

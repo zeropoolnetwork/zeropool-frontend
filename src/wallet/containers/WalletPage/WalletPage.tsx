@@ -15,7 +15,7 @@ import { HelpPage } from 'shared/components/HelpPage/HelpPage';
 import { AboutPage } from 'shared/components/AboutPage/AboutPage';
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
-import { getActiveToken, getActiveView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getAmounts, getWallets, getActiveWallet } from 'wallet/state/wallet.selectors';
+import { getActiveToken, getActiveView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getAmounts, getWallets, getActiveWallet, getSendData } from 'wallet/state/wallet.selectors';
 import { Wallets, WalletsButtonsHandler } from 'wallet/components/Wallets/Wallets';
 import { WalletHeaderMode } from "wallet/components/WalletHeader/WalletHeaderMode";
 import { walletActions } from 'wallet/state/wallet.actions';
@@ -23,8 +23,9 @@ import { WalletHeader } from 'wallet/components/WalletHeader/WalletHeader';
 import { totalHelper } from 'wallet/state/helpers/total.helper';
 import { WalletView } from 'wallet/state/models/wallet-view';
 import { Balance } from 'wallet/components/Balance/Balance';
-import { Send } from 'wallet/components/Send/Send';
 import { Wallet } from 'wallet/state/models/wallet';
+import { Send } from 'wallet/components/Send/Send';
+import { SendConfirmation } from 'wallet/components/SendConfirmation/SendConfirmation';
 
 export const componentId = 'WalletPage';
 
@@ -98,6 +99,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   const tokensRecord = useSelector(getSupportedTokensRecord);
   const wallet = useSelector(getActiveWallet);
   const wallets = useSelector(getWallets);
+  const send = useSelector(getSendData);
 
   const toggleDrawer = (open?: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
@@ -156,15 +158,21 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   const components = () => {
     switch (view) {
       case WalletView.Wallets:
-        return <Wallets 
+        return token ? <Wallets 
           handler={walletsButtonHandler}
-          rate={rates[token?.symbol || tokens[0].symbol]}
-          token={token || tokens[0]} 
+          rate={rates[token.symbol]}
+          token={token} 
           wallets={wallets || []}
-        />
+        /> : null;
       case WalletView.Send:
-        return <Send
-        />
+        return wallet ? <Send
+            wallet={wallet}
+            onNextClick={(address, amount) => dispatch(walletActions.openSendConfirmView({wallet, address, amount}))}
+          /> : null;
+      case WalletView.SendConfirmation:
+        return send ? <SendConfirmation
+            onSendClick={()=> dispatch(walletActions.send())}
+          /> : null; 
       case WalletView.About:
         return <AboutPage showBackButton={false} />
       case WalletView.Help:

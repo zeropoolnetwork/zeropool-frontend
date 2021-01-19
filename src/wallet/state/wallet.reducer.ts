@@ -4,6 +4,7 @@ import supportedTokens from 'assets/settings/supported-tokens.json'
 
 import { Token } from 'shared/models/token';
 import { recordFromArray } from 'shared/util/from';
+import { _testWalletsEth, _testWalletsNear } from 'shared/helpers/test/app-state.helper';
 
 import { walletActions as actions } from 'wallet/state/wallet.actions';
 import { navigationHelper } from 'wallet/state/helpers/navigation.helper';
@@ -12,17 +13,6 @@ import { Wallet } from 'wallet/state/models/wallet';
 
 export const initialWalletName = 'Main wallet';
 
-const _testWalletsEth = [
-  { name: 'WalletEth1', amount: 0, address: {symbol: 'ETH', value: 'x123333', private: false}},
-  { name: 'WalletEth2', amount: 1.3425, address: {symbol: 'ETH', value: 'x123222', private: false}},
-  { name: 'WalletEth3', amount: 1, address: {symbol: 'ETH', value: 'x123111', private: true}},
-]
-
-const _testWalletsNear = [
-  { name: 'WalletNear1', amount: 22.3, address: {symbol: 'NEAR', value: 'x123222', private: false}},
-  { name: 'WalletNear2', amount: 11, address: {symbol: 'NEAR', value: 'x123111', private: true}},
-]
-
 // const _testAmounts = { 'ETH': 2.3425, 'NEAR': 15 };
 
 export interface WalletState {
@@ -30,7 +20,7 @@ export interface WalletState {
   activeToken: Token | null;
   activeWallet: Wallet | null;
   amounts: Record<Token['symbol'], number>;
-  isPrivate?: boolean;
+  send?: { wallet: Wallet, address: string, amount: number};
   supportedTokens: Token[];
   supportedTokensRecord: Record<Token['symbol'], Token>;
   usdRates: Record<Token['symbol'], number>;
@@ -42,7 +32,6 @@ export const initialWalletState: WalletState = {
   activeToken: null,
   activeWallet: null,
   amounts: {},
-  isPrivate: false,
   supportedTokens: supportedTokens,
   supportedTokensRecord: recordFromArray(supportedTokens, 'symbol'),
   usdRates: {},
@@ -86,7 +75,12 @@ export const walletReducer = createReducer<
   .handleAction(actions.openSendConfirmView, (state, { payload }) => ({
     ...state,
     activeView: WalletView.SendConfirmation,
-    activeWallet: payload,
+    activeWallet: payload.wallet,
+    send: {
+      wallet: payload.wallet,
+      address: payload.address,
+      amount: payload.amount,
+    }
   }))
   .handleAction(actions.getRatesSuccess, (state, { payload }) => ({
     ...state,
