@@ -1,0 +1,8 @@
+@mixin link() {
+  font-size: 14px;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}

@@ -16,13 +16,13 @@ const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
 export type WalletHeaderProps = {
-  fiatValue?: number
-  hideBackButton?: boolean
-  label: string
-  mode: WalletHeaderMode
-  tokenAmount?: number
-  tokenName?:string
-  tokenSymbol?: string
+  fiatValue?: number,
+  hideBackButton?: boolean,
+  label: string,
+  mode: WalletHeaderMode,
+  tokenAmount?: number,
+  tokenName?:string,
+  tokenSymbol?: string,
 
   onBackClick: () => void
 }
