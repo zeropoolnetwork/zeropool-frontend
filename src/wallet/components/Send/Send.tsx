@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { TextField } from '@material-ui/core';
+import NumberFormat from 'react-number-format';
 import { cn } from '@bem-react/classname';
 
 import './Send.scss';
@@ -6,19 +8,19 @@ import './Send.scss';
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
 import { Wallet } from 'wallet/state/models/wallet';
-import { TextField } from '@material-ui/core';
 
 export const componentId = 'Send';
 
 const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
-export interface SendProps { 
-  wallet: Wallet,
-  onNextClick: (address: string, amount: number) => void,
+export type SendProps = { 
+  rate: number
+  wallet: Wallet
+  onNextClick: (address: string, amount: number) => void
 }
 
-export const Send: React.FC<SendProps> = ({wallet, onNextClick}) => {
+export const Send: React.FC<SendProps> = ({rate, wallet, onNextClick}) => {
   const [address, setAddress] = useState('');
   const [amount, setAmount] = useState(0);
 
@@ -39,7 +41,6 @@ export const Send: React.FC<SendProps> = ({wallet, onNextClick}) => {
     setAmount(wallet.amount);
   }
 
-
   return (
     <div className={css()} data-testid={test()}>
       <div className={css('Title')}> 
@@ -55,7 +56,12 @@ export const Send: React.FC<SendProps> = ({wallet, onNextClick}) => {
           onChange={handleAddressChange}
         />
         
-        <span className={css('AddressInputPaste')} onClick={handleAddressPaste}>Paste</span>
+        <span 
+          className={css('AddressInputPaste')} 
+          onClick={handleAddressPaste}
+        >
+            Paste
+        </span>
 
         <TextField 
           className={css('AmountInput')} 
@@ -65,11 +71,31 @@ export const Send: React.FC<SendProps> = ({wallet, onNextClick}) => {
           onChange={handleAmountChange}
         />
 
-        <span className={css('AmountInputMax')} onClick={handleAmountMaximise}>Max</span>
+        <span 
+          className={css('AmountInputMax')} 
+          onClick={handleAmountMaximise}
+        >
+          Max
+        </span>
+      
+        <NumberFormat
+          className={css('FiatAmount')}
+          data-testid={test('FiatAmount')}
+          value={amount*rate}
+          displayType={'text'}
+          thousandSeparator={true}
+          prefix={'(= '}
+          suffix={' $)'}
+          decimalScale={2}
+        />
       </form>
 
       <div className={css('Next')}>
-        <button className={css('NextButton')} onClick={() => onNextClick(address, amount)}>
+        <button 
+          className={css('NextButton')} 
+          data-testid={test('Next')}
+          onClick={() => onNextClick(address, amount)}
+        >
           Next
         </button>
       </div>

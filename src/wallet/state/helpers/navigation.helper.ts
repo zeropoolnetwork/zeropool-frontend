@@ -18,7 +18,7 @@ export const navigationHelper = {
       case WalletView.SendConfirmation:
         return state.activeToken && state.activeWallet ? {
           ...state,
-          activeView: WalletView.Wallets,
+          activeView: WalletView.Send,
           amounts: amountsHelper.getAmountsForWallet(state.activeToken, state.activeWallet),
         } : state;
 

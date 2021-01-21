@@ -165,13 +165,18 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
           wallets={wallets || []}
         /> : null;
       case WalletView.Send:
-        return wallet ? <Send
+        return wallet && token ? <Send
+            rate={rates[token.symbol]}
             wallet={wallet}
             onNextClick={(address, amount) => dispatch(walletActions.openSendConfirmView({wallet, address, amount}))}
           /> : null;
       case WalletView.SendConfirmation:
-        return send ? <SendConfirmation
-            onSendClick={()=> dispatch(walletActions.send())}
+        return send && token ? <SendConfirmation
+            amount={send.amount}
+            address={send.address}
+            rate={rates[token.symbol]}
+            wallet={send.wallet}
+            onConfirmClick={()=> dispatch(walletActions.send())}
           /> : null; 
       case WalletView.About:
         return <AboutPage showBackButton={false} />
