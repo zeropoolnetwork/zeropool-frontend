@@ -6,6 +6,7 @@ import { Tooltip, Button } from '@material-ui/core';
 
 import './WalletHeader.scss';
 
+import { useNavigateBack } from 'shared/hooks/use-navigate-back';
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
 import { WalletHeaderMode } from 'wallet/components/WalletHeader/WalletHeaderMode';
@@ -28,6 +29,8 @@ export type WalletHeaderProps = {
 }
 
 export const WalletHeader: React.FC<WalletHeaderProps> = ({ mode, tokenAmount, label, fiatValue, hideBackButton, tokenName, onBackClick }) => {
+  useNavigateBack(onBackClick);
+
   return (
     <div className={css()} data-testid={test()}>
       {!hideBackButton ?

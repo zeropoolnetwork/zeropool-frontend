@@ -23,11 +23,11 @@ export const componentId = 'CreateAccountPage';
 const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
-interface CreateAccountProps { }
+type CreateAccountProps = { }
 
 export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
-  const stage = useSelector(getRegisterStage);
   const seed = useSelector(getRegisterSeed);
+  const stage = useSelector(getRegisterStage);
   const showSteps = useSelector(getShowSteps);
   const dispatch = useDispatch();
 
@@ -55,10 +55,16 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
         />
     }
   }
-
   return (
     <div className={css()} data-testid={test()}>
-      {(stage && showSteps) ? <StepHeader step={stage} total={4} onBack={() => dispatch(actions.stepBack())} /> : null}
+      {(stage && showSteps) ? 
+        <StepHeader 
+          step={stage} 
+          total={4} 
+          onBack={() => dispatch(actions.stepBack())} 
+        /> : null
+      }
+
       {components()}
     </div>
   )
