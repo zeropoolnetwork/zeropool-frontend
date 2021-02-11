@@ -1,11 +1,11 @@
 import React from 'react';
 import { cn } from '@bem-react/classname';
+import { TextField, Tooltip } from '@material-ui/core';
 
 import './SendConfirmation.scss';
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 import { Wallet } from 'wallet/state/models/wallet';
-import { TextField } from '@material-ui/core';
 
 export const componentId = 'SendConfirmation';
 
@@ -35,21 +35,35 @@ export const SendConfirmation: React.FC<SendConfirmationProps> = ({
       </div>
 
       <form className={css('Inputs')} noValidate autoComplete="off">
-        <TextField 
-          className={css('From')} 
-          id="from" 
-          label="From" 
-          value={wallet.name} 
-          disabled={true}
-        />
+        <Tooltip title={wallet.name} placement="bottom">
+          <TextField 
+            className={css('From')} 
+            id="from" 
+            label="From" 
+            value={wallet.name} 
+            disabled={true}
+          />
+        </Tooltip>
 
-        <TextField 
-          className={css('To')} 
-          id="to" 
-          label="To" 
-          value={address} 
-          disabled={true}
-        />
+        <Tooltip title={address} placement="bottom">
+          <TextField 
+            className={css('To')} 
+            id="to" 
+            label="To" 
+            value={address} 
+            disabled={true}
+          />
+        </Tooltip>
+
+        <Tooltip title={amount} placement="bottom">
+          <TextField 
+            className={css('Amount')} 
+            id="amount" 
+            label="Amount" 
+            value={`${amount} ${wallet.address.symbol}`} 
+            disabled={true}
+          />
+        </Tooltip>
         
         <TextField 
           className={css('Fee')} 

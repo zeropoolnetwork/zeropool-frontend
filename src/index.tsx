@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from '@material-ui/core';
 import { ConnectedRouter } from 'connected-react-router';
+import { SnackbarProvider } from 'notistack';
 import { Router, Route, Redirect, Switch } from 'react-router-dom';
 
 import './index.css';
@@ -25,23 +26,25 @@ async function start() {
 
   ReactDOM.render(
     <ThemeProvider theme={theme}>
-      <React.StrictMode>
-        <Provider store={store}>
-          <PersistGate persistor={persistedStore}>
-            <ConnectedRouter history={history}>
-              <Router history={history}>
-                <Switch>
-                  <Route path="/welcome" exact component={CreateAccountPage} />
-                  <Route path="/about" exact component={AboutPage} />
-                  <Route path="/wallet" exact component={WalletPage} />
-                  <Route><Redirect to="/welcome" /></Route>
-                </Switch>
-              </Router>
-            </ConnectedRouter>
-            <LoadingBar />
-          </PersistGate>
-        </Provider>
-      </React.StrictMode>
+      <SnackbarProvider maxSnack={5} anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}>
+        <React.StrictMode>
+          <Provider store={store}>
+            <PersistGate persistor={persistedStore}>
+              <ConnectedRouter history={history}>
+                <Router history={history}>
+                  <Switch>
+                    <Route path="/welcome" exact component={CreateAccountPage} />
+                    <Route path="/about" exact component={AboutPage} />
+                    <Route path="/wallet" exact component={WalletPage} />
+                    <Route><Redirect to="/welcome" /></Route>
+                  </Switch>
+                </Router>
+              </ConnectedRouter>
+              <LoadingBar />
+            </PersistGate>
+          </Provider>
+        </React.StrictMode>
+      </SnackbarProvider>
     </ThemeProvider>,
     document.getElementById('root')
   );

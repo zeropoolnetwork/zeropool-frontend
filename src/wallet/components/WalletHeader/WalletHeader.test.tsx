@@ -3,7 +3,7 @@ import { cleanup, render } from '@testing-library/react';
 
 import { WalletHeader, componentId, WalletHeaderProps } from './WalletHeader';
 
-import { WalletView } from 'wallet/state/models/wallet-view';
+import { WalletHeaderMode } from './WalletHeaderMode';
 
 describe('WalletHeader', () => {
   let outputSpy: jest.Mock;
@@ -13,7 +13,8 @@ describe('WalletHeader', () => {
   beforeEach(() => {
     outputSpy = jest.fn();
     component = <WalletHeader
-      view={WalletView.Wallets}
+      label={'test label'}
+      mode={WalletHeaderMode.Info}
       tokenAmount={5}
       tokenRate={750}
       tokenSymbol={'ETH'}

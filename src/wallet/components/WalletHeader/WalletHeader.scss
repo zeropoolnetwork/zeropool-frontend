@@ -1,3 +1,5 @@
+@import "../../../styles/styles.scss";
+
 .WalletHeader {
   align-self: flex-end;
   display: flex;
@@ -17,6 +19,14 @@
   &-Amount {
     font-size: 30px;
     margin: auto;
+  }
 
+  &-Tokens {
+    color: $blue-secondary;
+    position: absolute;
+    bottom: -17px;
+    font-size: 13px;
+    width: 100%;
+    text-align: center;
   }
 }
