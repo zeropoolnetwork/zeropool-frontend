@@ -58,7 +58,7 @@ export const Welcome: React.FC<WelcomeProps> = ({ onCreate, onImport, onAbout, o
 
       <Button
         color="primary"
-        variant="contained"
+        variant="outlined"
         className={css('Button')}
         data-testid={test('AboutButton')}
         onClick={onAbout}

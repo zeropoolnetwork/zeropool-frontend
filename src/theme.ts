@@ -59,6 +59,7 @@ export const theme = createMuiTheme({
       outlinedPrimary: {
         backgroundColor: COLOR_PRIMARY,
         color: COLOR_WHITE,
+        border: `solid ${COLOR_BLUE_LIGHT} 2px`
       },
     },
 
