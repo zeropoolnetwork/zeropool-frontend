@@ -37,18 +37,18 @@ export const Welcome: React.FC<WelcomeProps> = ({ onCreate, onImport, onAbout, o
 
       <Button
         color="primary"
+        variant="contained"
         className={css('Button')}
         data-testid={test('CreateButton')}
         disableElevation
         onClick={onCreate}
-        variant="contained"
       >
         Create new wallet
       </Button>
 
       <Button
-        variant="outlined"
         color="primary"
+        variant="contained"
         className={css('Button')}
         data-testid={test('ImportButton')}
         onClick={onImport}
@@ -57,8 +57,8 @@ export const Welcome: React.FC<WelcomeProps> = ({ onCreate, onImport, onAbout, o
       </Button>
 
       <Button
-        variant="outlined"
         color="primary"
+        variant="contained"
         className={css('Button')}
         data-testid={test('AboutButton')}
         onClick={onAbout}

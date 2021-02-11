@@ -52,6 +52,14 @@ export const theme = createMuiTheme({
           backgroundColor: COLOR_BLUE_SECCONDARY,
         }
       },
+      containedPrimary: {
+        background: 'linear-gradient(90deg, rgba(132,198,255,1) 10%, rgba(38,153,251,1) 100%)',
+        color: COLOR_WHITE,
+      },
+      outlinedPrimary: {
+        backgroundColor: COLOR_PRIMARY,
+        color: COLOR_WHITE,
+      },
     },
 
     MuiLinearProgress: {
