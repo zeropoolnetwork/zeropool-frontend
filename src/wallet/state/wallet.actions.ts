@@ -11,7 +11,7 @@ export const walletActions = {
   openAddressView: create('@wallet/openAddressView')<Token>(),
   openReceiveView: create('@wallet/openReceiveView')<Wallet>(),
   openSendInitialView: create('@wallet/openSendInitialView')<Wallet>(),
-  openSendConfirmView: create('@wallet/openSendConfirmView')<{wallet: Wallet, address: string, amount: number}>(),
+  openSendConfirmView: create('@wallet/openSendConfirmView')<{ wallet: Wallet, address: string, amount: number }>(),
 
   getRates: create('@wallet/getRates')<void>(),
   getRatesSuccess: create('@wallet/getRatesSuccess')<Record<Token['name'], number>>(),
@@ -20,6 +20,10 @@ export const walletActions = {
   menu: create('@wallet/menu')<WalletView>(),
 
   edit: create('@wallet/edit')<Wallet>(),
-  
+
   send: create('@wallet/send')<void>(),
+
+  setSeed: create('@wallet/setSeed')<string>(),
+  addWallet: create('@wallet/addWallet')<number>(),
+  hideWallet: create('@wallet/hideWallet')<number>(),
 };

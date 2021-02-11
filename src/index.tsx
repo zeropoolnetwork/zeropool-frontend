@@ -26,16 +26,20 @@ async function start() {
 
   ReactDOM.render(
     <ThemeProvider theme={theme}>
-      <SnackbarProvider maxSnack={5} anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}>
+      <SnackbarProvider maxSnack={5} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
         <React.StrictMode>
           <Provider store={store}>
             <PersistGate persistor={persistedStore}>
               <ConnectedRouter history={history}>
                 <Router history={history}>
                   <Switch>
-                    <Route path="/welcome" exact component={CreateAccountPage} />
+                    <Route path="/welcome" exact>
+                      {store.getState().wallet.seed ? <Redirect to="/wallet" /> : <CreateAccountPage />}
+                    </Route>
                     <Route path="/about" exact component={AboutPage} />
-                    <Route path="/wallet" exact component={WalletPage} />
+                    <Route path="/wallet" exact>
+                      {!store.getState().wallet.seed ? <Redirect to="/welcome" /> : <WalletPage />}
+                    </Route>
                     <Route><Redirect to="/welcome" /></Route>
                   </Switch>
                 </Router>

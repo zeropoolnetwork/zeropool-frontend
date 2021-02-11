@@ -1,4 +1,5 @@
 import { ActionType, createReducer } from 'typesafe-actions';
+import { CoinType } from 'zeropool-api-js';
 
 import supportedTokens from 'assets/settings/supported-tokens.json'
 
@@ -6,6 +7,7 @@ import { Token } from 'shared/models/token';
 import { recordFromArray } from 'shared/util/from';
 import { _testWalletsEth, _testWalletsNear } from 'shared/helpers/test/app-state.helper';
 
+import { initHDWallet } from 'wallet/api/zeropool.api';
 import { walletActions as actions } from 'wallet/state/wallet.actions';
 import { navigationHelper } from 'wallet/state/helpers/navigation.helper';
 import { WalletView } from 'wallet/state/models/wallet-view';
@@ -20,11 +22,12 @@ export interface WalletState {
   activeToken: Token | null;
   activeWallet: Wallet | null;
   amounts: Record<Token['symbol'], number>;
-  send?: { wallet: Wallet, address: string, amount: number};
+  send?: { wallet: Wallet, address: string, amount: number };
   supportedTokens: Token[];
   supportedTokensRecord: Record<Token['symbol'], Token>;
   usdRates: Record<Token['symbol'], number>;
   wallets: Record<Token['symbol'], Wallet[]>;
+  seed: string | null;
 }
 
 export const initialWalletState: WalletState = {
@@ -40,6 +43,7 @@ export const initialWalletState: WalletState = {
     NEAR: _testWalletsNear,
     WAVES: [],
   },
+  seed: null,
 };
 
 export const walletReducer = createReducer<
@@ -85,4 +89,12 @@ export const walletReducer = createReducer<
   .handleAction(actions.getRatesSuccess, (state, { payload }) => ({
     ...state,
     usdRates: payload,
-  }));
+  }))
+  .handleAction(actions.setSeed, (state, { payload }) => {
+    initHDWallet(payload, { [CoinType.ethereum]: [0], [CoinType.near]: [0] });
+
+    return {
+      ...state,
+      seed: payload,
+    };
+  });

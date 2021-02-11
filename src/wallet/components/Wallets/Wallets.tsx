@@ -20,11 +20,11 @@ export interface WalletsButtonsHandler {
   onSendClick: (wallet: Wallet) => void;
   onEditClick: (wallet: Wallet) => void;
 };
-export interface WalletsProps { 
+export interface WalletsProps {
   handler: WalletsButtonsHandler;
   rate: number;
   token: Token;
-  wallets: {address: Address, amount: number, name: string}[];
+  wallets: Wallet[];
 };
 
 export const Wallets: React.FC<WalletsProps> = ({handler, wallets, rate, token}) => {

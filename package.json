@@ -43,7 +43,8 @@
     "rxjs": "^6.6.3",
     "typesafe-actions": "^5.1.0",
     "typescript": "~3.7.2",
-    "wallet.ts": "1.0.1"
+    "wallet.ts": "1.0.1",
+    "zeropool-api-js": "zeropoolnetwork/zeropool-api-js"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
