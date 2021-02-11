@@ -24,11 +24,12 @@ export type WalletHeaderProps = {
   tokenAmount?: number,
   tokenName?:string,
   tokenSymbol?: string,
+  tokenRate?: number,
 
   onBackClick: () => void
 }
 
-export const WalletHeader: React.FC<WalletHeaderProps> = ({ mode, tokenAmount, label, fiatValue, hideBackButton, tokenName, onBackClick }) => {
+export const WalletHeader: React.FC<WalletHeaderProps> = ({ mode, tokenAmount, tokenSymbol, label, fiatValue, hideBackButton, tokenName, onBackClick }) => {
   useNavigateBack(onBackClick);
 
   return (
@@ -47,7 +48,7 @@ export const WalletHeader: React.FC<WalletHeaderProps> = ({ mode, tokenAmount, l
         : null}
 
       <div className={css('Title')}>
-        {label}
+        <span>{label}</span>
       </div>
 
       <div className={css('Amount')}>
@@ -63,6 +64,12 @@ export const WalletHeader: React.FC<WalletHeaderProps> = ({ mode, tokenAmount, l
           />
         }
       </div>
+
+      <div className={css('Tokens')}>
+          {tokenAmount && tokenName 
+            ? `${tokenAmount} ${tokenSymbol}`
+            : null}
+        </div>
     </div>
   )
 };

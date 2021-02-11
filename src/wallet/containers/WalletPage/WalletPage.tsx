@@ -26,6 +26,7 @@ import { Balance } from 'wallet/components/Balance/Balance';
 import { Wallet } from 'wallet/state/models/wallet';
 import { Send } from 'wallet/components/Send/Send';
 import { SendConfirmation } from 'wallet/components/SendConfirmation/SendConfirmation';
+import { Receive } from 'wallet/components/Receive/Receive';
 
 export const componentId = 'WalletPage';
 
@@ -47,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'flex-start',
     flexDirection: 'column',
     paddingTop: theme.spacing(1),
-    minHeight: 150,
+    minHeight: 160,
     paddingBottom: '0',
   },
   toolbarHeader: {
@@ -178,6 +179,11 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
             wallet={send.wallet}
             onConfirmClick={()=> dispatch(walletActions.send())}
           /> : null; 
+      case WalletView.Receive:
+        return wallet ? <Receive
+        address={wallet.address}
+        rate={rates[wallet.address.symbol]}
+        /> : null;
       case WalletView.About:
         return <AboutPage showBackButton={false} />
       case WalletView.Help:
@@ -227,7 +233,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
             <div className={classes.toolbarHeaderItems}>
               <Tooltip title="No new messages" placement="bottom">
                 <IconButton aria-label="show 0 new notifications" color="inherit">
-                  <Badge badgeContent={0} color="secondary" title="No new messages">
+                  <Badge badgeContent={0} color="secondary">
                     <NotificationsIcon />
                   </Badge>
                 </IconButton>

@@ -1,0 +1,19 @@
+@import "../../../styles/styles.scss";
+
+.Receive {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &-Title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: $page-title-font-size;
+  }
+
+  &-Code {
+  }
+
+  &-Amount {
+  }
+}

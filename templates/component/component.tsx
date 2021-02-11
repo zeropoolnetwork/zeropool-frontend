@@ -10,7 +10,7 @@ export const componentId = 'TemplateName';
 const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
-export interface TemplateNameProps { }
+export type TemplateNameProps = { }
 
 export const TemplateName: React.FC<TemplateNameProps> = () => {
 

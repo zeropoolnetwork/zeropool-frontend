@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSnackbar } from 'notistack';
 import { TextField } from '@material-ui/core';
 import NumberFormat from 'react-number-format';
 import { cn } from '@bem-react/classname';
@@ -6,6 +7,7 @@ import { cn } from '@bem-react/classname';
 import './Send.scss';
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
+import { validateAddress } from 'shared/helpers/addres.helper';
 
 import { Wallet } from 'wallet/state/models/wallet';
 
@@ -23,6 +25,7 @@ export type SendProps = {
 export const Send: React.FC<SendProps> = ({rate, wallet, onNextClick}) => {
   const [address, setAddress] = useState('');
   const [amount, setAmount] = useState(0);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAddress(event.target.value);
@@ -30,11 +33,17 @@ export const Send: React.FC<SendProps> = ({rate, wallet, onNextClick}) => {
 
   const handleAddressPaste = async (event: React.MouseEvent) => {
     const text = await navigator.clipboard.readText();
-    setAddress(text);
+    
+    if (validateAddress({ ...wallet.address, value: text})) {
+      setAddress(text);
+      enqueueSnackbar('Address added from the clipboard', { variant: 'success' });
+    } else {
+      enqueueSnackbar('Clipboard contains bad address', { variant: 'error' });
+    }
   }
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAddress(event.target.value);
+    setAmount(Number(event.target.value) || 0);
   }
 
   const handleAmountMaximise = (event: React.MouseEvent) => {
