@@ -7,7 +7,6 @@ import { Token } from 'shared/models/token';
 import { recordFromArray } from 'shared/util/from';
 import { _testWalletsEth, _testWalletsNear } from 'shared/helpers/test/app-state.helper';
 
-import { initHDWallet } from 'wallet/api/zeropool.api';
 import { walletActions as actions } from 'wallet/state/wallet.actions';
 import { navigationHelper } from 'wallet/state/helpers/navigation.helper';
 import { WalletView } from 'wallet/state/models/wallet-view';
@@ -89,12 +88,4 @@ export const walletReducer = createReducer<
   .handleAction(actions.getRatesSuccess, (state, { payload }) => ({
     ...state,
     usdRates: payload,
-  }))
-  .handleAction(actions.setSeed, (state, { payload }) => {
-    initHDWallet(payload, { [CoinType.ethereum]: [0], [CoinType.near]: [0] });
-
-    return {
-      ...state,
-      seed: payload,
-    };
-  });
+  }));

@@ -34,11 +34,11 @@ async function start() {
                 <Router history={history}>
                   <Switch>
                     <Route path="/welcome" exact>
-                      {store.getState().wallet.seed ? <Redirect to="/wallet" /> : <CreateAccountPage />}
+                      {store.getState().account.seed ? <Redirect to="/wallet" /> : <CreateAccountPage />}
                     </Route>
                     <Route path="/about" exact component={AboutPage} />
                     <Route path="/wallet" exact>
-                      {!store.getState().wallet.seed ? <Redirect to="/welcome" /> : <WalletPage />}
+                      {!store.getState().account.seed ? <Redirect to="/welcome" /> : <WalletPage />}
                     </Route>
                     <Route><Redirect to="/welcome" /></Route>
                   </Switch>
