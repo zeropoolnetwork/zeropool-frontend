@@ -23,7 +23,7 @@ export const walletActions = {
 
   send: create('@wallet/send')<void>(),
 
-  setSeed: create('@wallet/setSeed')<string>(),
+  setSeed: create('@wallet/setSeed')<{ seed: string }>(),
   addWallet: create('@wallet/addWallet')<number>(),
   hideWallet: create('@wallet/hideWallet')<number>(),
 };

@@ -1,19 +1,18 @@
-import { Observable } from "rxjs";
-import { ActionType } from 'typesafe-actions';
-import { Epic, combineEpics } from "redux-observable";
-import { switchMapTo, map, withLatestFrom, mapTo } from 'rxjs/operators';
 import { CoinType } from 'zeropool-api-js';
+import { Observable } from 'rxjs';
+import { Epic, combineEpics } from 'redux-observable';
+import { ActionType, isActionOf } from 'typesafe-actions';
+import { switchMapTo, map, withLatestFrom, mapTo, filter } from 'rxjs/operators';
 
 import { filterActions } from 'shared/operators/filter-actions.operator';
 
+import { getSupportedTokens } from 'wallet/state/wallet.selectors';
+import { mapRatesToTokens } from 'wallet/state/helpers/map-rates-to-tokens';
+import { walletActions } from 'wallet/state/wallet.actions';
 import { initHDWallet } from 'wallet/api/zeropool.api';
-import { getSupportedTokens } from "wallet/state/wallet.selectors";
-import { mapRatesToTokens } from "wallet/state/helpers/map-rates-to-tokens";
-import { walletActions } from "wallet/state/wallet.actions";
-import { registerActions } from 'register/state/register.actions';
-import { RatesApi } from "wallet/api/rates.api";
+import { RatesApi } from 'wallet/api/rates.api';
 
-import { RootState } from "state";
+import { RootState } from 'state';
 
 type Actions = ActionType<typeof walletActions>;
 
@@ -31,7 +30,7 @@ const getRates$: Epic = (
   state$: Observable<RootState>,
 ) =>
   action$.pipe(
-    filterActions(walletActions.getRates),
+    filter(isActionOf(walletActions.getRates)),
     switchMapTo(RatesApi.getRates().pipe(
       withLatestFrom(state$.pipe(map(getSupportedTokens))),
       map(([{ status, data }, tokens]) => mapRatesToTokens(data, tokens)),
@@ -44,15 +43,17 @@ const initHDWallet$: Epic = (
   state$: Observable<RootState>,
 ) =>
   action$.pipe(
-    filterActions(walletActions.setSeed),
+    filter(isActionOf(walletActions.setSeed)),
     map(action => {
-      const seed = (action as any).payload.seed;
+      const seed = action.payload.seed;
       initHDWallet(seed, { [CoinType.ethereum]: [0], [CoinType.near]: [0] });
       // FIXME: redirect
+      debugger;
     }),
   );
 
 export const walletEpics: Epic = combineEpics(
   getRates$,
   openBalance$,
+  initHDWallet$,
 )

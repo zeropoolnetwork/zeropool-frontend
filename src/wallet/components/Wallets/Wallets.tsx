@@ -4,7 +4,6 @@ import { cn } from '@bem-react/classname';
 import './Wallets.scss';
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
-import { Address } from 'shared/models/address';
 import { Token } from 'shared/models/token';
 
 import { WalletRow } from 'wallet/components/WalletRow/WalletRow';

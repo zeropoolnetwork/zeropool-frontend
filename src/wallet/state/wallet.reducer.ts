@@ -1,5 +1,5 @@
 import { ActionType, createReducer } from 'typesafe-actions';
-import { CoinType } from 'zeropool-api-js';
+// import { CoinType } from 'zeropool-api-js';
 
 import supportedTokens from 'assets/settings/supported-tokens.json'
 

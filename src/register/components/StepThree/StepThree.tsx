@@ -42,6 +42,17 @@ export const StepThree: React.FC<StepThreeProps> = ({ seed, onConfirm }) => {
       >
         Confirm
       </Button>
+      
+      {/* TODO: remove after testing */}
+      <Button
+        color="primary"
+        className={css('Button')}
+        disableElevation
+        onClick={onConfirm}
+        variant="contained"
+      >
+        Testing: force confirm
+      </Button>
     </div>
   )
 };

@@ -1,4 +1,4 @@
-@import '../../../styles/styles.scss';
+@import "../../../styles/styles.scss";
 
 .StepFour {
   align-items: center;
@@ -15,7 +15,7 @@
   }
 
   &-Button.MuiButton-root {
-    display: block;
-    margin: auto;
+    margin-right: auto;
+    margin-left: auto;
   }
 }
