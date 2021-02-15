@@ -85,6 +85,10 @@ export const walletReducer = createReducer<
       amount: payload.amount,
     }
   }))
+  .handleAction(actions.setSeedSuccess, (state, { payload }) => ({
+    ...state,
+    seed: payload.seed,
+  }))
   .handleAction(actions.getRatesSuccess, (state, { payload }) => ({
     ...state,
     usdRates: payload,

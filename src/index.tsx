@@ -10,13 +10,15 @@ import { Router, Route, Redirect, Switch } from 'react-router-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 
-import { store, history, persistedStore } from 'state';
+import { SnackbarUtilsConfigurator } from 'shared/helpers/toast.helper';
 import { http, setupInterceptors } from 'shared/http/http';
-import { CreateAccountPage } from 'register/containers/CreateAccount/CreateAccountPage';
-import { WalletPage } from 'wallet/containers/WalletPage/WalletPage';
 import { LoadingBar } from 'shared/loading-bar/containers/loading-bar/loading-bar.component';
 import { AboutPage } from 'shared/components/AboutPage/AboutPage';
 import { timeout } from 'shared/util/timeout';
+
+import { store, history, persistedStore } from 'state';
+import { CreateAccountPage } from 'register/containers/CreateAccount/CreateAccountPage';
+import { WalletPage } from 'wallet/containers/WalletPage/WalletPage';
 import { theme } from 'theme';
 
 setupInterceptors(http(), store);
@@ -33,13 +35,9 @@ async function start() {
               <ConnectedRouter history={history}>
                 <Router history={history}>
                   <Switch>
-                    <Route path="/welcome" exact>
-                      {store.getState().account.seed ? <Redirect to="/wallet" /> : <CreateAccountPage />}
-                    </Route>
+                    <Route path="/welcome" exact component={CreateAccountPage} />
                     <Route path="/about" exact component={AboutPage} />
-                    <Route path="/wallet" exact>
-                      {!store.getState().account.seed ? <Redirect to="/welcome" /> : <WalletPage />}
-                    </Route>
+                    <Route path="/wallet" exact component={WalletPage} />
                     <Route><Redirect to="/welcome" /></Route>
                   </Switch>
                 </Router>
@@ -48,6 +46,7 @@ async function start() {
             </PersistGate>
           </Provider>
         </React.StrictMode>
+        <SnackbarUtilsConfigurator />
       </SnackbarProvider>
     </ThemeProvider>,
     document.getElementById('root')

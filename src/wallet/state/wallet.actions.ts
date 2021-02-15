@@ -24,6 +24,8 @@ export const walletActions = {
   send: create('@wallet/send')<void>(),
 
   setSeed: create('@wallet/setSeed')<{ seed: string }>(),
+  setSeedSuccess: create('@wallet/setSeedSuccess')<{ seed: string}>(),
+  setSeedError: create('@wallet/setSeedError')<void>(),
   addWallet: create('@wallet/addWallet')<number>(),
   hideWallet: create('@wallet/hideWallet')<number>(),
 };
