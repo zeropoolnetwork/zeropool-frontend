@@ -31,7 +31,7 @@ async function start() {
       <SnackbarProvider maxSnack={5} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
         <React.StrictMode>
           <Provider store={store}>
-            <PersistGate persistor={persistedStore}>
+            <PersistGate loading={null} persistor={persistedStore}>
               <ConnectedRouter history={history}>
                 <Router history={history}>
                   <Switch>

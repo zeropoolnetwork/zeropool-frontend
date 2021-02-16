@@ -10,9 +10,11 @@ export const useNavigateBack = (callback: Function): void => {
       
       window.addEventListener('popstate', function(event) {
         window.history.pushState(null, '', document.URL);
-        event.stopImmediatePropagation();
         callback();
       }, false);
+    } else {
+      // Fix browser history
+      window.history.pushState(null, '', document.URL);
     }
   }, [callback]);
 }
