@@ -1,4 +1,5 @@
 import { ActionType, createReducer } from 'typesafe-actions';
+// import { CoinType } from 'zeropool-api-js';
 
 import supportedTokens from 'assets/settings/supported-tokens.json'
 
@@ -20,11 +21,12 @@ export interface WalletState {
   activeToken: Token | null;
   activeWallet: Wallet | null;
   amounts: Record<Token['symbol'], number>;
-  send?: { wallet: Wallet, address: string, amount: number};
+  send?: { wallet: Wallet, address: string, amount: number };
   supportedTokens: Token[];
   supportedTokensRecord: Record<Token['symbol'], Token>;
   usdRates: Record<Token['symbol'], number>;
   wallets: Record<Token['symbol'], Wallet[]>;
+  seed: string | null;
 }
 
 export const initialWalletState: WalletState = {
@@ -40,6 +42,7 @@ export const initialWalletState: WalletState = {
     NEAR: _testWalletsNear,
     WAVES: [],
   },
+  seed: null,
 };
 
 export const walletReducer = createReducer<
@@ -81,6 +84,10 @@ export const walletReducer = createReducer<
       address: payload.address,
       amount: payload.amount,
     }
+  }))
+  .handleAction(actions.setSeedSuccess, (state, { payload }) => ({
+    ...state,
+    seed: payload.seed,
   }))
   .handleAction(actions.getRatesSuccess, (state, { payload }) => ({
     ...state,

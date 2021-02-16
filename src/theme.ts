@@ -30,6 +30,7 @@ export const theme = createMuiTheme({
       root: {
         fontSize: '1rem',
         fontFamily: '"Exo 2", "Roboto", "Helvetica", "Arial", sans-serif',
+        margin: '5px',
       },
     },
 

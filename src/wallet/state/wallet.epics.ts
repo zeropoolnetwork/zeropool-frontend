@@ -1,16 +1,20 @@
-import { Observable } from "rxjs";
-import { ActionType } from 'typesafe-actions';
-import { Epic, combineEpics } from "redux-observable";
-import { switchMapTo, map, withLatestFrom, mapTo } from 'rxjs/operators';
+import { push } from 'connected-react-router';
+import { CoinType } from 'zeropool-api-js';
+import { Observable, of } from 'rxjs';
+import { Epic, combineEpics } from 'redux-observable';
+import { ActionType, isActionOf } from 'typesafe-actions';
+import { switchMapTo, map, withLatestFrom, mapTo, filter, switchMap } from 'rxjs/operators';
 
 import { filterActions } from 'shared/operators/filter-actions.operator';
+import toast from 'shared/helpers/toast.helper';
 
-import { getSupportedTokens } from "wallet/state/wallet.selectors";
-import { mapRatesToTokens } from "wallet/state/helpers/map-rates-to-tokens";
-import { walletActions } from "wallet/state/wallet.actions";
-import { RatesApi } from "wallet/api/rates.api";
+import { getSupportedTokens } from 'wallet/state/wallet.selectors';
+import { mapRatesToTokens } from 'wallet/state/helpers/map-rates-to-tokens';
+import { walletActions } from 'wallet/state/wallet.actions';
+import { initHDWallet } from 'wallet/api/zeropool.api';
+import { RatesApi } from 'wallet/api/rates.api';
 
-import { RootState } from "state";
+import { RootState } from 'state';
 
 type Actions = ActionType<typeof walletActions>;
 
@@ -28,7 +32,7 @@ const getRates$: Epic = (
   state$: Observable<RootState>,
 ) =>
   action$.pipe(
-    filterActions(walletActions.getRates),
+    filter(isActionOf(walletActions.getRates)),
     switchMapTo(RatesApi.getRates().pipe(
       withLatestFrom(state$.pipe(map(getSupportedTokens))),
       map(([{ status, data }, tokens]) => mapRatesToTokens(data, tokens)),
@@ -36,7 +40,29 @@ const getRates$: Epic = (
     )),
   );
 
+const initHDWallet$: Epic = (
+  action$: Observable<Actions>,
+  state$: Observable<RootState>,
+) =>
+  action$.pipe(
+    filter(isActionOf(walletActions.setSeed)),
+    switchMap(action => {
+      try {
+        const seed = action.payload.seed;
+        initHDWallet(seed, { [CoinType.ethereum]: [0], [CoinType.near]: [0] });
+        toast.success('Seed accepted');
+
+        return of(push('/wallet'), walletActions.setSeedSuccess({seed}));
+      } catch (e) {
+        toast.error(e.message);
+        
+        return of(walletActions.setSeedError());
+      }
+    }),
+  );
+
 export const walletEpics: Epic = combineEpics(
   getRates$,
   openBalance$,
+  initHDWallet$,
 )

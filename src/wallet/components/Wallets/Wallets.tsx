@@ -4,7 +4,6 @@ import { cn } from '@bem-react/classname';
 import './Wallets.scss';
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
-import { Address } from 'shared/models/address';
 import { Token } from 'shared/models/token';
 
 import { WalletRow } from 'wallet/components/WalletRow/WalletRow';
@@ -20,11 +19,11 @@ export interface WalletsButtonsHandler {
   onSendClick: (wallet: Wallet) => void;
   onEditClick: (wallet: Wallet) => void;
 };
-export interface WalletsProps { 
+export interface WalletsProps {
   handler: WalletsButtonsHandler;
   rate: number;
   token: Token;
-  wallets: {address: Address, amount: number, name: string}[];
+  wallets: Wallet[];
 };
 
 export const Wallets: React.FC<WalletsProps> = ({handler, wallets, rate, token}) => {

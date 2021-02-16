@@ -163,7 +163,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
           handler={walletsButtonHandler}
           rate={rates[token.symbol]}
           token={token} 
-          wallets={wallets || []}
+          wallets={wallets ? Object.values(wallets) : []}
         /> : null;
       case WalletView.Send:
         return wallet && token ? <Send

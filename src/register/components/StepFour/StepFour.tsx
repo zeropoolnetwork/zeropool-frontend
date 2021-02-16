@@ -44,108 +44,117 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
   return (
     <div className={css()} data-testid={test()}>
       {process.env.NODE_ENV !== 'production' && <DevTool control={control} />}
-      <section>
-        <form onSubmit={handleSubmit(onRegister)} className={css('Form')}>
-          <FormControl className={css('FormControl')} error={!!errors['password']}>
-            <InputLabel htmlFor="password">Password</InputLabel>
+      
+      <form onSubmit={handleSubmit(onRegister)} className={css('Form')}>
+        <FormControl className={css('FormControl')} error={!!errors['password']}>
+          <InputLabel htmlFor="password">Password</InputLabel>
 
-            <Input id="password"
-              className={css('Password')}
-              inputProps={{ 'data-testid': test('Password') }}
-              inputRef={register(PasswordInputParams)}
-              name="password"
-              onChange={() => setPassword(control.getValues()['password'])}
-              type={showPassword ? 'text' : 'password'}
-              endAdornment={
-                <InputAdornment position="end">
-                  {password ?
-                    <IconButton
-                      aria-label="empty password"
-                      onClick={() => { reset({ password: undefined, confirm: control.getValues()['confirm'] }); setPassword(''); }}
-                      onMouseDown={(event) => event.preventDefault()}
-                    >
-                      <Close />
-                    </IconButton> : null
-                  }
-
+          <Input id="password"
+            className={css('Password')}
+            inputProps={{ 'data-testid': test('Password') }}
+            inputRef={register(PasswordInputParams)}
+            name="password"
+            onChange={() => setPassword(control.getValues()['password'])}
+            type={showPassword ? 'text' : 'password'}
+            endAdornment={
+              <InputAdornment position="end">
+                {password ?
                   <IconButton
-                    aria-label="toggle visibility"
-                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label="empty password"
+                    onClick={() => { reset({ password: undefined, confirm: control.getValues()['confirm'] }); setPassword(''); }}
                     onMouseDown={(event) => event.preventDefault()}
                   >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
+                    <Close />
+                  </IconButton> : null
+                }
 
-            {errors['password'] ?
-              <FormHelperText data-testid={test('PasswordError')}>{errors['password'].message}</FormHelperText>
-              : null
+                <IconButton
+                  aria-label="toggle visibility"
+                  onClick={() => setShowPassword(!showPassword)}
+                  onMouseDown={(event) => event.preventDefault()}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
             }
-          </FormControl>
+          />
 
-          <FormControl className={css('FormControl')} error={!!errors['confirm']}>
-            <InputLabel htmlFor="confirm">Confirm password</InputLabel>
+          {errors['password'] ?
+            <FormHelperText data-testid={test('PasswordError')}>{errors['password'].message}</FormHelperText>
+            : null
+          }
+        </FormControl>
 
-            <Input id="confirm"
-              className={css('Password')}
-              inputProps={{ 'data-testid': test('Confirm') }}
-              inputRef={register({
-                validate: value => value === control.getValues()['password']
-              })}
-              name="confirm"
-              onChange={() => setPasswordConfirm(control.getValues()['confirm'])}
-              type={showPassword ? 'text' : 'password'}
-              endAdornment={
-                <InputAdornment position="end">
-                  {passwordConfirm ?
-                    <IconButton
-                      aria-label="empty confirmation"
-                      onClick={() => { reset({ password: control.getValues()['password'], confirm: undefined }); setPasswordConfirm(''); }}
-                      onMouseDown={(event) => event.preventDefault()}
-                    >
-                      <Close />
-                    </IconButton> : null
-                  }
+        <FormControl className={css('FormControl')} error={!!errors['confirm']}>
+          <InputLabel htmlFor="confirm">Confirm password</InputLabel>
 
+          <Input id="confirm"
+            className={css('Password')}
+            inputProps={{ 'data-testid': test('Confirm') }}
+            inputRef={register({
+              validate: value => value === control.getValues()['password']
+            })}
+            name="confirm"
+            onChange={() => setPasswordConfirm(control.getValues()['confirm'])}
+            type={showPassword ? 'text' : 'password'}
+            endAdornment={
+              <InputAdornment position="end">
+                {passwordConfirm ?
                   <IconButton
-                    aria-label="toggle visibility"
-                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label="empty confirmation"
+                    onClick={() => { reset({ password: control.getValues()['password'], confirm: undefined }); setPasswordConfirm(''); }}
                     onMouseDown={(event) => event.preventDefault()}
                   >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
+                    <Close />
+                  </IconButton> : null
+                }
 
-            {errors['confirm'] ?
-              <FormHelperText data-testid={test('PasswordConfirmError')}>
-                Passwords do not match
-              </FormHelperText> : null
+                <IconButton
+                  aria-label="toggle visibility"
+                  onClick={() => setShowPassword(!showPassword)}
+                  onMouseDown={(event) => event.preventDefault()}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
             }
-          </FormControl>
+          />
 
-          <p>
-            Finally, please choose a password to be used
-            to export your secret frase in the future.
-          </p>
+          {errors['confirm'] ?
+            <FormHelperText data-testid={test('PasswordConfirmError')}>
+              Passwords do not match
+            </FormHelperText> : null
+          }
+        </FormControl>
 
-          <p>
-            <Button
-              color="primary"
-              className={css('Button')}
-              data-testid={test('Submit')}
-              disableElevation
-              variant="contained"
-              type="submit"
-            >
-              Register
-            </Button>
-          </p>
-        </form>
-      </section>
+        <p>
+          Finally, please choose a password to be used
+          to export your secret frase in the future.
+        </p>
+
+        <Button
+          color="primary"
+          className={css('Button')}
+          data-testid={test('Submit')}
+          disableElevation
+          variant="contained"
+          type="submit"
+        >
+          Register
+        </Button>
+
+        {/* TODO: remove after testing */}
+        <Button
+          color="primary"
+          className={css('Button')}
+          disableElevation
+          onClick={() => { reset({password: 'test1234', confirm: 'test1234'}); handleSubmit(onRegister) }}
+          variant="contained"
+          type="submit"
+        >
+          Testing: use 'test1234'
+        </Button>
+      </form>
     </div>
   )
 };

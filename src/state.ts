@@ -64,7 +64,7 @@ const persistConfig: PersistConfig<RootState> = {
   version: 0,
   storage,
   migrate: createMigrate(stateMigrations, { debug: false }),
-  whitelist: ['registerPage'],
+  whitelist: ['registerPage', 'wallet'],
 };
 
 const persistedReducer = persistReducer(

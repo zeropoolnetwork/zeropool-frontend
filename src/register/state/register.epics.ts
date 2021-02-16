@@ -1,12 +1,11 @@
 import { Observable } from "rxjs";
 import { Epic, combineEpics } from "redux-observable";
 import { ActionType, isActionOf } from 'typesafe-actions';
-import { tap, ignoreElements, withLatestFrom, filter, map } from 'rxjs/operators';
+import { withLatestFrom, filter, map } from 'rxjs/operators';
 
+import { walletActions } from "wallet/state/wallet.actions";
 import { registerActions } from "register/state/register.actions";
 import { getRegisterSeed } from "register/state/register.selectors";
-
-import { filterActions } from 'shared/operators/filter-actions.operator';
 
 import { RootState } from "state";
 
@@ -17,11 +16,11 @@ const finishImportAccount$: Epic = (
   state$: Observable<RootState>,
 ) =>
   action$.pipe(
-    filterActions(registerActions.finishImportAccount),
-    tap(action => {
-      console.log((action as any).payload);
+    filter(isActionOf(registerActions.finishImportAccount)),
+    map(action => {
+      const seed = action.payload.seed.join(' ');
+      return walletActions.setSeed({seed});
     }),
-    ignoreElements(),
   );
 
 const finishRegister$: Epic = (
@@ -31,13 +30,9 @@ const finishRegister$: Epic = (
   action$.pipe(
     filter(isActionOf(registerActions.finishRegister)),
     withLatestFrom(state$.pipe(map(getRegisterSeed))),
-    tap(([action, seed]) => {
-      console.log({
-        password: (action as any).payload,
-        seed,
-      });
+    map(([_action, seed]) => {
+      return walletActions.setSeed({ seed: seed.join(' ')});
     }),
-    ignoreElements(),
   );
 
 export const registerEpics: Epic = combineEpics(
