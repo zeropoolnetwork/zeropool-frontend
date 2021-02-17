@@ -1,4 +1,5 @@
 $primary: #020941;
+$white: white;
 
 $blue-primary: #2699fb;
 $blue-secondary: #84c6ff;
@@ -13,7 +14,7 @@ $grey-light: #ccc;
 $text-color: #333;
 $text-shadow-color: $grey-light;
 
-$button-color: #eee;
+$button-color: $white;
 $button-background-color: $primary;
 $button-border-color: $blue-secondary;
 $button-shadow-color: $grey-light;

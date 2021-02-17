@@ -50,3 +50,8 @@ export const getSendData = createSelector(
   getWalletState,
   state => state.send,
 );
+
+export const getSeed = createSelector(
+  getWalletState,
+  state => state.seed,
+);

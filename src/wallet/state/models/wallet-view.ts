@@ -7,4 +7,5 @@ export enum WalletView {
   Receive = 'Receive',
   Help = 'Help',
   About = 'About',
+  Reset = 'Reset',
 }

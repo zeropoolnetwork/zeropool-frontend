@@ -15,6 +15,7 @@ import { initHDWallet } from 'wallet/api/zeropool.api';
 import { RatesApi } from 'wallet/api/rates.api';
 
 import { RootState } from 'state';
+import { WalletView } from './models/wallet-view';
 
 type Actions = ActionType<typeof walletActions>;
 
@@ -61,8 +62,23 @@ const initHDWallet$: Epic = (
     }),
   );
 
+  const resetAccount$: Epic = (
+    action$: Observable<Actions>,
+    state$: Observable<RootState>,
+  ) =>
+    action$.pipe(
+      filter(isActionOf(walletActions.menu)),
+      filter(action => action.payload === WalletView.Reset),
+      switchMap(action => {
+          toast.success('Wallet reseted and data cleared');
+          
+          return of(push('/welcome'), walletActions.resetAccount());
+      }),
+    );
+
 export const walletEpics: Epic = combineEpics(
   getRates$,
   openBalance$,
   initHDWallet$,
+  resetAccount$,
 )

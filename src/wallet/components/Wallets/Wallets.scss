@@ -1,10 +1,21 @@
 @import "../../../styles/styles.scss";
 
+$walletsWidth: 320px;
+
 .Wallets {
   color: $primary;
   display: flex;
   flex-direction: column;
-  width: 320px;
+  width: $walletsWidth;
   position: relative;
   text-shadow: 2px 2px 2px $text-shadow-color;
+
+  &-Add {
+    bottom: 100px;
+    display: flex;
+    justify-content: center;
+    height: 85px;
+    position: fixed;
+    width: $walletsWidth;
+  }
 }

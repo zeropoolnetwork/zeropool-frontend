@@ -1,6 +1,6 @@
+import { Button, TextField } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { TextField } from '@material-ui/core';
 import NumberFormat from 'react-number-format';
 import { cn } from '@bem-react/classname';
 
@@ -100,13 +100,16 @@ export const Send: React.FC<SendProps> = ({rate, wallet, onNextClick}) => {
       </form>
 
       <div className={css('Next')}>
-        <button 
+        <Button 
           className={css('NextButton')} 
           data-testid={test('Next')}
           onClick={() => onNextClick(address, amount)}
+          color="primary"
+          disableElevation
+          variant="contained"
         >
           Next
-        </button>
+        </Button>
       </div>
     </div>
   )

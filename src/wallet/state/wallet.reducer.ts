@@ -51,7 +51,7 @@ export const walletReducer = createReducer<
 >(initialWalletState)
   .handleAction(actions.menu, (state, { payload }) => ({
     ...state,
-    activeView: payload,
+    activeView: payload !== WalletView.Reset ? payload : state.activeView,
   }))
   .handleAction(actions.headerBack, state => ({
     ...navigationHelper.handleBackClick(state),
@@ -89,6 +89,9 @@ export const walletReducer = createReducer<
     ...state,
     seed: payload.seed,
   }))
+  .handleAction(actions.resetAccount, () =>
+    initialWalletState
+  )
   .handleAction(actions.getRatesSuccess, (state, { payload }) => ({
     ...state,
     usdRates: payload,

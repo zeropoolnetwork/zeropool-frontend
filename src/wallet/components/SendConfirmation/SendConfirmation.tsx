@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@bem-react/classname';
-import { TextField, Tooltip } from '@material-ui/core';
+import { Button, TextField, Tooltip } from '@material-ui/core';
 
 import './SendConfirmation.scss';
 
@@ -75,13 +75,16 @@ export const SendConfirmation: React.FC<SendConfirmationProps> = ({
       </form>
 
       <div className={css('Confirm')}>
-        <button 
+        <Button 
           className={css('ConfirmButton')} 
           data-testid={test('Confirm')}
           onClick={() => onConfirmClick()}
+          color="primary"
+          disableElevation
+          variant="contained"
         >
           Confirm
-        </button>
+        </Button>
       </div>
     </div>
   )

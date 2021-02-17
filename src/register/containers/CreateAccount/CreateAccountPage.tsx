@@ -55,6 +55,7 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
         />
     }
   }
+  
   return (
     <div className={css()} data-testid={test()}>
       {(stage && showSteps) ? 
