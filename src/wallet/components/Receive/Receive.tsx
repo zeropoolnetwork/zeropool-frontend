@@ -22,8 +22,12 @@ export const Receive: React.FC<ReceiveProps> = ({address, rate}) => {
   const { enqueueSnackbar } = useSnackbar();
   const QRCode = require('qrcode.react');
   const handleCodeClick = (): void => {
-    enqueueSnackbar('Address copied to the clipboard', { variant: 'success' });
-  }
+    navigator.clipboard.writeText(address.value).then(() => {
+      enqueueSnackbar('Address copied to the clipboard', { variant: 'success' });
+    }, (err) => {
+      enqueueSnackbar(`Can't access clipboard`, { variant: 'error' });
+    });
+  };
   
   return (
     <div className={css()} data-testid={test()}>

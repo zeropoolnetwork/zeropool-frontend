@@ -190,7 +190,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
             data-testid={test('Back')}
             disableElevation
             onClick={onBack}
-            variant="outlined"
+            variant="contained"
           >
             Back
           </Button>

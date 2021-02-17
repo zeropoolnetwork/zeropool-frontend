@@ -2,6 +2,8 @@
 
 .Welcome {
   align-items: center;
+  background-color: $primary;
+  color: $white;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -18,15 +20,26 @@
 
   &-Description {
     text-align: center;
+    font-size: 5vw;
+
+    @media screen and (min-width: 350px) {
+      font-size: 18px;
+    }
   }
 
   &-Greeting {
     margin-bottom: 10px;
+    font-size: 6vw;
+
+    @media screen and (min-width: 800px) {
+      font-size: 48px;
+    }
   }
 
   &-Logo {
-    width: 50vw;
+    width: 40vw;
     max-width: 300px;
+    min-width: 150px;
     position: relative;
     left: -15px;
   }

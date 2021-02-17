@@ -6,27 +6,30 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import BuildOutlinedIcon from '@material-ui/icons/BuildOutlined';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import { useSnackbar } from 'notistack';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import MenuIcon from '@material-ui/icons/Menu';
 import Divider from '@material-ui/core/Divider';
 import { cn } from '@bem-react/classname';
 
+import logo from 'assets/images/logo1.svg';
 import { Token } from 'shared/models/token';
 import { HelpPage } from 'shared/components/HelpPage/HelpPage';
 import { AboutPage } from 'shared/components/AboutPage/AboutPage';
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
-import { getActiveToken, getActiveView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getAmounts, getWallets, getActiveWallet, getSendData } from 'wallet/state/wallet.selectors';
+import { getActiveToken, getActiveView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getAmounts, getWallets, getActiveWallet, getSendData, getSeed } from 'wallet/state/wallet.selectors';
 import { Wallets, WalletsButtonsHandler } from 'wallet/components/Wallets/Wallets';
+import { SendConfirmation } from 'wallet/components/SendConfirmation/SendConfirmation';
 import { WalletHeaderMode } from "wallet/components/WalletHeader/WalletHeaderMode";
 import { walletActions } from 'wallet/state/wallet.actions';
 import { WalletHeader } from 'wallet/components/WalletHeader/WalletHeader';
 import { totalHelper } from 'wallet/state/helpers/total.helper';
 import { WalletView } from 'wallet/state/models/wallet-view';
 import { Balance } from 'wallet/components/Balance/Balance';
+import { Receive } from 'wallet/components/Receive/Receive';
 import { Wallet } from 'wallet/state/models/wallet';
 import { Send } from 'wallet/components/Send/Send';
-import { SendConfirmation } from 'wallet/components/SendConfirmation/SendConfirmation';
-import { Receive } from 'wallet/components/Receive/Receive';
 
 export const componentId = 'WalletPage';
 
@@ -82,6 +85,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     margin: '50px auto',
   },
+  footer: {
+    backgroundColor: '#020941',
+    bottom: 0,
+    display: 'flex',
+    position: 'fixed',
+    height: '70px',
+    width: '100%',
+  },
   AboutPage: {
     height: '50vh',
   }
@@ -89,6 +100,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const WalletPage: React.FC<WalletPageProps> = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [state, setState] = useState({ drower: false });
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -101,6 +113,15 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   const wallet = useSelector(getActiveWallet);
   const wallets = useSelector(getWallets);
   const send = useSelector(getSendData);
+  const seed = useSelector(getSeed);
+
+  const handleExportSeed = () => {
+    navigator.clipboard.writeText(seed || 'No seed set').then(() => {
+      enqueueSnackbar('Seed copied to the clipboard', { variant: 'success' });
+    }, (err) => {
+      enqueueSnackbar(`Can't access clipboard`, { variant: 'error' });
+    });
+  }
 
   const toggleDrawer = (open?: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
@@ -125,7 +146,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        {[WalletView.Balance, WalletView.Wallets].map((text, index) => (
+        {[WalletView.Balance, WalletView.Reset].map((text, index) => (
           <ListItem className={classes.drowerItem} button key={text} onClick={() => dispatch(walletActions.menu(text))}>
             <ListItemIcon className={classes.drowerItemIcon}>
               {[<AttachMoneyOutlinedIcon />, <BuildOutlinedIcon />][index]}
@@ -133,6 +154,12 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
             <ListItemText className={classes.drowerItemText} primary={text} />
           </ListItem>
         ))}
+        <ListItem className={classes.drowerItem} button onClick={handleExportSeed}>
+          <ListItemIcon className={classes.drowerItemIcon}>
+            <FileCopyIcon />
+          </ListItemIcon>
+          <ListItemText className={classes.drowerItemText} primary="Export Seed" />
+        </ListItem>
       </List>
 
       <Divider />
@@ -154,6 +181,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
     onReceiveClick: (wallet: Wallet) => dispatch(walletActions.openReceiveView(wallet)),
     onSendClick: (wallet: Wallet) => dispatch(walletActions.openSendInitialView(wallet)),
     onEditClick: (wallet: Wallet) => dispatch(walletActions.edit(wallet)),
+    onAddClick: () => dispatch(walletActions.addWallet()),
   }
 
   const components = () => {
@@ -210,6 +238,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
     [WalletView.Address]: 'x12345',
     [WalletView.About]: 'About',
     [WalletView.Help]: 'Help',
+    [WalletView.Reset]: '',
   };
   
   useEffect(() => {
@@ -258,6 +287,10 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
 
       <div className={classes.wrapper}>
         {components()}
+      </div>
+
+      <div className={classes.footer}>
+        <img src={logo} alt="ZeroPool" style={{margin:'auto'}} />
       </div>
 
       <SwipeableDrawer
