@@ -1,3 +1,4 @@
+import { Dialog } from '@material-ui/core';
 import { createMuiTheme } from '@material-ui/core/styles'
 
 const COLOR_PRIMARY = '#020941';
@@ -8,7 +9,7 @@ const WHITE = 'white';
 export const theme = createMuiTheme({
   palette: {
     action: {
-      disabledBackground: 'set color of background here',
+      disabledBackground: COLOR_BLUE_SECCONDARY,
       disabled: 'set color of text here',
     },
     primary: {
@@ -56,6 +57,12 @@ export const theme = createMuiTheme({
     MuiLinearProgress: {
       colorPrimary: {
         backgroundColor: '#eee',
+      }
+    },
+  
+    MuiDialog: {
+      root: {
+        minWidth: '350px',
       }
     }
   },

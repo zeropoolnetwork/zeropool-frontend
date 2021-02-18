@@ -19,7 +19,7 @@ export const walletActions = {
   headerBack: create('@wallet/header/back')<void>(),
 
   menu: create('@wallet/menu')<WalletView>(),
-  edit: create('@wallet/edit')<Wallet>(),
+  edit: create('@wallet/edit')<{wallet: Wallet, name: string}>(),
   send: create('@wallet/send')<void>(),
 
   setSeed: create('@wallet/setSeed')<{ seed: string }>(),
@@ -27,7 +27,7 @@ export const walletActions = {
   setSeedError: create('@wallet/setSeedError')<void>(),
 
   addWallet: create('@wallet/addWallet')<void>(),
-  hideWallet: create('@wallet/hideWallet')<number>(),
+  hideWallet: create('@wallet/hideWallet')<{ wallet: Wallet }>(),
   
   resetAccount: create('@wallet/resetAccount')<void>(),
 };

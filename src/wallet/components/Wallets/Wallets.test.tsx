@@ -14,11 +14,12 @@ describe('Wallets', () => {
       rate={111}
       token={{id: 1, name: '111', symbol: '1'}}
       wallets={[]}
-      handler={{
-        onAddClick: () => true,
-        onEditClick: () => true,
-        onReceiveClick: () => true,
-        onSendClick: () => true,
+      handlers={{
+        onAdd: () => true,
+        onRename: () => true,
+        onDelete: () => true,
+        onReceive: () => true,
+        onSend: () => true,
       }}
 
     />;
