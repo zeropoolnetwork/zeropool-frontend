@@ -1,28 +1,29 @@
 {
   "files": {
-    "main.css": "/zeropool-frontend/static/css/main.27ea8db6.chunk.css",
-    "main.js": "/zeropool-frontend/static/js/main.63564d4b.chunk.js",
-    "main.js.map": "/zeropool-frontend/static/js/main.63564d4b.chunk.js.map",
+    "main.css": "/zeropool-frontend/static/css/main.3e33b9be.chunk.css",
+    "main.js": "/zeropool-frontend/static/js/main.83075fb1.chunk.js",
+    "main.js.map": "/zeropool-frontend/static/js/main.83075fb1.chunk.js.map",
     "runtime-main.js": "/zeropool-frontend/static/js/runtime-main.3e191303.js",
     "runtime-main.js.map": "/zeropool-frontend/static/js/runtime-main.3e191303.js.map",
     "static/css/2.3b47889b.chunk.css": "/zeropool-frontend/static/css/2.3b47889b.chunk.css",
-    "static/js/2.98bd400a.chunk.js": "/zeropool-frontend/static/js/2.98bd400a.chunk.js",
-    "static/js/2.98bd400a.chunk.js.map": "/zeropool-frontend/static/js/2.98bd400a.chunk.js.map",
+    "static/js/2.4d4f63b4.chunk.js": "/zeropool-frontend/static/js/2.4d4f63b4.chunk.js",
+    "static/js/2.4d4f63b4.chunk.js.map": "/zeropool-frontend/static/js/2.4d4f63b4.chunk.js.map",
     "index.html": "/zeropool-frontend/index.html",
-    "precache-manifest.c975e6a5db8397c39b2f7201542d5b6d.js": "/zeropool-frontend/precache-manifest.c975e6a5db8397c39b2f7201542d5b6d.js",
+    "precache-manifest.de218ac2830fce97fd64053b89af200b.js": "/zeropool-frontend/precache-manifest.de218ac2830fce97fd64053b89af200b.js",
     "service-worker.js": "/zeropool-frontend/service-worker.js",
     "static/css/2.3b47889b.chunk.css.map": "/zeropool-frontend/static/css/2.3b47889b.chunk.css.map",
-    "static/css/main.27ea8db6.chunk.css.map": "/zeropool-frontend/static/css/main.27ea8db6.chunk.css.map",
-    "static/js/2.98bd400a.chunk.js.LICENSE.txt": "/zeropool-frontend/static/js/2.98bd400a.chunk.js.LICENSE.txt",
-    "static/media/SendConfirmation.scss": "/zeropool-frontend/static/media/exo-2-vietnamese-400-normal.9a806be6.woff2",
-    "static/media/guy-fawkes-thanks.png": "/zeropool-frontend/static/media/guy-fawkes-thanks.0609f8d3.png",
-    "static/media/logo.svg": "/zeropool-frontend/static/media/logo.38e575e9.svg"
+    "static/css/main.3e33b9be.chunk.css.map": "/zeropool-frontend/static/css/main.3e33b9be.chunk.css.map",
+    "static/js/2.4d4f63b4.chunk.js.LICENSE.txt": "/zeropool-frontend/static/js/2.4d4f63b4.chunk.js.LICENSE.txt",
+    "static/media/Send.scss": "/zeropool-frontend/static/media/exo-2-vietnamese-400-normal.9a806be6.woff2",
+    "static/media/guy_wellcomes@2x.png": "/zeropool-frontend/static/media/guy_wellcomes@2x.a8f3ca1a.png",
+    "static/media/logo.svg": "/zeropool-frontend/static/media/logo.38e575e9.svg",
+    "static/media/logo1.svg": "/zeropool-frontend/static/media/logo1.8d914255.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.3e191303.js",
     "static/css/2.3b47889b.chunk.css",
-    "static/js/2.98bd400a.chunk.js",
-    "static/css/main.27ea8db6.chunk.css",
-    "static/js/main.63564d4b.chunk.js"
+    "static/js/2.4d4f63b4.chunk.js",
+    "static/css/main.3e33b9be.chunk.css",
+    "static/js/main.83075fb1.chunk.js"
   ]
 }
