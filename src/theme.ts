@@ -46,20 +46,12 @@ export const theme = createMuiTheme({
         }
       },
       containedPrimary: {
+        // backgroundColor: 'linear-gradient(90deg, rgba(132,198,255,1) 10%, rgba(38,153,251,1) 100%)',
         backgroundColor: COLOR_BLUE_PRIMARY,
         color: WHITE,
         "&:hover": {
           backgroundColor: COLOR_BLUE_SECCONDARY,
         }
-      },
-      containedPrimary: {
-        background: 'linear-gradient(90deg, rgba(132,198,255,1) 10%, rgba(38,153,251,1) 100%)',
-        color: COLOR_WHITE,
-      },
-      outlinedPrimary: {
-        backgroundColor: COLOR_PRIMARY,
-        color: COLOR_WHITE,
-        border: `solid ${COLOR_BLUE_LIGHT} 2px`
       },
     },
 

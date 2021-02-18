@@ -1,3 +1,14 @@
+@import "../../../styles/styles.scss";
+
 .CreateAccountPage {
   display: block;
+
+  &-Footer {
+    background-color: $primary;
+    bottom: 0;
+    display: flex;
+    position: fixed;
+    height: 70px;
+    width: 100%;
+  }
 }
