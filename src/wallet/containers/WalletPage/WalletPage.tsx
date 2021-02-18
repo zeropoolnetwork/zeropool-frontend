@@ -19,7 +19,7 @@ import { AboutPage } from 'shared/components/AboutPage/AboutPage';
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
 import { getActiveToken, getActiveView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getAmounts, getWallets, getActiveWallet, getSendData, getSeed } from 'wallet/state/wallet.selectors';
-import { Wallets, WalletsButtonsHandler } from 'wallet/components/Wallets/Wallets';
+import { Wallets, WalletsHandlers } from 'wallet/components/Wallets/Wallets';
 import { SendConfirmation } from 'wallet/components/SendConfirmation/SendConfirmation';
 import { WalletHeaderMode } from "wallet/components/WalletHeader/WalletHeaderMode";
 import { walletActions } from 'wallet/state/wallet.actions';
@@ -41,8 +41,9 @@ interface WalletPageProps { }
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    display: 'flex',
     flexDirection: 'column',
+    display: 'flex',
+    minWidth: '350px',
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -177,18 +178,19 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
     </div >
   );
 
-  const walletsButtonHandler: WalletsButtonsHandler = {
-    onReceiveClick: (wallet: Wallet) => dispatch(walletActions.openReceiveView(wallet)),
-    onSendClick: (wallet: Wallet) => dispatch(walletActions.openSendInitialView(wallet)),
-    onEditClick: (wallet: Wallet) => dispatch(walletActions.edit(wallet)),
-    onAddClick: () => dispatch(walletActions.addWallet()),
+  const walletsButtonHandlers: WalletsHandlers = {
+    onReceive: (wallet: Wallet) => dispatch(walletActions.openReceiveView(wallet)),
+    onSend: (wallet: Wallet) => dispatch(walletActions.openSendInitialView(wallet)),
+    onRename: (wallet: Wallet, name: string) => dispatch(walletActions.edit({ wallet, name })),
+    onDelete: (wallet: Wallet) => dispatch(walletActions.hideWallet({ wallet })),
+    onAdd: () => dispatch(walletActions.addWallet()),
   }
 
   const components = () => {
     switch (view) {
       case WalletView.Wallets:
         return token ? <Wallets 
-          handler={walletsButtonHandler}
+          handlers={walletsButtonHandlers}
           rate={rates[token.symbol]}
           token={token} 
           wallets={wallets ? Object.values(wallets) : []}

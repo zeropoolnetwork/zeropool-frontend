@@ -1,0 +1,22 @@
+.DeleteWallet {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+
+  &-Name {
+    margin-top: 0;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  &-Confirm {
+    margin: -1rem 0 1rem !important;
+  }
+
+  &-Delete,
+  &-Cancel {
+    width: 200px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}

@@ -12,7 +12,7 @@
         "test": "templates/component/component.test.tsx",
         "stories": "templates/component/component.stories.tsx"
       },
-      "path": "src/components",
+      "path": "src/shared/components",
       "withLazy": false,
       "withStory": false,
       "withStyle": true,

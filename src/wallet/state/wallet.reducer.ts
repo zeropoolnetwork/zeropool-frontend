@@ -9,6 +9,7 @@ import { _testWalletsEth, _testWalletsNear } from 'shared/helpers/test/app-state
 
 import { walletActions as actions } from 'wallet/state/wallet.actions';
 import { navigationHelper } from 'wallet/state/helpers/navigation.helper';
+import { walletsHelper } from 'wallet/state/helpers/wallets.helper';
 import { WalletView } from 'wallet/state/models/wallet-view';
 import { Wallet } from 'wallet/state/models/wallet';
 
@@ -92,7 +93,36 @@ export const walletReducer = createReducer<
   .handleAction(actions.resetAccount, () =>
     initialWalletState
   )
+  .handleAction(actions.edit, (state , { payload }) => ({
+    ...state,
+    wallets: !state.activeToken ? state.wallets : {
+      ...state.wallets,
+      [state.activeToken.symbol]: walletsHelper.renameWallet(
+        state.wallets[state.activeToken.symbol], 
+        payload.wallet,
+        payload.name,
+      ),
+    }
+  }))
+  .handleAction(actions.addWallet, state => ({
+    ...state,
+    wallets: !state.activeToken ? state.wallets : {
+      ...state.wallets,
+      [state.activeToken.symbol]: walletsHelper.addWallet(state.wallets[state.activeToken.symbol]),
+    }
+  }))
+  .handleAction(actions.hideWallet, (state , { payload }) => ({
+    ...state,
+    wallets: !state.activeToken ? state.wallets : {
+      ...state.wallets,
+      [state.activeToken.symbol]: walletsHelper.hideWallet(
+        state.wallets[state.activeToken.symbol],
+        payload.wallet,
+      ),
+    }
+  }))
   .handleAction(actions.getRatesSuccess, (state, { payload }) => ({
     ...state,
     usdRates: payload,
   }));
+ 
