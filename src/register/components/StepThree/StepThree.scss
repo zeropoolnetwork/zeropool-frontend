@@ -1,13 +1,22 @@
-@import '../../../styles/styles.scss';
+@import "../../../styles/styles.scss";
 
 .StepThree {
   align-items: center;
   display: flex;
   flex-direction: column;
+  color: $white;
 
-  &-Button {
-    &_Disabled.MuiButton-root {
-      background-color: $grey-light;
+  &-SeedPanel {
+    height: 30vh !important;
+    min-height: 260px !important;
+  }
+
+  &-Description {
+    text-align: justify;
+
+    @media screen and (max-width: 350px) {
+      font-size: 14px;
+      margin: 0 $margin-normal;
     }
   }
 }

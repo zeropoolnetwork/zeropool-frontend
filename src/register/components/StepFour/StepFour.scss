@@ -4,10 +4,25 @@
   align-items: center;
   display: flex;
   flex-direction: column;
+  color: $white;
+
+  &-Description {
+    text-align: justify;
+
+    @media screen and (max-width: 350px) {
+      font-size: 14px;
+      margin: $margin-normal;
+    }
+  }
 
   &-Form {
     display: grid;
-    margin-top: $margin-normal;
+    margin: $margin-normal;
+  }
+
+  &-FormControlLabel,
+  &-FormControlButton {
+    color: $white !important;
   }
 
   &-FormControl.MuiFormControl-root {

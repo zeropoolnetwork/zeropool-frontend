@@ -18,11 +18,16 @@
     min-width: 200px;
     padding: 12px;
     width: 50vw;
+
+    @media screen and (max-width: 350px) {
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
   }
 
   &-Description {
     text-align: center;
-    font-size: 5vw;
+    font-size: 4vw;
 
     @media screen and (min-width: 350px) {
       font-size: 18px;

@@ -23,9 +23,9 @@ export const StepThree: React.FC<StepThreeProps> = ({ seed, onConfirm }) => {
   return (
     <div className={css()} data-testid={test()}>
       <section>
-        <SeedPanel seed={seed} check onCheck={(success: boolean) => setButtonDisabled(!success)} />
+        <SeedPanel classes={[css('SeedPanel')]} seed={seed} check onCheck={(success: boolean) => setButtonDisabled(!success)} />
 
-        <p>
+        <p className={css('Description')}>
           Please confirm your secret phrase.
           We want to be sure that you saved it correctly.
         </p>
@@ -36,7 +36,6 @@ export const StepThree: React.FC<StepThreeProps> = ({ seed, onConfirm }) => {
         className={css('Button', { Disabled: buttonDisabled })}
         data-testid={test('ConfirmButton')}
         disabled={buttonDisabled}
-        disableElevation
         onClick={onConfirm}
         variant="contained"
       >

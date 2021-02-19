@@ -47,7 +47,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
       
       <form onSubmit={handleSubmit(onRegister)} className={css('Form')}>
         <FormControl className={css('FormControl')} error={!!errors['password']}>
-          <InputLabel htmlFor="password">Password</InputLabel>
+          <InputLabel className={css('FormControlLabel')} htmlFor="password">Password</InputLabel>
 
           <Input id="password"
             className={css('Password')}
@@ -60,6 +60,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
               <InputAdornment position="end">
                 {password ?
                   <IconButton
+                    className={css('FormControlButton')}
                     aria-label="empty password"
                     onClick={() => { reset({ password: undefined, confirm: control.getValues()['confirm'] }); setPassword(''); }}
                     onMouseDown={(event) => event.preventDefault()}
@@ -69,6 +70,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
                 }
 
                 <IconButton
+                  className={css('FormControlButton')}
                   aria-label="toggle visibility"
                   onClick={() => setShowPassword(!showPassword)}
                   onMouseDown={(event) => event.preventDefault()}
@@ -86,7 +88,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
         </FormControl>
 
         <FormControl className={css('FormControl')} error={!!errors['confirm']}>
-          <InputLabel htmlFor="confirm">Confirm password</InputLabel>
+          <InputLabel className={css('FormControlLabel')} htmlFor="confirm">Confirm password</InputLabel>
 
           <Input id="confirm"
             className={css('Password')}
@@ -101,6 +103,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
               <InputAdornment position="end">
                 {passwordConfirm ?
                   <IconButton
+                    className={css('FormControlButton')}
                     aria-label="empty confirmation"
                     onClick={() => { reset({ password: control.getValues()['password'], confirm: undefined }); setPasswordConfirm(''); }}
                     onMouseDown={(event) => event.preventDefault()}
@@ -110,6 +113,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
                 }
 
                 <IconButton
+                  className={css('FormControlButton')}
                   aria-label="toggle visibility"
                   onClick={() => setShowPassword(!showPassword)}
                   onMouseDown={(event) => event.preventDefault()}
@@ -127,7 +131,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
           }
         </FormControl>
 
-        <p>
+        <p className={css('Description')}>
           Finally, please choose a password to be used
           to export your secret frase in the future.
         </p>

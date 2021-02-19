@@ -45,8 +45,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ showBackButton = true }) =
           <Button
             color="primary"
             data-testid={test('BackButton')}
-            disableElevation
-            onClick={() => dispatch(push('/'))}
+             onClick={() => dispatch(push('/'))}
             variant="contained"
           >
             Back

@@ -1,10 +1,11 @@
-import { Dialog } from '@material-ui/core';
 import { createMuiTheme } from '@material-ui/core/styles'
 
 const COLOR_PRIMARY = '#020941';
 const COLOR_BLUE_PRIMARY = '#2699fb';
 const COLOR_BLUE_SECCONDARY = '#84c6ff';
+const COLOR_BLUE_LIGHT = '#c4e1fa';
 const WHITE = 'white';
+const INPUT_UNDERLINE_COLOR = COLOR_BLUE_SECCONDARY;
 
 export const theme = createMuiTheme({
   palette: {
@@ -65,6 +66,35 @@ export const theme = createMuiTheme({
       root: {
         minWidth: '350px',
       }
-    }
+    },
+
+    MuiInputLabel: {
+    },
+
+    MuiInput: {
+      colorSecondary: {
+        color: WHITE,
+      },
+
+      underline: {
+        borderBottomColor: INPUT_UNDERLINE_COLOR,
+
+        '&:not($disabled):after': {
+          borderBottomColor: INPUT_UNDERLINE_COLOR,
+        },
+
+        '&:hover:not($disabled):after': {
+          borderBottomColor: INPUT_UNDERLINE_COLOR,
+        },
+
+        '&:not($disabled):before': {
+          borderBottomColor: INPUT_UNDERLINE_COLOR,
+        },
+
+        '&:hover:not($disabled):before': {
+          borderBottomColor: INPUT_UNDERLINE_COLOR,
+        },
+      },
+    },
   },
 });

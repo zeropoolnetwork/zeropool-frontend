@@ -1,5 +1,22 @@
+@import "../../../styles/styles.scss";
+
 .StepOne {
   align-items: center;
   display: flex;
   flex-direction: column;
+  color: $white;
+
+  &-SeedPanel {
+    height: 30vh !important;
+    min-height: 220px !important;
+  }
+
+  &-Description {
+    text-align: justify;
+
+    @media screen and (max-width: 350px) {
+      font-size: 14px;
+      margin: 0 $margin-normal;
+    }
+  }
 }

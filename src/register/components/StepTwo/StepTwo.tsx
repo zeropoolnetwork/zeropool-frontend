@@ -23,9 +23,9 @@ export const StepTwo: React.FC<StepTwoProps> = ({ seed, onSubmit }) => {
   return (
     <div className={css()} data-testid="StepTwo">
       <section>
-        <SeedPanel seed={seed} />
+        <SeedPanel classes={[css('SeedPanel')]} seed={seed} />
 
-        <p>
+        <p className={css('Description')}>
           By submiting, you confirm that you have stored the secret phrase
           on paper or using another safe method.
         </p>
@@ -35,7 +35,6 @@ export const StepTwo: React.FC<StepTwoProps> = ({ seed, onSubmit }) => {
         color="primary"
         className={css('Button')}
         data-testid={test('SubmitButton')}
-        disableElevation
         onClick={onSubmit}
         variant="contained"
       >

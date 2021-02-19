@@ -57,13 +57,16 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
     <div className={css()} data-testid={test()}>
       {process.env.NODE_ENV !== 'production' && <DevTool control={control} />}
       <section>
-        <SeedPanel seed={seed} />
+        <SeedPanel classes={[css('SeedPanel')]} seed={seed} />
+
         <form onSubmit={handleSubmit((data: FormData) => onImport({ password: data.password, seed }))} className={css('Form')}>
           <FormControl className={css('FormControl')} error={!!errors['seed']}>
-            <InputLabel htmlFor="seed">Secret phrase</InputLabel>
+            <InputLabel color="secondary" className={css('FormControlLabel')} htmlFor="seed">Secret phrase</InputLabel>
 
             <Input id="seed"
               className={css('Seed')}
+              color="secondary"
+              classes={{input: css('SeedInput')}}
               inputProps={{ 'data-testid': test('Seed') }}
               inputRef={register(seedInputParamsFactory(seed)) as any}
               name="seed"
@@ -73,6 +76,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                 <InputAdornment position="end">
                   {seed.length ?
                     <IconButton
+                      className={css('FormControlButton')}
                       aria-label="empty seed"
                       onClick={() => { reset({ seed: undefined, password: control.getValues()['password'], confirm: control.getValues()['confirm'] }); setSeed([]); }}
                       onMouseDown={(event) => event.preventDefault()}
@@ -92,10 +96,12 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
           </FormControl>
 
           <FormControl className={css('FormControl')} error={!!errors['password']}>
-            <InputLabel htmlFor="password">Password</InputLabel>
+            <InputLabel className={css('FormControlLabel')} htmlFor="password">Password</InputLabel>
 
             <Input id="password"
               className={css('Password')}
+              color="secondary"
+              classes={{input: css('PasswordInput')}}
               inputProps={{ 'data-testid': test('Password') }}
               inputRef={register(PasswordInputParams)}
               name="password"
@@ -105,6 +111,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                 <InputAdornment position="end">
                   {password ?
                     <IconButton
+                      className={css('FormControlButton')}
                       aria-label="empty password"
                       onClick={() => { reset({ seed: control.getValues()['seed'], password: undefined, confirm: control.getValues()['confirm'] }); setPassword(''); }}
                       onMouseDown={(event) => event.preventDefault()}
@@ -114,6 +121,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                   }
 
                   <IconButton
+                    className={css('FormControlButton')}
                     aria-label="toggle visibility"
                     onClick={() => setShowPassword(!showPassword)}
                     onMouseDown={(event) => event.preventDefault()}
@@ -132,11 +140,13 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
           </FormControl>
 
           <FormControl className={css('FormControl')} error={!!errors['confirm']}>
-            <InputLabel htmlFor="confirm">Confirm password</InputLabel>
+            <InputLabel className={css('FormControlLabel')} htmlFor="confirm">Confirm password</InputLabel>
 
             <Input id="confirm"
               className={css('Password')}
-              inputProps={{ 'data-testid': test('Confirm') }}
+              color="secondary"
+              classes={{input: css('PasswordInput')}}
+              inputProps={{'data-testid': test('Confirm')}}
               inputRef={register({
                 validate: value => value === control.getValues()['password']
               })}
@@ -147,6 +157,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                 <InputAdornment position="end">
                   {passwordConfirm ?
                     <IconButton
+                      className={css('FormControlButton')}
                       aria-label="empty confirmation"
                       onClick={() => { reset({ seed: control.getValues()['seed'], password: control.getValues()['password'], confirm: undefined }); setPasswordConfirm(''); }}
                       onMouseDown={(event) => event.preventDefault()}
@@ -156,6 +167,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                   }
 
                   <IconButton
+                    className={css('FormControlButton')}
                     aria-label="toggle visibility"
                     onClick={() => setShowPassword(!showPassword)}
                     onMouseDown={(event) => event.preventDefault()}
@@ -190,7 +202,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
             data-testid={test('Back')}
             disableElevation
             onClick={onBack}
-            variant="contained"
+            variant="outlined"
           >
             Back
           </Button>
