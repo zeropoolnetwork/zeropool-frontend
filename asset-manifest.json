@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/zeropool-frontend/static/css/main.3e33b9be.chunk.css",
-    "main.js": "/zeropool-frontend/static/js/main.83075fb1.chunk.js",
-    "main.js.map": "/zeropool-frontend/static/js/main.83075fb1.chunk.js.map",
+    "main.css": "/zeropool-frontend/static/css/main.154b6fc3.chunk.css",
+    "main.js": "/zeropool-frontend/static/js/main.a5af8f16.chunk.js",
+    "main.js.map": "/zeropool-frontend/static/js/main.a5af8f16.chunk.js.map",
     "runtime-main.js": "/zeropool-frontend/static/js/runtime-main.3e191303.js",
     "runtime-main.js.map": "/zeropool-frontend/static/js/runtime-main.3e191303.js.map",
     "static/css/2.3b47889b.chunk.css": "/zeropool-frontend/static/css/2.3b47889b.chunk.css",
-    "static/js/2.4d4f63b4.chunk.js": "/zeropool-frontend/static/js/2.4d4f63b4.chunk.js",
-    "static/js/2.4d4f63b4.chunk.js.map": "/zeropool-frontend/static/js/2.4d4f63b4.chunk.js.map",
+    "static/js/2.0d3bbb9e.chunk.js": "/zeropool-frontend/static/js/2.0d3bbb9e.chunk.js",
+    "static/js/2.0d3bbb9e.chunk.js.map": "/zeropool-frontend/static/js/2.0d3bbb9e.chunk.js.map",
     "index.html": "/zeropool-frontend/index.html",
-    "precache-manifest.de218ac2830fce97fd64053b89af200b.js": "/zeropool-frontend/precache-manifest.de218ac2830fce97fd64053b89af200b.js",
+    "precache-manifest.0cf4bb605532b4d79abdf9e5696c791e.js": "/zeropool-frontend/precache-manifest.0cf4bb605532b4d79abdf9e5696c791e.js",
     "service-worker.js": "/zeropool-frontend/service-worker.js",
     "static/css/2.3b47889b.chunk.css.map": "/zeropool-frontend/static/css/2.3b47889b.chunk.css.map",
-    "static/css/main.3e33b9be.chunk.css.map": "/zeropool-frontend/static/css/main.3e33b9be.chunk.css.map",
-    "static/js/2.4d4f63b4.chunk.js.LICENSE.txt": "/zeropool-frontend/static/js/2.4d4f63b4.chunk.js.LICENSE.txt",
+    "static/css/main.154b6fc3.chunk.css.map": "/zeropool-frontend/static/css/main.154b6fc3.chunk.css.map",
+    "static/js/2.0d3bbb9e.chunk.js.LICENSE.txt": "/zeropool-frontend/static/js/2.0d3bbb9e.chunk.js.LICENSE.txt",
     "static/media/Send.scss": "/zeropool-frontend/static/media/exo-2-vietnamese-400-normal.9a806be6.woff2",
     "static/media/guy_wellcomes@2x.png": "/zeropool-frontend/static/media/guy_wellcomes@2x.a8f3ca1a.png",
     "static/media/logo.svg": "/zeropool-frontend/static/media/logo.38e575e9.svg",
@@ -22,8 +22,8 @@
   "entrypoints": [
     "static/js/runtime-main.3e191303.js",
     "static/css/2.3b47889b.chunk.css",
-    "static/js/2.4d4f63b4.chunk.js",
-    "static/css/main.3e33b9be.chunk.css",
-    "static/js/main.83075fb1.chunk.js"
+    "static/js/2.0d3bbb9e.chunk.js",
+    "static/css/main.154b6fc3.chunk.css",
+    "static/js/main.a5af8f16.chunk.js"
   ]
 }
