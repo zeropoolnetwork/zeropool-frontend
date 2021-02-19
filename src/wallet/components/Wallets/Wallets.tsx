@@ -1,7 +1,7 @@
 import { cn } from '@bem-react/classname';
 import AddIcon from '@material-ui/icons/Add';
 import React, { useState } from 'react';
-import { Dialog, DialogContent, WithStyles, withStyles } from '@material-ui/core';
+import { Dialog, DialogContent } from '@material-ui/core';
 
 import './Wallets.scss';
 

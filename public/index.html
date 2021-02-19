@@ -24,16 +24,19 @@
     <title>ZeroPool</title>
 
     <style>
-      body {
-        margin: 0;
-        font-size: 18px;
+      html {
+        height: 100vh;
       }
-
+      body {
+        background-color: #020941;
+        font-size: 18px;
+        height: 100vh;
+        margin: 0;
+      }
       .loader {
         background-color: #020941;
         height: 100vh;
       }
-
       .loader-spinner {
         background: url("%PUBLIC_URL%/spinner.svg") no-repeat;
         position: absolute;
@@ -43,7 +46,6 @@
         height: 13em;
         animation: load 10s infinite linear;
       }
-
       .loader-face {
         background: url("%PUBLIC_URL%/logo2.svg") no-repeat;
         background-size: cover;

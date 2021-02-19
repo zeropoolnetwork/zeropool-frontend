@@ -22,9 +22,9 @@ export const StepOne: React.FC<StepOneProps> = ({ onGenerate }) => {
   return (
     <div className={css()} data-testid={test()}>
       <section>
-        <SeedPanel seed={[]} />
+        <SeedPanel classes={[css('SeedPanel')]} seed={[]} />
 
-        <p>
+        <p className={css('Description')}>
           Your secret phrase consists of 12 words. Store it carefully.
           If you loose it, you will loose access to all of your
           associated wallets!
@@ -35,7 +35,6 @@ export const StepOne: React.FC<StepOneProps> = ({ onGenerate }) => {
         color="primary"
         className={css('Button')}
         data-testid={test('GenerateButton')}
-        disableElevation
         onClick={onGenerate}
         variant="contained"
       >

@@ -15,12 +15,13 @@ const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
 export interface SeedPanelProps {
+  classes?: string[];
   seed: string[];
   check?: boolean;
   onCheck?: (checked: boolean) => void;
 }
 
-export const SeedPanel: React.FC<SeedPanelProps> = ({ seed, check, onCheck }) => {
+export const SeedPanel: React.FC<SeedPanelProps> = ({ classes = [], seed, check, onCheck }) => {
   const [confirmedSeed, setConfirmedSeed] = useState([] as string[]);
   const [success, setSuccess] = useState(false);
   const [shuffledSeed, setShuffledSeed] = useState([] as string[]);
@@ -49,7 +50,7 @@ export const SeedPanel: React.FC<SeedPanelProps> = ({ seed, check, onCheck }) =>
   };
 
   return (
-    <Paper className={css()} data-testid={test()}>
+    <Paper className={css('', classes)} data-testid={test()}>
       <div className={css('Body')} data-testid={test('Body')}>
         {check ?
           confirmedSeed.map((tag: string, index: number) => (

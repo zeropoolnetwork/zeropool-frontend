@@ -2,6 +2,7 @@ import React from 'react';
 import { cn } from '@bem-react/classname';
 import { push } from 'connected-react-router';
 import { useDispatch, useSelector } from 'react-redux';
+import logo from 'assets/images/logo1.svg';
 
 import './CreateAccountPage.scss';
 
@@ -67,6 +68,13 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
       }
 
       {components()}
+
+      {(stage && showSteps) ? 
+        <div className={css('Footer')}>
+          <img src={logo} alt="ZeroPool" style={{margin:'auto'}} />
+        </div>
+       : null
+      }
     </div>
-  )
+  ) 
 };

@@ -1,10 +1,16 @@
-@import '../../../styles/styles.scss';
+@import "../../../styles/styles.scss";
 
 .ImportAccount {
   align-items: center;
+  background-color: $primary;
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  &-SeedPanel {
+    height: 30vh;
+    min-height: 200px;
+  }
 
   &-Form {
     display: grid;
@@ -12,8 +18,22 @@
   }
 
   &-FormControl.MuiFormControl-root {
-    margin-bottom: $margin-normal;
+    margin-bottom: 10px;
   }
+
+  &-FormControlLabel,
+  &-FormControlButton {
+    color: $white !important;
+  }
+
+  // &-SeedInput,
+  // &-PasswordInput {
+  //   color: $white !important;
+
+  //   &::before {
+  //     border-bottom-color: $white !important;
+  //   }
+  // }
 
   &-Button.MuiButton-root {
     display: block;
@@ -24,4 +44,4 @@
       margin-top: $margin-normal;
     }
   }
-}     
+}

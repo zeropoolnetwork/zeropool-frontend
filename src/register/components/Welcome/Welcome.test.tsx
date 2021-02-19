@@ -10,7 +10,7 @@ describe('Welcome Page', () => {
 
   beforeEach(() => {
     outputSpy = jest.fn();
-    component = <Welcome onAbout={outputSpy} onCreate={outputSpy} onImport={outputSpy} />;
+    component = <Welcome onAbout={outputSpy} onCreate={outputSpy} onImport={outputSpy} onMockedLogin={jest.fn()}/>;
   });
 
   it('should render component', () => {

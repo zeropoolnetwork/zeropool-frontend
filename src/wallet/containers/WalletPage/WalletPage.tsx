@@ -40,9 +40,11 @@ interface WalletPageProps { }
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    backgroundColor: 'white',
     flexGrow: 1,
     flexDirection: 'column',
     display: 'flex',
+    height: '100vh',
     minWidth: '350px',
   },
   menuButton: {
@@ -248,7 +250,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   }, [dispatch]);
 
   return (
-    <div className={classes.root} data-testid={test()} id={componentId}>
+    <div className={css('', [classes.root])} data-testid={test()} id={componentId}>
       <AppBar position="static" className={css('AppBar')}>
         <Toolbar className={classes.toolbar}>
           <div className={classes.toolbarHeader}>
@@ -287,11 +289,11 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
         </Toolbar>
       </AppBar>
 
-      <div className={classes.wrapper}>
+      <div className={css('Wrapper', [classes.wrapper])}>
         {components()}
       </div>
 
-      <div className={classes.footer}>
+      <div className={css('Footer', [classes.footer])}>
         <img src={logo} alt="ZeroPool" style={{margin:'auto'}} />
       </div>
 
