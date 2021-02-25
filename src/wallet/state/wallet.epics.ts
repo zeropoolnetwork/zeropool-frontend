@@ -12,10 +12,11 @@ import { getSupportedTokens } from 'wallet/state/wallet.selectors';
 import { mapRatesToTokens } from 'wallet/state/helpers/map-rates-to-tokens';
 import { walletActions } from 'wallet/state/wallet.actions';
 import { initHDWallet } from 'wallet/api/zeropool.api';
+import { WalletView } from 'wallet/state/models/wallet-view';
 import { RatesApi } from 'wallet/api/rates.api';
+import { hdWallet } from 'wallet/api/zeropool.api';
 
 import { RootState } from 'state';
-import { WalletView } from './models/wallet-view';
 
 type Actions = ActionType<typeof walletActions>;
 
@@ -50,8 +51,13 @@ const initHDWallet$: Epic = (
     switchMap(action => {
       try {
         const seed = action.payload.seed;
-        initHDWallet(seed, { [CoinType.ethereum]: [0], [CoinType.near]: [0] });
+        initHDWallet(seed, [ CoinType.ethereum, CoinType.near, CoinType.waves ]);
         toast.success('Seed accepted');
+        hdWallet?.getBalances(0).then(
+          (resp) => {
+            console.log(resp);
+          }
+        )
 
         return of(push('/wallet'), walletActions.setSeedSuccess({seed}));
       } catch (e) {

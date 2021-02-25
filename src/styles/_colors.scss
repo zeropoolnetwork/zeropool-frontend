@@ -1,10 +1,15 @@
 $primary: #020941;
 $white: white;
 
-$blue-primary: #2699fb;
-$blue-secondary: #84c6ff;
+$blue-primary: #4b8bfa;
+// $blue-primary: #2699fb;
+$blue-secondary: #4faae3;
+// $blue-secondary: #84c6ff;
 $blue-light: #c4e1fa;
 $blue-dark: #3f51b5;
+
+$green-primary: #4be3fa;
+$green-secondary: #48f0db;
 
 $red-primary: #f50057;
 
@@ -19,7 +24,7 @@ $button-background-color: $primary;
 $button-border-color: $blue-secondary;
 $button-shadow-color: $grey-light;
 
-$navigation-panel-background-color: $grey-primary;
+$navigation-panel-background-color: $primary;
 $navigation-panel-text-color: #eee;
 $navigation-panel-icon-hover-color: #1ea7fd;
 $navigation-panel-icon-color: $blue-primary;

@@ -23,8 +23,13 @@ export const Welcome: React.FC<WelcomeProps> = ({ onCreate, onImport, onAbout, o
 
   return (
     <div className={css()} data-testid={test()}>
-      <section>
-        <img src={guy} className={css('Logo')} data-testid={test('Logo')} alt="logo" onClick={onMockedLogin} />
+      <section className="noselect">
+        <img 
+          src={guy} 
+          className={css('Logo')} 
+          data-testid={test('Logo')} alt="logo" 
+          onClick={onMockedLogin} 
+        />
 
         <h1 className={css('Greeting')} data-testid={test('Greeting')} >
           Welcome to ZeroPool
