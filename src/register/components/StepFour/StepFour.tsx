@@ -49,7 +49,9 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
         <FormControl className={css('FormControl')} error={!!errors['password']}>
           <InputLabel className={css('FormControlLabel')} htmlFor="password">Password</InputLabel>
 
-          <Input id="password"
+          <Input 
+            id="password"
+            color="secondary"
             className={css('Password')}
             inputProps={{ 'data-testid': test('Password') }}
             inputRef={register(PasswordInputParams)}
@@ -90,7 +92,9 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
         <FormControl className={css('FormControl')} error={!!errors['confirm']}>
           <InputLabel className={css('FormControlLabel')} htmlFor="confirm">Confirm password</InputLabel>
 
-          <Input id="confirm"
+          <Input 
+            id="confirm"
+            color="secondary"
             className={css('Password')}
             inputProps={{ 'data-testid': test('Confirm') }}
             inputRef={register({

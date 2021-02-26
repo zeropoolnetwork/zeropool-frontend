@@ -1,0 +1,25 @@
+@import "../../../styles/styles.scss";
+
+.Perl {
+  background-color: $primary;
+  border-radius: 100%;
+  border: solid 1px $blue-primary;
+  color: $white;
+  display: flex;
+  height: 36px;
+  width: 36px;
+  margin-left: 20px;
+  margin-top: auto;
+  margin-bottom: auto;
+
+  &_Active{
+    background-color: $blue-primary;
+    border-color: $white;
+  }
+
+  &-Number{
+    font-size: 18px;
+    margin: auto;
+  }
+}
+

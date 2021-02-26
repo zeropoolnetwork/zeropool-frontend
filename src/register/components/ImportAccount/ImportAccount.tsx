@@ -63,10 +63,10 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
           <FormControl className={css('FormControl')} error={!!errors['seed']}>
             <InputLabel color="secondary" className={css('FormControlLabel')} htmlFor="seed">Secret phrase</InputLabel>
 
-            <Input id="seed"
+            <Input 
+              id="seed"
               className={css('Seed')}
               color="secondary"
-              classes={{input: css('SeedInput')}}
               inputProps={{ 'data-testid': test('Seed') }}
               inputRef={register(seedInputParamsFactory(seed)) as any}
               name="seed"

@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
+
+import './Perl.scss';
 
 export type PerlProps = {
     number: number
@@ -7,9 +9,10 @@ export type PerlProps = {
 
 export const Perl = (props: PerlProps) => {
     return(
-        <div>
-            {props.number}
+        <div className={'Perl' + (props.isActive ? ' Perl_Active' : '')}>
+            <div className="Perl-Number">
+                {props.number}
+            </div>
         </div>
     )
 }
-
