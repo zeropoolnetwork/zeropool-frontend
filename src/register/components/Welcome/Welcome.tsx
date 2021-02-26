@@ -3,7 +3,7 @@ import { Button } from '@material-ui/core';
 import { cn } from '@bem-react/classname';
 
 import './Welcome.scss';
-import guy from 'assets/images/guy_wellcomes@2x.png';
+import guy from 'assets/images/guy_welcomes@2x.png';
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 

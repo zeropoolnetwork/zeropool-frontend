@@ -41,10 +41,10 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
       case RegisterStage.STEP3:
         return <StepThree seed={seed} onConfirm={() => dispatch(actions.confirmSeed())} />
       case RegisterStage.STEP4:
-        return <StepFour onRegister={data => dispatch(actions.finishRegister(data.password))} />
+        return <StepFour onRegister={data => dispatch(actions.register(data.password))} />
       case RegisterStage.IMPORT:
         return <ImportAccount
-          onImport={data => dispatch(actions.finishImportAccount(data))}
+          onImport={data => dispatch(actions.importAccount(data))}
           onBack={() => dispatch(actions.stepBack())} />
       default:
         return <Welcome

@@ -1,11 +1,11 @@
-import { Token } from "shared/models/token";
+import { Token, TokenSymbol } from "shared/models/token";
 import { round } from "shared/util/round-number";
 
 import { Wallet } from "wallet/state/models/wallet";
 
 export const amountsHelper = {
-  getAmountsForAllTakens: (tokens: Token[], wallets: Record<Token['symbol'], Wallet[]>): Record<Token['symbol'], number> => {
-    const amounts: Record<Token['symbol'], number> = {};
+  getAmountsForAllTakens: (tokens: Token[], wallets: Record<TokenSymbol, Wallet[]>): Record<TokenSymbol, number> => {
+    const amounts: Record<TokenSymbol, number> = {};
     
     for (let token of tokens) {
       amounts[token.symbol] = 0;
@@ -23,11 +23,11 @@ export const amountsHelper = {
     return amounts;
   },
 
-  getAmountsForToken: (token: Token, wallets: Wallet[]): Record<Token['symbol'], number> => ({
+  getAmountsForToken: (token: Token, wallets: Wallet[]): Record<TokenSymbol, number> => ({
     [token.symbol]: round(wallets.reduce((accu, next) => accu += next.amount, 0)),
   }),
 
-  getAmountsForWallet: (token: Token, wallet: Wallet): Record<Token['symbol'], number> => ({
+  getAmountsForWallet: (token: Token, wallet: Wallet): Record<TokenSymbol, number> => ({
     [token.symbol]: wallet.amount,
   }),
 };

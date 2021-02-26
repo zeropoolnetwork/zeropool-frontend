@@ -1,9 +1,9 @@
-import { Token } from "shared/models/token";
+import { TokenSymbol } from "shared/models/token";
 
 export const totalHelper = (
-  amounts: Record<Token['symbol'], number>, 
-  rates: Record<Token['symbol'], number>,
-  filter?: Token['symbol'], 
+  amounts: Record<TokenSymbol, number>, 
+  rates: Record<TokenSymbol, number>,
+  filter?: TokenSymbol, 
 ): number => {
     let total = 0;
 
