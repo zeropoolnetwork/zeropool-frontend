@@ -14,7 +14,7 @@ export const walletActions = {
   openSendInitialView: create('@wallet/openSendInitialView')<Wallet>(),
   openSendConfirmView: create('@wallet/openSendConfirmView')<{ wallet: Wallet, address: string, amount: number }>(),
 
-  setBalances: create('@wallet/setBalances')<{ balances: { [key in CoinType]?: string | Error }}>(),
+  setBalances: create('@wallet/setBalances')<{ balances: { [key in CoinType]?: (string | Error)[] }}>(),
 
   getRates: create('@wallet/getRates')<void>(),
   getRatesSuccess: create('@wallet/getRatesSuccess')<Record<Token['name'], number>>(),

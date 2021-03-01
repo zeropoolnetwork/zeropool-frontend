@@ -9,22 +9,26 @@ import { _testWalletsEth, _testWalletsNear } from 'shared/helpers/test/app-state
 import { walletActions as actions } from 'wallet/state/wallet.actions';
 import { navigationHelper } from 'wallet/state/helpers/navigation.helper';
 import { walletsHelper } from 'wallet/state/helpers/wallets.helper';
+import { PollSettings } from 'wallet/state/models/poll-settings';
 import { WalletView } from 'wallet/state/models/wallet-view';
 import { Wallet } from 'wallet/state/models/wallet';
 
 export const initialWalletName = 'Main wallet';
+
+const pollSettingsDefault: PollSettings = { amount: 10, offset: 0 };
 
 export interface WalletState {
   activeView: WalletView;
   activeToken: Token | null;
   activeWallet: Wallet | null;
   amounts: Record<TokenSymbol, number>;
+  pollSettings: PollSettings;
+  seed: string | null;
   send?: { wallet: Wallet, address: string, amount: number };
   supportedTokens: Token[];
   supportedTokensRecord: Record<TokenSymbol, Token>;
   usdRates: Record<TokenSymbol, number>;
   wallets: Record<TokenSymbol, Wallet[]>;
-  seed: string | null;
 }
 
 export const initialWalletState: WalletState = {
@@ -32,6 +36,8 @@ export const initialWalletState: WalletState = {
   activeToken: null,
   activeWallet: null,
   amounts: {},
+  pollSettings: pollSettingsDefault,
+  seed: null,
   supportedTokens: supportedTokens,
   supportedTokensRecord: recordFromArray(supportedTokens, 'symbol'),
   usdRates: {},
@@ -40,7 +46,6 @@ export const initialWalletState: WalletState = {
     NEAR: _testWalletsNear,
     WAVES: [],
   },
-  seed: null,
 };
 
 export const walletReducer = createReducer<

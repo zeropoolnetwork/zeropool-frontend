@@ -55,3 +55,8 @@ export const getSeed = createSelector(
   getWalletState,
   state => state.seed,
 );
+
+export const getPollSettings = createSelector(
+  getWalletState,
+  state => state.pollSettings,
+);

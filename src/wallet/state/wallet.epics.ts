@@ -58,12 +58,12 @@ const getRates$: Epic = (
   ) =>
     action$.pipe(
       filter(isActionOf(walletActions.openBalanceView)),
-      withLatestFrom(state$.pipe(map(getSeed))),
+      withLatestFrom(state$.pipe(map(getSeed)), state$.pipe(map(getSeed))),
       switchMap(([, seed, ]) => {
         if (seed) {
           const wallet = initHDWallet(seed, [ CoinType.ethereum, CoinType.near, CoinType.waves ]);
         
-          return from(wallet.getBalances(0))
+          return from(wallet.getBalances(10))
             .pipe(
               switchMap((balances) => {
                 toast.success('Wellcome to ZPWallet!');
