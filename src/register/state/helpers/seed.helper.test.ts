@@ -15,7 +15,7 @@ describe('Seed generation helper', () => {
     it('generates seed phrase as array of 12 unic words', () => {
       const seed = require('./seed.helper').generateSeed();
 
-      expect(seed).toStrictEqual(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']);
+      expect(seed.length).toBe(12);
     });
   });
 

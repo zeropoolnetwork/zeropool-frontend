@@ -1,18 +1,23 @@
 import React from 'react';
+import { cn } from '@bem-react/classname';
 
 import './Perl.scss';
 
+export const componentId = 'Perl';
+
+const css = cn(componentId);
+
 export type PerlProps = {
-  classes: string[]
+  classes?: string[]
   number: number
   isActive: boolean
 }
 
-export const Perl = (props: PerlProps) => {
+export const Perl: React.FC<PerlProps> = ({classes = [], number, isActive}) => {
   return(
-    <div className={'Perl' + (props.isActive ? ' Perl_Active ' : ' ') + props.classes.join(' ')}>
-      <div className="Perl-Number">
-        {props.number}
+    <div className={css({Active: isActive}, classes)}>
+      <div className={css('Number')}>
+        {number}
       </div>
     </div>
   )
