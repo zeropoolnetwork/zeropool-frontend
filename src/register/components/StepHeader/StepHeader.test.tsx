@@ -1,5 +1,5 @@
 import React, { ReactComponentElement, ReactElement } from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, queryByText, render } from '@testing-library/react';
 
 import { componentId, StepHeader, StepHeaderProps } from './StepHeader';
 
@@ -19,15 +19,18 @@ describe('StepHeader', () => {
   });
 
   it('shows current step', () => {
-    const { getByTestId } = render(component);
+    const { container } = render(component);
 
-    expect(getByTestId(`${componentId}-Text`).textContent?.includes('2')).toBeTruthy();
+    expect(container.getElementsByClassName(`${componentId}-Perl_Active`).length).toBe(1);
+    
   });
 
-  it('shows total number of steps', () => {
-    const { getByTestId } = render(component);
+  it('shows steps', () => {
+    const { container, getByText } = render(component);
 
-    expect(getByTestId(`${componentId}-Text`).textContent?.includes('3')).toBeTruthy();
+    expect(container.getElementsByClassName(`${componentId}-Perl`).length).toBe(4);
+    expect(getByText('4')).toBeInTheDocument();
+    expect(queryByText(container, '5')).not.toBeInTheDocument();
   });
 
   describe('Back button', () => {

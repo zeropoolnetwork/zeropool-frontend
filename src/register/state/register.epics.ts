@@ -35,7 +35,7 @@ const register$: Epic = (
     withLatestFrom(state$.pipe(map(getRegisterSeed))),
     switchMap(([_action, seed]) => {
       return of(
-        registerActions.reset(),
+        registerActions.reset(),          
         walletActions.setSeed({ seed: seed.join(' ')}),
       );
     }),

@@ -35,7 +35,12 @@ export const StepHeader: React.FC<StepHeaderProps> = ({ step, total, onBack }) =
       </Tooltip>
 
       <div className={css('Perls')} data-testid={test('Perls')}>
-        {[1,2,3,4].map((value) => <Perl number={value} isActive={value === step} key={value} />)}
+        {[1,2,3,4].map((value) => <Perl 
+          classes={[css('Perl', {'Active': value === step})]}
+          isActive={value === step} 
+          key={value} 
+          number={value} 
+        />)}
       </div>
 
       <MobileStepper
