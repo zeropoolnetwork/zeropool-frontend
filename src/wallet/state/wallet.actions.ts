@@ -1,10 +1,9 @@
 import { createAction as create } from 'typesafe-actions';
 
-import { Token } from 'shared/models/token';
+import { Token, TokenSymbol } from 'shared/models/token';
 
 import { WalletView } from 'wallet/state/models/wallet-view';
 import { Wallet } from 'wallet/state/models/wallet';
-import { CoinType } from 'zeropool-api-js/lib/coins/coin-type';
 
 export const walletActions = {
   openBalanceView: create('@wallet/openBalanceView')<void>(), // called once on wallet component first load
@@ -14,7 +13,7 @@ export const walletActions = {
   openSendInitialView: create('@wallet/openSendInitialView')<Wallet>(),
   openSendConfirmView: create('@wallet/openSendConfirmView')<{ wallet: Wallet, address: string, amount: number }>(),
 
-  setBalances: create('@wallet/setBalances')<{ balances: { [key in CoinType]?: (string | Error)[] }}>(),
+  updateWallets: create('@wallet/updateWallets')<{ wallets: Record<TokenSymbol, Wallet[]> | null }>(),
 
   getRates: create('@wallet/getRates')<void>(),
   getRatesSuccess: create('@wallet/getRatesSuccess')<Record<Token['name'], number>>(),
@@ -26,6 +25,7 @@ export const walletActions = {
   send: create('@wallet/send')<void>(),
 
   setSeed: create('@wallet/setSeed')<{ seed: string }>(),
+  setSeedSuccess: create('@wallet/setSeedSuccess')<void>(),
   setSeedError: create('@wallet/setSeedError')<void>(),
 
   addWallet: create('@wallet/addWallet')<void>(),

@@ -18,7 +18,7 @@ import { HelpPage } from 'shared/components/HelpPage/HelpPage';
 import { AboutPage } from 'shared/components/AboutPage/AboutPage';
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
-import { getActiveToken, getActiveView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getAmounts, getWallets, getActiveWallet, getSendData, getSeed } from 'wallet/state/wallet.selectors';
+import { getActiveToken, getActiveView, getSupportedTokens, getSupportedTokensRecord, getUsdRates, getAmounts, getWalletsForActiveToken, getActiveWallet, getSendData, getSeed } from 'wallet/state/wallet.selectors';
 import { Wallets, WalletsHandlers } from 'wallet/components/Wallets/Wallets';
 import { SendConfirmation } from 'wallet/components/SendConfirmation/SendConfirmation';
 import { WalletHeaderMode } from "wallet/components/WalletHeader/WalletHeaderMode";
@@ -111,10 +111,10 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   const token = useSelector(getActiveToken);
   const rates = useSelector(getUsdRates);
   const tokens = useSelector(getSupportedTokens);
-  const amounts = useSelector(getAmounts);
+  const amounts = useSelector(getAmounts) || {};
   const tokensRecord = useSelector(getSupportedTokensRecord);
   const wallet = useSelector(getActiveWallet);
-  const wallets = useSelector(getWallets);
+  const wallets = useSelector(getWalletsForActiveToken);
   const send = useSelector(getSendData);
   const seed = useSelector(getSeed);
 

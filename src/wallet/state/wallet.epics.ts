@@ -1,20 +1,20 @@
 import { push } from 'connected-react-router';
-import { CoinType } from 'zeropool-api-js';
+import { Balance, CoinType } from 'zeropool-api-js';
 import { from, Observable, of } from 'rxjs';
 import { Epic, combineEpics } from 'redux-observable';
 import { ActionType, isActionOf } from 'typesafe-actions';
-import { switchMapTo, map, withLatestFrom, mapTo, filter, switchMap } from 'rxjs/operators';
+import { switchMapTo, map, withLatestFrom, mapTo, filter, switchMap, mergeMap } from 'rxjs/operators';
 
+import { Token, TokenSymbol } from 'shared/models/token';
 import { filterActions } from 'shared/operators/filter-actions.operator';
-import { Token } from 'shared/models/token';
 import { Rate } from 'shared/models/rate';
 import toast from 'shared/helpers/toast.helper';
 
-import { getSeed, getSupportedTokens } from 'wallet/state/wallet.selectors';
+import { getPollSettings, getSeed, getSupportedTokens, getWallets } from 'wallet/state/wallet.selectors';
+import { hdWallet, initHDWallet } from 'wallet/api/zeropool.api';
+import { Wallet, WalletView } from 'wallet/state/models';
 import { mapRatesToTokens } from 'wallet/state/helpers/map-rates-to-tokens';
 import { walletActions } from 'wallet/state/wallet.actions';
-import { initHDWallet } from 'wallet/api/zeropool.api';
-import { WalletView } from 'wallet/state/models/wallet-view';
 import { RatesApi } from 'wallet/api/rates.api';
 
 import { RootState } from 'state';
@@ -58,21 +58,14 @@ const getRates$: Epic = (
   ) =>
     action$.pipe(
       filter(isActionOf(walletActions.openBalanceView)),
-      withLatestFrom(state$.pipe(map(getSeed)), state$.pipe(map(getSeed))),
-      switchMap(([, seed, ]) => {
+      withLatestFrom(state$.pipe(map(getSeed))),
+      mergeMap(([, seed]) => {
         if (seed) {
-          const wallet = initHDWallet(seed, [ CoinType.ethereum, CoinType.near, CoinType.waves ]);
-        
-          return from(wallet.getBalances(10))
-            .pipe(
-              switchMap((balances) => {
-                toast.success('Wellcome to ZPWallet!');
-                
-                return of(
-                  walletActions.setBalances({balances}),
-                );
-              })
-            )
+          const hdWallet = initHDWallet(seed, [ CoinType.ethereum, CoinType.near, CoinType.waves ]);
+          
+          toast.success('Wellcome to ZPWallet!');
+          
+          return of(walletActions.setSeedSuccess());
         } else {
           toast.error('Seed phrase not set');
 
@@ -91,10 +84,68 @@ const getRates$: Epic = (
     action$.pipe(
       filter(isActionOf(walletActions.menu)),
       filter(action => action.payload === WalletView.Reset),
-      switchMap(action => {
+      mergeMap(action => {
           toast.success('Wallet reseted and data cleared');
           
-          return of(push('/welcome'), walletActions.resetAccount());
+          return of(
+            push('/welcome'), 
+            walletActions.resetAccount(),
+          );
+      }),
+    );
+
+  const updateWallets$: Epic = (
+    action$: Observable<Actions>,
+    state$: Observable<RootState>,
+  ) =>
+    action$.pipe(
+      filter(isActionOf(walletActions.setSeedSuccess)),
+      withLatestFrom(
+        state$.pipe(map(getWallets)), 
+        state$.pipe(map(getPollSettings)),
+        state$.pipe(map(getSupportedTokens)),
+      ),
+      switchMap(([, wallets, settings, tokens]) => {
+        console.log('wallets: ', wallets);
+
+        if (hdWallet) {
+          if (!wallets) {
+
+            return from(hdWallet.getBalances(settings.amount))
+              .pipe(
+                map((balances) => {
+                  const wallets: Record<TokenSymbol, Wallet[]> = {};
+                  
+                  for (const token of tokens) {
+                    wallets[token.symbol] = [];
+
+                    for (const [balanceDataIndex, balanceData] of Object.entries(balances[token.name])) {
+                      wallets[token.symbol].push({
+                        account: 0,
+                        address: {
+                          symbol: token.symbol,
+                          value: (balanceData as Balance).address,
+                          private: false,
+                        },
+                        amount: +(balanceData as Balance).balance,
+                        name: `Wallet${token.symbol}${balanceDataIndex}`,
+                      });
+                    }
+                  }
+
+                  return walletActions.updateWallets({wallets});
+                }),
+              )
+          } else {
+
+            return from(hdWallet.getBalances(settings.amount))
+            .pipe(
+              map((balances) => walletActions.updateWallets({wallets}))
+            );
+          }
+        }
+
+        return of(walletActions.updateWallets({wallets: null}));
       }),
     );
 
@@ -104,4 +155,5 @@ export const walletEpics: Epic = combineEpics(
   openBalance$,
   resetAccount$,
   redirectToTheWallet$,
+  updateWallets$,
 );

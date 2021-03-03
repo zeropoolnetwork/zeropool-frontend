@@ -1,4 +1,4 @@
-import React, { ReactComponentElement, ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 import { fireEvent, queryByText, render } from '@testing-library/react';
 
 import { componentId, StepHeader, StepHeaderProps } from './StepHeader';
@@ -22,7 +22,7 @@ describe('StepHeader', () => {
     const { container } = render(component);
 
     expect(container.getElementsByClassName(`${componentId}-Perl_Active`).length).toBe(1);
-    
+
   });
 
   it('shows steps', () => {

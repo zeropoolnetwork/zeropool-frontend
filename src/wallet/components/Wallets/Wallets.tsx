@@ -74,7 +74,7 @@ export const Wallets: React.FC<WalletsProps> = ({handlers, wallets, rate, token}
       )}
 
       <div  className={css('Add')}>
-        <RoundButton label={'Add new'} onClick={handlers.onAdd}>
+        <RoundButton label={'Add wallet'} onClick={handlers.onAdd}>
           <AddIcon />
         </RoundButton>
       </div>

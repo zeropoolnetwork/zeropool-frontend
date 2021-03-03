@@ -4,7 +4,9 @@ import { round } from "shared/util/round-number";
 import { Wallet } from "wallet/state/models/wallet";
 
 export const amountsHelper = {
-  getAmountsForAllTakens: (tokens: Token[], wallets: Record<TokenSymbol, Wallet[]>): Record<TokenSymbol, number> => {
+  getAmountsForAllTakens: (tokens: Token[], wallets: Record<TokenSymbol, Wallet[]> | null): Record<TokenSymbol, number>|null => {
+    if (!wallets) return null;
+    
     const amounts: Record<TokenSymbol, number> = {};
     
     for (let token of tokens) {
@@ -13,6 +15,7 @@ export const amountsHelper = {
     
     for (let token of tokens) {
       let amount = 0;
+
       for (let wallet of wallets[token.symbol]) {
         amount += wallet.amount;   
       }

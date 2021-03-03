@@ -1,10 +1,9 @@
-import { Coin } from 'zeropool-api-js/lib/coins/coin';
-
-export interface Token {
-  id: number;
-  name: string;
-  symbol: string;
-  coin?: Coin;
+export type Token = {
+  id: number
+  name: string // CoinType from zeropool-api-js/src/coins/coin-type.ts
+  symbol: string
 }
 
 export type TokenSymbol = Token['symbol'];
+export type TokenName = Token['name'];
+export type TokenId = Token['id'];
