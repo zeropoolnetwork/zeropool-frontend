@@ -14,7 +14,7 @@ import { Wallet } from 'wallet/state/models/wallet';
 
 export const initialWalletName = 'Main wallet';
 
-const pollSettingsDefault: PollSettings = { amount: 10, offset: 0 };
+const pollSettingsDefault: PollSettings = { amount: 5, offset: 0 };
 
 export interface WalletState {
   activeView: WalletView;
