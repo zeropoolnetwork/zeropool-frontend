@@ -8,8 +8,9 @@ export const registerActions = {
   generateSeed: create('@register/generateSeed')<void>(),
   submitSeed: create('@register/submitSeed')<void>(),
   confirmSeed: create('@register/confirmSeed')<void>(),
-  finishRegister: create('@register/register')<string>(),
+  register: create('@register/register')<string>(),
+  reset: create('@register/reset')<void>(),
 
   startImportAccount: create('@register/startImportAccount')<void>(),
-  finishImportAccount: create('@register/importAccount')<{ seed: string[], password: string }>(),
+  importAccount: create('@register/importAccount')<{ seed: string[], password: string }>(),
 };

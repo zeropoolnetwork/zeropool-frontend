@@ -48,7 +48,7 @@ export const registerReducer = createReducer<
     seedConfirmed: true,
     stage: RegisterStage.STEP4,
   }))
-  .handleAction(actions.finishRegister, (state, password) => ({
+  .handleAction(actions.register, (state, password) => ({
     ...state,
     showSteps: false,
     stage: undefined,
@@ -57,8 +57,11 @@ export const registerReducer = createReducer<
     ...state,
     showSteps: false,
     stage: RegisterStage.IMPORT,
+  }))  
+  .handleAction(actions.reset, () => ({
+    ...initialRegisterState,
   }))
-  .handleAction(actions.finishImportAccount, state => ({
+  .handleAction(actions.importAccount, state => ({
     ...state,
     showSteps: false,
     stage: undefined,

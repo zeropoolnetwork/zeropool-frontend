@@ -28,7 +28,12 @@ export const getAmounts = createSelector(
 
 export const getWallets = createSelector(
   getWalletState,
-  state => state.activeToken ? state.wallets[state.activeToken.symbol] : null,
+  state => state.wallets,
+);
+
+export const getWalletsForActiveToken = createSelector(
+  getWalletState,
+  state => state.activeToken && state.wallets ? state.wallets[state.activeToken.symbol] : null,
 );
 
 export const getSupportedTokens = createSelector(
@@ -54,4 +59,9 @@ export const getSendData = createSelector(
 export const getSeed = createSelector(
   getWalletState,
   state => state.seed,
+);
+
+export const getPollSettings = createSelector(
+  getWalletState,
+  state => state.pollSettings,
 );

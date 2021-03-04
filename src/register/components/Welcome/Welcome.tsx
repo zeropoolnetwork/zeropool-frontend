@@ -3,7 +3,7 @@ import { Button } from '@material-ui/core';
 import { cn } from '@bem-react/classname';
 
 import './Welcome.scss';
-import guy from 'assets/images/guy_wellcomes@2x.png';
+import guy from 'assets/images/guy_welcomes@2x.png';
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
 
@@ -23,8 +23,13 @@ export const Welcome: React.FC<WelcomeProps> = ({ onCreate, onImport, onAbout, o
 
   return (
     <div className={css()} data-testid={test()}>
-      <section>
-        <img src={guy} className={css('Logo')} data-testid={test('Logo')} alt="logo" onClick={onMockedLogin} />
+      <section className="noselect">
+        <img 
+          src={guy} 
+          className={css('Logo')} 
+          data-testid={test('Logo')} alt="logo" 
+          onClick={onMockedLogin} 
+        />
 
         <h1 className={css('Greeting')} data-testid={test('Greeting')} >
           Welcome to ZeroPool

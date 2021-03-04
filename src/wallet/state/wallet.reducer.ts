@@ -1,49 +1,46 @@
 import { ActionType, createReducer } from 'typesafe-actions';
-// import { CoinType } from 'zeropool-api-js';
 
 import supportedTokens from 'assets/settings/supported-tokens.json'
 
-import { Token } from 'shared/models/token';
 import { recordFromArray } from 'shared/util/from';
-import { _testWalletsEth, _testWalletsNear } from 'shared/helpers/test/app-state.helper';
+import { Token, TokenSymbol } from 'shared/models/token';
 
 import { walletActions as actions } from 'wallet/state/wallet.actions';
 import { navigationHelper } from 'wallet/state/helpers/navigation.helper';
 import { walletsHelper } from 'wallet/state/helpers/wallets.helper';
+import { PollSettings } from 'wallet/state/models/poll-settings';
 import { WalletView } from 'wallet/state/models/wallet-view';
 import { Wallet } from 'wallet/state/models/wallet';
 
 export const initialWalletName = 'Main wallet';
 
-// const _testAmounts = { 'ETH': 2.3425, 'NEAR': 15 };
+const pollSettingsDefault: PollSettings = { amount: 5, offset: 0 };
 
 export interface WalletState {
   activeView: WalletView;
   activeToken: Token | null;
   activeWallet: Wallet | null;
-  amounts: Record<Token['symbol'], number>;
+  amounts: Record<TokenSymbol, number> | null;
+  pollSettings: PollSettings;
+  seed: string | null;
   send?: { wallet: Wallet, address: string, amount: number };
   supportedTokens: Token[];
-  supportedTokensRecord: Record<Token['symbol'], Token>;
-  usdRates: Record<Token['symbol'], number>;
-  wallets: Record<Token['symbol'], Wallet[]>;
-  seed: string | null;
+  supportedTokensRecord: Record<TokenSymbol, Token>;
+  usdRates: Record<TokenSymbol, number>;
+  wallets: Record<TokenSymbol, Wallet[]> | null;
 }
 
 export const initialWalletState: WalletState = {
   activeView: WalletView.Balance,
   activeToken: null,
   activeWallet: null,
-  amounts: {},
+  amounts: null,
+  pollSettings: pollSettingsDefault,
+  seed: null,
   supportedTokens: supportedTokens,
   supportedTokensRecord: recordFromArray(supportedTokens, 'symbol'),
   usdRates: {},
-  wallets: {
-    ETH: _testWalletsEth,
-    NEAR: _testWalletsNear,
-    WAVES: [],
-  },
-  seed: null,
+  wallets: null,
 };
 
 export const walletReducer = createReducer<
@@ -86,16 +83,20 @@ export const walletReducer = createReducer<
       amount: payload.amount,
     }
   }))
-  .handleAction(actions.setSeedSuccess, (state, { payload }) => ({
+  .handleAction(actions.setSeed, (state, { payload }) => ({
     ...state,
     seed: payload.seed,
+  }))
+  .handleAction(actions.updateWallets, (state, { payload }) => ({
+    ...state,
+    wallets: payload.wallets,
   }))
   .handleAction(actions.resetAccount, () =>
     initialWalletState
   )
   .handleAction(actions.edit, (state , { payload }) => ({
     ...state,
-    wallets: !state.activeToken ? state.wallets : {
+    wallets: !(state.activeToken && state.wallets) ? state.wallets : {
       ...state.wallets,
       [state.activeToken.symbol]: walletsHelper.renameWallet(
         state.wallets[state.activeToken.symbol], 
@@ -106,14 +107,14 @@ export const walletReducer = createReducer<
   }))
   .handleAction(actions.addWallet, state => ({
     ...state,
-    wallets: !state.activeToken ? state.wallets : {
+    wallets: !(state.activeToken && state.wallets) ? state.wallets : {
       ...state.wallets,
       [state.activeToken.symbol]: walletsHelper.addWallet(state.wallets[state.activeToken.symbol]),
     }
   }))
   .handleAction(actions.hideWallet, (state , { payload }) => ({
     ...state,
-    wallets: !state.activeToken ? state.wallets : {
+    wallets: !(state.activeToken && state.wallets) ? state.wallets : {
       ...state.wallets,
       [state.activeToken.symbol]: walletsHelper.hideWallet(
         state.wallets[state.activeToken.symbol],

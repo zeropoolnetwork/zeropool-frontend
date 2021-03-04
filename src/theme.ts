@@ -3,8 +3,9 @@ import { createMuiTheme } from '@material-ui/core/styles'
 const COLOR_PRIMARY = '#020941';
 const COLOR_BLUE_PRIMARY = '#2699fb';
 const COLOR_BLUE_SECCONDARY = '#84c6ff';
-const COLOR_BLUE_LIGHT = '#c4e1fa';
+// const COLOR_BLUE_LIGHT = '#c4e1fa';
 const WHITE = 'white';
+const GREEN = '#4be3fa';
 const INPUT_UNDERLINE_COLOR = COLOR_BLUE_SECCONDARY;
 
 export const theme = createMuiTheme({
@@ -16,12 +17,6 @@ export const theme = createMuiTheme({
     primary: {
       main: COLOR_PRIMARY,
     }
-  },
-
-  typography: {
-    button: {
-      // fontSize: '1rem',
-    },
   },
 
   overrides: {
@@ -57,8 +52,11 @@ export const theme = createMuiTheme({
     },
 
     MuiLinearProgress: {
+      barColorPrimary: {
+        backgroundColor: GREEN,
+      },
       colorPrimary: {
-        backgroundColor: '#eee',
+        backgroundColor: COLOR_PRIMARY,
       }
     },
   

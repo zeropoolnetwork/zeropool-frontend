@@ -105,7 +105,8 @@ export const Send: React.FC<SendProps> = ({rate, wallet, onNextClick}) => {
           data-testid={test('Next')}
           onClick={() => onNextClick(address, amount)}
           color="primary"
-          disableElevation
+          disabled={!(address&&amount)}
+          disableElevation={!(address&&amount)}
           variant="contained"
         >
           Next

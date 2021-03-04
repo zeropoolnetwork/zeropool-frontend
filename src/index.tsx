@@ -29,7 +29,7 @@ async function start() {
   ReactDOM.render(
     <ThemeProvider theme={theme}>
       <SnackbarProvider maxSnack={5} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-        <React.StrictMode>
+        {/* <React.StrictMode> */}
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistedStore}>
               <ConnectedRouter history={history}>
@@ -45,7 +45,7 @@ async function start() {
               <LoadingBar />
             </PersistGate>
           </Provider>
-        </React.StrictMode>
+        {/* </React.StrictMode> */}
         <SnackbarUtilsConfigurator />
       </SnackbarProvider>
     </ThemeProvider>,

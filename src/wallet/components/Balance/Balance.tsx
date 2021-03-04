@@ -4,7 +4,7 @@ import { cn } from '@bem-react/classname';
 import './Balance.scss';
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
-import { Token } from 'shared/models/token';
+import { Token, TokenSymbol } from 'shared/models/token';
 
 import { TokenRow } from 'wallet/components/TokenRow/TokenRow';
 
@@ -14,7 +14,7 @@ const css = cn(componentId);
 const test = testIdBuilder(componentId);
 
 export interface BalanceProps {
-  amounts: Record<Token['symbol'], number>;
+  amounts: Record<TokenSymbol, number>;
   onSelectToken: (token: Token) => void;
   rates: Record<string, number>;
   tokens: string[];

@@ -49,7 +49,9 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
         <FormControl className={css('FormControl')} error={!!errors['password']}>
           <InputLabel className={css('FormControlLabel')} htmlFor="password">Password</InputLabel>
 
-          <Input id="password"
+          <Input 
+            id="password"
+            color="secondary"
             className={css('Password')}
             inputProps={{ 'data-testid': test('Password') }}
             inputRef={register(PasswordInputParams)}
@@ -90,7 +92,9 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
         <FormControl className={css('FormControl')} error={!!errors['confirm']}>
           <InputLabel className={css('FormControlLabel')} htmlFor="confirm">Confirm password</InputLabel>
 
-          <Input id="confirm"
+          <Input 
+            id="confirm"
+            color="secondary"
             className={css('Password')}
             inputProps={{ 'data-testid': test('Confirm') }}
             inputRef={register({
@@ -133,7 +137,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
 
         <p className={css('Description')}>
           Finally, please choose a password to be used
-          to export your secret frase in the future.
+          to export your secret phrase in the future.
         </p>
 
         <Button

@@ -1,4 +1,5 @@
 import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { http, RequestConfig } from 'shared/http/http';
 import { getHTTPData } from 'shared/operators/get-http-data.operator';
@@ -25,11 +26,14 @@ export const RatesApi = {
     };
 
     if (useMock) {
-      return of(ratesMock);
+      return of(ratesMock.data);
     }
 
     return http()
       .get<{ status: any, data: Rate<Token>[] }>(url, config)
-      .pipe(getHTTPData());
+      .pipe(
+        getHTTPData(),
+        map(({status, data}) => data),
+      );
   },
 };

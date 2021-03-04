@@ -5,7 +5,6 @@ import { amountsHelper } from "./amounts.helper";
 
 export const navigationHelper = {
   handleBackClick: (state: WalletState): WalletState => {
-
     switch (state.activeView) {
       case WalletView.Send:
         return state.activeToken && state.wallets ? {

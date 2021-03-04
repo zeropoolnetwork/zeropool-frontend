@@ -5,7 +5,7 @@
   flex-wrap: wrap;
   background-color: $navigation-panel-background-color;
 
-  &-Button, &-Text {
+  &-Button, &-Perls {
     flex: 1;
   }
 
@@ -26,12 +26,11 @@
     font-size: 35px;
   }
 
-  &-Text {
-    color: $navigation-panel-text-color;
+  &-Perls {
+    justify-content: center;
+    display: flex;
     left: -5vw;
     position: relative;
-    text-align: center;
-    z-index: 0;
   }
 
   &-Progress.MuiMobileStepper-root {

@@ -1,17 +1,17 @@
 [
   {
     "id": 1027,
-    "name": "Ethereum",
+    "name": "ethereum",
     "symbol": "ETH"
   },
   {
     "id": 6535,
-    "name": "NEAR Protocol",
+    "name": "near",
     "symbol": "NEAR"
   },
   {
     "id": 1274,
-    "name": "Waves",
+    "name": "waves",
     "symbol": "WAVES"
   }
 ]
