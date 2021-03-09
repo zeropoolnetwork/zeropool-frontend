@@ -46,4 +46,17 @@ export const walletsHelper = {
       }
     ];
   },
+
+  reduceWallets: (wallets: Wallet[]): Wallet[] => {
+    let lastValuableIndex = 1;
+
+    for (let i = wallets.length - 1; i > 0; i--) {
+      if (wallets[i].amount > 0) {
+        lastValuableIndex = i;
+        break;
+      }
+    }
+    
+    return wallets.slice(0, lastValuableIndex);
+  }
 };

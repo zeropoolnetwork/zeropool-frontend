@@ -14,7 +14,7 @@ import { Wallet } from 'wallet/state/models/wallet';
 
 export const initialWalletName = 'Main wallet';
 
-const pollSettingsDefault: PollSettings = { amount: 5, offset: 0 };
+const pollSettingsDefault: PollSettings = { account: 0, amount: 5, offset: 0 };
 
 export interface WalletState {
   activeView: WalletView;
@@ -87,7 +87,7 @@ export const walletReducer = createReducer<
     ...state,
     seed: payload.seed,
   }))
-  .handleAction(actions.updateWallets, (state, { payload }) => ({
+  .handleAction(actions.updateWalletsSuccess, (state, { payload }) => ({
     ...state,
     wallets: payload.wallets,
   }))
@@ -105,12 +105,9 @@ export const walletReducer = createReducer<
       ),
     }
   }))
-  .handleAction(actions.addWallet, state => ({
+  .handleAction(actions.addWalletSuccess, (state , { payload }) => ({
     ...state,
-    wallets: !(state.activeToken && state.wallets) ? state.wallets : {
-      ...state.wallets,
-      [state.activeToken.symbol]: walletsHelper.addWallet(state.wallets[state.activeToken.symbol]),
-    }
+    wallets: payload.wallets,
   }))
   .handleAction(actions.hideWallet, (state , { payload }) => ({
     ...state,
