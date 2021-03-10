@@ -7,6 +7,7 @@ import { Token, TokenSymbol } from 'shared/models/token';
 
 import { walletActions as actions } from 'wallet/state/wallet.actions';
 import { navigationHelper } from 'wallet/state/helpers/navigation.helper';
+import { amountsHelper } from 'wallet/state/helpers/amounts.helper';
 import { walletsHelper } from 'wallet/state/helpers/wallets.helper';
 import { PollSettings } from 'wallet/state/models/poll-settings';
 import { WalletView } from 'wallet/state/models/wallet-view';
@@ -14,7 +15,7 @@ import { Wallet } from 'wallet/state/models/wallet';
 
 export const initialWalletName = 'Main wallet';
 
-const pollSettingsDefault: PollSettings = { amount: 5, offset: 0 };
+const pollSettingsDefault: PollSettings = { account: 0, amount: 5, offset: 0 };
 
 export interface WalletState {
   activeView: WalletView;
@@ -76,7 +77,6 @@ export const walletReducer = createReducer<
   .handleAction(actions.openSendConfirmView, (state, { payload }) => ({
     ...state,
     activeView: WalletView.SendConfirmation,
-    activeWallet: payload.wallet,
     send: {
       wallet: payload.wallet,
       address: payload.address,
@@ -87,9 +87,17 @@ export const walletReducer = createReducer<
     ...state,
     seed: payload.seed,
   }))
-  .handleAction(actions.updateWallets, (state, { payload }) => ({
+  .handleAction(actions.updateWalletsSuccess, (state, { payload }) => ({
     ...state,
     wallets: payload.wallets,
+    activeWallet: state.activeWallet && state.activeToken ? 
+      payload.wallets[state.activeToken.symbol][
+        walletsHelper.getActiveIndex(payload.wallets[state.activeToken.symbol], state.activeWallet)
+      ] : null,
+  }))
+  .handleAction(actions.refreshAmounts, state => ({
+    ...state,
+    amounts: amountsHelper.getAmounts(state),
   }))
   .handleAction(actions.resetAccount, () =>
     initialWalletState
@@ -105,12 +113,9 @@ export const walletReducer = createReducer<
       ),
     }
   }))
-  .handleAction(actions.addWallet, state => ({
+  .handleAction(actions.addWalletSuccess, (state , { payload }) => ({
     ...state,
-    wallets: !(state.activeToken && state.wallets) ? state.wallets : {
-      ...state.wallets,
-      [state.activeToken.symbol]: walletsHelper.addWallet(state.wallets[state.activeToken.symbol]),
-    }
+    wallets: payload.wallets,
   }))
   .handleAction(actions.hideWallet, (state , { payload }) => ({
     ...state,

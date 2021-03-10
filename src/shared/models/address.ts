@@ -1,5 +1,5 @@
-export interface Address {
-  private: boolean;
-  symbol: string;
-  value: string;
+export type Address = {
+  private: boolean
+  symbol: string
+  value: string
 }

@@ -8,6 +8,7 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import { useSnackbar } from 'notistack';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import MenuIcon from '@material-ui/icons/Menu';
 import Divider from '@material-ui/core/Divider';
 import { cn } from '@bem-react/classname';
@@ -24,7 +25,7 @@ import { SendConfirmation } from 'wallet/components/SendConfirmation/SendConfirm
 import { WalletHeaderMode } from "wallet/components/WalletHeader/WalletHeaderMode";
 import { walletActions } from 'wallet/state/wallet.actions';
 import { WalletHeader } from 'wallet/components/WalletHeader/WalletHeader';
-import { totalHelper } from 'wallet/state/helpers/total.helper';
+import { total } from 'wallet/state/helpers/total.helper';
 import { WalletView } from 'wallet/state/models/wallet-view';
 import { Balance } from 'wallet/components/Balance/Balance';
 import { Receive } from 'wallet/components/Receive/Receive';
@@ -66,6 +67,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexGrow: 1,
     justifyContent: 'flex-end',
+    marginRight: '-15px',
+  },  
+  toolbarHeaderItemsEdgeStart: {
+    marginLeft: '-15px',
   },
   toolbarBody: {
     margin: 'auto',
@@ -98,8 +103,10 @@ const useStyles = makeStyles((theme) => ({
   },
   AboutPage: {
     height: '50vh',
+  },
+  zeroPaddingRight: {
+    paddingRight: '0',
   }
-
 }));
 
 export const WalletPage: React.FC<WalletPageProps> = () => {
@@ -255,6 +262,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
         <Toolbar className={classes.toolbar}>
           <div className={classes.toolbarHeader}>
             <IconButton
+              classes={{edgeStart: classes.toolbarHeaderItemsEdgeStart}}
               onClick={toggleDrawer()}
               color="inherit"
               aria-label="menu"
@@ -265,10 +273,22 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
 
             <div className={classes.toolbarHeaderItems}>
               <Tooltip title="No new messages" placement="bottom">
-                <IconButton aria-label="show 0 new notifications" color="inherit">
+                <IconButton 
+                  color="inherit"
+                  className={classes.zeroPaddingRight}
+                >
                   <Badge badgeContent={0} color="secondary">
                     <NotificationsIcon />
                   </Badge>
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Update balances" placement="bottom">
+                <IconButton 
+                  color="inherit" 
+                  onClick={() => dispatch(walletActions.updateWallets())}
+                >
+                  <RefreshIcon />
                 </IconButton>
               </Tooltip>
             </div>
@@ -279,7 +299,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
               mode={walletHeaderMode}
               label={walletHeaderLabels[view]}
               hideBackButton={view === WalletView.Balance}
-              fiatValue={walletHeaderMode === WalletHeaderMode.Info ? undefined : totalHelper(amounts, rates, token?.symbol)}
+              fiatValue={walletHeaderMode === WalletHeaderMode.Info ? undefined : total(amounts, rates, token?.symbol)}
               tokenAmount={token ? amounts[token.symbol] : undefined}
               tokenSymbol={token?.symbol}
               tokenName={token?.name}

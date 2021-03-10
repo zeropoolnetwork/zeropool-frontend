@@ -1,13 +1,13 @@
-import { Observable, of } from "rxjs";
-import { Epic, combineEpics } from "redux-observable";
+import { Observable, of } from 'rxjs';
+import { Epic, combineEpics } from 'redux-observable';
 import { ActionType, isActionOf } from 'typesafe-actions';
 import { withLatestFrom, filter, map, switchMap } from 'rxjs/operators';
 
-import { walletActions } from "wallet/state/wallet.actions";
-import { registerActions } from "register/state/register.actions";
-import { getRegisterSeed } from "register/state/register.selectors";
+import { walletActions } from 'wallet/state/wallet.actions';
+import { registerActions } from 'register/state/register.actions';
+import { getRegisterSeed } from 'register/state/register.selectors';
 
-import { RootState } from "state";
+import { RootState } from 'state';
 
 type Actions = ActionType<typeof registerActions>;
 

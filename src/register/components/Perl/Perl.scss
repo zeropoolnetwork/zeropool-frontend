@@ -3,7 +3,7 @@
 .Perl {
   background-color: $primary;
   border-radius: 100%;
-  border: solid 1px $blue-primary;
+  border: solid 2px $blue-primary;
   color: $white;
   display: flex;
   height: 36px;
@@ -12,14 +12,13 @@
   margin-top: auto;
   margin-bottom: auto;
 
-  &_Active{
+  &_Active {
     background-color: $blue-primary;
     border-color: $white;
   }
 
-  &-Number{
+  &-Number {
     font-size: 18px;
     margin: auto;
   }
 }
-

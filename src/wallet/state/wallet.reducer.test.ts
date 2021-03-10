@@ -1,8 +1,8 @@
-import { deepFreeze } from "shared/util/deep-freeze";
+import { deepFreeze } from 'shared/util/deep-freeze';
 
 import { walletActions as actions } from 'wallet/state/wallet.actions';
 
-import { initialWalletState, walletReducer, WalletState } from "./wallet.reducer";
+import { initialWalletState, walletReducer, WalletState } from './wallet.reducer';
 
 describe('wallet reducer', () => {
   const initialState: WalletState = deepFreeze(initialWalletState);
