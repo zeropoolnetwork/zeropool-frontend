@@ -1,4 +1,4 @@
 declare var QRCode;
-declare module "qrcode.react" {
+declare module 'qrcode.react' {
     export = QRCode;
 }

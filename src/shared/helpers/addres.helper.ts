@@ -1,5 +1,5 @@
-import { Address } from "shared/models/address";
-import { isEthereumAddress } from "shared/helpers/validators/eth.validator";
+import { Address } from 'shared/models/address';
+import { isEthereumAddress } from 'shared/helpers/validators/eth.validator';
 
 export const validateAddress = (address: Address): boolean | undefined => {
   let result;

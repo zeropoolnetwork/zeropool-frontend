@@ -1,8 +1,9 @@
-import { createSelector } from "reselect";
+import { createSelector } from 'reselect';
 
-import { RootState } from "state";
+import { RootState } from 'state';
 
-import { WalletState } from "wallet/state/wallet.reducer";
+import { WalletState } from 'wallet/state/wallet.reducer';
+import { walletsHelper } from 'wallet/state/helpers/wallets.helper';
 
 export const getWalletState = (state: RootState): WalletState => state.account;
 
@@ -16,19 +17,32 @@ export const getActiveToken = createSelector(
   state => state.activeToken,
 );
 
+export const getWallets = createSelector(
+  getWalletState,
+  state => state.wallets,
+  );
+  
 export const getActiveWallet = createSelector(
   getWalletState,
   state => state.activeWallet,
 );
 
+export const getActiveWalletIndex = createSelector(
+  getWallets,
+  getActiveWallet,
+  getActiveToken,
+  (wallets, wallet, token) => 
+    wallets && token && wallet ? 
+      walletsHelper.getActiveIndex(
+        wallets[token?.symbol], 
+        wallet,
+      ) : null,
+);
+
+
 export const getAmounts = createSelector(
   getWalletState,
   state => state.amounts,
-);
-
-export const getWallets = createSelector(
-  getWalletState,
-  state => state.wallets,
 );
 
 export const getWalletsForActiveToken = createSelector(

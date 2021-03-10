@@ -1,9 +1,9 @@
-import { RegisterState } from "register/state/register.reducer";
-import { WalletState } from "wallet/state/wallet.reducer";
-import { WalletView } from "wallet/state/models/wallet-view";
+import { RegisterState } from 'register/state/register.reducer';
+import { WalletState } from 'wallet/state/wallet.reducer';
+import { WalletView } from 'wallet/state/models/wallet-view';
 
-import { Token } from "shared/models/token";
-import { Address } from "shared/models/address";
+import { Token } from 'shared/models/token';
+import { Address } from 'shared/models/address';
 
 const _testToken: Token = { id: 1, symbol: 'ETH', name: 'testName' };
 

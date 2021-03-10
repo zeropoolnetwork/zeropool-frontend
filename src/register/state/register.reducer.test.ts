@@ -1,8 +1,8 @@
-import { deepFreeze } from "shared/util/deep-freeze";
+import { deepFreeze } from 'shared/util/deep-freeze';
 
 import { registerActions as actions } from 'register/state/register.actions';
 
-import { initialRegisterState, registerReducer, RegisterState } from "./register.reducer";
+import { initialRegisterState, registerReducer, RegisterState } from './register.reducer';
 
 describe('Register reducer', () => {
   const initialState: RegisterState = deepFreeze(initialRegisterState);

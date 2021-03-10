@@ -3,25 +3,24 @@ import { Balance, CoinType } from 'zeropool-api-js';
 import { Epic, combineEpics } from 'redux-observable';
 import { from, Observable, of } from 'rxjs';
 import { ActionType, isActionOf } from 'typesafe-actions';
-import { switchMapTo, map, withLatestFrom, mapTo, filter, switchMap, mergeMap, ignoreElements, catchError, tap } from 'rxjs/operators';
+import { switchMapTo, map, withLatestFrom, filter, switchMap, mergeMap, ignoreElements, tap } from 'rxjs/operators';
 
-import { Token, TokenSymbol } from 'shared/models/token';
+import { Token, TokenSymbol, Rate } from 'shared/models';
+import { promiseWithError } from 'shared/util/promise-with-error';
 import { handleEpicError } from 'shared/operators/handle-epic-error.operator';
 import { filterActions } from 'shared/operators/filter-actions.operator';
-import { Rate } from 'shared/models/rate';
 import toast from 'shared/helpers/toast.helper';
 
 import { getActiveToken, getPollSettings, getSeed, getSupportedTokens, getWallets } from 'wallet/state/wallet.selectors';
 import { hdWallet, initHDWallet } from 'wallet/api/zeropool.api';
 import { Wallet, WalletView } from 'wallet/state/models';
 import { mapRatesToTokens } from 'wallet/state/helpers/map-rates-to-tokens';
+import { updateBalances } from 'wallet/state/helpers/update-balances.helper';
 import { walletsHelper } from 'wallet/state/helpers/wallets.helper';
 import { walletActions } from 'wallet/state/wallet.actions';
 import { RatesApi } from 'wallet/api/rates.api';
 
 import { RootState } from 'state';
-import { throwOnAbsence } from 'shared/util/throwOnAbsence';
-import { promiseWithError } from 'shared/util/promise-with-error';
 
 type Actions = ActionType<typeof walletActions>;
 
@@ -56,12 +55,12 @@ const getRates$: Epic = (
       filter(isActionOf(walletActions.menu)),
       filter(action => action.payload === WalletView.Reset),
       mergeMap(action => {
-          toast.success('Wallet reseted and data cleared');
-          
-          return of(
-            push('/welcome'), 
-            walletActions.resetAccount(),
-          );
+        toast.success('Wallet reseted and data cleared');
+        
+        return of(
+          push('/welcome'), 
+          walletActions.resetAccount(),
+        );
       }),
     );
 
@@ -136,7 +135,6 @@ const getRates$: Epic = (
               );
             }),
           )
-
       }),
       handleEpicError(walletActions.updateWalletsError),
     );
@@ -151,7 +149,12 @@ const getRates$: Epic = (
         state$.pipe(map(getWallets)),
         state$.pipe(map(getSupportedTokens)),
       ),
-      switchMap(async ([, wallets, tokens]) => {
+      switchMap(([, wallets, tokens]) => {
+        if (!hdWallet) { throw Error('Api not initialized!'); }
+        if (!wallets) { throw Error('No wallets exists at the moment!'); }
+
+        //#region 
+        /*
         if (!hdWallet) { throw Error('Api not initialized!'); }
         if (!wallets) { throw Error('No wallets exists at the moment!'); }
 
@@ -182,20 +185,18 @@ const getRates$: Epic = (
 
           balances[token.symbol] =  await Promise.all(promises);
         }
-
-        tokens.forEach((token) => {
-          result[token.symbol] = wallets[token.symbol].map((wallet, index) => ({
-            ...wallet,
-            amount: +balances[token.symbol][index],
-          }));
-        })
-
-        return result;
+        */
+        //#endregion
+        return updateBalances(hdWallet, wallets, tokens);
       }),
-      mergeMap((wallets) => of(
+      mergeMap(wallets => {
+        toast.success('Balances updated');
+
+        return of(
           walletActions.getRates(), 
           walletActions.updateWalletsSuccess({wallets}),
-      )),
+        )
+      }),
       handleEpicError(walletActions.updateWalletsError),
     );
   
@@ -245,6 +246,15 @@ const getRates$: Epic = (
       handleEpicError(walletActions.addWalletError),
     );
 
+    const refreshAmounts$: Epic = (
+      action$: Observable<Actions>,
+      state$: Observable<RootState>,
+    ) =>
+      action$.pipe(
+        filterActions(walletActions.updateWalletsSuccess),
+        map(() => walletActions.refreshAmounts()),
+      );
+
     const handleErrorActions$: Epic = (
       action$: Observable<Actions>,
       state$: Observable<RootState>,
@@ -271,4 +281,5 @@ export const walletEpics: Epic = combineEpics(
   initWallets$,
   updateWallets$,
   handleErrorActions$,
+  refreshAmounts$,
 );

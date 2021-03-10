@@ -1,4 +1,4 @@
-import { Wallet } from "wallet/state/models/wallet";
+import { Wallet } from 'wallet/state/models/wallet';
 
 export const walletsHelper = {
   renameWallet: (wallets: Wallet[], wallet: Wallet, name: string): Wallet[] => {
@@ -58,5 +58,8 @@ export const walletsHelper = {
     }
     
     return wallets.slice(0, lastValuableIndex);
-  }
+  },
+
+  getActiveIndex: (wallets: Wallet[], activeWallet: Wallet): number =>
+    wallets.findIndex(wallet => wallet.address.value === activeWallet.address.value)
 };

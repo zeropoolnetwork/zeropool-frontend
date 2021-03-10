@@ -1,6 +1,6 @@
-import { createSelector } from "reselect";
+import { createSelector } from 'reselect';
 
-import { RootState } from "state";
+import { RootState } from 'state';
 
 export const getRegisterState = (state: RootState) => state.register;
 

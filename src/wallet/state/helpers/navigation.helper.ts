@@ -1,7 +1,7 @@
-import { WalletView } from "wallet/state/models/wallet-view";
-import { Wallet } from "../models/wallet";
-import { WalletState } from "../wallet.reducer";
-import { amountsHelper } from "./amounts.helper";
+import { WalletState } from 'wallet/state/wallet.reducer';
+import { amountsHelper } from 'wallet/state/helpers/amounts.helper';
+import { WalletView, Wallet } from 'wallet/state/models';
+
 
 export const navigationHelper = {
   handleBackClick: (state: WalletState): WalletState => {
@@ -18,7 +18,7 @@ export const navigationHelper = {
         return state.activeToken && state.activeWallet ? {
           ...state,
           activeView: WalletView.Send,
-          amounts: amountsHelper.getAmountsForWallet(state.activeToken, state.activeWallet),
+          amounts: amountsHelper.getAmountsForWallet(state.activeWallet),
         } : state;
 
       case WalletView.Receive: 
@@ -41,20 +41,20 @@ export const navigationHelper = {
   },
 
   getReceiveView: (state: WalletState, wallet: Wallet) => ( 
-    state.activeToken ? {
+    state.activeToken && state.wallets ? {
       ...state,
       activeView: WalletView.Receive,
       activeWallet: wallet,
-      amounts: amountsHelper.getAmountsForWallet(state.activeToken, wallet),
+      amounts: amountsHelper.getAmountsForWallet(wallet),
     } : state
   ),
 
   getSendInitialView: (state: WalletState, wallet: Wallet) => ( 
-    state.activeToken ? {
+    state.activeToken && state.wallets ? {
       ...state,
       activeView: WalletView.Send,
       activeWallet: wallet,
-      amounts: amountsHelper.getAmountsForWallet(state.activeToken, wallet),
+      amounts: amountsHelper.getAmountsForWallet(wallet),
     } : state
   ),
 
@@ -65,5 +65,4 @@ export const navigationHelper = {
     activeWallet: null,
     amounts: amountsHelper.getAmountsForAllTakens(state.supportedTokens, state.wallets),
   }),
-
 };

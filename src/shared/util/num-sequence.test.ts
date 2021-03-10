@@ -1,4 +1,4 @@
-import { numSequence } from "./num-sequence";
+import { numSequence } from './num-sequence';
 
 describe('Num sequence helper', () => {
   it('returns [0] when gets 1', () => {

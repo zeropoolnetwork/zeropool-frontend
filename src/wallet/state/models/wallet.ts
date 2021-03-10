@@ -1,4 +1,4 @@
-import { Address } from "shared/models/address";
+import { Address } from 'shared/models/address';
 
 export type Wallet = {
   account: number

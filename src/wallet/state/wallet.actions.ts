@@ -12,15 +12,17 @@ export const walletActions = {
 
   openBalanceView: create('@wallet/openBalanceView')<void>(), // called once on wallet component first load
   openWalletsView: create('@wallet/openWalletsView')<Token>(),
-  openAddressView: create('@wallet/openAddressView')<Token>(),
+  openAddressView: create('@wallet/openAddressView')<Token>(), // Log View
   openReceiveView: create('@wallet/openReceiveView')<Wallet>(),
   openSendInitialView: create('@wallet/openSendInitialView')<Wallet>(),
   openSendConfirmView: create('@wallet/openSendConfirmView')<{ wallet: Wallet, address: string, amount: number }>(),
 
   initWallets: create('@wallet/initWallets')<void>(),
   updateWallets: create('@wallet/updateWallets')<void>(),
-  updateWalletsSuccess: create('@wallet/updateWalletsSuccess')<{ wallets: Record<TokenSymbol, Wallet[]> | null }>(),
+  updateWalletsSuccess: create('@wallet/updateWalletsSuccess')<{ wallets: Record<TokenSymbol, Wallet[]> }>(),
   updateWalletsError: create('@wallet/updateWalletsError')<string>(),
+
+  refreshAmounts: create('@wallet/refreshAmounts')<void>(),
 
   getRates: create('@wallet/getRates')<void>(),
   getRatesSuccess: create('@wallet/getRatesSuccess')<Record<Token['name'], number>>(),

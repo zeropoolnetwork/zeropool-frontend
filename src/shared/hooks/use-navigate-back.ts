@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 // Intercepts browser's Navigate Back event
 export const useNavigateBack = (callback: Function): void => {

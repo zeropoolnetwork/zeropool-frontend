@@ -7,6 +7,7 @@ import { Token, TokenSymbol } from 'shared/models/token';
 
 import { walletActions as actions } from 'wallet/state/wallet.actions';
 import { navigationHelper } from 'wallet/state/helpers/navigation.helper';
+import { amountsHelper } from 'wallet/state/helpers/amounts.helper';
 import { walletsHelper } from 'wallet/state/helpers/wallets.helper';
 import { PollSettings } from 'wallet/state/models/poll-settings';
 import { WalletView } from 'wallet/state/models/wallet-view';
@@ -76,7 +77,6 @@ export const walletReducer = createReducer<
   .handleAction(actions.openSendConfirmView, (state, { payload }) => ({
     ...state,
     activeView: WalletView.SendConfirmation,
-    activeWallet: payload.wallet,
     send: {
       wallet: payload.wallet,
       address: payload.address,
@@ -90,6 +90,14 @@ export const walletReducer = createReducer<
   .handleAction(actions.updateWalletsSuccess, (state, { payload }) => ({
     ...state,
     wallets: payload.wallets,
+    activeWallet: state.activeWallet && state.activeToken ? 
+      payload.wallets[state.activeToken.symbol][
+        walletsHelper.getActiveIndex(payload.wallets[state.activeToken.symbol], state.activeWallet)
+      ] : null,
+  }))
+  .handleAction(actions.refreshAmounts, state => ({
+    ...state,
+    amounts: amountsHelper.getAmounts(state),
   }))
   .handleAction(actions.resetAccount, () =>
     initialWalletState

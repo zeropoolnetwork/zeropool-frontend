@@ -1,4 +1,4 @@
-import { isEthereumAddress } from "./eth.validator";
+import { isEthereumAddress } from './eth.validator';
 
 describe('Eth Address validator', () => {
   const valid = '0xc1912fee45d61c87cc5ea59dae31190fffff232d';

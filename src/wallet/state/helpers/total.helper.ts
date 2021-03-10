@@ -1,6 +1,6 @@
-import { TokenSymbol } from "shared/models/token";
+import { TokenSymbol } from 'shared/models';
 
-export const totalHelper = (
+export const total = (
   amounts: Record<TokenSymbol, number>, 
   rates: Record<TokenSymbol, number>,
   filter?: TokenSymbol, 

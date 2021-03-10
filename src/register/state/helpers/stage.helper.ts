@@ -1,5 +1,5 @@
-import { RegisterStage } from "register/state/models/register-stage";
-import { RegisterState } from "../register.reducer";
+import { RegisterStage } from 'register/state/models/register-stage';
+import { RegisterState } from 'register/state/register.reducer';
 
 interface registerStageStateSlice {
   stage: RegisterStage | undefined;

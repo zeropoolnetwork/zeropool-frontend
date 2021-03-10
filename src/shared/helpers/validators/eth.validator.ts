@@ -1,4 +1,4 @@
-import jsSHA from "jssha";
+import jsSHA from 'jssha';
 
 /**
  * Checks if the given string is an address
