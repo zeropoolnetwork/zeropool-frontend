@@ -208,20 +208,24 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
         return wallet && token ? <Send
             rate={rates[token.symbol]}
             wallet={wallet}
-            onNextClick={(address, amount) => dispatch(walletActions.openSendConfirmView({wallet, address, amount}))}
+            onNextClick={(address, amount) => 
+              dispatch(walletActions.prepareSendConfirmView({wallet, address, amount}))
+            }
           /> : null;
       case WalletView.SendConfirmation:
         return send && token ? <SendConfirmation
-            amount={send.amount}
-            address={send.address}
-            rate={rates[token.symbol]}
-            wallet={send.wallet}
-            onConfirmClick={()=> dispatch(walletActions.send())}
-          /> : null; 
+          amount={send.amount}
+          address={send.address}
+          fee={send.fee}
+          rate={rates[token.symbol]}
+          wallet={send.wallet}
+          onConfirmClick={()=> dispatch(walletActions.send())}
+        /> : null; 
       case WalletView.Receive:
-        return wallet ? <Receive
-        address={wallet.address}
-        rate={rates[wallet.address.symbol]}
+        return wallet && token ? <Receive
+          address={wallet.address}
+          rate={rates[wallet.token.symbol]}
+          token={token}
         /> : null;
       case WalletView.About:
         return <AboutPage showBackButton={false} />
@@ -233,7 +237,8 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
           onSelectToken={(token: Token) => dispatch(walletActions.openWalletsView(token))}
           rates={rates}
           tokens={tokens.map(i => i.symbol)}
-          tokensRecord={tokensRecord} />
+          tokensRecord={tokensRecord} 
+        />
     }
   }
 

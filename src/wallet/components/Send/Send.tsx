@@ -34,7 +34,7 @@ export const Send: React.FC<SendProps> = ({rate, wallet, onNextClick}) => {
   const handleAddressPaste = async (event: React.MouseEvent) => {
     const text = await navigator.clipboard.readText();
     
-    if (validateAddress({ ...wallet.address, value: text})) {
+    if (validateAddress(text, wallet.token.symbol)) {
       setAddress(text);
       enqueueSnackbar('Address added from the clipboard', { variant: 'success' });
     } else {
@@ -53,7 +53,7 @@ export const Send: React.FC<SendProps> = ({rate, wallet, onNextClick}) => {
   return (
     <div className={css()} data-testid={test()}>
       <div className={css('Title')}> 
-        Send {wallet.address.symbol}
+        Send {wallet.token.symbol}
       </div>
 
       <form className={css('Inputs')} noValidate autoComplete="off">

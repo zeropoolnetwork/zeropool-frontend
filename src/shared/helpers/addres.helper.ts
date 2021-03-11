@@ -1,17 +1,17 @@
-import { Address } from 'shared/models/address';
 import { isEthereumAddress } from 'shared/helpers/validators/eth.validator';
+import { TokenSymbol } from 'shared/models';
 
-export const validateAddress = (address: Address): boolean | undefined => {
+export const validateAddress = (address: string, symbol: TokenSymbol): boolean | undefined => {
   let result;
   const supportedSymbols = ['ETH', 'WAWES', 'NEAR'];
   
-  if (!supportedSymbols.includes(address.symbol)) {
+  if (!supportedSymbols.includes(symbol)) {
     return undefined;
   }
 
-  switch (address.symbol) {
+  switch (symbol) {
     case 'ETH':
-      result = isEthereumAddress(address.value);
+      result = isEthereumAddress(address);
       break;
     
     case 'WAVES':

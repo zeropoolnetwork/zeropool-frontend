@@ -4,7 +4,7 @@ import { cleanup, render } from '@testing-library/react';
 import { WalletRow, componentId, WalletRowProps } from './WalletRow';
 
 const testToken = {name: 'testToken', symbol: 'Test', id: 1};
-const testWallet = {name: 'testWallet', amount: 333, address: {symbol: 'Test', value: 'x123', private: false}}
+const testWallet = {account: 0, id: 0, name: 'testWallet', amount: 333, address: 'x123', token: testToken, private: false}
 
 describe('WalletRow', () => {
   let outputSpy: jest.Mock;
@@ -15,13 +15,14 @@ describe('WalletRow', () => {
     outputSpy = jest.fn();
     component = <WalletRow 
       rate={1}
+      rollUp={0}
       token={testToken}
       wallet={testWallet}
 
       onEditClick={jest.fn()}
       onReceiveClick={jest.fn()}
       onSendClick={jest.fn()}
-      onExpandClick={jest.fn()}
+      onRollUpClick={jest.fn()}
     />;
   });
 

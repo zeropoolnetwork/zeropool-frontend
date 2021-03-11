@@ -24,7 +24,7 @@ export interface WalletState {
   amounts: Record<TokenSymbol, number> | null;
   pollSettings: PollSettings;
   seed: string | null;
-  send?: { wallet: Wallet, address: string, amount: number };
+  send?: { wallet: Wallet, address: string, amount: number, fee: number };
   supportedTokens: Token[];
   supportedTokensRecord: Record<TokenSymbol, Token>;
   usdRates: Record<TokenSymbol, number>;
@@ -81,6 +81,7 @@ export const walletReducer = createReducer<
       wallet: payload.wallet,
       address: payload.address,
       amount: payload.amount,
+      fee: payload.fee,
     }
   }))
   .handleAction(actions.setSeed, (state, { payload }) => ({

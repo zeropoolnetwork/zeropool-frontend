@@ -1,9 +1,11 @@
-import { Address } from 'shared/models/address';
+import { Token } from 'shared/models';
 
 export type Wallet = {
   account: number
-  address: Address
+  address: string
   amount: number
   id: number
   name: string
+  private: boolean
+  token: Token
 }

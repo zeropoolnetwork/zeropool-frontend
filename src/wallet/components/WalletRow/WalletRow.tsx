@@ -58,7 +58,7 @@ export const WalletRow: React.FC<WalletRowProps> = ({token, wallet, rate, rollUp
   return (
     <div className={css({Expanded: showButtons})} data-testid={test()}>
       <div className={css('Main')}>
-        <Icon className={css('Icon')} icon={wallet.address.symbol as IconOption} />
+        <Icon className={css('Icon')} icon={wallet.token.symbol as IconOption} />
 
         <div className={css('Values')}>
           <div className={css('WalletName')}>{wallet.name}</div>

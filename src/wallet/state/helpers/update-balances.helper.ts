@@ -25,13 +25,24 @@ export const updateBalances = (
       walletPromises.push(
         coin.getBalance(wallet.id)
           .catch(err => { 
+            // Waves Fix
             if (typeof(err?.message) === 'string' && err.message.includes('[-32000]')) {
               return '0';
             } 
 
             throw Error(err);
           })
-          .then((balance) => balance)
+          .then((balance) => {
+            try {
+              return coin.fromBaseUnit(balance);
+            } catch (err) {
+            // Waves Fix
+              if (typeof(err?.message) === 'string' && err.message.includes('not implemented')) {
+                return '0';
+              } 
+              throw Error(err?.message);
+            }
+          })
       );
     });
 

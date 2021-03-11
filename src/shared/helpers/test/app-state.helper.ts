@@ -3,21 +3,20 @@ import { WalletState } from 'wallet/state/wallet.reducer';
 import { WalletView } from 'wallet/state/models/wallet-view';
 
 import { Token } from 'shared/models/token';
-import { Address } from 'shared/models/address';
 
-const _testToken: Token = { id: 1, symbol: 'ETH', name: 'testName' };
+export const _testToken: Token = { id: 1, symbol: 'ETH', name: 'testName' };
 
-export const _testAddress: Address = { symbol: 'ETH', value: 'x123333', private: false };
+export const _testAddress = 'x1233';
 
 export const _testWalletsEth = [
-  {  id: 0, account: 0, name: 'WalletEth1', amount: 0, address: _testAddress },
-  {  id: 1, account: 0, name: 'WalletEth2', amount: 1.3425, address: { ..._testAddress, value: 'x123222' } },
-  {  id: 2, account: 0, name: 'WalletEth3', amount: 1, address: { ..._testAddress, value: 'x123111', private: true } },
+  {  id: 0, account: 0, name: 'WalletEth1', amount: 0, address: _testAddress, token: _testToken, private: false },
+  {  id: 1, account: 0, name: 'WalletEth2', amount: 1.3425, address: 'x123222', token: _testToken, private: false },
+  {  id: 2, account: 0, name: 'WalletEth3', amount: 1, address: 'x123111', private: true, token: _testToken },
 ]
 
 export const _testWalletsNear = [
-  {  id: 0, account: 0, name: 'WalletNear1', amount: 22.3, address: { symbol: 'NEAR', value: 'x123222', private: false } },
-  {  id: 1, account: 0, name: 'WalletNear2', amount: 11, address: { symbol: 'NEAR', value: 'x123111', private: true } },
+  {  id: 0, account: 0, name: 'WalletNear1', amount: 22.3, address: 'x123222', private: false, token: {..._testToken, symbol: 'NEAR'} },
+  {  id: 1, account: 0, name: 'WalletNear2', amount: 11, address: 'x123111', private: true, token: {..._testToken, symbol: 'NEAR'} },
 ]
 export const mockAppState: {
   register: Partial<RegisterState>,
