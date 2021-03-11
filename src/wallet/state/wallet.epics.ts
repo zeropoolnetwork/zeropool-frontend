@@ -1,5 +1,5 @@
 import { push } from 'connected-react-router';
-import { Balance, CoinType } from 'zeropool-api-js';
+import { Balance, Coin, CoinType } from 'zeropool-api-js';
 import { Epic, combineEpics } from 'redux-observable';
 import { from, Observable, of } from 'rxjs';
 import { ActionType, isActionOf } from 'typesafe-actions';
@@ -11,8 +11,8 @@ import { handleEpicError } from 'shared/operators/handle-epic-error.operator';
 import { filterActions } from 'shared/operators/filter-actions.operator';
 import toast from 'shared/helpers/toast.helper';
 
-import { getActiveToken, getPollSettings, getSeed, getSupportedTokens, getWallets } from 'wallet/state/wallet.selectors';
-import { hdWallet, initHDWallet } from 'wallet/api/zeropool.api';
+import { getActiveToken, getPollSettings, getSeed, getSupportedTokens, getSupportedTokensRecord, getWallets } from 'wallet/state/wallet.selectors';
+import { getNetworkFee, hdWallet, initHDWallet } from 'wallet/api/zeropool.api';
 import { Wallet, WalletView } from 'wallet/state/models';
 import { mapRatesToTokens } from 'wallet/state/helpers/map-rates-to-tokens';
 import { updateBalances } from 'wallet/state/helpers/update-balances.helper';
@@ -21,6 +21,7 @@ import { walletActions } from 'wallet/state/wallet.actions';
 import { RatesApi } from 'wallet/api/rates.api';
 
 import { RootState } from 'state';
+import { getPayload } from 'shared/operators/get-payload.operator';
 
 type Actions = ActionType<typeof walletActions>;
 
@@ -115,14 +116,12 @@ const getRates$: Epic = (
                 for (const [balanceDataIndex, balanceData] of Object.entries(balances[token.name])) {
                   wallets[tokenId].push({
                     account: settings.account,
-                    address: {
-                      symbol: tokenId,
-                      value: (balanceData as Balance).address,
-                      private: false,
-                    },
+                    address: (balanceData as Balance).address,
                     id: +balanceDataIndex,
                     amount: +(balanceData as Balance).balance,
                     name: `Wallet${tokenId}${balanceDataIndex}`,
+                    private: false,
+                    token: token,
                   });
                 }
 
@@ -217,26 +216,27 @@ const getRates$: Epic = (
         const activeWallets = wallets[activeToken.symbol];
         const lastWallet = activeWallets[activeWallets.length - 1];
         const newWalletId = lastWallet.id + 1;
+        const coin = hdWallet.getCoin(activeToken.name as CoinType)
+        
+        if (!coin) { throw Error(`Can not access ${activeToken.name} data!`); }
 
         return from(
-          hdWallet.getCoin(activeToken.name as CoinType)?.getBalances(1, newWalletId) || 
+          coin.getBalances(1, newWalletId) || 
           promiseWithError(`Can't get ballance of ${activeToken.name}`)
         ).pipe(
-          map((balances) => walletActions.addWalletSuccess({ 
+          map(balances => walletActions.addWalletSuccess({ 
             wallets: {
               ...wallets,
               [activeToken.symbol]: [
                 ...wallets[activeToken.symbol],
                 {
                   account: lastWallet.account,
-                  address: {
-                    symbol: activeToken.symbol,
-                    value: (balances as Balance[])[0].address,
-                    private: false,
-                  },
+                  address: (balances as Balance[])[0].address,
+                  token: { ... activeToken },
                   id: newWalletId,
-                  amount: +(balances as Balance[])[0].balance,
+                  amount: +coin.fromBaseUnit((balances as Balance[])[0].balance),
                   name: `Wallet${activeToken.symbol}${newWalletId}`,
+                  private: false,
                 }
               ]
             }
@@ -253,6 +253,20 @@ const getRates$: Epic = (
       action$.pipe(
         filterActions(walletActions.updateWalletsSuccess),
         map(() => walletActions.refreshAmounts()),
+      );
+
+    const openSendConfirmView$: Epic = (
+      action$: Observable<Actions>,
+      state$: Observable<RootState>,
+    ) =>
+      action$.pipe(
+        filter(isActionOf(walletActions.prepareSendConfirmView)),
+        getPayload(),
+        switchMap((payload) => getNetworkFee(payload.wallet.token).pipe(
+          map((fee) => walletActions.openSendConfirmView({
+            ...payload, fee: +fee.fee 
+          }))
+        ))
       );
 
     const handleErrorActions$: Epic = (
@@ -282,4 +296,5 @@ export const walletEpics: Epic = combineEpics(
   updateWallets$,
   handleErrorActions$,
   refreshAmounts$,
+  openSendConfirmView$,
 );

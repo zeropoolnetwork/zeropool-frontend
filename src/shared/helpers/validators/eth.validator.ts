@@ -15,8 +15,10 @@ export const isEthereumAddress = function (address: string) {
       // If it's all small caps or all all caps, return true
       return true;
   } else {
+      // hardcoded for test tetworks
+      return /^(0x)?[0-9a-fA-F]{40}$/.test(address)
       // Otherwise check each case
-      return isChecksumAddress(address);
+      // return isChecksumAddress(address);
   }
 };
 

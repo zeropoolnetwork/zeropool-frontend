@@ -15,7 +15,8 @@ export const walletActions = {
   openAddressView: create('@wallet/openAddressView')<Token>(), // Log View
   openReceiveView: create('@wallet/openReceiveView')<Wallet>(),
   openSendInitialView: create('@wallet/openSendInitialView')<Wallet>(),
-  openSendConfirmView: create('@wallet/openSendConfirmView')<{ wallet: Wallet, address: string, amount: number }>(),
+  prepareSendConfirmView: create('@wallet/prepareSendConfirmView')<{ wallet: Wallet, address: string, amount: number }>(),
+  openSendConfirmView: create('@wallet/openSendConfirmView')<{ wallet: Wallet, address: string, amount: number, fee: number }>(),
 
   initWallets: create('@wallet/initWallets')<void>(),
   updateWallets: create('@wallet/updateWallets')<void>(),

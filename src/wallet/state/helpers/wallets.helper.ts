@@ -37,18 +37,15 @@ export const walletsHelper = {
       ...wallets,
       {
         ...first,
-        name: `Wallet${first.address.symbol}${wallets.length}`,
+        name: `Wallet${first.token.symbol}${wallets.length}`,
         amount: 0,
-        address: {
-          ...first.address,
-          value: first.address.value + wallets.length,
-        }
+        address: first.address + wallets.length,
       }
     ];
   },
 
   reduceWallets: (wallets: Wallet[]): Wallet[] => {
-    let lastValuableIndex = 1;
+    let lastValuableIndex = 0;
 
     for (let i = wallets.length - 1; i > 0; i--) {
       if (wallets[i].amount > 0) {
@@ -57,9 +54,9 @@ export const walletsHelper = {
       }
     }
     
-    return wallets.slice(0, lastValuableIndex);
+    return wallets.slice(0, lastValuableIndex ? lastValuableIndex + 1 : 1);
   },
 
   getActiveIndex: (wallets: Wallet[], activeWallet: Wallet): number =>
-    wallets.findIndex(wallet => wallet.address.value === activeWallet.address.value)
+    wallets.findIndex(wallet => wallet.address === activeWallet.address)
 };

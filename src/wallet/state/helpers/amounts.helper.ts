@@ -34,7 +34,7 @@ export const amountsHelper = {
 
   getAmountsForWallet: (wallet: Wallet | null): Record<TokenSymbol, number> => {
     
-    return wallet ? ({ [wallet.address.symbol]: wallet.amount }) : {};
+    return wallet ? ({ [wallet.token.symbol]: wallet.amount }) : {};
   },
 
   getAmounts: (state: WalletState) => {

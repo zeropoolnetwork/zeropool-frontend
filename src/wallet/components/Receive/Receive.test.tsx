@@ -4,7 +4,7 @@ import { cleanup, render } from '@testing-library/react';
 
 import { Receive, componentId, ReceiveProps } from './Receive';
 
-import { _testAddress } from 'shared/helpers/test/app-state.helper';
+import { _testAddress, _testToken } from 'shared/helpers/test/app-state.helper';
 
 
 const enqueueSnackbar = jest.fn();
@@ -24,6 +24,7 @@ describe('Receive', () => {
     component = <Receive 
       address={_testAddress}
       rate={10}
+      token={_testToken}
     />;
   });
 

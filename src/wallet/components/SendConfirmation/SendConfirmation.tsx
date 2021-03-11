@@ -15,6 +15,7 @@ const test = testIdBuilder(componentId);
 export type SendConfirmationProps = { 
   address: string
   amount: number
+  fee: number
   rate: number
   wallet: Wallet
   onConfirmClick: () => void
@@ -23,6 +24,7 @@ export type SendConfirmationProps = {
 export const SendConfirmation: React.FC<SendConfirmationProps> = ({
   address,
   amount,
+  fee,
   rate,
   wallet,
   onConfirmClick,
@@ -60,7 +62,7 @@ export const SendConfirmation: React.FC<SendConfirmationProps> = ({
             className={css('Amount')} 
             id="amount" 
             label="Amount" 
-            value={`${amount} ${wallet.address.symbol}`} 
+            value={`${amount} ${wallet.token.symbol}`} 
             disabled={true}
           />
         </Tooltip>
@@ -69,7 +71,7 @@ export const SendConfirmation: React.FC<SendConfirmationProps> = ({
           className={css('Fee')} 
           id="fee" 
           label="Network fee" 
-          value={'0.22 ETH'} 
+          value={`${fee} ${wallet.token.symbol} (${(Math.round(rate*fee*10000))/10000} $)`} 
           disabled={true}
         />
       </form>
