@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "/zeropool-frontend/static/css/main.e50529ec.chunk.css",
-    "main.js": "/zeropool-frontend/static/js/main.1d6c2b60.chunk.js",
-    "main.js.map": "/zeropool-frontend/static/js/main.1d6c2b60.chunk.js.map",
+    "main.js": "/zeropool-frontend/static/js/main.1de02777.chunk.js",
+    "main.js.map": "/zeropool-frontend/static/js/main.1de02777.chunk.js.map",
     "runtime-main.js": "/zeropool-frontend/static/js/runtime-main.3e191303.js",
     "runtime-main.js.map": "/zeropool-frontend/static/js/runtime-main.3e191303.js.map",
     "static/css/2.3b47889b.chunk.css": "/zeropool-frontend/static/css/2.3b47889b.chunk.css",
-    "static/js/2.22dcf200.chunk.js": "/zeropool-frontend/static/js/2.22dcf200.chunk.js",
-    "static/js/2.22dcf200.chunk.js.map": "/zeropool-frontend/static/js/2.22dcf200.chunk.js.map",
+    "static/js/2.95c4141c.chunk.js": "/zeropool-frontend/static/js/2.95c4141c.chunk.js",
+    "static/js/2.95c4141c.chunk.js.map": "/zeropool-frontend/static/js/2.95c4141c.chunk.js.map",
     "index.html": "/zeropool-frontend/index.html",
-    "precache-manifest.474824c5328e6f60200db66a1d2ab564.js": "/zeropool-frontend/precache-manifest.474824c5328e6f60200db66a1d2ab564.js",
+    "precache-manifest.e0b333290ac612a78f4e63187f31e2dd.js": "/zeropool-frontend/precache-manifest.e0b333290ac612a78f4e63187f31e2dd.js",
     "service-worker.js": "/zeropool-frontend/service-worker.js",
     "static/css/2.3b47889b.chunk.css.map": "/zeropool-frontend/static/css/2.3b47889b.chunk.css.map",
     "static/css/main.e50529ec.chunk.css.map": "/zeropool-frontend/static/css/main.e50529ec.chunk.css.map",
-    "static/js/2.22dcf200.chunk.js.LICENSE.txt": "/zeropool-frontend/static/js/2.22dcf200.chunk.js.LICENSE.txt",
+    "static/js/2.95c4141c.chunk.js.LICENSE.txt": "/zeropool-frontend/static/js/2.95c4141c.chunk.js.LICENSE.txt",
     "static/media/Send.scss": "/zeropool-frontend/static/media/exo-2-vietnamese-400-normal.9a806be6.woff2",
     "static/media/guy_welcomes@2x.png": "/zeropool-frontend/static/media/guy_welcomes@2x.a8f3ca1a.png",
     "static/media/logo.svg": "/zeropool-frontend/static/media/logo.38e575e9.svg",
@@ -22,8 +22,8 @@
   "entrypoints": [
     "static/js/runtime-main.3e191303.js",
     "static/css/2.3b47889b.chunk.css",
-    "static/js/2.22dcf200.chunk.js",
+    "static/js/2.95c4141c.chunk.js",
     "static/css/main.e50529ec.chunk.css",
-    "static/js/main.1d6c2b60.chunk.js"
+    "static/js/main.1de02777.chunk.js"
   ]
 }
