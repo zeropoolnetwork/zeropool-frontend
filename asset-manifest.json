@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/zeropool-frontend/static/css/main.761cc4e9.chunk.css",
-    "main.js": "/zeropool-frontend/static/js/main.a8f4a3d9.chunk.js",
-    "main.js.map": "/zeropool-frontend/static/js/main.a8f4a3d9.chunk.js.map",
+    "main.js": "/zeropool-frontend/static/js/main.76696b2c.chunk.js",
+    "main.js.map": "/zeropool-frontend/static/js/main.76696b2c.chunk.js.map",
     "runtime-main.js": "/zeropool-frontend/static/js/runtime-main.3e191303.js",
     "runtime-main.js.map": "/zeropool-frontend/static/js/runtime-main.3e191303.js.map",
     "static/css/2.3b47889b.chunk.css": "/zeropool-frontend/static/css/2.3b47889b.chunk.css",
     "static/js/2.d2def778.chunk.js": "/zeropool-frontend/static/js/2.d2def778.chunk.js",
     "static/js/2.d2def778.chunk.js.map": "/zeropool-frontend/static/js/2.d2def778.chunk.js.map",
     "index.html": "/zeropool-frontend/index.html",
-    "precache-manifest.9c803dd589656cdae3e8ca5200b0f27e.js": "/zeropool-frontend/precache-manifest.9c803dd589656cdae3e8ca5200b0f27e.js",
+    "precache-manifest.eaf8a4aff09a48b4edc8a4e501a8cb96.js": "/zeropool-frontend/precache-manifest.eaf8a4aff09a48b4edc8a4e501a8cb96.js",
     "service-worker.js": "/zeropool-frontend/service-worker.js",
     "static/css/2.3b47889b.chunk.css.map": "/zeropool-frontend/static/css/2.3b47889b.chunk.css.map",
     "static/css/main.761cc4e9.chunk.css.map": "/zeropool-frontend/static/css/main.761cc4e9.chunk.css.map",
@@ -24,6 +24,6 @@
     "static/css/2.3b47889b.chunk.css",
     "static/js/2.d2def778.chunk.js",
     "static/css/main.761cc4e9.chunk.css",
-    "static/js/main.a8f4a3d9.chunk.js"
+    "static/js/main.76696b2c.chunk.js"
   ]
 }
