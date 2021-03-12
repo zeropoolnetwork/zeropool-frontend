@@ -1,5 +1,5 @@
 import { push } from 'connected-react-router';
-import { Balance, Coin, CoinType } from 'zeropool-api-js';
+import { Balance, CoinType } from 'zeropool-api-js';
 import { Epic, combineEpics } from 'redux-observable';
 import { from, Observable, of } from 'rxjs';
 import { ActionType, isActionOf } from 'typesafe-actions';
@@ -11,7 +11,7 @@ import { handleEpicError } from 'shared/operators/handle-epic-error.operator';
 import { filterActions } from 'shared/operators/filter-actions.operator';
 import toast from 'shared/helpers/toast.helper';
 
-import { getActiveToken, getPollSettings, getSeed, getSupportedTokens, getSupportedTokensRecord, getWallets } from 'wallet/state/wallet.selectors';
+import { getActiveToken, getPollSettings, getSeed, getSupportedTokens, getWallets } from 'wallet/state/wallet.selectors';
 import { getNetworkFee, hdWallet, initHDWallet } from 'wallet/api/zeropool.api';
 import { Wallet, WalletView } from 'wallet/state/models';
 import { mapRatesToTokens } from 'wallet/state/helpers/map-rates-to-tokens';
@@ -65,7 +65,7 @@ const getRates$: Epic = (
       }),
     );
 
-  const initWalletScreen$: Epic = (
+  const initApi$: Epic = (
     action$: Observable<Actions>,
     state$: Observable<RootState>,
   ) =>
@@ -149,43 +149,9 @@ const getRates$: Epic = (
         state$.pipe(map(getSupportedTokens)),
       ),
       switchMap(([, wallets, tokens]) => {
-        if (!hdWallet) { throw Error('Api not initialized!'); }
-        if (!wallets) { throw Error('No wallets exists at the moment!'); }
+        if (!hdWallet) { throw Error('Api not initialized!') }
+        if (!wallets) { throw Error('No wallets exists at the moment!') }
 
-        //#region 
-        /*
-        if (!hdWallet) { throw Error('Api not initialized!'); }
-        if (!wallets) { throw Error('No wallets exists at the moment!'); }
-
-        const balances: Record<TokenSymbol, string[]> = {};
-        const result: Record<string, Wallet[]> = {};
-
-        for (let t = 0; t < tokens.length; t++) {
-          const token = tokens[t];
-          const tokenWallets = wallets[token.symbol];
-          const promises: Promise<string>[] = [];
-          const coin = hdWallet?.getCoin(token.name as CoinType);
-        
-          if (!coin) { throw Error(`Can not access ${token.name} data!`); }
-
-          for (let i = 0; i < tokenWallets.length; i++) {
-            const promise = coin.getBalance(tokenWallets[i].id)
-              .catch(err => { 
-                if (typeof(err?.message) === 'string' && err.message.includes('[-32000]')) {
-                  return '0';
-                } 
-
-                throw Error(err);
-              })
-              .then((balance) => balance);
-    
-          promises.push(promise);
-          }
-
-          balances[token.symbol] =  await Promise.all(promises);
-        }
-        */
-        //#endregion
         return updateBalances(hdWallet, wallets, tokens);
       }),
       mergeMap(wallets => {
@@ -232,7 +198,7 @@ const getRates$: Epic = (
                 {
                   account: lastWallet.account,
                   address: (balances as Balance[])[0].address,
-                  token: { ... activeToken },
+                  token: { ...activeToken },
                   id: newWalletId,
                   amount: +coin.fromBaseUnit((balances as Balance[])[0].balance),
                   name: `Wallet${activeToken.symbol}${newWalletId}`,
@@ -266,7 +232,8 @@ const getRates$: Epic = (
           map((fee) => walletActions.openSendConfirmView({
             ...payload, fee: +fee.fee 
           }))
-        ))
+        )),
+        handleEpicError(walletActions.apiError)
       );
 
     const handleErrorActions$: Epic = (
@@ -278,6 +245,7 @@ const getRates$: Epic = (
           walletActions.addWalletError,
           walletActions.setSeedError,
           walletActions.updateWalletsError,
+          walletActions.apiError,
         ])),
         tap(({payload}) => {
           toast.error(payload);
@@ -289,7 +257,7 @@ const getRates$: Epic = (
 export const walletEpics: Epic = combineEpics(
   addWallet$,
   getRates$,
-  initWalletScreen$,
+  initApi$,
   resetAccount$,
   redirectToTheWalletOnSetSeed$,
   initWallets$,

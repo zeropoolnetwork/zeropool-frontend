@@ -251,7 +251,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
     [WalletView.Receive]: `${wallet?.name}`,
     [WalletView.Send]: `${wallet?.name}`,
     [WalletView.SendConfirmation]: `${wallet?.name}`,
-    [WalletView.Address]: 'x12345',
+    [WalletView.Log]: 'x12345',
     [WalletView.About]: 'About',
     [WalletView.Help]: 'Help',
     [WalletView.Reset]: '',

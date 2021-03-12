@@ -1,7 +1,7 @@
 export enum WalletView {
   Balance = 'Balance',
   Wallets = 'Wallets',
-  Address = 'Address',
+  Log = 'Log',
   Send = 'Send',
   SendConfirmation = 'SendConfirmation',
   Receive = 'Receive',
