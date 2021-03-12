@@ -2,6 +2,7 @@ import { CoinType, HDWallet } from 'zeropool-api-js';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { nearBug } from 'shared/util/waves-bug';
 import { Token, TokenSymbol } from 'shared/models/token';
 
 import { Wallet } from 'wallet/state/models';
@@ -19,14 +20,13 @@ export const updateBalances = (
     const walletPromises: Promise<string>[] = [];
     const coin = hdWallet?.getCoin(token.name as CoinType);
 
-    if (!coin) { throw Error(`Can not access ${token.name} data!`); }
+    if (!coin) { throw Error(`Can not access ${token.name} data!`) }
 
     tokenWallets.forEach(wallet => {
       walletPromises.push(
         coin.getBalance(wallet.id)
           .catch(err => { 
-            // Waves Fix
-            if (typeof(err?.message) === 'string' && err.message.includes('[-32000]')) {
+            if (nearBug(err)) {
               return '0';
             } 
 

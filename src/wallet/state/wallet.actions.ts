@@ -6,13 +6,15 @@ import { WalletView } from 'wallet/state/models/wallet-view';
 import { Wallet } from 'wallet/state/models/wallet';
 
 export const walletActions = {
+  apiError: create('@wallet/apiError')<string>(),
+
   addWallet: create('@wallet/addWallet')<void>(),
   addWalletSuccess: create('@wallet/addWalletSuccess')<{ wallets: Record<TokenSymbol, Wallet[]> }>(),
   addWalletError: create('@wallet/addWalletError')<string>(),
 
   openBalanceView: create('@wallet/openBalanceView')<void>(), // called once on wallet component first load
   openWalletsView: create('@wallet/openWalletsView')<Token>(),
-  openAddressView: create('@wallet/openAddressView')<Token>(), // Log View
+  openLogView: create('@wallet/openLogView')<Token>(), // Log View
   openReceiveView: create('@wallet/openReceiveView')<Wallet>(),
   openSendInitialView: create('@wallet/openSendInitialView')<Wallet>(),
   prepareSendConfirmView: create('@wallet/prepareSendConfirmView')<{ wallet: Wallet, address: string, amount: number }>(),

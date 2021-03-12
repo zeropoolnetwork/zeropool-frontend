@@ -1,8 +1,9 @@
 import { catchError, map } from 'rxjs/operators';
-import { from } from 'rxjs';
+import { from, of } from 'rxjs';
 import { HDWallet, CoinType, devConfig } from 'zeropool-api-js';
 
 import { Token } from 'shared/models';
+import { nearBug } from 'shared/util/waves-bug';
 
 export let hdWallet: HDWallet | null = null;
 
@@ -23,6 +24,9 @@ export function getNetworkFee(token: Token) {
   return from(coin.estimateTxFee())
     .pipe(
       map((fee) => fee),
-      catchError((err) => { throw Error(err.message) }),
+      catchError((err) => { 
+        // if (nearBug(err)) { return of({fee: 0}) }
+        throw Error(err.message) 
+      }),
     )
 }

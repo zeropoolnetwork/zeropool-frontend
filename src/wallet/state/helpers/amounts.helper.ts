@@ -46,8 +46,8 @@ export const amountsHelper = {
       case WalletView.Receive:
       case WalletView.Send:
       case WalletView.SendConfirmation:
-      case WalletView.Address:
-        return state.activeWallet && state.wallets && state.activeToken ? 
+      case WalletView.Log:
+        return state.activeWallet ? 
           amountsHelper.getAmountsForWallet(state.activeWallet):
           state.amounts;
       default:

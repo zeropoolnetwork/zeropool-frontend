@@ -16,7 +16,22 @@ export const HelpPage: React.FC<HelpPageProps> = () => {
 
   return (
     <div className={css()} data-testid={test()}>
-      <h1> Help Page is under construction...</h1>
+      <h2> Wallet is in test mode. How to start:</h2>
+      
+      <p>
+        We use Kovan test network to emulate operations 
+        with Ethereum and standard Near's test network for the Near.
+        Operations with Waves are not yet implemented.
+      </p>
+
+      <h3>Ethereum.</h3>
+
+      <p>
+        To try it out you can install Metamask, select Kovan network, 
+        get some free Eth from the 
+        <a href="https://gitter.im/kovan-testnet/faucet#" target="_blank"> kovan faucet </a> 
+        and send it to one of your Zero Pool Eth Wallet's address.
+      </p>
     </div>
   )
 };

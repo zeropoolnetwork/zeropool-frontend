@@ -63,10 +63,10 @@ export const walletReducer = createReducer<
     activeView: WalletView.Wallets,
     activeToken: payload,
   }))
-  .handleAction(actions.openAddressView, (state, { payload }) => ({
+  .handleAction(actions.openLogView, (state, { payload }) => ({
     ...state,
-    activeView: WalletView.Address,
-    activeAddress: payload,
+    activeView: WalletView.Log,
+    activeToken: payload,
   }))
   .handleAction(actions.openReceiveView, (state, { payload }) => ({
     ...navigationHelper.getReceiveView(state, payload),
