@@ -193,9 +193,10 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
     onRename: (wallet: Wallet, name: string) => dispatch(walletActions.edit({ wallet, name })),
     onDelete: (wallet: Wallet) => dispatch(walletActions.hideWallet({ wallet })),
     onAdd: () => dispatch(walletActions.addWallet()),
+    onOpen: (wallet: Wallet) => dispatch(walletActions.openLogView(wallet)),
   }
 
-  const components = () => {
+  const actualView = () => {
     switch (view) {
       case WalletView.Wallets:
         return token ? <Wallets 
@@ -315,7 +316,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
       </AppBar>
 
       <div className={css('Wrapper', [classes.wrapper])}>
-        {components()}
+        {actualView()}
       </div>
 
       <div className={css('Footer', [classes.footer])}>

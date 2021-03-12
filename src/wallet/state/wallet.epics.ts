@@ -22,6 +22,7 @@ import { RatesApi } from 'wallet/api/rates.api';
 
 import { RootState } from 'state';
 import { getPayload } from 'shared/operators/get-payload.operator';
+import { notImplemented } from 'shared/util/not-implemented';
 
 type Actions = ActionType<typeof walletActions>;
 
@@ -111,17 +112,27 @@ const getRates$: Epic = (
               
               for (const token of tokens) {
                 const tokenId = token.symbol;
+                const coin = hdWallet?.getCoin(token.name as CoinType);
                 wallets[tokenId] = [];
 
                 for (const [balanceDataIndex, balanceData] of Object.entries(balances[token.name])) {
+                  let amount; 
+                  try {
+                    amount = coin ? +coin.fromBaseUnit((balanceData as Balance).balance) : +(balanceData as Balance).balance;
+                  } catch (err) {
+                    if (notImplemented(err)) {
+                      amount = 0;
+                    } else { throw Error(err.message) }
+                  }
+
                   wallets[tokenId].push({
                     account: settings.account,
                     address: (balanceData as Balance).address,
                     id: +balanceDataIndex,
-                    amount: +(balanceData as Balance).balance,
+                    amount,
                     name: `Wallet${tokenId}${balanceDataIndex}`,
                     private: false,
-                    token: token,
+                    token,
                   });
                 }
 

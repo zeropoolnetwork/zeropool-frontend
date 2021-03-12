@@ -25,6 +25,7 @@ export interface WalletsHandlers {
   onDelete: (wallet: Wallet) => void;
   onRename: (wallet: Wallet, name: string) => void;
   onAdd: () => void;
+  onOpen: (wallet: Wallet) => void;
 };
 export interface WalletsProps {
   handlers: WalletsHandlers;
@@ -66,10 +67,11 @@ export const Wallets: React.FC<WalletsProps> = ({handlers, wallets, rate, token}
           rate={rate}
           key={index}
 
-          onReceiveClick={handlers.onReceive}
-          onSendClick={handlers.onSend}
           onEditClick={(wallet) => {setSelectedWallet(wallet); setOpenEditDialog(true);}}
+          onReceiveClick={handlers.onReceive}
           onRollUpClick={() => setRollUpSignal(rollUpSignal+1)}
+          onSendClick={handlers.onSend}
+          onWalletNameClick={handlers.onOpen}
         />
       )}
 
