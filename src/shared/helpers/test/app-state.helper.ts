@@ -6,10 +6,8 @@ import { Token } from 'shared/models/token';
 
 export const _testToken: Token = { id: 1, symbol: 'ETH', name: 'testName' };
 
-export const _testAddress = 'x1233';
-
 export const _testWalletsEth = [
-  {  id: 0, account: 0, name: 'WalletEth1', amount: 0, address: _testAddress, token: _testToken, private: false },
+  {  id: 0, account: 0, name: 'WalletEth1', amount: 0, address: 'x12322', token: _testToken, private: false },
   {  id: 1, account: 0, name: 'WalletEth2', amount: 1.3425, address: 'x123222', token: _testToken, private: false },
   {  id: 2, account: 0, name: 'WalletEth3', amount: 1, address: 'x123111', private: true, token: _testToken },
 ]

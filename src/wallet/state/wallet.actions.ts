@@ -14,7 +14,7 @@ export const walletActions = {
 
   openBalanceView: create('@wallet/openBalanceView')<void>(), // called once on wallet component first load
   openWalletsView: create('@wallet/openWalletsView')<Token>(),
-  openLogView: create('@wallet/openLogView')<Token>(), // Log View
+  openLogView: create('@wallet/openLogView')<Wallet>(), // Log View
   openReceiveView: create('@wallet/openReceiveView')<Wallet>(),
   openSendInitialView: create('@wallet/openSendInitialView')<Wallet>(),
   prepareSendConfirmView: create('@wallet/prepareSendConfirmView')<{ wallet: Wallet, address: string, amount: number }>(),

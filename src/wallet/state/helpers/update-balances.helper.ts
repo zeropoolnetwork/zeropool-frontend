@@ -3,6 +3,7 @@ import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { nearBug } from 'shared/util/waves-bug';
+import { notImplemented } from 'shared/util/not-implemented';
 import { Token, TokenSymbol } from 'shared/models/token';
 
 import { Wallet } from 'wallet/state/models';
@@ -26,6 +27,7 @@ export const updateBalances = (
       walletPromises.push(
         coin.getBalance(wallet.id)
           .catch(err => { 
+            //Near Fix
             if (nearBug(err)) {
               return '0';
             } 
@@ -37,7 +39,7 @@ export const updateBalances = (
               return coin.fromBaseUnit(balance);
             } catch (err) {
             // Waves Fix
-              if (typeof(err?.message) === 'string' && err.message.includes('not implemented')) {
+              if (notImplemented(err)) {
                 return '0';
               } 
               throw Error(err?.message);

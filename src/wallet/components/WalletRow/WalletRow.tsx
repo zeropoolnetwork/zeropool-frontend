@@ -26,13 +26,14 @@ export type WalletRowProps = {
   token: Token
   wallet: Wallet
 
+  onEditClick: (wallet: Wallet) => void
   onReceiveClick: (wallet: Wallet) => void
   onSendClick: (wallet: Wallet) => void
-  onEditClick: (wallet: Wallet) => void
   onRollUpClick: () => void
+  onWalletNameClick: (wallet: Wallet) => void
 }
 
-export const WalletRow: React.FC<WalletRowProps> = ({token, wallet, rate, rollUp, onReceiveClick, onSendClick, onEditClick, onRollUpClick}) => {
+export const WalletRow: React.FC<WalletRowProps> = ({token, wallet, rate, rollUp, onReceiveClick, onSendClick, onEditClick, onRollUpClick , onWalletNameClick}) => {
   const [showButtons, setShowButtons] = useState(false);
   const [toBeOpened, setToBeOpened] = useState(false);
   
@@ -56,12 +57,12 @@ export const WalletRow: React.FC<WalletRowProps> = ({token, wallet, rate, rollUp
   }, [wallet.name, rollUp]);
 
   return (
-    <div className={css({Expanded: showButtons})} data-testid={test()}>
+    <div className={css({Expanded: showButtons}, ['noselect'])} data-testid={test()}>
       <div className={css('Main')}>
         <Icon className={css('Icon')} icon={wallet.token.symbol as IconOption} />
 
         <div className={css('Values')}>
-          <div className={css('WalletName')}>{wallet.name}</div>
+          <div className={css('WalletName', ['noselect'])} onClick={() => onWalletNameClick(wallet)}>{wallet.name}</div>
           <div className={css('WalletAmount')}>{wallet.amount} {token.symbol} ({(rate * wallet.amount).toFixed(2)} $)</div>
         </div>
 

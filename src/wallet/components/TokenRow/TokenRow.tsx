@@ -24,7 +24,7 @@ export interface TokenRowProps {
 export const TokenRow: React.FC<TokenRowProps> = ({ amount = 0, token, rate, onSelectToken }) => {
 
   return (
-    <div className={css()} data-testid={test()} onClick={() => onSelectToken(token)}>
+    <div className={css({}, ['noselect'])} data-testid={test()} onClick={() => onSelectToken(token)}>
       <div className={css('Rates')}>
         <Icon icon={token.symbol as IconOption} />
         

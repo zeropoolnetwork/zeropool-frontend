@@ -31,7 +31,7 @@ export const RoundButton: React.FC<RoundButtonProps> = (({ label, labelPosition 
     </IconButton>
 
     <span 
-      className={css('Label', {...cssMod(labelPosition)})} 
+      className={css('Label', {...cssMod(labelPosition)}, ['noselect'])} 
       data-testid={test('Label')}
     >
         {label}
