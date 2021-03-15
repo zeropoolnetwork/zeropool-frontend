@@ -1,37 +1,37 @@
-import * as React from 'react';
-import { Button } from '@material-ui/core';
-import { cn } from '@bem-react/classname';
+import * as React from 'react'
+import { Button } from '@material-ui/core'
+import { cn } from '@bem-react/classname'
 
-import './Welcome.scss';
-import guy from 'assets/images/guy_welcomes@2x.png';
+import './Welcome.scss'
+import guy from 'assets/images/guy_welcomes@2x.png'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
-export const componentId = 'Welcome';
+export const componentId = 'Welcome'
 export interface WelcomeProps {
   // TODO: remove onMockedLogin after API is connected
-  onMockedLogin: () => void;
-  onCreate: () => void;
-  onImport: () => void;
-  onAbout: () => void;
+  onMockedLogin: () => void
+  onCreate: () => void
+  onImport: () => void
+  onAbout: () => void
 }
 
-const css = cn(componentId);
-const test = testIdBuilder(componentId);
+const css = cn(componentId)
+const test = testIdBuilder(componentId)
 
 export const Welcome: React.FC<WelcomeProps> = ({ onCreate, onImport, onAbout, onMockedLogin }) => {
-
   return (
     <div className={css()} data-testid={test()}>
       <section className="noselect">
-        <img 
-          src={guy} 
-          className={css('Logo')} 
-          data-testid={test('Logo')} alt="logo" 
-          onClick={onMockedLogin} 
+        <img
+          src={guy}
+          className={css('Logo')}
+          data-testid={test('Logo')}
+          alt="logo"
+          onClick={onMockedLogin}
         />
 
-        <h1 className={css('Greeting')} data-testid={test('Greeting')} >
+        <h1 className={css('Greeting')} data-testid={test('Greeting')}>
           Welcome to ZeroPool
         </h1>
 
@@ -45,7 +45,7 @@ export const Welcome: React.FC<WelcomeProps> = ({ onCreate, onImport, onAbout, o
         variant="contained"
         className={css('Button')}
         data-testid={test('CreateButton')}
-        disableElevation
+        disableElevation={true}
         onClick={onCreate}
       >
         Create new wallet
@@ -71,5 +71,5 @@ export const Welcome: React.FC<WelcomeProps> = ({ onCreate, onImport, onAbout, o
         About zeropool
       </Button>
     </div>
-  );
+  )
 }

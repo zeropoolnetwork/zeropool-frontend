@@ -1,25 +1,25 @@
-import React from 'react';
-import { cn } from '@bem-react/classname';
-import { push } from 'connected-react-router';
-import { Button } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import React from 'react'
+import { cn } from '@bem-react/classname'
+import { push } from 'connected-react-router'
+import { Button } from '@material-ui/core'
+import { useDispatch } from 'react-redux'
 
-import './AboutPage.scss';
-import logo from 'assets/logo.svg';
+import './AboutPage.scss'
+import logo from 'assets/logo.svg'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
-export const componentId = 'AboutPage';
+export const componentId = 'AboutPage'
 
-const css = cn(componentId);
-const test = testIdBuilder(componentId);
+const css = cn(componentId)
+const test = testIdBuilder(componentId)
 
 interface AboutPageProps {
-  showBackButton: boolean;
+  showBackButton: boolean
 }
 
 export const AboutPage: React.FC<AboutPageProps> = ({ showBackButton = true }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   return (
     <div className={css()} data-testid="AboutPage">
@@ -28,29 +28,29 @@ export const AboutPage: React.FC<AboutPageProps> = ({ showBackButton = true }) =
       <h1 className={css('Header')}> WHAT IS ZEROPOOL </h1>
 
       <p className={css('Text')}>
-        ZeroPool is fully private multi-blokchain solution.
-        Low transaction fees, atomic swaps and common anonymity set.
-        Balances and transaction graph are hidden and compatibility
-        with network identity hiding technologies, like Tor.
-        You can deposit, transfer and withdraw tokens in our product.
+        ZeroPool is fully private multi-blokchain solution. Low transaction fees, atomic swaps and
+        common anonymity set. Balances and transaction graph are hidden and compatibility with
+        network identity hiding technologies, like Tor. You can deposit, transfer and withdraw
+        tokens in our product.
       </p>
 
       <p className={css('Text')}>
-        The projec was found at ethDenver by a group of reserchers
-        and still developed as product with strong scientific base.
+        The projec was found at ethDenver by a group of reserchers and still developed as product
+        with strong scientific base.
       </p>
 
-      {showBackButton ?
+      {showBackButton ? (
         <p className={css('Button')}>
           <Button
             color="primary"
             data-testid={test('BackButton')}
-             onClick={() => dispatch(push('/'))}
+            onClick={() => dispatch(push('/'))}
             variant="contained"
           >
             Back
           </Button>
-        </p> : null}
+        </p>
+      ) : null}
     </div>
   )
-};
+}

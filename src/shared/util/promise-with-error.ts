@@ -1,2 +1,1 @@
-export const promiseWithError = (errorMessage: string) => 
-  Promise.reject(new Error(errorMessage));
+export const promiseWithError = (errorMessage: string) => Promise.reject(new Error(errorMessage))

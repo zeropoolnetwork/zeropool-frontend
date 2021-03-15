@@ -1,3 +1,3 @@
-import { capFirstLetter } from './cap-first-letter';
+import { capFirstLetter } from './cap-first-letter'
 
-export const cssMod = (value: string) => ({[capFirstLetter(value)]: true}) 
+export const cssMod = (value: string) => ({ [capFirstLetter(value)]: true })

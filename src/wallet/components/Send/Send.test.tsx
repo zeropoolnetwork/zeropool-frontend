@@ -1,43 +1,39 @@
-import React from 'react';
-import notistack from 'notistack';
-import { cleanup, fireEvent, render } from '@testing-library/react';
+import React from 'react'
+import notistack from 'notistack'
+import { cleanup, fireEvent, render } from '@testing-library/react'
 
-import { Send, componentId, SendProps } from './Send';
+import { Send, componentId, SendProps } from './Send'
 
-import { _testWalletsEth } from 'shared/helpers/test/app-state.helper';
+import { _testWalletsEth } from 'shared/helpers/test/app-state.helper'
 
-const enqueueSnackbar = jest.fn();
-const outputSpy = jest.fn();
+const enqueueSnackbar = jest.fn()
+const outputSpy = jest.fn()
 jest.mock('notistack', () => ({
-  useSnackbar: jest.fn()
-}));
+  useSnackbar: jest.fn(),
+}))
 // @ts-ignore
 jest.spyOn(notistack, 'useSnackbar').mockImplementation(() => {
-  return {enqueueSnackbar}
-});
+  return { enqueueSnackbar }
+})
 
 describe('Send', () => {
-  let component: React.ReactElement<SendProps>;
-  afterEach(cleanup);
+  let component: React.ReactElement<SendProps>
+  afterEach(cleanup)
 
   beforeEach(() => {
-    component = <Send 
-      rate={123}
-      wallet={_testWalletsEth[0]} 
-      onNextClick={outputSpy}
-    />;
-  });
+    component = <Send rate={123} wallet={_testWalletsEth[0]} onNextClick={outputSpy} />
+  })
 
   it('renders component', () => {
-    const { getByTestId } = render(component);
+    const { getByTestId } = render(component)
 
-    expect(getByTestId(componentId)).toBeInTheDocument();
+    expect(getByTestId(componentId)).toBeInTheDocument()
   })
 
   it('calls onNextClick() prop when Next button clicked', () => {
-    const { getByTestId } = render(component);
-    fireEvent.click(getByTestId(componentId + '-Next'));
+    const { getByTestId } = render(component)
+    fireEvent.click(getByTestId(componentId + '-Next'))
 
     // expect(outputSpy).toHaveBeenCalledTimes(1);
-  });
-});
+  })
+})

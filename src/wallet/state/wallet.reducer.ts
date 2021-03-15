@@ -1,34 +1,34 @@
-import { ActionType, createReducer } from 'typesafe-actions';
+import { ActionType, createReducer } from 'typesafe-actions'
 
 import supportedTokens from 'assets/settings/supported-tokens.json'
 
-import { recordFromArray } from 'shared/util/from';
-import { Token, TokenSymbol } from 'shared/models/token';
+import { recordFromArray } from 'shared/util/from'
+import { Token, TokenSymbol } from 'shared/models/token'
 
-import { walletActions as actions } from 'wallet/state/wallet.actions';
-import { navigationHelper } from 'wallet/state/helpers/navigation.helper';
-import { amountsHelper } from 'wallet/state/helpers/amounts.helper';
-import { walletsHelper } from 'wallet/state/helpers/wallets.helper';
-import { PollSettings } from 'wallet/state/models/poll-settings';
-import { WalletView } from 'wallet/state/models/wallet-view';
-import { Wallet } from 'wallet/state/models/wallet';
+import { walletActions as actions } from 'wallet/state/wallet.actions'
+import { navigationHelper } from 'wallet/state/helpers/navigation.helper'
+import { amountsHelper } from 'wallet/state/helpers/amounts.helper'
+import { walletsHelper } from 'wallet/state/helpers/wallets.helper'
+import { PollSettings } from 'wallet/state/models/poll-settings'
+import { WalletView } from 'wallet/state/models/wallet-view'
+import { Wallet } from 'wallet/state/models/wallet'
 
-export const initialWalletName = 'Main wallet';
+export const initialWalletName = 'Main wallet'
 
-const pollSettingsDefault: PollSettings = { account: 0, amount: 5, offset: 0 };
+const pollSettingsDefault: PollSettings = { account: 0, amount: 5, offset: 0 }
 
 export interface WalletState {
-  activeView: WalletView;
-  activeToken: Token | null;
-  activeWallet: Wallet | null;
-  amounts: Record<TokenSymbol, number> | null;
-  pollSettings: PollSettings;
-  seed: string | null;
-  send?: { wallet: Wallet, address: string, amount: number, fee: number };
-  supportedTokens: Token[];
-  supportedTokensRecord: Record<TokenSymbol, Token>;
-  usdRates: Record<TokenSymbol, number>;
-  wallets: Record<TokenSymbol, Wallet[]> | null;
+  activeView: WalletView
+  activeToken: Token | null
+  activeWallet: Wallet | null
+  amounts: Record<TokenSymbol, number> | null
+  pollSettings: PollSettings
+  seed: string | null
+  send?: { wallet: Wallet; address: string; amount: number; fee: number }
+  supportedTokens: Token[]
+  supportedTokensRecord: Record<TokenSymbol, Token>
+  usdRates: Record<TokenSymbol, number>
+  wallets: Record<TokenSymbol, Wallet[]> | null
 }
 
 export const initialWalletState: WalletState = {
@@ -38,24 +38,23 @@ export const initialWalletState: WalletState = {
   amounts: null,
   pollSettings: pollSettingsDefault,
   seed: null,
-  supportedTokens: supportedTokens,
+  supportedTokens,
   supportedTokensRecord: recordFromArray(supportedTokens, 'symbol'),
   usdRates: {},
   wallets: null,
-};
+}
 
-export const walletReducer = createReducer<
-  WalletState,
-  ActionType<typeof actions>
->(initialWalletState)
+export const walletReducer = createReducer<WalletState, ActionType<typeof actions>>(
+  initialWalletState
+)
   .handleAction(actions.menu, (state, { payload }) => ({
     ...state,
     activeView: payload !== WalletView.Reset ? payload : state.activeView,
   }))
-  .handleAction(actions.headerBack, state => ({
+  .handleAction(actions.headerBack, (state) => ({
     ...navigationHelper.handleBackClick(state),
   }))
-  .handleAction(actions.openBalanceView, state => ({
+  .handleAction(actions.openBalanceView, (state) => ({
     ...navigationHelper.getBalanceView(state),
   }))
   .handleAction(actions.openWalletsView, (state, { payload }) => ({
@@ -63,11 +62,11 @@ export const walletReducer = createReducer<
     activeView: WalletView.Wallets,
     activeToken: payload,
   }))
-  // .handleAction(actions.openLogView, (state, { payload }) => ({
-  //   ...state,
-  //   activeView: WalletView.Log,
-  //   activeWallet: payload,
-  // }))
+  .handleAction(actions.openLogView, (state, { payload }) => ({
+    ...state,
+    activeView: WalletView.Log,
+    activeWallet: payload,
+  }))
   .handleAction(actions.openReceiveView, (state, { payload }) => ({
     ...navigationHelper.getReceiveView(state, payload),
   }))
@@ -82,7 +81,7 @@ export const walletReducer = createReducer<
       address: payload.address,
       amount: payload.amount,
       fee: payload.fee,
-    }
+    },
   }))
   .handleAction(actions.setSeed, (state, { payload }) => ({
     ...state,
@@ -91,45 +90,51 @@ export const walletReducer = createReducer<
   .handleAction(actions.updateWalletsSuccess, (state, { payload }) => ({
     ...state,
     wallets: payload.wallets,
-    activeWallet: state.activeWallet && state.activeToken ? 
-      payload.wallets[state.activeToken.symbol][
-        walletsHelper.getActiveIndex(payload.wallets[state.activeToken.symbol], state.activeWallet)
-      ] : null,
+    activeWallet:
+      state.activeWallet && state.activeToken
+        ? payload.wallets[state.activeToken.symbol][
+            walletsHelper.getActiveIndex(
+              payload.wallets[state.activeToken.symbol],
+              state.activeWallet
+            )
+          ]
+        : null,
   }))
-  .handleAction(actions.refreshAmounts, state => ({
+  .handleAction(actions.refreshAmounts, (state) => ({
     ...state,
     amounts: amountsHelper.getAmounts(state),
   }))
-  .handleAction(actions.resetAccount, () =>
-    initialWalletState
-  )
-  .handleAction(actions.edit, (state , { payload }) => ({
+  .handleAction(actions.resetAccount, () => initialWalletState)
+  .handleAction(actions.edit, (state, { payload }) => ({
     ...state,
-    wallets: !(state.activeToken && state.wallets) ? state.wallets : {
-      ...state.wallets,
-      [state.activeToken.symbol]: walletsHelper.renameWallet(
-        state.wallets[state.activeToken.symbol], 
-        payload.wallet,
-        payload.name,
-      ),
-    }
+    wallets: !(state.activeToken && state.wallets)
+      ? state.wallets
+      : {
+          ...state.wallets,
+          [state.activeToken.symbol]: walletsHelper.renameWallet(
+            state.wallets[state.activeToken.symbol],
+            payload.wallet,
+            payload.name
+          ),
+        },
   }))
-  .handleAction(actions.addWalletSuccess, (state , { payload }) => ({
+  .handleAction(actions.addWalletSuccess, (state, { payload }) => ({
     ...state,
     wallets: payload.wallets,
   }))
-  .handleAction(actions.hideWallet, (state , { payload }) => ({
+  .handleAction(actions.hideWallet, (state, { payload }) => ({
     ...state,
-    wallets: !(state.activeToken && state.wallets) ? state.wallets : {
-      ...state.wallets,
-      [state.activeToken.symbol]: walletsHelper.hideWallet(
-        state.wallets[state.activeToken.symbol],
-        payload.wallet,
-      ),
-    }
+    wallets: !(state.activeToken && state.wallets)
+      ? state.wallets
+      : {
+          ...state.wallets,
+          [state.activeToken.symbol]: walletsHelper.hideWallet(
+            state.wallets[state.activeToken.symbol],
+            payload.wallet
+          ),
+        },
   }))
   .handleAction(actions.getRatesSuccess, (state, { payload }) => ({
     ...state,
     usdRates: payload,
-  }));
- 
+  }))

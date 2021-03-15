@@ -1,43 +1,40 @@
-import { Store } from 'redux';
-import axios, { Axios } from 'axios-observable';
-import { AxiosRequestConfig } from 'axios';
+import { Store } from 'redux'
+import axios, { Axios } from 'axios-observable'
+import { AxiosRequestConfig } from 'axios'
 
-import { authInterceptor } from 'shared/http/interceptors/auth.interceptor';
-import { RootState } from 'state';
-import { Provider } from 'shared/models/provider';
+import { authInterceptor } from 'shared/http/interceptors/auth.interceptor'
+import { RootState } from 'state'
+import { Provider } from 'shared/models/provider'
 import {
   loadingBarErrorResponseInterceptor,
   loadingBarRequestInterceptor,
   loadingBarResponseInterceptor,
-} from 'shared/http/interceptors/loading-bar.interceptor';
+} from 'shared/http/interceptors/loading-bar.interceptor'
 
-let instance: Axios | null = null;
+let instance: Axios | null = null
 
 export interface RequestConfig extends AxiosRequestConfig {
   context?: {
-    noBasicHeaders?: boolean;
-    noLoadingBar?: boolean;
-    provider?: Provider;
-  };
-};
+    noBasicHeaders?: boolean
+    noLoadingBar?: boolean
+    provider?: Provider
+  }
+}
 
-export const setupInterceptors = (
-  instance: Axios,
-  store: Store<RootState>,
-): void => {
-  instance.interceptors.request.use(loadingBarRequestInterceptor(store));
-  instance.interceptors.request.use(authInterceptor(store));
+export const setupInterceptors = (axi: Axios, store: Store<RootState>): void => {
+  axi.interceptors.request.use(loadingBarRequestInterceptor(store))
+  axi.interceptors.request.use(authInterceptor(store))
 
-  instance.interceptors.response.use(
+  axi.interceptors.response.use(
     loadingBarResponseInterceptor(store),
-    loadingBarErrorResponseInterceptor(store),
-  );
-};
+    loadingBarErrorResponseInterceptor(store)
+  )
+}
 
 export const http = (): Axios => {
   if (!instance) {
-    instance = axios.create({});
+    instance = axios.create({})
   }
 
-  return instance;
-};
+  return instance
+}

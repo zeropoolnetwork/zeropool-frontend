@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { useSnackbar, WithSnackbarProps } from 'notistack'
 
 interface IProps {
@@ -38,5 +38,5 @@ export default {
   },
   toast(msg: string, options: OptionsObject = {}) {
     useSnackbarRef.enqueueSnackbar(msg, options)
-  }
+  },
 }

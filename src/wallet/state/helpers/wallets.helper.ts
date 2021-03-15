@@ -1,8 +1,8 @@
-import { Wallet } from 'wallet/state/models/wallet';
+import { Wallet } from 'wallet/state/models/wallet'
 
 export const walletsHelper = {
   renameWallet: (wallets: Wallet[], wallet: Wallet, name: string): Wallet[] => {
-    const result: Wallet[] = [];
+    const result: Wallet[] = []
 
     for (const _wallet of wallets) {
       if (_wallet === wallet) {
@@ -11,15 +11,15 @@ export const walletsHelper = {
           name,
         })
       } else {
-        result.push(_wallet);
+        result.push(_wallet)
       }
     }
 
-    return result;
+    return result
   },
 
   hideWallet: (wallets: Wallet[], wallet: Wallet) => {
-    const result: Wallet[] = [];
+    const result: Wallet[] = []
 
     for (const _wallet of wallets) {
       if (_wallet !== wallet) {
@@ -27,11 +27,11 @@ export const walletsHelper = {
       }
     }
 
-    return result;
+    return result
   },
 
   addWallet: (wallets: Wallet[]): Wallet[] => {
-    const first: Wallet = wallets[0];
+    const first: Wallet = wallets[0]
 
     return [
       ...wallets,
@@ -40,23 +40,23 @@ export const walletsHelper = {
         name: `Wallet${first.token.symbol}${wallets.length}`,
         amount: 0,
         address: first.address + wallets.length,
-      }
-    ];
+      },
+    ]
   },
 
   reduceWallets: (wallets: Wallet[]): Wallet[] => {
-    let lastValuableIndex = 0;
+    let lastValuableIndex = 0
 
     for (let i = wallets.length - 1; i > 0; i--) {
       if (wallets[i].amount > 0) {
-        lastValuableIndex = i;
-        break;
+        lastValuableIndex = i
+        break
       }
     }
-    
-    return wallets.slice(0, lastValuableIndex ? lastValuableIndex + 1 : 1);
+
+    return wallets.slice(0, lastValuableIndex ? lastValuableIndex + 1 : 1)
   },
 
   getActiveIndex: (wallets: Wallet[], activeWallet: Wallet): number =>
-    wallets.findIndex(wallet => wallet.address === activeWallet.address)
-};
+    wallets.findIndex((wallet) => wallet.address === activeWallet.address),
+}

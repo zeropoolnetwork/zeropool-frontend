@@ -1,7 +1,7 @@
-export const roundNumber = (number: number, decimals: number) => {
-  const result = Number(number+'').toFixed(parseInt(decimals+''));
-  
-  return parseFloat(result); 
+export const roundNumber = (num: number, decimals: number) => {
+  const result = Number(num + '').toFixed(parseInt(decimals + '', undefined))
+
+  return parseFloat(result)
 }
 
-export const round = (number: number) => roundNumber(number, 12);
+export const round = (num: number) => roundNumber(num, 12)

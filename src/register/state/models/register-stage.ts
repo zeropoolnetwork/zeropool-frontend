@@ -4,4 +4,4 @@ export enum RegisterStage {
   'STEP3',
   'STEP4',
   'IMPORT',
-} 
+}

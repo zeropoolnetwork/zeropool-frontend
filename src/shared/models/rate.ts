@@ -1,1 +1,1 @@
-export type Rate<Type> = Type & { quote: { USD: { price: number } } };
+export type Rate<Type> = Type & { quote: { USD: { price: number } } }

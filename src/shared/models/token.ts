@@ -4,6 +4,6 @@ export type Token = {
   symbol: string
 }
 
-export type TokenSymbol = Token['symbol'];
-export type TokenName = Token['name'];
-export type TokenId = Token['id'];
+export type TokenSymbol = Token['symbol']
+export type TokenName = Token['name']
+export type TokenId = Token['id']
