@@ -1,17 +1,17 @@
-import React, { forwardRef, HTMLAttributes, memo } from 'react';
-import { cn } from '@bem-react/classname';
+import React, { forwardRef, HTMLAttributes, memo } from 'react'
+import { cn } from '@bem-react/classname'
 
-import './Icon.scss';
+import './Icon.scss'
 
-import { IconOption } from 'shared/components/Icon/IconOption';
+import { IconOption } from 'shared/components/Icon/IconOption'
 
-export const componentId = 'Icon';
+export const componentId = 'Icon'
 
-const css = cn(componentId);
+const css = cn(componentId)
 
 export interface IconProps extends HTMLAttributes<HTMLElement> {
-  icon: IconOption;
-  spaceOn?: 'right' | 'left';
+  icon: IconOption
+  spaceOn?: 'right' | 'left'
 }
 
 const component = memo(
@@ -25,13 +25,13 @@ const component = memo(
           LeftMargin: spaceOn === 'left',
           Clickable: !!props.onClick,
         },
-        [props.className],
+        [props.className]
       )}
       ref={ref}
-    ></i>
-  )),
-);
+    />
+  ))
+)
 
-component.displayName = componentId;
+component.displayName = componentId
 
-export const Icon = component;
+export const Icon = component

@@ -1,21 +1,21 @@
-import { TokenSymbol } from 'shared/models';
+import { TokenSymbol } from 'shared/models'
 
 export const total = (
-  amounts: Record<TokenSymbol, number>, 
+  amounts: Record<TokenSymbol, number>,
   rates: Record<TokenSymbol, number>,
-  filter?: TokenSymbol, 
+  filter?: TokenSymbol
 ): number => {
-    let total = 0;
+  let t = 0
 
-    for (let symbol in amounts) {
-      if (amounts.hasOwnProperty(symbol) && rates.hasOwnProperty(symbol)) {
-        if (filter && filter !== symbol) {
-          continue;
-        }
-
-        total += amounts[symbol] * rates[symbol];
+  for (const symbol in amounts) {
+    if (amounts.hasOwnProperty(symbol) && rates.hasOwnProperty(symbol)) {
+      if (filter && filter !== symbol) {
+        continue
       }
-    }
 
-    return total;
+      t += amounts[symbol] * rates[symbol]
+    }
+  }
+
+  return t
 }

@@ -1,39 +1,37 @@
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { of } from 'rxjs'
+import { map } from 'rxjs/operators'
 
-import { http, RequestConfig } from 'shared/http/http';
-import { getHTTPData } from 'shared/operators/get-http-data.operator';
-import { Provider } from 'shared/models/provider';
-import { Token } from 'shared/models/token';
-import { Rate } from 'shared/models/rate';
+import { http, RequestConfig } from 'shared/http/http'
+import { getHTTPData } from 'shared/operators/get-http-data.operator'
+import { Provider } from 'shared/models/provider'
+import { Token } from 'shared/models/token'
+import { Rate } from 'shared/models/rate'
 
-import ratesMock from 'assets/mocks/rates.mock.json';
-import proxy from 'assets/settings/proxy.json';
+import ratesMock from 'assets/mocks/rates.mock.json'
+import proxy from 'assets/settings/proxy.json'
 
-const useMock = true;
+const useMock = true
 
 export const RatesApi = {
-
   getRates() {
-    const url = proxy.cors + `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest`;
+    const url = proxy.cors + `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest`
     const config: RequestConfig = {
-      params: {
-      },
+      params: {},
       context: {
         noLoadingBar: true,
         provider: Provider.Marketcap,
       },
-    };
+    }
 
     if (useMock) {
-      return of(ratesMock.data);
+      return of(ratesMock.data)
     }
 
     return http()
-      .get<{ status: any, data: Rate<Token>[] }>(url, config)
+      .get<{ status: any; data: Rate<Token>[] }>(url, config)
       .pipe(
         getHTTPData(),
-        map(({status, data}) => data),
-      );
+        map(({ status, data }) => data)
+      )
   },
-};
+}

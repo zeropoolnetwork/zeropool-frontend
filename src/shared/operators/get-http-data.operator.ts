@@ -1,6 +1,5 @@
-import { map } from 'rxjs/operators';
+import { map } from 'rxjs/operators'
 
-import { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios'
 
-export const getHTTPData = <T>() =>
-  map((response: AxiosResponse<T>) => response.data);
+export const getHTTPData = <T>() => map((response: AxiosResponse<T>) => response.data)

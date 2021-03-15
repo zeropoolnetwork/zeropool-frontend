@@ -1,4 +1,4 @@
-import { Token } from 'shared/models';
+import { Token } from 'shared/models'
 
 export type Wallet = {
   account: number

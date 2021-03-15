@@ -1,17 +1,17 @@
-import React from 'react';
-import { cn } from '@bem-react/classname';
-import { ArrowBack } from '@material-ui/icons';
-import { Button, MobileStepper, Tooltip } from '@material-ui/core';
+import React from 'react'
+import { cn } from '@bem-react/classname'
+import { ArrowBack } from '@material-ui/icons'
+import { Button, MobileStepper, Tooltip } from '@material-ui/core'
 
-import './StepHeader.scss';
+import './StepHeader.scss'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
-import { Perl } from 'register/components/Perl/Perl';
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
+import { Perl } from 'register/components/Perl/Perl'
 
-export const componentId = 'StepHeader';
+export const componentId = 'StepHeader'
 
-const css = cn(componentId);
-const test = testIdBuilder(componentId);
+const css = cn(componentId)
+const test = testIdBuilder(componentId)
 
 export type StepHeaderProps = {
   step: number
@@ -20,7 +20,6 @@ export type StepHeaderProps = {
 }
 
 export const StepHeader: React.FC<StepHeaderProps> = ({ step, total, onBack }) => {
-
   return (
     <div className={css()} data-testid={test()}>
       <Tooltip title="Step back" placement="top-end">
@@ -28,19 +27,21 @@ export const StepHeader: React.FC<StepHeaderProps> = ({ step, total, onBack }) =
           className={css('Button')}
           data-testid={test('BackButton')}
           onClick={onBack}
-          disableRipple
+          disableRipple={true}
         >
           <ArrowBack className={css('Icon')} />
         </Button>
       </Tooltip>
 
       <div className={css('Perls')} data-testid={test('Perls')}>
-        {[1,2,3,4].map((value) => <Perl 
-          classes={[css('Perl', {'Active': value === step})]}
-          isActive={value === step} 
-          key={value} 
-          number={value} 
-        />)}
+        {[1, 2, 3, 4].map((value) => (
+          <Perl
+            classes={[css('Perl', { Active: value === step })]}
+            isActive={value === step}
+            key={value}
+            num={value}
+          />
+        ))}
       </div>
 
       <MobileStepper
@@ -54,4 +55,4 @@ export const StepHeader: React.FC<StepHeaderProps> = ({ step, total, onBack }) =
       />
     </div>
   )
-};
+}

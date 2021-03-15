@@ -1,12 +1,12 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 
-const COLOR_PRIMARY = '#020941';
-const COLOR_BLUE_PRIMARY = '#2699fb';
-const COLOR_BLUE_SECCONDARY = '#84c6ff';
+const COLOR_PRIMARY = '#020941'
+const COLOR_BLUE_PRIMARY = '#2699fb'
+const COLOR_BLUE_SECCONDARY = '#84c6ff'
 // const COLOR_BLUE_LIGHT = '#c4e1fa';
-const WHITE = 'white';
-const GREEN = '#4be3fa';
-const INPUT_UNDERLINE_COLOR = COLOR_BLUE_SECCONDARY;
+const WHITE = 'white'
+const GREEN = '#4be3fa'
+const INPUT_UNDERLINE_COLOR = COLOR_BLUE_SECCONDARY
 
 export const theme = createMuiTheme({
   palette: {
@@ -16,14 +16,14 @@ export const theme = createMuiTheme({
     },
     primary: {
       main: COLOR_PRIMARY,
-    }
+    },
   },
 
   overrides: {
     MuiAppBar: {
       colorPrimary: {
         backgroundColor: COLOR_PRIMARY,
-      }
+      },
     },
 
     MuiButton: {
@@ -36,18 +36,18 @@ export const theme = createMuiTheme({
         backgroundColor: COLOR_PRIMARY,
         border: `solid 2px ${COLOR_BLUE_PRIMARY}`,
         color: WHITE,
-        "&:hover": {
+        '&:hover': {
           backgroundColor: COLOR_PRIMARY,
           border: `solid 2px ${COLOR_BLUE_SECCONDARY}`,
-        }
+        },
       },
       containedPrimary: {
         // backgroundColor: 'linear-gradient(90deg, rgba(132,198,255,1) 10%, rgba(38,153,251,1) 100%)',
         backgroundColor: COLOR_BLUE_PRIMARY,
         color: WHITE,
-        "&:hover": {
+        '&:hover': {
           backgroundColor: COLOR_BLUE_SECCONDARY,
-        }
+        },
       },
     },
 
@@ -57,17 +57,16 @@ export const theme = createMuiTheme({
       },
       colorPrimary: {
         backgroundColor: COLOR_PRIMARY,
-      }
+      },
     },
-  
+
     MuiDialog: {
       root: {
         minWidth: '350px',
-      }
+      },
     },
 
-    MuiInputLabel: {
-    },
+    MuiInputLabel: {},
 
     MuiInput: {
       colorSecondary: {
@@ -95,4 +94,4 @@ export const theme = createMuiTheme({
       },
     },
   },
-});
+})

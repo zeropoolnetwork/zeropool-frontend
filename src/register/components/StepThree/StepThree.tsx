@@ -1,33 +1,37 @@
-import React, { useState } from 'react';
-import { cn } from '@bem-react/classname';
-import { Button } from '@material-ui/core';
+import React, { useState } from 'react'
+import { cn } from '@bem-react/classname'
+import { Button } from '@material-ui/core'
 
-import './StepThree.scss';
+import './StepThree.scss'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper';
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
-import { SeedPanel } from 'register/components/SeedPanel/SeedPanel';
+import { SeedPanel } from 'register/components/SeedPanel/SeedPanel'
 
-export const componentId = 'StepThree';
+export const componentId = 'StepThree'
 
-const css = cn(componentId);
-const test = testIdBuilder(componentId);
+const css = cn(componentId)
+const test = testIdBuilder(componentId)
 
 export interface StepThreeProps {
-  seed: string[];
-  onConfirm: () => void;
+  seed: string[]
+  onConfirm: () => void
 }
 export const StepThree: React.FC<StepThreeProps> = ({ seed, onConfirm }) => {
-  const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [buttonDisabled, setButtonDisabled] = useState(true)
 
   return (
     <div className={css()} data-testid={test()}>
       <section>
-        <SeedPanel classes={[css('SeedPanel')]} seed={seed} check onCheck={(success: boolean) => setButtonDisabled(!success)} />
+        <SeedPanel
+          classes={[css('SeedPanel')]}
+          seed={seed}
+          check={true}
+          onCheck={(success: boolean) => setButtonDisabled(!success)}
+        />
 
         <p className={css('Description')}>
-          Please confirm your secret phrase.
-          We want to be sure that you saved it correctly.
+          Please confirm your secret phrase. We want to be sure that you saved it correctly.
         </p>
       </section>
 
@@ -41,12 +45,12 @@ export const StepThree: React.FC<StepThreeProps> = ({ seed, onConfirm }) => {
       >
         Confirm
       </Button>
-      
+
       {/* TODO: remove after testing */}
       <Button
         color="primary"
         className={css('Button')}
-        disableElevation
+        disableElevation={true}
         onClick={onConfirm}
         variant="contained"
       >
@@ -54,4 +58,4 @@ export const StepThree: React.FC<StepThreeProps> = ({ seed, onConfirm }) => {
       </Button>
     </div>
   )
-};
+}

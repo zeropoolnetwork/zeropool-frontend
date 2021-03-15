@@ -1,9 +1,9 @@
-import { generateMnemonic, validateMnemonic } from 'zeropool-api-js/lib/utils';
+import { generateMnemonic, validateMnemonic } from 'zeropool-api-js/lib/utils'
 
 export const generateSeed = () => {
-  return generateMnemonic().split(' ');
+  return generateMnemonic().split(' ')
 }
 
 export const validateSeed = (seed: string[]): boolean => {
-  return validateMnemonic(seed.join(' '));
+  return validateMnemonic(seed.join(' '))
 }

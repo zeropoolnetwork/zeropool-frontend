@@ -1,5 +1,1 @@
-
-export type IconOption =
-  'ETH' |
-  'WAVES' |
-  'NEAR';
+export type IconOption = 'ETH' | 'WAVES' | 'NEAR'
