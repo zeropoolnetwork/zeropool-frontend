@@ -11,6 +11,7 @@
     "prettier": true,
     "interface-name": false,
     "jsx-no-lambda": false,
-    "no-console": false
+    "no-console": false,
+    "max-line-length": [true, 120]
   }
 }

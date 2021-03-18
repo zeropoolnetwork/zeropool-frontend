@@ -5,13 +5,12 @@ import supportedTokens from 'assets/settings/supported-tokens.json'
 import { recordFromArray } from 'shared/util/from'
 import { Token, TokenSymbol } from 'shared/models/token'
 
+import { PollSettings, SendData, Wallet } from 'wallet/state/models'
 import { walletActions as actions } from 'wallet/state/wallet.actions'
 import { navigationHelper } from 'wallet/state/helpers/navigation.helper'
 import { amountsHelper } from 'wallet/state/helpers/amounts.helper'
 import { walletsHelper } from 'wallet/state/helpers/wallets.helper'
-import { PollSettings } from 'wallet/state/models/poll-settings'
 import { WalletView } from 'wallet/state/models/wallet-view'
-import { Wallet } from 'wallet/state/models/wallet'
 
 export const initialWalletName = 'Main wallet'
 
@@ -24,7 +23,7 @@ export interface WalletState {
   amounts: Record<TokenSymbol, number> | null
   pollSettings: PollSettings
   seed: string | null
-  send?: { wallet: Wallet; address: string; amount: number; fee: number }
+  send: SendData | null
   supportedTokens: Token[]
   supportedTokensRecord: Record<TokenSymbol, Token>
   usdRates: Record<TokenSymbol, number>
@@ -38,6 +37,7 @@ export const initialWalletState: WalletState = {
   amounts: null,
   pollSettings: pollSettingsDefault,
   seed: null,
+  send: null,
   supportedTokens,
   supportedTokensRecord: recordFromArray(supportedTokens, 'symbol'),
   usdRates: {},
