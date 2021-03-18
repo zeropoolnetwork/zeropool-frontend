@@ -24,7 +24,8 @@ export type SendProps = {
 
 export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
   const [address, setAddress] = useState('')
-  const [amount, setAmount] = useState(0)
+  const [amount, setAmount] = useState('')
+  const [amountValid, setAmountValid] = useState(true)
   const { enqueueSnackbar } = useSnackbar()
 
   const handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,11 +44,17 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
   }
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(Number(event.target.value) || 0)
+    if (/^\d+(\.\d{1,9})?$/.test(event.target.value)) {
+      setAmount(event.target.value)
+      setAmountValid(Number(event.target.value) > 0)
+    } else {
+      setAmount(event.target.value)
+      setAmountValid(false)
+    }
   }
 
   const handleAmountMaximise = (event: React.MouseEvent) => {
-    setAmount(wallet.amount)
+    setAmount(wallet.amount.toString())
   }
 
   return (
@@ -68,7 +75,7 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
         </span>
 
         <TextField
-          className={css('AmountInput')}
+          className={css('AmountInput', { Invalid: !amountValid })}
           id="amount"
           label="Token amount"
           value={amount}
@@ -82,7 +89,7 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
         <NumberFormat
           className={css('FiatAmount')}
           data-testid={test('FiatAmount')}
-          value={amount * rate}
+          value={+amount * rate || 0}
           displayType={'text'}
           thousandSeparator={true}
           prefix={'(= '}
@@ -95,9 +102,9 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
         <Button
           className={css('NextButton')}
           data-testid={test('Next')}
-          onClick={() => onNextClick(address, amount)}
+          onClick={() => onNextClick(address, +amount)}
           color="primary"
-          disabled={!(address && amount)}
+          disabled={!(address && +amount > 0 && amountValid)}
           disableElevation={!(address && amount)}
           variant="contained"
         >
