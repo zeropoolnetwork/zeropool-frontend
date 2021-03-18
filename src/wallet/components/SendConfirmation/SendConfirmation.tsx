@@ -1,6 +1,7 @@
-import React from 'react'
-import { cn } from '@bem-react/classname'
 import { Button, TextField, Tooltip } from '@material-ui/core'
+import React, { useState } from 'react'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import { cn } from '@bem-react/classname'
 
 import './SendConfirmation.scss'
 
@@ -29,6 +30,13 @@ export const SendConfirmation: React.FC<SendConfirmationProps> = ({
   wallet,
   onConfirmClick,
 }) => {
+  const [processing, setProcessing] = useState(false)
+
+  const handleConfirm = () => {
+    onConfirmClick()
+    setProcessing(true)
+  }
+
   return (
     <div className={css()} data-testid={test()}>
       <div className={css('Title')}>Confirm transaction</div>
@@ -68,16 +76,20 @@ export const SendConfirmation: React.FC<SendConfirmationProps> = ({
       </form>
 
       <div className={css('Confirm')}>
-        <Button
-          className={css('ConfirmButton')}
-          data-testid={test('Confirm')}
-          onClick={() => onConfirmClick()}
-          color="primary"
-          disableElevation={true}
-          variant="contained"
-        >
-          Confirm
-        </Button>
+        {processing ? (
+          <CircularProgress />
+        ) : (
+          <Button
+            className={css('ConfirmButton')}
+            data-testid={test('Confirm')}
+            onClick={handleConfirm}
+            color="primary"
+            disableElevation={true}
+            variant="contained"
+          >
+            Confirm
+          </Button>
+        )}
       </div>
     </div>
   )

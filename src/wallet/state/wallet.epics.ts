@@ -249,6 +249,7 @@ const sendTransaction$: Epic = (action$: Observable<Actions>, state$: Observable
     ),
     switchMap(({ sendData, wallet }) =>
       transfer(wallet.id, sendData.address, sendData.amount, wallet.token).pipe(
+        tap(() => toast.success('Transaction completed successfully')),
         mapTo(walletActions.openLogView(wallet))
       )
     ),
@@ -265,9 +266,7 @@ const handleErrorActions$: Epic = (action$: Observable<Actions>, state$: Observa
         walletActions.apiError,
       ])
     ),
-    tap(({ payload }) => {
-      toast.error(payload)
-    }),
+    tap(({ payload }) => toast.error(payload)),
     ignoreElements()
   )
 
