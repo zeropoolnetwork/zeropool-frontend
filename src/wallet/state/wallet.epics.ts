@@ -12,6 +12,7 @@ import {
   mergeMap,
   ignoreElements,
   tap,
+  mapTo,
 } from 'rxjs/operators'
 
 import { Token, TokenSymbol, Rate } from 'shared/models'
@@ -22,13 +23,15 @@ import toast from 'shared/helpers/toast.helper'
 
 import {
   getActiveToken,
+  getActiveWallet,
   getPollSettings,
   getSeed,
+  getSendData,
   getSupportedTokens,
   getWallets,
 } from 'wallet/state/wallet.selectors'
-import { getNetworkFee, hdWallet, initHDWallet } from 'wallet/api/zeropool.api'
-import { Wallet, WalletView } from 'wallet/state/models'
+import { getNetworkFee, hdWallet, initHDWallet, transfer } from 'wallet/api/zeropool.api'
+import { SendData, Wallet, WalletView } from 'wallet/state/models'
 import { mapRatesToTokens } from 'wallet/state/helpers/map-rates-to-tokens'
 import { updateBalances } from 'wallet/state/helpers/update-balances.helper'
 import { walletsHelper } from 'wallet/state/helpers/wallets.helper'
@@ -233,6 +236,25 @@ const openSendConfirmView$: Epic = (action$: Observable<Actions>, state$: Observ
     handleEpicError(walletActions.apiError)
   )
 
+const sendTransaction$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
+  action$.pipe(
+    filterActions(walletActions.send),
+    withLatestFrom(state$.pipe(map(getSendData)), state$.pipe(map(getActiveWallet))),
+    map(([, sendData, wallet]) => ({ sendData, wallet })),
+    filter(
+      (value: {
+        sendData: SendData | null
+        wallet: Wallet | null
+      }): value is { sendData: SendData; wallet: Wallet } => !!value.sendData && !!value.wallet
+    ),
+    switchMap(({ sendData, wallet }) =>
+      transfer(wallet.id, sendData.address, sendData.amount, wallet.token).pipe(
+        mapTo(walletActions.openLogView(wallet))
+      )
+    ),
+    handleEpicError(walletActions.apiError)
+  )
+
 const handleErrorActions$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(
     filter(
@@ -259,5 +281,6 @@ export const walletEpics: Epic = combineEpics(
   updateWallets$,
   handleErrorActions$,
   refreshAmounts$,
-  openSendConfirmView$
+  openSendConfirmView$,
+  sendTransaction$
 )

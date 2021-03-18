@@ -54,6 +54,7 @@ import { Balance } from 'wallet/components/Balance/Balance'
 import { Receive } from 'wallet/components/Receive/Receive'
 import { Wallet } from 'wallet/state/models/wallet'
 import { Send } from 'wallet/components/Send/Send'
+import { Log } from 'wallet/components/Log/Log'
 
 export const componentId = 'WalletPage'
 
@@ -248,13 +249,13 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
           />
         ) : null
       case WalletView.SendConfirmation:
-        return send && token ? (
+        return send && token && wallet ? (
           <SendConfirmation
             amount={send.amount}
             address={send.address}
             fee={send.fee}
             rate={rates[token.symbol]}
-            wallet={send.wallet}
+            wallet={wallet}
             onConfirmClick={() => dispatch(walletActions.send())}
           />
         ) : null
@@ -262,6 +263,8 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
         return wallet && token ? (
           <Receive address={wallet.address} rate={rates[wallet.token.symbol]} token={token} />
         ) : null
+      case WalletView.Log:
+        return wallet ? <Log wallet={wallet} /> : null
       case WalletView.About:
         return <AboutPage showBackButton={false} />
       case WalletView.Help:
@@ -289,7 +292,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
     [WalletView.Receive]: `${wallet?.name}`,
     [WalletView.Send]: `${wallet?.name}`,
     [WalletView.SendConfirmation]: `${wallet?.name}`,
-    [WalletView.Log]: 'x12345',
+    [WalletView.Log]: `${wallet?.name}`,
     [WalletView.About]: 'About',
     [WalletView.Help]: 'Help',
     [WalletView.Reset]: '',

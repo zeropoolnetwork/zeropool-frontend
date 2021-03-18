@@ -14,7 +14,7 @@ export const walletActions = {
   }>(),
   addWalletError: create('@wallet/addWalletError')<string>(),
 
-  openBalanceView: create('@wallet/openBalanceView')<void>(), // called once on wallet component first load
+  openBalanceView: create('@wallet/openBalanceView')<void>(), // called on wallet first load
   openWalletsView: create('@wallet/openWalletsView')<Token>(),
   openLogView: create('@wallet/openLogView')<Wallet>(), // Log View
   openReceiveView: create('@wallet/openReceiveView')<Wallet>(),
