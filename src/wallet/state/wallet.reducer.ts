@@ -38,8 +38,8 @@ export const initialWalletState: WalletState = {
   pollSettings: pollSettingsDefault,
   seed: null,
   send: null,
-  supportedTokens,
-  supportedTokensRecord: recordFromArray(supportedTokens, 'symbol'),
+  supportedTokens: supportedTokens.supported,
+  supportedTokensRecord: recordFromArray(supportedTokens.supported, 'symbol'),
   usdRates: {},
   wallets: null,
 }
