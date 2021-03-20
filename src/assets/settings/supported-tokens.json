@@ -1,4 +1,4 @@
-[
+{ "supported": [
   {
     "id": 1027,
     "name": "ethereum",
@@ -8,10 +8,13 @@
     "id": 6535,
     "name": "near",
     "symbol": "NEAR"
-  },
-  {
-    "id": 1274,
-    "name": "waves",
-    "symbol": "WAVES"
   }
-]
+],
+ "postponed": [
+   {
+     "id": 1274,
+     "name": "waves",
+     "symbol": "WAVES"
+   }
+  ]
+}
