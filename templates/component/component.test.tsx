@@ -1,12 +1,11 @@
 import React from 'react';
-import { cleanup, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 import { TemplateName, componentId, TemplateNameProps } from './TemplateName';
 
 describe('TemplateName', () => {
   let outputSpy: jest.Mock;
   let component: React.ReactElement<TemplateNameProps>;
-  afterEach(cleanup);
 
   beforeEach(() => {
     outputSpy = jest.fn();

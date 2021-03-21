@@ -1,4 +1,4 @@
-import jsSHA from 'jssha'
+// import jsSHA from 'jssha'
 
 /**
  * Checks if the given string is an address
@@ -29,22 +29,22 @@ export const isEthereumAddress = (address: string) => {
  * @param {String} address the given HEX adress
  * @return {Boolean}
  */
-const isChecksumAddress = (address: string) => {
-  let addressHash: string
-  const shaObj = new jsSHA('SHA-512', 'TEXT', { encoding: 'UTF8' })
+// const isChecksumAddress = (address: string) => {
+//   let addressHash: string
+//   const shaObj = new jsSHA('SHA-512', 'TEXT', { encoding: 'UTF8' })
 
-  address = address.replace('0x', '')
-  shaObj.update(address.toLowerCase())
-  addressHash = shaObj.getHash('HEX')
+//   address = address.replace('0x', '')
+//   shaObj.update(address.toLowerCase())
+//   addressHash = shaObj.getHash('HEX')
 
-  for (let i = 0; i < 40; i++) {
-    // the nth letter should be uppercase if the nth digit of casemap is 1
-    if (
-      (parseInt(addressHash[i], 16) > 7 && address[i].toUpperCase() !== address[i]) ||
-      (parseInt(addressHash[i], 16) <= 7 && address[i].toLowerCase() !== address[i])
-    ) {
-      return false
-    }
-  }
-  return true
-}
+//   for (let i = 0; i < 40; i++) {
+//     // the nth letter should be uppercase if the nth digit of casemap is 1
+//     if (
+//       (parseInt(addressHash[i], 16) > 7 && address[i].toUpperCase() !== address[i]) ||
+//       (parseInt(addressHash[i], 16) <= 7 && address[i].toLowerCase() !== address[i])
+//     ) {
+//       return false
+//     }
+//   }
+//   return true
+// }

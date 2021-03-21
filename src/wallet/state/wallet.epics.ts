@@ -129,7 +129,6 @@ const updateWallets$: Epic = (action$: Observable<Actions>, state$: Observable<R
     handleEpicError(walletActions.updateWalletsError, debug)
   )
 
-// tslint:disable-next-line: one-variable-per-declaration
 const addWallet$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(
     filterActions(walletActions.addWallet),

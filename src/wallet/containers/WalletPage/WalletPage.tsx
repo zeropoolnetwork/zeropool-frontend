@@ -54,7 +54,7 @@ import { Balance } from 'wallet/components/Balance/Balance'
 import { Receive } from 'wallet/components/Receive/Receive'
 import { Wallet } from 'wallet/state/models/wallet'
 import { Send } from 'wallet/components/Send/Send'
-import { Log } from 'wallet/components/Log/Log'
+import { Transactions } from 'wallet/containers/Transactions/Transactions'
 
 export const componentId = 'WalletPage'
 
@@ -264,7 +264,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
           <Receive address={wallet.address} rate={rates[wallet.token.symbol]} token={token} />
         ) : null
       case WalletView.Log:
-        return wallet ? <Log wallet={wallet} /> : null
+        return wallet ? <Transactions wallet={wallet} /> : null
       case WalletView.About:
         return <AboutPage showBackButton={false} />
       case WalletView.Help:

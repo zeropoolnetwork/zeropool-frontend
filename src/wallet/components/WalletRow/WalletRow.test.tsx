@@ -1,23 +1,13 @@
 import React from 'react'
-import { cleanup, render } from '@testing-library/react'
+import { render } from '@testing-library/react'
 
 import { WalletRow, componentId, WalletRowProps } from './WalletRow'
 
-const testToken = { name: 'testToken', symbol: 'Test', id: 1 }
-const testWallet = {
-  account: 0,
-  id: 0,
-  name: 'testWallet',
-  amount: 333,
-  address: 'x123',
-  token: testToken,
-  private: false,
-}
+import { _testToken, _testWalletsEth } from 'shared/helpers/test/app-state.helper'
 
 describe('WalletRow', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<WalletRowProps>
-  afterEach(cleanup)
 
   beforeEach(() => {
     outputSpy = jest.fn()
@@ -25,12 +15,13 @@ describe('WalletRow', () => {
       <WalletRow
         rate={1}
         rollUp={0}
-        token={testToken}
-        wallet={testWallet}
+        token={_testToken}
+        wallet={_testWalletsEth[0]}
         onEditClick={jest.fn()}
         onReceiveClick={jest.fn()}
         onSendClick={jest.fn()}
         onRollUpClick={jest.fn()}
+        onWalletNameClick={jest.fn()}
       />
     )
   })

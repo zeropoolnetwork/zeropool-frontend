@@ -1,5 +1,5 @@
 import React from 'react'
-import { cleanup, render } from '@testing-library/react'
+import { render } from '@testing-library/react'
 
 import { EditWallet, componentId, EditWalletProps } from './EditWallet'
 
@@ -7,8 +7,6 @@ describe('EditWallet', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<EditWalletProps>
   const testWalletName = 'TestWalletName'
-
-  afterEach(cleanup)
 
   beforeEach(() => {
     outputSpy = jest.fn()

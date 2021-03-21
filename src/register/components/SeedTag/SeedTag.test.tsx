@@ -1,5 +1,5 @@
 import React from 'react'
-import { cleanup, fireEvent, render } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 
 import { SeedTag, componentId, SeedTagProps } from './SeedTag'
 
@@ -7,7 +7,6 @@ describe('SeedTag', () => {
   let outputSpy: jest.Mock
   let spyCall
   let component: React.ReactElement<SeedTagProps>
-  afterEach(cleanup)
 
   beforeEach(() => {
     outputSpy = jest.fn()

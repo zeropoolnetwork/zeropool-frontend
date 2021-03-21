@@ -1,12 +1,11 @@
 import React from 'react'
-import { cleanup, render } from '@testing-library/react'
+import { render } from '@testing-library/react'
 
 import { Balance, componentId, BalanceProps } from './Balance'
 
 describe('Balance', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<BalanceProps>
-  afterEach(cleanup)
 
   jest.mock('wallet/components/TokenRow/TokenRow', () => () => <span>TokenRow</span>)
 
@@ -18,6 +17,7 @@ describe('Balance', () => {
         rates={{ NEAR: 1 }}
         tokens={['NEAR']}
         tokensRecord={{ NEAR: { id: 1, name: 'test', symbol: 'TST' } }}
+        onSelectToken={jest.fn()}
       />
     )
   })

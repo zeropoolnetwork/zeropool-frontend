@@ -1,6 +1,6 @@
 import React from 'react'
 import notistack from 'notistack'
-import { cleanup, fireEvent, render } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 
 import { Send, componentId, SendProps } from './Send'
 
@@ -18,7 +18,6 @@ jest.spyOn(notistack, 'useSnackbar').mockImplementation(() => {
 
 describe('Send', () => {
   let component: React.ReactElement<SendProps>
-  afterEach(cleanup)
 
   beforeEach(() => {
     component = <Send rate={123} wallet={_testWalletsEth[0]} onNextClick={outputSpy} />
