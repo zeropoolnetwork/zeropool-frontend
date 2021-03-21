@@ -1,15 +1,17 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 
-import { RoundButton, componentId, RoundButtonProps } from './RoundButton'
+import { Transactions, componentId, TransactionsProps } from './Transactions'
 
-describe('RoundButton', () => {
+import { _testWalletsEth } from 'shared/helpers/test/app-state.helper'
+
+describe('Transactions', () => {
   let outputSpy: jest.Mock
-  let component: React.ReactElement<RoundButtonProps>
+  let component: React.ReactElement<TransactionsProps>
 
   beforeEach(() => {
     outputSpy = jest.fn()
-    component = <RoundButton>test</RoundButton>
+    component = <Transactions wallet={_testWalletsEth[0]} />
   })
 
   it('should render component', () => {

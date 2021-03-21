@@ -1,12 +1,11 @@
 import React from 'react'
-import { cleanup, fireEvent, render } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 
 import { componentId, StepOne, StepOneProps } from './StepOne'
 
 describe('StepOne', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<StepOneProps>
-  afterEach(cleanup)
 
   beforeEach(() => {
     outputSpy = jest.fn()

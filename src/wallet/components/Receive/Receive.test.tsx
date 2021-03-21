@@ -1,6 +1,6 @@
 import React from 'react'
 import notistack from 'notistack'
-import { cleanup, render } from '@testing-library/react'
+import { render } from '@testing-library/react'
 
 import { Receive, componentId, ReceiveProps } from './Receive'
 
@@ -17,7 +17,6 @@ jest.spyOn(notistack, 'useSnackbar').mockImplementation(() => {
 
 describe('Receive', () => {
   let component: React.ReactElement<ReceiveProps>
-  afterEach(cleanup)
 
   beforeEach(() => {
     component = <Receive address={'0x123asd'} rate={10} token={_testToken} />

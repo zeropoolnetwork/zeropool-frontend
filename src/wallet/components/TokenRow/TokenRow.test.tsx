@@ -1,5 +1,5 @@
 import React from 'react'
-import { cleanup, render } from '@testing-library/react'
+import { render } from '@testing-library/react'
 
 import { Token } from 'shared/models/token'
 
@@ -11,11 +11,9 @@ describe('Token', () => {
 
   const token: Token = { name: 'Test', id: 1, symbol: 'TST' }
 
-  afterEach(cleanup)
-
   beforeEach(() => {
     outputSpy = jest.fn()
-    component = <TokenRow amount={1} token={token} rate={500} />
+    component = <TokenRow amount={1} token={token} rate={500} onSelectToken={jest.fn()} />
   })
 
   it('should render component', () => {

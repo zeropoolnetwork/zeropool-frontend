@@ -1,5 +1,5 @@
 import React from 'react'
-import { cleanup, render } from '@testing-library/react'
+import { render } from '@testing-library/react'
 
 import { WalletHeader, componentId, WalletHeaderProps } from './WalletHeader'
 
@@ -8,7 +8,6 @@ import { WalletHeaderMode } from './WalletHeaderMode'
 describe('WalletHeader', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<WalletHeaderProps>
-  afterEach(cleanup)
 
   beforeEach(() => {
     outputSpy = jest.fn()
