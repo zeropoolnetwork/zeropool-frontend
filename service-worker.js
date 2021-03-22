@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/zeropool-frontend/precache-manifest.5d89b91a8592f000c19df9940b0f7e27.js"
+  "/zeropool-frontend/precache-manifest.abf9cf1c633bb73c321b1175f1d2f6d9.js"
 );
 
 self.addEventListener('message', (event) => {
