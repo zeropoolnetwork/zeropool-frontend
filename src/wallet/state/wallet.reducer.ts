@@ -10,13 +10,14 @@ import { walletActions as actions } from 'wallet/state/wallet.actions'
 import { navigationHelper } from 'wallet/state/helpers/navigation.helper'
 import { amountsHelper } from 'wallet/state/helpers/amounts.helper'
 import { walletsHelper } from 'wallet/state/helpers/wallets.helper'
+import { Transaction } from 'wallet/state/models/transaction'
 import { WalletView } from 'wallet/state/models/wallet-view'
 
 export const initialWalletName = 'Main wallet'
 
 const pollSettingsDefault: PollSettings = { account: 0, amount: 5, offset: 0 }
 
-export interface WalletState {
+export type WalletState = {
   activeView: WalletView
   activeToken: Token | null
   activeWallet: Wallet | null
@@ -26,8 +27,10 @@ export interface WalletState {
   send: SendData | null
   supportedTokens: Token[]
   supportedTokensRecord: Record<TokenSymbol, Token>
+  transactions: Transaction[] | null
   usdRates: Record<TokenSymbol, number>
   wallets: Record<TokenSymbol, Wallet[]> | null
+  previousView: WalletView | null
 }
 
 export const initialWalletState: WalletState = {
@@ -40,8 +43,10 @@ export const initialWalletState: WalletState = {
   send: null,
   supportedTokens: supportedTokens.supported,
   supportedTokensRecord: recordFromArray(supportedTokens.supported, 'symbol'),
+  transactions: null,
   usdRates: {},
   wallets: null,
+  previousView: null,
 }
 
 export const walletReducer = createReducer<WalletState, ActionType<typeof actions>>(
@@ -61,11 +66,15 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
     ...state,
     activeView: WalletView.Wallets,
     activeToken: payload,
+    previousView: state.activeView,
   }))
-  .handleAction(actions.openLogView, (state, { payload }) => ({
+  .handleAction(actions.openTransactionsView, (state, { payload }) => ({
     ...state,
-    activeView: WalletView.Log,
+    activeView: WalletView.Transactions,
     activeWallet: payload,
+    previousView: state.activeView,
+    transactions: null,
+    amounts: amountsHelper.getAmountsForWallet(payload),
   }))
   .handleAction(actions.openReceiveView, (state, { payload }) => ({
     ...navigationHelper.getReceiveView(state, payload),
@@ -83,16 +92,20 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
       fee: payload.fee,
     },
   }))
+  .handleAction(actions.transactions, (state, { payload }) => ({
+    ...state,
+    transactions: payload,
+  }))
   .handleAction(actions.setSeed, (state, { payload }) => ({
     ...state,
-    seed: payload.seed,
+    seed: payload,
   }))
   .handleAction(actions.updateWalletsSuccess, (state, { payload }) => ({
     ...state,
-    wallets: payload.wallets,
+    wallets: payload,
     activeWallet:
       state.activeWallet && state.activeToken
-        ? payload.wallets[state.activeToken.symbol][
+        ? payload[state.activeToken.symbol][
             walletsHelper.getActiveIndex(
               payload.wallets[state.activeToken.symbol],
               state.activeWallet
@@ -120,7 +133,7 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
   }))
   .handleAction(actions.addWalletSuccess, (state, { payload }) => ({
     ...state,
-    wallets: payload.wallets,
+    wallets: payload,
   }))
   .handleAction(actions.hideWallet, (state, { payload }) => ({
     ...state,
@@ -130,7 +143,7 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
           ...state.wallets,
           [state.activeToken.symbol]: walletsHelper.hideWallet(
             state.wallets[state.activeToken.symbol],
-            payload.wallet
+            payload
           ),
         },
   }))

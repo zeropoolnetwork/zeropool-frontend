@@ -222,9 +222,9 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
     onSend: (_wallet: Wallet) => dispatch(walletActions.openSendInitialView(_wallet)),
     onRename: (_wallet: Wallet, name: string) =>
       dispatch(walletActions.edit({ wallet: _wallet, name })),
-    onDelete: (_wallet: Wallet) => dispatch(walletActions.hideWallet({ wallet: _wallet })),
+    onDelete: (_wallet: Wallet) => dispatch(walletActions.hideWallet(_wallet)),
     onAdd: () => dispatch(walletActions.addWallet()),
-    onOpen: (_wallet: Wallet) => dispatch(walletActions.openLogView(_wallet)),
+    onOpen: (_wallet: Wallet) => dispatch(walletActions.openTransactionsView(_wallet)),
   }
 
   const actualView = () => {
@@ -263,7 +263,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
         return wallet && token ? (
           <Receive address={wallet.address} rate={rates[wallet.token.symbol]} token={token} />
         ) : null
-      case WalletView.Log:
+      case WalletView.Transactions:
         return wallet ? <Transactions wallet={wallet} /> : null
       case WalletView.About:
         return <AboutPage showBackButton={false} />
@@ -292,7 +292,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
     [WalletView.Receive]: `${wallet?.name}`,
     [WalletView.Send]: `${wallet?.name}`,
     [WalletView.SendConfirmation]: `${wallet?.name}`,
-    [WalletView.Log]: `${wallet?.name}`,
+    [WalletView.Transactions]: `${wallet?.name}`,
     [WalletView.About]: 'About',
     [WalletView.Help]: 'Help',
     [WalletView.Reset]: '',

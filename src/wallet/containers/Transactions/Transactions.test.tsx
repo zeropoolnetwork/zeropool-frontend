@@ -5,6 +5,12 @@ import { Transactions, componentId, TransactionsProps } from './Transactions'
 
 import { _testWalletsEth } from 'shared/helpers/test/app-state.helper'
 
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux'),
+  useSelector: jest.fn(),
+  useDispatch: jest.fn(),
+}))
+
 describe('Transactions', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<TransactionsProps>

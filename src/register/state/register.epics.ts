@@ -16,7 +16,7 @@ const importAccount$: Epic = (action$: Observable<Actions>, state$: Observable<R
     filter(isActionOf(registerActions.importAccount)),
     switchMap((action) => {
       const seed = action.payload.seed.join(' ')
-      return of(registerActions.reset(), walletActions.setSeed({ seed }))
+      return of(registerActions.reset(), walletActions.setSeed(seed))
     })
   )
 
@@ -25,7 +25,7 @@ const register$: Epic = (action$: Observable<Actions>, state$: Observable<RootSt
     filter(isActionOf(registerActions.register)),
     withLatestFrom(state$.pipe(map(getRegisterSeed))),
     switchMap(([_action, seed]) => {
-      return of(registerActions.reset(), walletActions.setSeed({ seed: seed.join(' ') }))
+      return of(registerActions.reset(), walletActions.setSeed(seed.join(' ')))
     })
   )
 

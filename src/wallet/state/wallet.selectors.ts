@@ -43,3 +43,5 @@ export const getSendData = createSelector(getWalletState, (state) => state.send)
 export const getSeed = createSelector(getWalletState, (state) => state.seed)
 
 export const getPollSettings = createSelector(getWalletState, (state) => state.pollSettings)
+
+export const getTransactions = createSelector(getWalletState, (state) => state.transactions)
