@@ -23,6 +23,7 @@ import { filterActions } from 'shared/operators/filter-actions.operator'
 
 import {
   getActiveToken,
+  getActiveView,
   getActiveWallet,
   getPollSettings,
   getSeed,
@@ -194,22 +195,43 @@ const sendTransaction$: Epic = (action$: Observable<Actions>, state$: Observable
     handleEpicError(walletActions.apiError)
   )
 
-const getTransactions$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
+const callGetTransactionsOnOpenTransactionsView$: Epic = (
+  action$: Observable<Actions>,
+  state$: Observable<RootState>
+) =>
   action$.pipe(
-    filterActions(walletActions.openTransactionsView),
-    withLatestFrom(state$.pipe(map(getActiveWallet))),
-    map(([, wallet]) => wallet),
+    filter(isActionOf(walletActions.openTransactionsView)),
+    getPayload(),
+    map((wallet) => walletActions.getTransactions(wallet))
+  )
+
+const callGetTransactionsOnUpdateWallets$: Epic = (
+  action$: Observable<Actions>,
+  state$: Observable<RootState>
+) =>
+  action$.pipe(
+    filterActions(walletActions.updateWallets),
+    withLatestFrom(state$.pipe(map(getActiveView)), state$.pipe(map(getActiveWallet))),
+    filter(([, view]) => view === WalletView.Transactions),
+    map(([, , wallet]) => wallet),
     filter((wallet): wallet is Wallet => !!wallet),
+    map((wallet) => walletActions.getTransactions(wallet))
+  )
+
+const getTransactions$: Epic = (action$: Observable<Actions>) =>
+  action$.pipe(
+    filter(isActionOf(walletActions.getTransactions)),
+    getPayload(),
     switchMap((wallet) =>
       api.getWalletTransactions(wallet.token, wallet.id).pipe(
         // debug(),
-        map((transactions) => walletActions.transactions(transactions))
+        map((transactions) => walletActions.getTransactionsSuccess(transactions))
       )
     ),
     handleEpicError(walletActions.apiError)
   )
 
-const handleErrorActions$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
+const handleErrorActions$: Epic = (action$: Observable<Actions>) =>
   action$.pipe(
     filter(
       isActionOf([
@@ -227,6 +249,8 @@ export const walletEpics: Epic = combineEpics(
   addWallet$,
   getRates$,
   getTransactions$,
+  callGetTransactionsOnOpenTransactionsView$,
+  callGetTransactionsOnUpdateWallets$,
   initApi$,
   resetAccount$,
   redirectToTheWalletOnSetSeed$,

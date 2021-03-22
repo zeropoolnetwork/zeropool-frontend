@@ -92,7 +92,7 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
       fee: payload.fee,
     },
   }))
-  .handleAction(actions.transactions, (state, { payload }) => ({
+  .handleAction(actions.getTransactionsSuccess, (state, { payload }) => ({
     ...state,
     transactions: payload,
   }))

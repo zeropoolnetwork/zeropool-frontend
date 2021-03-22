@@ -36,7 +36,8 @@ export const walletActions = {
   updateWalletsSuccess: create('@wallet/updateWalletsSuccess')<WalletRecord>(),
   updateWalletsError: create('@wallet/updateWalletsError')<string>(),
 
-  transactions: create('@wallet/transactions')<Transaction[]>(),
+  getTransactions: create('@wallet/getTransactions')<Wallet>(),
+  getTransactionsSuccess: create('@wallet/getTransactionsSussess')<Transaction[]>(),
 
   refreshAmounts: create('@wallet/refreshAmounts')<void>(),
 
