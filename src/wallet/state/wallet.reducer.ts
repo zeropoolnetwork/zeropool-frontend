@@ -106,10 +106,7 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
     activeWallet:
       state.activeWallet && state.activeToken
         ? payload[state.activeToken.symbol][
-            walletsHelper.getActiveIndex(
-              payload.wallets[state.activeToken.symbol],
-              state.activeWallet
-            )
+            walletsHelper.getActiveIndex(payload[state.activeToken.symbol], state.activeWallet)
           ]
         : null,
   }))
