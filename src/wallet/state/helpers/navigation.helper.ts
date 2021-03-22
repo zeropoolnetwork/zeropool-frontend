@@ -40,6 +40,22 @@ export const navigationHelper = {
             }
           : state
 
+      case WalletView.Transactions:
+        return state.activeToken && state.wallets
+          ? {
+              ...state,
+              activeView: state.previousView || WalletView.Balance,
+              activeToken: state.previousView ? state.activeToken : null,
+              activeWallet: state.previousView ? state.activeWallet : null,
+              amounts: state.previousView
+                ? amountsHelper.getAmountsForToken(
+                    state.activeToken,
+                    state.wallets[state.activeToken.symbol]
+                  )
+                : amountsHelper.getAmountsForAllTakens(state.supportedTokens, state.wallets),
+            }
+          : state
+
       default:
         return {
           ...state,

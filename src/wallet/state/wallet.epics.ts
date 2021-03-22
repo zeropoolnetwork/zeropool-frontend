@@ -15,10 +15,11 @@ import {
   mapTo,
 } from 'rxjs/operators'
 
+import toast from 'shared/helpers/toast.helper'
+import { debug } from 'shared/operators/debug.operator'
 import { Token, Rate } from 'shared/models'
 import { handleEpicError } from 'shared/operators/handle-epic-error.operator'
 import { filterActions } from 'shared/operators/filter-actions.operator'
-import toast from 'shared/helpers/toast.helper'
 
 import {
   getActiveToken,
@@ -29,14 +30,7 @@ import {
   getSupportedTokens,
   getWallets,
 } from 'wallet/state/wallet.selectors'
-import {
-  getAllBalances,
-  getNetworkFee,
-  getWalletBalance,
-  hdWallet,
-  initHDWallet,
-  transfer,
-} from 'wallet/api/zeropool.api'
+import api, { hdWallet } from 'wallet/api/zeropool.api'
 import { SendData, Wallet, WalletRecord, WalletView } from 'wallet/state/models'
 import { mapRatesToTokens } from 'wallet/state/helpers/map-rates-to-tokens'
 import { updateBalances } from 'wallet/state/helpers/update-balances.helper'
@@ -49,7 +43,6 @@ import { initBalances } from './helpers/init-balances.helper'
 
 type Actions = ActionType<typeof walletActions>
 
-const debug = false
 const defaultAccount = 0
 const nextWalletId = (wallets: WalletRecord, token: Token) =>
   wallets[token.symbol][wallets[token.symbol].length - 1].id + 1
@@ -64,7 +57,7 @@ const getRates$: Epic = (action$: Observable<Actions>, state$: Observable<RootSt
         map((rates) => walletActions.getRatesSuccess(rates))
       )
     ),
-    handleEpicError(walletActions.getRatesError, debug)
+    handleEpicError(walletActions.getRatesError)
   )
 
 const redirectToTheWalletOnSetSeed$: Epic = (
@@ -89,7 +82,7 @@ const initApi$: Epic = (action$: Observable<Actions>, state$: Observable<RootSta
         () => !!_seed,
         of(_seed).pipe(
           filter((seed): seed is string => typeof seed === 'string'),
-          tap((seed) => initHDWallet(seed, [CoinType.ethereum, CoinType.near])), // TODO: take from supported tokens
+          tap((seed) => api.initHDWallet(seed, [CoinType.ethereum, CoinType.near])), // TODO: take from supported tokens
           map(() => (!wallets ? walletActions.initWallets() : walletActions.updateWallets()))
         ),
         of(false).pipe(
@@ -97,7 +90,7 @@ const initApi$: Epic = (action$: Observable<Actions>, state$: Observable<RootSta
         )
       )
     ),
-    handleEpicError(walletActions.setSeedError, debug)
+    handleEpicError(walletActions.setSeedError)
   )
 
 const initWallets$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
@@ -105,14 +98,14 @@ const initWallets$: Epic = (action$: Observable<Actions>, state$: Observable<Roo
     filterActions(walletActions.initWallets),
     withLatestFrom(state$.pipe(map(getPollSettings)), state$.pipe(map(getSupportedTokens))),
     switchMap(([, settings, tokens]) =>
-      getAllBalances(settings.amount).pipe(
+      api.getAllBalances(settings.amount).pipe(
         map((balances) => initBalances(hdWallet as any, balances, tokens)),
         mergeMap((wallets) =>
-          of(walletActions.getRates(), walletActions.updateWalletsSuccess({ wallets }))
+          of(walletActions.getRates(), walletActions.updateWalletsSuccess(wallets))
         )
       )
     ),
-    handleEpicError(walletActions.updateWalletsError, debug)
+    handleEpicError(walletActions.updateWalletsError)
   )
 
 const updateWallets$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
@@ -124,9 +117,9 @@ const updateWallets$: Epic = (action$: Observable<Actions>, state$: Observable<R
     switchMap(({ wallets, tokens }) => updateBalances(hdWallet as any, wallets, tokens)),
     tap(() => toast.success('Balances updated')),
     mergeMap((wallets) =>
-      of(walletActions.getRates(), walletActions.updateWalletsSuccess({ wallets }))
+      of(walletActions.getRates(), walletActions.updateWalletsSuccess(wallets))
     ),
-    handleEpicError(walletActions.updateWalletsError, debug)
+    handleEpicError(walletActions.updateWalletsError)
   )
 
 const addWallet$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
@@ -138,29 +131,27 @@ const addWallet$: Epic = (action$: Observable<Actions>, state$: Observable<RootS
       (value): value is { wallets: WalletRecord; token: Token } => !!value.wallets && !!value.token
     ),
     switchMap(({ wallets, token }) =>
-      getWalletBalance(token, nextWalletId(wallets, token)).pipe(
+      api.getWalletBalance(token, nextWalletId(wallets, token)).pipe(
         map((balance) =>
           walletActions.addWalletSuccess({
-            wallets: {
-              ...wallets,
-              [token.symbol]: [
-                ...wallets[token.symbol],
-                {
-                  account: defaultAccount,
-                  address: balance.address,
-                  token: { ...token },
-                  id: nextWalletId(wallets, token),
-                  amount: +balance.balance,
-                  name: `Wallet${token.symbol}${nextWalletId(wallets, token)}`,
-                  private: false,
-                },
-              ],
-            },
+            ...wallets,
+            [token.symbol]: [
+              ...wallets[token.symbol],
+              {
+                account: defaultAccount,
+                address: balance.address,
+                token: { ...token },
+                id: nextWalletId(wallets, token),
+                amount: +balance.balance,
+                name: `Wallet${token.symbol}${nextWalletId(wallets, token)}`,
+                private: false,
+              },
+            ],
           })
         )
       )
     ),
-    handleEpicError(walletActions.addWalletError, debug)
+    handleEpicError(walletActions.addWalletError)
   )
 
 const refreshAmounts$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
@@ -174,7 +165,7 @@ const openSendConfirmView$: Epic = (action$: Observable<Actions>, state$: Observ
     filter(isActionOf(walletActions.prepareSendConfirmView)),
     getPayload(),
     switchMap((payload) =>
-      getNetworkFee(payload.wallet.token).pipe(
+      api.getNetworkFee(payload.wallet.token).pipe(
         map((fee) =>
           walletActions.openSendConfirmView({
             ...payload,
@@ -183,7 +174,7 @@ const openSendConfirmView$: Epic = (action$: Observable<Actions>, state$: Observ
         )
       )
     ),
-    handleEpicError(walletActions.apiError, debug)
+    handleEpicError(walletActions.apiError)
   )
 
 const sendTransaction$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
@@ -195,12 +186,27 @@ const sendTransaction$: Epic = (action$: Observable<Actions>, state$: Observable
       (value): value is { sendData: SendData; wallet: Wallet } => !!value.sendData && !!value.wallet
     ),
     switchMap(({ sendData, wallet }) =>
-      transfer(wallet.id, sendData.address, sendData.amount, wallet.token).pipe(
+      api.transfer(wallet.id, sendData.address, sendData.amount, wallet.token).pipe(
         tap(() => toast.success('Transaction completed successfully')),
-        mapTo(walletActions.openLogView(wallet))
+        mapTo(walletActions.openTransactionsView(wallet))
       )
     ),
-    handleEpicError(walletActions.apiError, debug)
+    handleEpicError(walletActions.apiError)
+  )
+
+const getTransactions$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
+  action$.pipe(
+    filterActions(walletActions.openTransactionsView),
+    withLatestFrom(state$.pipe(map(getActiveWallet))),
+    map(([, wallet]) => wallet),
+    filter((wallet): wallet is Wallet => !!wallet),
+    switchMap((wallet) =>
+      api.getWalletTransactions(wallet.token, wallet.id).pipe(
+        // debug(),
+        map((transactions) => walletActions.transactions(transactions))
+      )
+    ),
+    handleEpicError(walletActions.apiError)
   )
 
 const handleErrorActions$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
@@ -220,6 +226,7 @@ const handleErrorActions$: Epic = (action$: Observable<Actions>, state$: Observa
 export const walletEpics: Epic = combineEpics(
   addWallet$,
   getRates$,
+  getTransactions$,
   initApi$,
   resetAccount$,
   redirectToTheWalletOnSetSeed$,

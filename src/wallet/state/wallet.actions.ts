@@ -1,22 +1,22 @@
 import { createAction as create } from 'typesafe-actions'
 
-import { Token, TokenSymbol } from 'shared/models/token'
+import { Token, TokenName } from 'shared/models/token'
 
 import { WalletView } from 'wallet/state/models/wallet-view'
 import { Wallet } from 'wallet/state/models/wallet'
+import { WalletRecord } from './models'
+import { Transaction } from 'zeropool-api-js/lib/coins/transaction'
 
 export const walletActions = {
   apiError: create('@wallet/apiError')<string>(),
 
   addWallet: create('@wallet/addWallet')<void>(),
-  addWalletSuccess: create('@wallet/addWalletSuccess')<{
-    wallets: Record<TokenSymbol, Wallet[]>
-  }>(),
+  addWalletSuccess: create('@wallet/addWalletSuccess')<WalletRecord>(),
   addWalletError: create('@wallet/addWalletError')<string>(),
 
   openBalanceView: create('@wallet/openBalanceView')<void>(), // called on wallet first load
   openWalletsView: create('@wallet/openWalletsView')<Token>(),
-  openLogView: create('@wallet/openLogView')<Wallet>(), // Log View
+  openTransactionsView: create('@wallet/openTransactionsView')<Wallet>(), // Transactions View
   openReceiveView: create('@wallet/openReceiveView')<Wallet>(),
   openSendInitialView: create('@wallet/openSendInitialView')<Wallet>(),
   prepareSendConfirmView: create('@wallet/prepareSendConfirmView')<{
@@ -33,15 +33,15 @@ export const walletActions = {
 
   initWallets: create('@wallet/initWallets')<void>(),
   updateWallets: create('@wallet/updateWallets')<void>(),
-  updateWalletsSuccess: create('@wallet/updateWalletsSuccess')<{
-    wallets: Record<TokenSymbol, Wallet[]>
-  }>(),
+  updateWalletsSuccess: create('@wallet/updateWalletsSuccess')<WalletRecord>(),
   updateWalletsError: create('@wallet/updateWalletsError')<string>(),
+
+  transactions: create('@wallet/transactions')<Transaction[]>(),
 
   refreshAmounts: create('@wallet/refreshAmounts')<void>(),
 
   getRates: create('@wallet/getRates')<void>(),
-  getRatesSuccess: create('@wallet/getRatesSuccess')<Record<Token['name'], number>>(),
+  getRatesSuccess: create('@wallet/getRatesSuccess')<Record<TokenName, number>>(),
   getRatesError: create('@wallet/getRates')<string>(),
 
   headerBack: create('@wallet/header/back')<void>(),
@@ -50,11 +50,11 @@ export const walletActions = {
   edit: create('@wallet/edit')<{ wallet: Wallet; name: string }>(),
   send: create('@wallet/send')<void>(),
 
-  setSeed: create('@wallet/setSeed')<{ seed: string }>(),
+  setSeed: create('@wallet/setSeed')<string>(),
   setSeedSuccess: create('@wallet/setSeedSuccess')<void>(),
   setSeedError: create('@wallet/setSeedError')<string>(),
 
-  hideWallet: create('@wallet/hideWallet')<{ wallet: Wallet }>(),
+  hideWallet: create('@wallet/hideWallet')<Wallet>(),
 
   resetAccount: create('@wallet/resetAccount')<void>(),
 }

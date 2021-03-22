@@ -1,0 +1,58 @@
+{
+  "git.ignoreLimitWarning": true,
+  "editor.tokenColorCustomizations": {
+    "comments": "#ffffff3f"
+  },
+  "folding": {
+    "*": [
+      {
+        "begin": "{{{",
+        "end": "}}}"
+      },
+    ],
+    "typescript": [
+      {
+        "begin": "[",
+        "end": "]",
+      },
+      {
+        "begin": "{",
+        "end": "}",
+      }
+    ],
+    "typescriptreact": [
+      {
+        "begin": "{/*",
+        "end": "*/}"
+      },
+      {
+        "begin": "[",
+        "end": "]",
+      },
+      {
+        "begin": "{",
+        "end": "}"
+      },
+    ]
+  },
+  "editor.formatOnSave": false,
+  "[javascript]": {
+    "editor.formatOnSave": true
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "quoteStyle": "single"
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": true
+  },
+  "prettier.tslintIntegration": true,
+  "prettier.eslintIntegration": true,
+  "prettier.jsxSingleQuote": false,
+  "prettier.singleQuote": true,
+  
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.preferences.quoteStyle": "single",
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "javascript.preferences.quoteStyle": "single",
+}

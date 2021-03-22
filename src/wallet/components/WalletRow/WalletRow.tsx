@@ -1,4 +1,5 @@
 import { cn } from '@bem-react/classname'
+import { Tooltip } from '@material-ui/core'
 import SettingsIcon from '@material-ui/icons/Settings'
 import VerticalAlignTopIcon from '@material-ui/icons/VerticalAlignTop'
 import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom'
@@ -72,12 +73,15 @@ export const WalletRow: React.FC<WalletRowProps> = ({
         <Icon className={css('Icon')} icon={wallet.token.symbol as IconOption} />
 
         <div className={css('Values')}>
-          <div
-            className={css('WalletName', ['noselect'])}
-            onClick={() => onWalletNameClick(wallet)}
-          >
-            {wallet.name}
-          </div>
+          <Tooltip title={'View transactions'} placement="bottom">
+            <div
+              className={css('WalletName', ['noselect'])}
+              onClick={() => onWalletNameClick(wallet)}
+            >
+              {wallet.name}
+            </div>
+          </Tooltip>
+
           <div className={css('WalletAmount')}>
             {wallet.amount} {token.symbol} ({(rate * wallet.amount).toFixed(2)} $)
           </div>

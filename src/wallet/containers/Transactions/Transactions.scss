@@ -1,3 +1,9 @@
 .Transactions {
   display: flex;
+  flex-direction: column;
+
+  &-Transaction {
+    font-size: 12px;
+    margin: 3px 0;
+  }
 }
