@@ -54,8 +54,12 @@ describe('StepFour', () => {
     const { getByTestId } = render(component)
 
     await act(async () => {
-      await fireEvent.input(getByTestId(test('Password')), { target: { value: '1234qwer' } })
-      await fireEvent.input(getByTestId(test('Confirm')), { target: { value: '1234qwer' } })
+      await fireEvent.input(getByTestId(test('Password')), {
+        target: { value: '1234qwer' },
+      })
+      await fireEvent.input(getByTestId(test('Confirm')), {
+        target: { value: '1234qwer' },
+      })
       await fireEvent.click(getByTestId(test('Submit')))
     })
 

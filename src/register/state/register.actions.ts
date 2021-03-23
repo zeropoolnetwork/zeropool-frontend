@@ -11,5 +11,8 @@ export const registerActions = {
   reset: create('@register/reset')<void>(),
 
   startImportAccount: create('@register/startImportAccount')<void>(),
-  importAccount: create('@register/importAccount')<{ seed: string[]; password: string }>(),
+  importAccount: create('@register/importAccount')<{
+    seed: string[]
+    password: string
+  }>(),
 }

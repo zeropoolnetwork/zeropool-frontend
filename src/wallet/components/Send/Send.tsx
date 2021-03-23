@@ -37,7 +37,9 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
 
     if (validateAddress(text, wallet.token.symbol)) {
       setAddress(text)
-      enqueueSnackbar('Address added from the clipboard', { variant: 'success' })
+      enqueueSnackbar('Address added from the clipboard', {
+        variant: 'success',
+      })
     } else {
       enqueueSnackbar('Clipboard contains bad address', { variant: 'error' })
     }

@@ -25,7 +25,9 @@ export const Receive: React.FC<ReceiveProps> = ({ address, rate, token }) => {
   const handleCodeClick = (): void => {
     navigator.clipboard.writeText(address).then(
       () => {
-        enqueueSnackbar('Address copied to the clipboard', { variant: 'success' })
+        enqueueSnackbar('Address copied to the clipboard', {
+          variant: 'success',
+        })
       },
       (err) => {
         enqueueSnackbar(`Can't access clipboard`, { variant: 'error' })
