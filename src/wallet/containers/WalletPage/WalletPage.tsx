@@ -244,7 +244,13 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
             rate={rates[token.symbol]}
             wallet={wallet}
             onNextClick={(address, amount) =>
-              dispatch(walletActions.prepareSendConfirmView({ wallet, address, amount }))
+              dispatch(
+                walletActions.prepareSendConfirmView({
+                  wallet,
+                  address,
+                  amount,
+                })
+              )
             }
           />
         ) : null

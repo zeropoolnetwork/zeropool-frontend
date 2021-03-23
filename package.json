@@ -71,6 +71,7 @@
     "babel-loader": "8.1.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "mutationobserver-shim": "^0.3.7",
+    "prettier": "2.2.1",
     "react-is": "^17.0.1",
     "ts-jest": "^26.4.3",
     "tslint": "^6.1.3",

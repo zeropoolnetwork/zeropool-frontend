@@ -223,7 +223,7 @@ const getTransactions$: Epic = (action$: Observable<Actions>) =>
     filter(isActionOf(walletActions.getTransactions)),
     getPayload(),
     switchMap((wallet) =>
-      api.getWalletTransactions(wallet.token, wallet.id).pipe(
+      api.getWalletTransactions(wallet.token, wallet.id, false).pipe(
         // debug(),
         map((transactions) => walletActions.getTransactionsSuccess(transactions))
       )

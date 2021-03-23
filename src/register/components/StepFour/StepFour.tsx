@@ -77,7 +77,10 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
                     className={css('FormControlButton')}
                     aria-label="empty password"
                     onClick={() => {
-                      reset({ password: undefined, confirm: control.getValues().confirm })
+                      reset({
+                        password: undefined,
+                        confirm: control.getValues().confirm,
+                      })
                       setPassword('')
                     }}
                     onMouseDown={(event) => event.preventDefault()}
@@ -128,7 +131,10 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
                     className={css('FormControlButton')}
                     aria-label="empty confirmation"
                     onClick={() => {
-                      reset({ password: control.getValues().password, confirm: undefined })
+                      reset({
+                        password: control.getValues().password,
+                        confirm: undefined,
+                      })
                       setPasswordConfirm('')
                     }}
                     onMouseDown={(event) => event.preventDefault()}
