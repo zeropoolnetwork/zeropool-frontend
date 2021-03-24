@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { cn } from '@bem-react/classname'
+import { useSnackbar } from 'notistack'
 import { CircularProgress } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -10,6 +11,7 @@ import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { Wallet } from 'wallet/state/models'
 import { getTransactions } from 'wallet/state/wallet.selectors'
 import { Transaction } from 'wallet/state/models/transaction'
+import transactionHelper from 'wallet/state/helpers/transaction.helper'
 
 export const componentId = 'Transactions'
 
@@ -21,35 +23,73 @@ export type TransactionsProps = {
 }
 
 export const Transactions: React.FC<TransactionsProps> = ({ wallet }) => {
+  let sorted: { date: string; transactions: Transaction[] }[] = []
   const dispatch = useDispatch()
   const transactions = useSelector(getTransactions)
+  const { enqueueSnackbar } = useSnackbar()
+  const [opened, setOpened] = useState<boolean[]>([])
 
   const incoming = (transaction: Transaction) =>
     wallet.address.toLowerCase() === transaction.to.toLocaleLowerCase()
 
+  const openHandler = (index: number) => {
+    const arr = [...opened]
+
+    arr[index] = !opened[index]
+    setOpened(arr)
+  }
+
+  if (transactions?.length) {
+    try {
+      sorted = transactionHelper.sortByDays(transactions)
+
+      if (!opened.length) {
+        const arr: boolean[] = []
+
+        sorted.forEach(() => arr.push(false))
+        arr[0] = true
+        setOpened(arr)
+      }
+    } catch (e) {
+      enqueueSnackbar(e.message, { variant: 'error' })
+    }
+  }
+
   return (
     <div className={css()} data-testid={test()}>
       {transactions ? (
-        transactions.map((transaction, i) => (
-          <div className={css('Transaction')} key={i}>
-            <span>{incoming(transaction) ? '<--  ' : '-->  '}</span>
-
-            {incoming(transaction) ? (
-              <span>
-                <b>From: </b>
-                {transaction.from}
+        sorted.map((day, i) => (
+          <div className={css('Day')} key={i}>
+            <div className={css('Date')}>
+              <span className={css('Arrow', { Down: opened[i] })} onClick={() => openHandler(i)}>
+                {'>'}
               </span>
-            ) : (
-              <span>
-                <b>To: </b> {transaction.to}
-              </span>
-            )}
 
-            <span>
-              <b>
-                {' ' + transaction.amount} {wallet.token.symbol}
-              </b>
-            </span>
+              {' ' + day.date}
+            </div>
+
+            {day.transactions.map((transaction, j) => (
+              <div className={css('Transaction', { Open: opened[i] })} key={j}>
+                <span>{incoming(transaction) ? '<--  ' : '-->  '}</span>
+
+                {incoming(transaction) ? (
+                  <span>
+                    <b>From: </b>
+                    {transaction.from}
+                  </span>
+                ) : (
+                  <span>
+                    <b>To: </b> {transaction.to}
+                  </span>
+                )}
+
+                <span>
+                  <b>
+                    {' ' + transaction.amount} {wallet.token.symbol}
+                  </b>
+                </span>
+              </div>
+            ))}
           </div>
         ))
       ) : (
