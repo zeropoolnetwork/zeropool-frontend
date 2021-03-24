@@ -1,6 +1,7 @@
 import mocks from './mocks.json'
 
 import { Transaction } from 'wallet/state/models/transaction'
+import { fixTimestamp } from 'shared/util/fix-timestamp'
 
 const k = 'MCTF6EHW28WGXZN21USVHDIAVFN9WC2IH7'
 const getUrl = (address: string) =>
@@ -17,7 +18,7 @@ const toTransaction = (tr: any) =>
     amount: tr.value,
     from: tr.from,
     to: tr.to,
-    timestamp: +tr.timeStamp,
+    timestamp: fixTimestamp(tr.timeStamp),
   } as Transaction)
 
 export const getEthTransactions = (address: string, mocked = false): Promise<Transaction[]> =>

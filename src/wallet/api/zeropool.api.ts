@@ -9,6 +9,7 @@ import { nearBug } from 'shared/util/waves-bug'
 import mocks from './mocks.json'
 import { promiceErrorHandler } from 'wallet/api/promice-error.handler'
 import { getEthTransactions } from './es.api'
+import { fixTimestamp } from 'shared/util/fix-timestamp'
 
 export let hdWallet: HDWallet | null = null
 export let transaction$: Observable<Transaction> | null = null
@@ -129,4 +130,5 @@ const convertValues = (coin: Coin) => (transactions: Transaction[]) =>
   transactions.map((transaction) => ({
     ...transaction,
     amount: coin.fromBaseUnit(transaction.amount),
+    timestamp: fixTimestamp(transaction.timestamp),
   }))

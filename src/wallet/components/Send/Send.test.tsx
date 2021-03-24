@@ -8,6 +8,7 @@ import { _testWalletsEth } from 'shared/helpers/test/app-state.helper'
 
 const enqueueSnackbar = jest.fn()
 const outputSpy = jest.fn()
+
 jest.mock('notistack', () => ({
   useSnackbar: jest.fn(),
 }))
