@@ -12,6 +12,7 @@ import { Wallet } from 'wallet/state/models'
 import { getTransactions } from 'wallet/state/wallet.selectors'
 import { Transaction } from 'wallet/state/models/transaction'
 import transactionHelper from 'wallet/state/helpers/transaction.helper'
+import { SortedTransactions } from 'wallet/state/models/sorted-transactions'
 
 export const componentId = 'Transactions'
 
@@ -23,7 +24,7 @@ export type TransactionsProps = {
 }
 
 export const Transactions: React.FC<TransactionsProps> = ({ wallet }) => {
-  let sorted: { date: string; transactions: Transaction[] }[] = []
+  let sorted: SortedTransactions[] = []
   const dispatch = useDispatch()
   const transactions = useSelector(getTransactions)
   const { enqueueSnackbar } = useSnackbar()

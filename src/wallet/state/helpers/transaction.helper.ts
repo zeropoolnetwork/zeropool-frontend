@@ -1,8 +1,9 @@
 import moment from 'moment'
+import { SortedTransactions } from 'wallet/state/models/sorted-transactions'
 import { Transaction } from 'wallet/state/models/transaction'
 
 const sortByDays = (transactions: Transaction[]) => {
-  const result: { date: string; transactions: Transaction[] }[] = []
+  const result: SortedTransactions[] = []
   const lastElement = <T>(arr: T[]) => arr[arr.length - 1]
   const m = moment
   const isAfter = (
