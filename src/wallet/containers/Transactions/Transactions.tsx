@@ -13,6 +13,7 @@ import { getTransactions } from 'wallet/state/wallet.selectors'
 import { Transaction } from 'wallet/state/models/transaction'
 import transactionHelper from 'wallet/state/helpers/transaction.helper'
 import { SortedTransactions } from 'wallet/state/models/sorted-transactions'
+import { beautifyAdress } from 'shared/helpers/addres.helper'
 
 export const componentId = 'Transactions'
 
@@ -76,11 +77,11 @@ export const Transactions: React.FC<TransactionsProps> = ({ wallet }) => {
                 {incoming(transaction) ? (
                   <span>
                     <b>From: </b>
-                    {transaction.from}
+                    {beautifyAdress(transaction.from)}
                   </span>
                 ) : (
                   <span>
-                    <b>To: </b> {transaction.to}
+                    <b>To: </b> {beautifyAdress(transaction.to)}
                   </span>
                 )}
 
