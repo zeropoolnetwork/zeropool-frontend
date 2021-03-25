@@ -25,3 +25,13 @@ export const validateAddress = (address: string, symbol: TokenSymbol): boolean |
 
   return result
 }
+
+export const beautifyAdress = (address: string, limit: number): string => {
+  let result = ''
+
+  if (address.length > limit) {
+    result = address.substring(0, limit) + '...' + address.substring(address.length - 4)
+  } else result = address
+  
+  return result
+}
