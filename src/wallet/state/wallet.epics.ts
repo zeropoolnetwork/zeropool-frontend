@@ -76,13 +76,13 @@ const resetAccount$: Epic = (action$: Observable<Actions>, state$: Observable<Ro
 const initApi$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(
     filterActions(walletActions.openBalanceView),
-    withLatestFrom(state$.pipe(map(getSeed)), state$.pipe(map(getWallets))),
-    switchMap(([, _seed, wallets]) =>
+    withLatestFrom(state$.pipe(map(getSeed)), state$.pipe(map(getWallets)), state$.pipe(map(getSupportedTokens))),
+    switchMap(([, _seed, wallets, tokens]) =>
       iif(
         () => !!_seed,
         of(_seed).pipe(
           filter((seed): seed is string => typeof seed === 'string'),
-          tap((seed) => api.initHDWallet(seed, [CoinType.ethereum, CoinType.near])), // TODO: take from supported tokens
+          tap((seed) => api.initHDWallet(seed, tokens.map(item => item.name as CoinType))),
           map(() => (!wallets ? walletActions.initWallets() : walletActions.updateWallets()))
         ),
         of(false).pipe(
