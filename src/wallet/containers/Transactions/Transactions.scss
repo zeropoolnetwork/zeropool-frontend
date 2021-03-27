@@ -1,10 +1,19 @@
+@import "../../../styles/styles.scss";
+
 .Transactions {
   display: flex;
   flex-direction: column;
   min-width: 400px;
+  color: $grey-primary;
+  //font-size: ;
+  padding-bottom: 4px;
 
   &-Date {
     font-size: 14px;
+  }
+
+  &-Day {
+    padding-bottom: 6px;
   }
 
   &-Arrow {
@@ -21,7 +30,7 @@
     }
   }
 
-  &-Transaction {
+  &-TransactionRow {
     font-size: 12px;
     margin: 3px 0;
     display: none;
