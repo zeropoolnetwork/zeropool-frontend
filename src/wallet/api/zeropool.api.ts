@@ -1,15 +1,15 @@
 import { HDWallet, CoinType, devConfig, Balance, Coin } from 'zeropool-api-js'
 import { from, Observable, of } from 'rxjs'
 import { Transaction } from 'zeropool-api-js/lib/coins/transaction'
-import { catchError, map } from 'rxjs/operators'
+import { map } from 'rxjs/operators'
 
 import { Token } from 'shared/models'
-import { nearBug } from 'shared/util/waves-bug'
+import { fixTimestamp } from 'shared/util/fix-timestamp'
+
+import { promiceErrorHandler } from 'wallet/api/promice-error.handler'
+import { getEthTransactions } from 'wallet/api/es.api'
 
 import mocks from './mocks.json'
-import { promiceErrorHandler } from 'wallet/api/promice-error.handler'
-import { getEthTransactions } from './es.api'
-import { fixTimestamp } from 'shared/util/fix-timestamp'
 
 export let hdWallet: HDWallet | null = null
 export let transaction$: Observable<Transaction> | null = null
@@ -48,26 +48,19 @@ const getAllBalances = (amount: number, offset = 0) => {
   return from(hdWallet.getBalances(amount, offset).catch(promiceErrorHandler({})))
 }
 
-const getNetworkFee = (token: Token) => {
+const getNetworkFee = (token: Token): Observable<{ fee: string }> => {
   if (!hdWallet) {
     throw Error('API not available!')
   }
 
   const coin = hdWallet.getCoin(token.name as CoinType)
+  const e = `Can't estimate fee for ${token.name}`
 
   if (!coin) {
     throw Error(`Can't estimate fee for ${token.symbol}`)
   }
 
-  return from(coin.estimateTxFee()).pipe(
-    catchError((err) => {
-      if (nearBug(err)) {
-        return of({ fee: 0 })
-      }
-
-      throw Error(err.message)
-    })
-  )
+  return from(coin.estimateTxFee().catch(promiceErrorHandler<{ fee: string }>({ fee: '' }, e)))
 }
 
 // tslint:disable-next-line: prettier
@@ -77,6 +70,7 @@ const getWalletTransactions = (token: Token, walletId: number, mocked = false): 
   }
 
   const coin = hdWallet.getCoin(token.name as CoinType)
+  const e = `Can't get transactions for ${token.name}`
 
   if (!coin) {
     throw Error(`Can't connect to ${token.symbol}`)
@@ -86,12 +80,12 @@ const getWalletTransactions = (token: Token, walletId: number, mocked = false): 
     token.symbol === 'ETH'
       ? from(
           getEthTransactions(coin.getAddress(walletId), mocked).catch(
-            promiceErrorHandler<Transaction[]>([])
+            promiceErrorHandler<Transaction[]>([], e)
           )
         )
       : mocked
       ? of(mocks.transactions[token.symbol])
-      : from(coin.getTransactions(walletId, 10, 0).catch(promiceErrorHandler<Transaction[]>([])))
+      : from(coin.getTransactions(walletId, 10, 0).catch(promiceErrorHandler<Transaction[]>([], e)))
 
   return tr.pipe(map(convertValues(coin)))
 }
@@ -102,18 +96,16 @@ const transfer = (account: number, to: string, amount: number, token: Token) => 
   }
 
   const coin = hdWallet.getCoin(token.name as CoinType)
+  const e = `Can't transfer ${token.name}`
 
   if (!coin) {
     throw Error(`Can't estimate fee for ${token.symbol}`)
   }
 
-  return from(coin.transfer(account, to, coin.toBaseUnit(amount.toString()))).pipe(
-    catchError((err) => {
-      console.log('Transfer error:')
-      console.log(err)
-
-      throw Error(err.message)
-    })
+  return from(
+    coin
+      .transfer(account, to, coin.toBaseUnit(amount.toString()))
+      .catch(promiceErrorHandler<Transaction[]>([], e))
   )
 }
 
