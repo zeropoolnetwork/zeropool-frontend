@@ -16,7 +16,7 @@ const test = testIdBuilder(componentId)
 export type SendConfirmationProps = {
   address: string
   amount: number
-  fee: number
+  fee: string
   rate: number
   wallet: Wallet
   onConfirmClick: () => void
@@ -70,7 +70,9 @@ export const SendConfirmation: React.FC<SendConfirmationProps> = ({
           className={css('Fee')}
           id="fee"
           label="Network fee"
-          value={`${fee} ${wallet.token.symbol} (${Math.round(rate * fee * 10000) / 10000} $)`}
+          value={
+            fee ? `${fee} ${wallet.token.symbol} (${Math.round(rate * +fee * 10000) / 10000} $)` : 0
+          }
           disabled={true}
         />
       </form>
@@ -84,6 +86,7 @@ export const SendConfirmation: React.FC<SendConfirmationProps> = ({
             data-testid={test('Confirm')}
             onClick={handleConfirm}
             color="primary"
+            disabled={!fee}
             disableElevation={true}
             variant="contained"
           >

@@ -28,7 +28,7 @@ export const walletActions = {
     wallet: Wallet
     address: string
     amount: number
-    fee: number
+    fee: string
   }>(),
 
   initWallets: create('@wallet/initWallets')<void>(),

@@ -169,7 +169,7 @@ const openSendConfirmView$: Epic = (action$: Observable<Actions>, state$: Observ
         map((fee) =>
           walletActions.openSendConfirmView({
             ...payload,
-            fee: +fee.fee,
+            fee: fee.fee,
           })
         )
       )
