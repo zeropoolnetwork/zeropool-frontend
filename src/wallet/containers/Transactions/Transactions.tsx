@@ -10,10 +10,11 @@ import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
 import { Wallet } from 'wallet/state/models'
 import { getTransactions } from 'wallet/state/wallet.selectors'
-import { Transaction } from 'wallet/state/models/transaction'
 import transactionHelper from 'wallet/state/helpers/transaction.helper'
 import { SortedTransactions } from 'wallet/state/models/sorted-transactions'
 import { beautifyAdress } from 'shared/helpers/addres.helper'
+import { Transaction } from 'wallet/components/Transaction/Transaction'
+import { Transaction as Tr } from 'wallet/state/models/transaction'
 
 export const componentId = 'Transactions'
 
@@ -31,7 +32,7 @@ export const Transactions: React.FC<TransactionsProps> = ({ wallet }) => {
   const { enqueueSnackbar } = useSnackbar()
   const [opened, setOpened] = useState<boolean[]>([])
 
-  const incoming = (transaction: Transaction) =>
+  const incoming = (transaction: Tr) =>
     wallet.address.toLowerCase() === transaction.to.toLocaleLowerCase()
 
   const openHandler = (index: number) => {
@@ -71,26 +72,28 @@ export const Transactions: React.FC<TransactionsProps> = ({ wallet }) => {
             </div>
 
             {day.transactions.map((transaction, j) => (
-              <div className={css('Transaction', { Open: opened[i] })} key={j}>
-                <span>{incoming(transaction) ? '<--  ' : '-->  '}</span>
-
-                {incoming(transaction) ? (
-                  <span>
-                    <b>From: </b>
-                    {beautifyAdress(transaction.from)}
-                  </span>
-                ) : (
-                  <span>
-                    <b>To: </b> {beautifyAdress(transaction.to)}
-                  </span>
-                )}
-
-                <span>
-                  <b>
-                    {' ' + transaction.amount} {wallet.token.symbol}
-                  </b>
-                </span>
+              <div className={css('TransactionRow', { Open: opened[i] })} key={j}>
+                <Transaction transaction={transaction} key={j} wallet={wallet}></Transaction>
               </div>
+              //   <span>{incoming(transaction) ? '<--  ' : '-->  '}</span>
+
+              //   {incoming(transaction) ? (
+              //     <span>
+              //       <b>From: </b>
+              //       {beautifyAdress(transaction.from)}
+              //     </span>
+              //   ) : (
+              //     <span>
+              //       <b>To: </b> {beautifyAdress(transaction.to)}
+              //     </span>
+              //   )}
+
+              //   <span>
+              //     <b>
+              //       {' ' + transaction.amount} {wallet.token.symbol}
+              //     </b>
+              //   </span>
+              // </div>
             ))}
           </div>
         ))

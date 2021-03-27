@@ -2,6 +2,7 @@ import React from 'react'
 import { render } from '@testing-library/react'
 
 import { Transaction, componentId, TransactionProps } from './Transaction'
+import { Transaction as Tr } from 'wallet/state/models/transaction'
 
 const tr1: Tr = {
   status: 0,
@@ -12,13 +13,21 @@ const tr1: Tr = {
   blockHash: '0x36ee558c0e10023ad3c2de8ee5fc6ee369809920edbe3fbbd7009a2f25d4c5a3',
   hash: '0x084d420dbc7cce7c756b19213f5b4b42b2b179c495d50a45514d0c0219d8b879',
 }
+
+const wallet = {
+  address: '123',
+  token: {
+    symbol: 'BTC',
+  },
+}
+
 describe('Transaction', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<TransactionProps>
 
   beforeEach(() => {
     outputSpy = jest.fn()
-    component = <Transaction transaction={tr1} />
+    component = <Transaction transaction={tr1} wallet={wallet as any} />
   })
 
   it('should render component', () => {

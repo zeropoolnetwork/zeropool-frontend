@@ -1,4 +1,29 @@
+@import "../../../styles/styles.scss";
+
 .Transaction {
+  align-items: center;
+  color: $grey-primary;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  font-size: 20px;
+  margin-left: 10px;
+  
+  &-Direction {
+    padding: 0 4px;
+  }
+
+  &-Icon {
+    font-size: 28px;
+    position: relative;
+    top: 3px;
+  }
+
+  &-Amount {
+    color: $primary;
+    font-weight: bold;
+    font-size: 24px;
+    flex-grow: 1;
+    padding: 0 4px;
+    text-align: end;
+  }
 }
