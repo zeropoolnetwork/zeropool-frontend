@@ -19,6 +19,8 @@ export interface RequestConfig extends AxiosRequestConfig {
     noLoadingBar?: boolean
     provider?: Provider
   }
+  params: any
+  headers: any
 }
 
 export const setupInterceptors = (axi: Axios, store: Store<RootState>): void => {

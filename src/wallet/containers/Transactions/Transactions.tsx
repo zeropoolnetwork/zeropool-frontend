@@ -73,7 +73,7 @@ export const Transactions: React.FC<TransactionsProps> = ({ wallet }) => {
 
             {day.transactions.map((transaction, j) => (
               <div className={css('TransactionRow', { Open: opened[i] })} key={j}>
-                <Transaction transaction={transaction} key={j} wallet={wallet}></Transaction>
+                <Transaction transaction={transaction} key={j} wallet={wallet} />
               </div>
               //   <span>{incoming(transaction) ? '<--  ' : '-->  '}</span>
 

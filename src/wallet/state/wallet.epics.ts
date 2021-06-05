@@ -160,6 +160,15 @@ const refreshAmounts$: Epic = (action$: Observable<Actions>, state$: Observable<
     map(() => walletActions.refreshAmounts())
   )
 
+const getPrivateAddress$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
+  action$.pipe(
+    filter(isActionOf(walletActions.getPrivateAddress)),
+    switchMap(({ payload }) => api.getPrivateAddress(payload).pipe(
+      map((address) => walletActions.getPrivateAddressSuccess(address))
+    )),
+    handleEpicError(walletActions.apiError),
+  )
+
 const openSendConfirmView$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(
     filter(isActionOf(walletActions.prepareSendConfirmView)),
@@ -258,5 +267,6 @@ export const walletEpics: Epic = combineEpics(
   handleErrorActions$,
   refreshAmounts$,
   openSendConfirmView$,
-  sendTransaction$
+  sendTransaction$,
+  getPrivateAddress$,
 )

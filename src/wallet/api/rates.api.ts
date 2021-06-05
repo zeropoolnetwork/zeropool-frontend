@@ -21,6 +21,9 @@ export const RatesApi = {
         noLoadingBar: true,
         provider: Provider.Marketcap,
       },
+      headers: {
+        'X-CMC_PRO_API_KEY': '66b703ca-d01c-4977-8876-b42c09e8b99e',
+      },
     }
 
     if (useMock) {
