@@ -194,6 +194,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
             <ListItemText className={classes.drowerItemText} primary={text} />
           </ListItem>
         ))}
+
         <ListItem className={classes.drowerItem} button={true} onClick={handleExportSeed}>
           <ListItemIcon className={classes.drowerItemIcon}>
             <FileCopyIcon />
@@ -236,6 +237,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
             rate={rates[token.symbol]}
             token={token}
             wallets={wallets ? Object.values(wallets) : []}
+            getPrivateAddress={(_token) => dispatch(walletActions.getPrivateAddress(_token))}
           />
         ) : null
       case WalletView.Send:

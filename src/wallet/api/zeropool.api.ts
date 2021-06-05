@@ -1,7 +1,7 @@
 import { HDWallet, CoinType, devConfig, Balance, Coin } from 'zeropool-api-js'
 import { from, Observable, of } from 'rxjs'
 import { Transaction } from 'zeropool-api-js/lib/coins/transaction'
-import { map } from 'rxjs/operators'
+import { map, tap } from 'rxjs/operators'
 
 import { Token } from 'shared/models'
 import { fixTimestamp } from 'shared/util/fix-timestamp'
@@ -32,12 +32,27 @@ const getWalletBalance = (token: Token, walletId: number) => {
   }
 
   return from(coin.getBalances(1, walletId).catch(promiceErrorHandler<Balance[]>([]))).pipe(
-    map((balances) => balances[0]),
-    map((balance) => ({
+    map((balances: any[]) => balances[0]),
+    map((balance: any) => ({
       ...balance,
       balance: coin.fromBaseUnit(balance.balance),
     }))
   )
+}
+
+const getPrivateAddress = (token: Token) => {
+  if (!hdWallet) {
+    throw Error('API not available!')
+  }
+
+  const coin = hdWallet.getCoin(token.name as CoinType)
+  const e = `Can't estimate fee for ${token.name}`
+
+  if (!coin) {
+    throw Error(`Can't estimate fee for ${token.symbol}`)
+  }
+
+  return from([coin.generatePrivateAddress()])
 }
 
 const getAllBalances = (amount: number, offset = 0) => {
@@ -114,6 +129,7 @@ export default {
   getWalletBalance,
   getNetworkFee,
   getWalletTransactions,
+  getPrivateAddress,
   initHDWallet,
   transfer,
 }

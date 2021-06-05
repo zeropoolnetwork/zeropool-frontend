@@ -58,4 +58,7 @@ export const walletActions = {
   hideWallet: create('@wallet/hideWallet')<Wallet>(),
 
   resetAccount: create('@wallet/resetAccount')<void>(),
+
+  getPrivateAddress: create('@wallet/getPrivateAddress')<Token>(),
+  getPrivateAddressSuccess: create('@wallet/getPrivateAddressSuccess')<string>(),
 }

@@ -14,6 +14,7 @@ describe('Wallets', () => {
     component = (
       <Wallets
         rate={111}
+        getPrivateAddress={jest.fn()}
         token={_testToken}
         wallets={[]}
         handlers={{

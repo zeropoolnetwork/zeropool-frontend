@@ -1,7 +1,7 @@
-import React, { HTMLAttributes } from 'react'
 import { cn } from '@bem-react/classname'
 import { IconButton } from '@material-ui/core'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
+import React, { HTMLAttributes } from 'react'
 
 import './ExpandButton.scss'
 
