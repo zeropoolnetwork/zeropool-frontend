@@ -32,7 +32,7 @@ export const walletActions = {
   }>(),
 
   initWallets: create('@wallet/initWallets')<void>(),
-  updateWallets: create('@wallet/updateWallets')<void>(),
+  updateBalances: create('@wallet/updateBalances')<void>(),
   updateWalletsSuccess: create('@wallet/updateWalletsSuccess')<WalletRecord>(),
   updateWalletsError: create('@wallet/updateWalletsError')<string>(),
 

@@ -29,6 +29,10 @@
   &-WalletName {
     cursor: pointer;
     font-weight: bold;
+
+    &_Private {
+      color: #af0000;
+    }
   }
 
   &-WalletAmount {
@@ -40,6 +44,14 @@
   &-Expander {
     height: 39px;
     width: 40px;
+
+    & button {
+      background: $button-background-color !important;
+    }
+
+    &_Private button {
+      background: #af0000 !important;
+    }
   }
 
   &-Buttons {

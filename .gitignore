@@ -2,6 +2,7 @@
 
 #VSCode
 # .vscode
+.eslintcache
 
 # dependencies
 /node_modules

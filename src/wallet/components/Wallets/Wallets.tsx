@@ -65,34 +65,8 @@ export const Wallets: React.FC<WalletsProps> = ({
     }
   }
 
-  const privateWallet = {
-    id: 0,
-    account: 0,
-    name: 'Private',
-    amount: 0,
-    address: 'x12322',
-    token,
-    private: false,
-  }
-
   return (
     <div className={css()} data-testid={test()}>
-      <WalletRow
-        rollUp={rollUpSignal}
-        wallet={privateWallet}
-        token={token}
-        rate={rate}
-        key={-1}
-        onEditClick={(_wallet) => {
-          setSelectedWallet(_wallet)
-          setOpenEditDialog(true)
-        }}
-        onReceiveClick={handlers.onReceive}
-        onRollUpClick={() => setRollUpSignal(rollUpSignal + 1)}
-        onSendClick={handlers.onSend}
-        onWalletNameClick={() => getPrivateAddress(token)}
-      />
-
       {wallets.map((wallet, index) => (
         <WalletRow
           rollUp={rollUpSignal}

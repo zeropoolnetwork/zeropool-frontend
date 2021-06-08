@@ -335,7 +335,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
               </Tooltip>
 
               <Tooltip title="Update balances" placement="bottom">
-                <IconButton color="inherit" onClick={() => dispatch(walletActions.updateWallets())}>
+                <IconButton color="inherit" onClick={() => dispatch(walletActions.updateBalances())}>
                   <RefreshIcon />
                 </IconButton>
               </Tooltip>

@@ -10,7 +10,7 @@ export const initBalances = (
   hdWallet: HDWallet,
   balances: Record<TokenSymbol, Balance[]>,
   tokens: Token[],
-  account = 0
+  account = 0,
 ): Record<TokenSymbol, Wallet[]> => {
   const wallets: Record<TokenSymbol, Wallet[]> = {}
 
@@ -19,8 +19,19 @@ export const initBalances = (
     const coin = hdWallet?.getCoin(token.name as CoinType)
     wallets[tokenId] = []
 
+    wallets[tokenId].push({
+      account,
+      address: '',
+      id: 0,
+      amount: 0,
+      name: 'Private',
+      token,
+    })
+
     for (const [balanceDataIndex, balanceData] of Object.entries(balances[token.name])) {
       let amount
+      const id = +balanceDataIndex + 1
+
       try {
         amount = coin
           ? +coin.fromBaseUnit((balanceData as Balance).balance)
@@ -36,10 +47,9 @@ export const initBalances = (
       wallets[tokenId].push({
         account,
         address: (balanceData as Balance).address,
-        id: +balanceDataIndex,
+        id,
         amount,
-        name: `Wallet${tokenId}${balanceDataIndex}`,
-        private: false,
+        name: `Wallet ${id < 10 ? '0' + id : id}`,
         token,
       })
     }
