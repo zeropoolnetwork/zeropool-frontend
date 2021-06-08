@@ -36,7 +36,7 @@ describe('Sort transactions by days', () => {
 
   it('returns array of objects like { date: string, transactions: Transaction[] }', () => {
     expect(JSON.stringify(transactionHelper.sortByDays(transactions as any))).toBe(
-      JSON.stringify(result)
+      JSON.stringify(result),
     )
   })
 })

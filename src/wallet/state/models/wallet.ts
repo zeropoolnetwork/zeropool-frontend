@@ -6,6 +6,5 @@ export type Wallet = {
   amount: number
   id: number
   name: string
-  private: boolean
   token: Token
 }

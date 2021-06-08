@@ -75,7 +75,7 @@ export const WalletRow: React.FC<WalletRowProps> = ({
         <div className={css('Values')}>
           <Tooltip title={'View transactions'} placement="bottom">
             <div
-              className={css('WalletName', ['noselect'])}
+              className={css('WalletName', { Private: !wallet.address }, ['noselect'])}
               onClick={() => onWalletNameClick(wallet)}
             >
               {wallet.name}
@@ -88,7 +88,7 @@ export const WalletRow: React.FC<WalletRowProps> = ({
         </div>
 
         <ExpandButton
-          className={css('Expander')}
+          className={css('Expander', { Private: !wallet.address })}
           expanded={showButtons}
           click={showButtonsHandler}
         />
@@ -107,9 +107,15 @@ export const WalletRow: React.FC<WalletRowProps> = ({
           <VerticalAlignBottomIcon />
         </RoundButton>
 
-        <RoundButton className={css('Button2')} label={'Edit'} onClick={() => onEditClick(wallet)}>
-          <SettingsIcon />
-        </RoundButton>
+        {!!wallet.address ? (
+          <RoundButton
+            className={css('Button2')}
+            label={'Edit'}
+            onClick={() => onEditClick(wallet)}
+          >
+            <SettingsIcon />
+          </RoundButton>
+        ) : null}
       </div>
     </div>
   )
