@@ -1,26 +1,27 @@
 import React from 'react'
-import notistack from 'notistack'
+import { useSnackbar } from 'notistack'
 import { fireEvent, render } from '@testing-library/react'
 
 import { Send, componentId, SendProps } from './Send'
 
 import { _testWalletsEth } from 'shared/helpers/test/app-state.helper'
 
-const enqueueSnackbar = jest.fn()
+const useSnackbarMock = useSnackbar as jest.Mock
 const outputSpy = jest.fn()
 
 jest.mock('notistack', () => ({
+  ...jest.requireActual('notistack'),
   useSnackbar: jest.fn(),
 }))
-// @ts-ignore
-jest.spyOn(notistack, 'useSnackbar').mockImplementation(() => {
-  return { enqueueSnackbar }
-})
 
 describe('Send', () => {
   let component: React.ReactElement<SendProps>
 
   beforeEach(() => {
+    useSnackbarMock.mockImplementation(() => ({
+      enqueueSnackbar: jest.fn(),
+    }))
+
     component = <Send rate={123} wallet={_testWalletsEth[0]} onNextClick={outputSpy} />
   })
 
