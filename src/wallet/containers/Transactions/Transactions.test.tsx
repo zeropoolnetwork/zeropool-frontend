@@ -1,10 +1,12 @@
 import React from 'react'
-import notistack from 'notistack'
+import { useSnackbar } from 'notistack'
 import { render } from '@testing-library/react'
 
 import { Transactions, componentId, TransactionsProps } from './Transactions'
 
 import { _testWalletsEth } from 'shared/helpers/test/app-state.helper'
+//#region Mocks
+const useSnackbarMock = useSnackbar as jest.Mock
 
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
@@ -13,19 +15,19 @@ jest.mock('react-redux', () => ({
 }))
 
 jest.mock('notistack', () => ({
+  ...jest.requireActual('notistack'),
   useSnackbar: jest.fn(),
 }))
-// @ts-ignore
-jest.spyOn(notistack, 'useSnackbar').mockImplementation(() => {
-  return { enqueueSnackbar: jest.fn() }
-})
-
+//#endregion
 describe('Transactions', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<TransactionsProps>
 
   beforeEach(() => {
     outputSpy = jest.fn()
+    useSnackbarMock.mockImplementation(() => ({
+      enqueueSnackbar: jest.fn(),
+    }))
     component = <Transactions wallet={_testWalletsEth[0]} />
   })
 

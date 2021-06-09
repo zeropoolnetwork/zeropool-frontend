@@ -15,11 +15,10 @@ const test = testIdBuilder(componentId)
 
 export type ReceiveProps = {
   address: string
-  rate: number
   token: Token
 }
 
-export const Receive: React.FC<ReceiveProps> = ({ address, rate, token }) => {
+export const Receive: React.FC<ReceiveProps> = ({ address, token }) => {
   const { enqueueSnackbar } = useSnackbar()
   const QRCode = require('qrcode.react')
   const handleCodeClick = (): void => {
@@ -31,7 +30,7 @@ export const Receive: React.FC<ReceiveProps> = ({ address, rate, token }) => {
       },
       (err) => {
         enqueueSnackbar(`Can't access clipboard`, { variant: 'error' })
-      }
+      },
     )
   }
 

@@ -1,17 +1,16 @@
 import React from 'react'
-import notistack from 'notistack'
+import { useSnackbar } from 'notistack'
 import { render } from '@testing-library/react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { componentId, WalletPage } from './WalletPage'
 
 import { mockAppState } from 'shared/helpers/test/app-state.helper'
-
 //#region Mocks
+const useSnackbarMock = useSnackbar as jest.Mock
 const useSelectorMock = useSelector as jest.Mock
 const useDispatchMock = useDispatch as jest.Mock
 const dispatchSpy = jest.fn()
-const enqueueSnackbar = jest.fn()
 
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
@@ -20,17 +19,17 @@ jest.mock('react-redux', () => ({
 }))
 
 jest.mock('notistack', () => ({
+  ...jest.requireActual('notistack'),
   useSnackbar: jest.fn(),
 }))
-// @ts-ignore
-jest.spyOn(notistack, 'useSnackbar').mockImplementation(() => {
-  return { enqueueSnackbar }
-})
-
+//#endregion
 describe('WalletPage', () => {
   beforeEach(() => {
     useSelectorMock.mockImplementation((selectorFn) => selectorFn(mockAppState))
     useDispatchMock.mockReturnValue(dispatchSpy)
+    useSnackbarMock.mockImplementation(() => ({
+      enqueueSnackbar: jest.fn(),
+    }))
   })
 
   it('WalletPage', () => {

@@ -27,9 +27,9 @@
       "internalConsoleOptions": "neverOpen"
     },
     {
-      "name": "vscode-jest-tests",
       "type": "node",
       "request": "launch",
+      "name": "Debug tests",
       "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/react-scripts",
       "args": [
         "test",
@@ -42,20 +42,16 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
     },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Jest watch current file",
-      "program": "${workspaceFolder}/node_modules/jest/bin/jest",
-      "args": [
-        "${fileBasename}",
-        "--verbose",
-        "-i",
-        "--no-cache",
-        "--watchAll"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen"
-    }
+      {
+        "name": "Debug opened file",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/react-scripts",
+        "args": ["test", "${fileBasenameNoExtension}", "--runInBand", "--no-cache", "--watchAll"],
+        "cwd": "${workspaceRoot}",
+        "protocol": "inspector",
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen"
+      },
   ]
 }
