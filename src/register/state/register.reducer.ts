@@ -20,7 +20,7 @@ export const initialRegisterState: RegisterState = {
 }
 
 export const registerReducer = createReducer<RegisterState, ActionType<typeof actions>>(
-  initialRegisterState
+  initialRegisterState,
 )
   .handleAction(actions.stepBack, (state) => ({
     ...state,

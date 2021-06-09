@@ -8,6 +8,10 @@ import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 const test = testIdBuilder(componentId)
 const getById = queryByAttribute.bind(null, 'id')
 
+jest.mock('register/state/helpers/seed.helper', () => ({
+  validateSeed: jest.fn(),
+}))
+
 describe('ImportAccount', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<ImportAccountProps>

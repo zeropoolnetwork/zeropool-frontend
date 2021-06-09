@@ -268,9 +268,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
           />
         ) : null
       case WalletView.Receive:
-        return wallet && token ? (
-          <Receive address={wallet.address} rate={rates[wallet.token.symbol]} token={token} />
-        ) : null
+        return wallet && token ? <Receive address={wallet.address} token={token} /> : null
       case WalletView.Transactions:
         return wallet ? <Transactions wallet={wallet} /> : null
       case WalletView.About:

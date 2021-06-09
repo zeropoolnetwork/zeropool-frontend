@@ -7,7 +7,7 @@ describe('Balance', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<BalanceProps>
 
-  jest.mock('wallet/components/TokenRow/TokenRow', () => () => <span>TokenRow</span>)
+  // jest.mock('wallet/components/TokenRow/TokenRow', () => () => <span>TokenRow</span>)
 
   beforeEach(() => {
     outputSpy = jest.fn()

@@ -90,7 +90,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                   control
                     .getValues()
                     .seed.split(/[ ,.]+/)
-                    .filter((str) => !!str)
+                    .filter((str) => !!str),
                 )
               }
               type={'text'}
