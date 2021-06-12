@@ -29,5 +29,5 @@ export const getEthTransactions = (address: string, mocked = false): Promise<Tra
           .clone()
           .json()
           .then((response) => response.result)
-          .then((data) => data.map(toTransaction))
+          .then((data) => data.map(toTransaction)),
       )

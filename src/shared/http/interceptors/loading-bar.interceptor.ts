@@ -6,7 +6,7 @@ import { RequestConfig } from 'shared/http/http'
 import { loadingBarActions } from 'shared/loading-bar/state/loading-bar.actions'
 
 export const loadingBarRequestInterceptor = (store: Store<RootState>) => (
-  request: AxiosRequestConfig
+  request: AxiosRequestConfig,
 ): AxiosRequestConfig => {
   const { context } = request as RequestConfig
   const noBar = !!context?.noLoadingBar
@@ -19,7 +19,7 @@ export const loadingBarRequestInterceptor = (store: Store<RootState>) => (
 }
 
 export const loadingBarResponseInterceptor = (store: Store<RootState>) => (
-  response: AxiosResponse
+  response: AxiosResponse,
 ): AxiosResponse => {
   const { context } = response.config as RequestConfig
   const noBar = !!context?.noLoadingBar
@@ -32,7 +32,7 @@ export const loadingBarResponseInterceptor = (store: Store<RootState>) => (
 }
 
 export const loadingBarErrorResponseInterceptor = (store: Store<RootState>) => (
-  error: AxiosError
+  error: AxiosError,
 ): unknown => {
   const context = (error.config as RequestConfig)?.context
   const noBar = !!context?.noLoadingBar

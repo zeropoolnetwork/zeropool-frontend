@@ -7,7 +7,7 @@ export const debug = <T>() => {
       tap((x) => {
         /* tslint:disable-next-line */
         debugger
-      })
+      }),
     )
   }
 }

@@ -34,4 +34,22 @@ describe('Receive view', () => {
 
     expect(getByText('Receive ETH')).toBeInTheDocument()
   })
+
+  it('shows qr-code if has adress', () => {
+    const renderResult = render(<Receive address={'123'} token={_testToken} />)
+
+    expect(renderResult.getByTestId(componentId + '-Code')).toBeInTheDocument()
+  })
+
+  it('not shows qr-code if has no adress', () => {
+    const renderResult = render(<Receive address={''} token={_testToken} />)
+
+    expect(renderResult.queryByTestId(componentId + '-Code')).toBeNull()
+  })
+
+  it('shows buttun if has no adress', () => {
+    const renderResult = render(<Receive address={''} token={_testToken} />)
+
+    expect(renderResult.getByTestId(componentId + '-Button')).toBeInTheDocument()
+  })
 })

@@ -42,6 +42,7 @@ import {
   getActiveWallet,
   getSendData,
   getSeed,
+  getPrivateAddress,
 } from 'wallet/state/wallet.selectors'
 import { Wallets, WalletsHandlers } from 'wallet/components/Wallets/Wallets'
 import { SendConfirmation } from 'wallet/components/SendConfirmation/SendConfirmation'
@@ -148,6 +149,9 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   const wallets = useSelector(getWalletsForActiveToken)
   const send = useSelector(getSendData)
   const seed = useSelector(getSeed)
+  const privateAddress = useSelector(getPrivateAddress)
+
+  const generateAddres = () => '123'
 
   const handleExportSeed = () => {
     navigator.clipboard.writeText(seed || 'No seed set').then(
@@ -156,7 +160,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
       },
       (err) => {
         enqueueSnackbar(`Can't access clipboard`, { variant: 'error' })
-      }
+      },
     )
   }
 
@@ -251,7 +255,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
                   wallet,
                   address,
                   amount,
-                })
+                }),
               )
             }
           />
@@ -268,7 +272,14 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
           />
         ) : null
       case WalletView.Receive:
-        return wallet && token ? <Receive address={wallet.address} token={token} /> : null
+        return wallet && token ? (
+          <Receive
+            address={wallet.address}
+            token={token}
+            getPrivateAddress={(_token) => dispatch(walletActions.getPrivateAddress(_token))}
+            privateAddress={privateAddress}
+          />
+        ) : null
       case WalletView.Transactions:
         return wallet ? <Transactions wallet={wallet} /> : null
       case WalletView.About:
@@ -333,7 +344,10 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
               </Tooltip>
 
               <Tooltip title="Update balances" placement="bottom">
-                <IconButton color="inherit" onClick={() => dispatch(walletActions.updateBalances())}>
+                <IconButton
+                  color="inherit"
+                  onClick={() => dispatch(walletActions.updateBalances())}
+                >
                   <RefreshIcon />
                 </IconButton>
               </Tooltip>

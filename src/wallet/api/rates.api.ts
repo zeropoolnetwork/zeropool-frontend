@@ -34,7 +34,7 @@ export const RatesApi = {
       .get<{ status: any; data: Rate<Token>[] }>(url, config)
       .pipe(
         getHTTPData(),
-        map(({ status, data }) => data)
+        map(({ status, data }) => data),
       )
   },
 }

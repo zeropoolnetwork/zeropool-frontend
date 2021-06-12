@@ -20,20 +20,22 @@ export const getActiveWalletIndex = createSelector(
   getActiveWallet,
   getActiveToken,
   (wallets, wallet, token) =>
-    wallets && token && wallet ? walletsHelper.getActiveIndex(wallets[token?.symbol], wallet) : null
+    wallets && token && wallet
+      ? walletsHelper.getActiveIndex(wallets[token?.symbol], wallet)
+      : null,
 )
 
 export const getAmounts = createSelector(getWalletState, (state) => state.amounts)
 
 export const getWalletsForActiveToken = createSelector(getWalletState, (state) =>
-  state.activeToken && state.wallets ? state.wallets[state.activeToken.symbol] : null
+  state.activeToken && state.wallets ? state.wallets[state.activeToken.symbol] : null,
 )
 
 export const getSupportedTokens = createSelector(getWalletState, (state) => state.supportedTokens)
 
 export const getSupportedTokensRecord = createSelector(
   getWalletState,
-  (state) => state.supportedTokensRecord
+  (state) => state.supportedTokensRecord,
 )
 
 export const getUsdRates = createSelector(getWalletState, (state) => state.usdRates)
@@ -45,3 +47,5 @@ export const getSeed = createSelector(getWalletState, (state) => state.seed)
 export const getPollSettings = createSelector(getWalletState, (state) => state.pollSettings)
 
 export const getTransactions = createSelector(getWalletState, (state) => state.transactions)
+
+export const getPrivateAddress = createSelector(getWalletState, (state) => state.privateAddress)

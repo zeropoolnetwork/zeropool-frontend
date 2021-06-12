@@ -29,7 +29,7 @@ export const setupInterceptors = (axi: Axios, store: Store<RootState>): void => 
 
   axi.interceptors.response.use(
     loadingBarResponseInterceptor(store),
-    loadingBarErrorResponseInterceptor(store)
+    loadingBarErrorResponseInterceptor(store),
   )
 }
 

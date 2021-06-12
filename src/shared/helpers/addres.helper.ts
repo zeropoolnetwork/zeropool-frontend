@@ -32,6 +32,6 @@ export const beautifyAdress = (address: string, limit = 6): string => {
   if (address.length > limit) {
     result = address.substring(0, limit) + '...' + address.substring(address.length - 4)
   } else result = address
-  
+
   return result
 }

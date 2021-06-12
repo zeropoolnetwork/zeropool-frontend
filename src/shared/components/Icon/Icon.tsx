@@ -25,11 +25,11 @@ const component = memo(
           LeftMargin: spaceOn === 'left',
           Clickable: !!props.onClick,
         },
-        [props.className]
+        [props.className],
       )}
       ref={ref}
     />
-  ))
+  )),
 )
 
 component.displayName = componentId
