@@ -4,7 +4,7 @@ import { recordFromArray } from 'shared/util/from'
 
 export const mapRatesToTokens = (
   rates: Rate<Token>[],
-  tokens: Token[]
+  tokens: Token[],
 ): Record<TokenSymbol, number> => {
   const result: Record<TokenSymbol, number> = {}
   const ratesMap = recordFromArray(rates, 'symbol')

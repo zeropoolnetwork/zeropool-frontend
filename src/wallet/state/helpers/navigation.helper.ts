@@ -13,7 +13,7 @@ export const navigationHelper = {
               activeWallet: null,
               amounts: amountsHelper.getAmountsForToken(
                 state.activeToken,
-                state.wallets[state.activeToken.symbol]
+                state.wallets[state.activeToken.symbol],
               ),
             }
           : state
@@ -35,7 +35,7 @@ export const navigationHelper = {
               activeWallet: null,
               amounts: amountsHelper.getAmountsForToken(
                 state.activeToken,
-                state.wallets[state.activeToken.symbol]
+                state.wallets[state.activeToken.symbol],
               ),
             }
           : state
@@ -50,7 +50,7 @@ export const navigationHelper = {
               amounts: state.previousView
                 ? amountsHelper.getAmountsForToken(
                     state.activeToken,
-                    state.wallets[state.activeToken.symbol]
+                    state.wallets[state.activeToken.symbol],
                   )
                 : amountsHelper.getAmountsForAllTakens(state.supportedTokens, state.wallets),
             }

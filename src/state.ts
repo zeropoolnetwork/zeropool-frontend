@@ -31,7 +31,7 @@ const epicMiddleware = createEpicMiddleware()
 
 const rootEpic = combineEpics(
   registerEpics,
-  walletEpics
+  walletEpics,
   // alertsEpics,
   // notificationsEpics,
 )
@@ -69,7 +69,7 @@ const persistedReducer = persistReducer(persistConfig, createRootReducer(history
 
 export const store = createStore(
   persistedReducer,
-  composeEnhancers(applyMiddleware(epicMiddleware, routerMiddleware(history)))
+  composeEnhancers(applyMiddleware(epicMiddleware, routerMiddleware(history))),
 )
 
 export const persistedStore = persistStore(store)

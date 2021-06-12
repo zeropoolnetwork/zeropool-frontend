@@ -51,7 +51,7 @@ async function start() {
         <SnackbarUtilsConfigurator />
       </SnackbarProvider>
     </ThemeProvider>,
-    document.getElementById('root')
+    document.getElementById('root'),
   )
 }
 

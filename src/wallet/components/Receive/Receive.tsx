@@ -1,6 +1,6 @@
 import React from 'react'
 import { cn } from '@bem-react/classname'
-import { Tooltip } from '@material-ui/core'
+import { Button, Tooltip } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 
 import './Receive.scss'
@@ -15,23 +15,32 @@ const test = testIdBuilder(componentId)
 
 export type ReceiveProps = {
   address: string
+  privateAddress: string | null
   token: Token
+  getPrivateAddress: (_token: Token) => void
 }
 
-export const Receive: React.FC<ReceiveProps> = ({ address, token }) => {
+export const Receive: React.FC<ReceiveProps> = ({
+  address,
+  token,
+  getPrivateAddress,
+  privateAddress,
+}) => {
   const { enqueueSnackbar } = useSnackbar()
   const QRCode = require('qrcode.react')
   const handleCodeClick = (): void => {
-    navigator.clipboard.writeText(address).then(
-      () => {
-        enqueueSnackbar('Address copied to the clipboard', {
-          variant: 'success',
-        })
-      },
-      (err) => {
-        enqueueSnackbar(`Can't access clipboard`, { variant: 'error' })
-      },
-    )
+    if (address) {
+      navigator.clipboard.writeText(address).then(
+        () => {
+          enqueueSnackbar('Address copied to the clipboard', {
+            variant: 'success',
+          })
+        },
+        (err) => {
+          enqueueSnackbar(`Can't access clipboard`, { variant: 'error' })
+        },
+      )
+    }
   }
 
   return (
@@ -40,7 +49,19 @@ export const Receive: React.FC<ReceiveProps> = ({ address, token }) => {
 
       <Tooltip title={address} placement="bottom">
         <div className={css('Code')} onClick={handleCodeClick}>
-          <QRCode value={address} />
+          {address || privateAddress ? (
+            <QRCode value={address || privateAddress} data-testid={test('Code')} />
+          ) : (
+            <Button
+              className={css('Button')}
+              data-testid={test('Button')}
+              onClick={() => getPrivateAddress(token)}
+              color="primary"
+              variant="contained"
+            >
+              Generate
+            </Button>
+          )}
         </div>
       </Tooltip>
     </div>

@@ -36,7 +36,7 @@ const getWalletBalance = (token: Token, walletId: number) => {
     map((balance: any) => ({
       ...balance,
       balance: coin.fromBaseUnit(balance.balance),
-    }))
+    })),
   )
 }
 
@@ -95,8 +95,8 @@ const getWalletTransactions = (token: Token, walletId: number, mocked = false): 
     token.symbol === 'ETH'
       ? from(
           getEthTransactions(coin.getAddress(walletId), mocked).catch(
-            promiceErrorHandler<Transaction[]>([], e)
-          )
+            promiceErrorHandler<Transaction[]>([], e),
+          ),
         )
       : mocked
       ? of(mocks.transactions[token.symbol])
@@ -120,7 +120,7 @@ const transfer = (account: number, to: string, amount: number, token: Token) => 
   return from(
     coin
       .transfer(account, to, coin.toBaseUnit(amount.toString()))
-      .catch(promiceErrorHandler<Transaction[]>([], e))
+      .catch(promiceErrorHandler<Transaction[]>([], e)),
   )
 }
 

@@ -31,6 +31,7 @@ export type WalletState = {
   usdRates: Record<TokenSymbol, number>
   wallets: Record<TokenSymbol, Wallet[]> | null
   previousView: WalletView | null
+  privateAddress: string | null
 }
 
 export const initialWalletState: WalletState = {
@@ -47,10 +48,11 @@ export const initialWalletState: WalletState = {
   usdRates: {},
   wallets: null,
   previousView: null,
+  privateAddress: null,
 }
 
 export const walletReducer = createReducer<WalletState, ActionType<typeof actions>>(
-  initialWalletState
+  initialWalletState,
 )
   .handleAction(actions.menu, (state, { payload }) => ({
     ...state,
@@ -78,6 +80,7 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
   }))
   .handleAction(actions.openReceiveView, (state, { payload }) => ({
     ...navigationHelper.getReceiveView(state, payload),
+    privateAddress: null,
   }))
   .handleAction(actions.openSendInitialView, (state, { payload }) => ({
     ...navigationHelper.getSendInitialView(state, payload),
@@ -124,7 +127,7 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
           [state.activeToken.symbol]: walletsHelper.renameWallet(
             state.wallets[state.activeToken.symbol],
             payload.wallet,
-            payload.name
+            payload.name,
           ),
         },
   }))
@@ -140,11 +143,15 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
           ...state.wallets,
           [state.activeToken.symbol]: walletsHelper.hideWallet(
             state.wallets[state.activeToken.symbol],
-            payload
+            payload,
           ),
         },
   }))
   .handleAction(actions.getRatesSuccess, (state, { payload }) => ({
     ...state,
     usdRates: payload,
+  }))
+  .handleAction(actions.getPrivateAddressSuccess, (state, { payload }) => ({
+    ...state,
+    privateAddress: payload,
   }))

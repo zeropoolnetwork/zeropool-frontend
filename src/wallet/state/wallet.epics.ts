@@ -86,7 +86,12 @@ const initApi$: Epic = (action$: Observable<Actions>, state$: Observable<RootSta
         () => !!_seed,
         of(_seed).pipe(
           filter((seed): seed is string => typeof seed === 'string'),
-          tap((seed) => api.initHDWallet(seed, tokens.map(item => item.name as CoinType))),
+          tap((seed) =>
+            api.initHDWallet(
+              seed,
+              tokens.map((item) => item.name as CoinType),
+            ),
+          ),
           map(() => (!wallets ? walletActions.initWallets() : walletActions.updateBalances())),
         ),
         of(false).pipe(
@@ -166,9 +171,11 @@ const refreshAmounts$: Epic = (action$: Observable<Actions>, state$: Observable<
 const getPrivateAddress$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(
     filter(isActionOf(walletActions.getPrivateAddress)),
-    switchMap(({ payload }) => api.getPrivateAddress(payload).pipe(
-      map((address) => walletActions.getPrivateAddressSuccess(address)),
-    )),
+    switchMap(({ payload }) =>
+      api
+        .getPrivateAddress(payload)
+        .pipe(map((address) => walletActions.getPrivateAddressSuccess(address))),
+    ),
     handleEpicError(walletActions.apiError),
   )
 

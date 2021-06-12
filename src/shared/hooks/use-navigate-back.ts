@@ -14,7 +14,7 @@ export const useNavigateBack = (callback: () => void): void => {
           window.history.pushState(null, '', document.URL)
           callback()
         },
-        false
+        false,
       )
     } else {
       // Fix browser history

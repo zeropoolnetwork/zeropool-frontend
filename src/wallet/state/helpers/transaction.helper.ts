@@ -9,7 +9,7 @@ const sortByDays = (transactions: Transaction[]) => {
   const isAfter = (
     currentTimestamp: number,
     lastTimestamp: number,
-    check: 'day' | 'week' | 'month' = 'day'
+    check: 'day' | 'week' | 'month' = 'day',
   ): boolean => m(currentTimestamp).isAfter(m(lastTimestamp), check)
 
   transactions

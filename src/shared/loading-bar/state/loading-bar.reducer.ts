@@ -18,11 +18,11 @@ export const loadingBarReducer = createReducer<
     loadingBarActions.addRequest,
     (state): LoadingBarState => ({
       requestsInProgress: state.requestsInProgress + 1,
-    })
+    }),
   )
   .handleAction(
     loadingBarActions.removeRequest,
     (state): LoadingBarState => ({
       requestsInProgress: state.requestsInProgress - 1,
-    })
+    }),
   )

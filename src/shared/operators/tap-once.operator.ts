@@ -12,7 +12,7 @@ export function tapOnce<T>(fn: (value: T) => void) {
             fn(payload)
           }
           first = false
-        })
+        }),
       )
     })
 }

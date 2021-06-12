@@ -8,7 +8,7 @@ import { WalletState } from 'wallet/state/wallet.reducer'
 export const amountsHelper = {
   getAmountsForAllTakens: (
     tokens: Token[],
-    wallets: Record<TokenSymbol, Wallet[]> | null
+    wallets: Record<TokenSymbol, Wallet[]> | null,
   ): Record<TokenSymbol, number> | null => {
     if (!wallets) return null
 
@@ -45,7 +45,7 @@ export const amountsHelper = {
         return state.activeToken && state.wallets
           ? amountsHelper.getAmountsForToken(
               state.activeToken,
-              state.wallets[state.activeToken.symbol]
+              state.wallets[state.activeToken.symbol],
             )
           : state.amounts
       case WalletView.Receive:

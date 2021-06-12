@@ -11,7 +11,7 @@ import { Wallet } from 'wallet/state/models'
 export const updateBalances = (
   hdWallet: HDWallet,
   wallets: Record<TokenSymbol, Wallet[]>,
-  tokens: Token[]
+  tokens: Token[],
 ): Observable<Record<string, Wallet[]>> => {
   const promices: Promise<string[]>[] = []
   const result: Record<string, Wallet[]> = {}
@@ -47,7 +47,7 @@ export const updateBalances = (
               }
               throw Error(err?.message)
             }
-          })
+          }),
       )
     })
 
@@ -65,6 +65,6 @@ export const updateBalances = (
       })
 
       return result
-    })
+    }),
   )
 }

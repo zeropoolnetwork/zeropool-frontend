@@ -8,7 +8,7 @@ import { Provider } from 'shared/models/provider'
 import providers from 'assets/settings/providers.json'
 
 export const authInterceptor = (store: Store<RootState>) => (
-  request: AxiosRequestConfig
+  request: AxiosRequestConfig,
 ): AxiosRequestConfig => {
   const { context } = request as RequestConfig
 

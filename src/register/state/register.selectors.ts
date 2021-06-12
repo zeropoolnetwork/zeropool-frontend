@@ -10,7 +10,7 @@ export const getRegisterSeed = createSelector(getRegisterState, (state) => state
 
 export const getRegisterSeedConfirmed = createSelector(
   getRegisterState,
-  (state) => state.seedConfirmed
+  (state) => state.seedConfirmed,
 )
 
 export const getShowSteps = createSelector(getRegisterState, (state) => state.showSteps)
