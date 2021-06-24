@@ -26,29 +26,31 @@ export const updateBalances = (
     }
 
     tokenWallets.forEach((wallet) => {
-      walletPromises.push(
-        coin
-          .getBalance(wallet.id)
-          .catch((err) => {
-            // Near Fix
-            if (nearBug(err)) {
-              return '0'
-            }
-
-            throw Error(err)
-          })
-          .then((balance) => {
-            try {
-              return coin.fromBaseUnit(balance)
-            } catch (err) {
-              // Waves Fix
-              if (notImplemented(err)) {
+      if (wallet.id !== 0) {
+        walletPromises.push(
+          coin
+            .getBalance(wallet.id - 1)
+            .catch((err) => {
+              // Near Fix
+              if (nearBug(err)) {
                 return '0'
               }
-              throw Error(err?.message)
-            }
-          }),
-      )
+
+              throw Error(err)
+            })
+            .then((balance) => {
+              try {
+                return coin.fromBaseUnit(balance)
+              } catch (err) {
+                // Waves Fix
+                if (notImplemented(err)) {
+                  return '0'
+                }
+                throw Error(err?.message)
+              }
+            }),
+        )
+      }
     })
 
     promices.push(Promise.all(walletPromises))
@@ -57,11 +59,13 @@ export const updateBalances = (
   return from(Promise.all(promices)).pipe(
     map((balances) => {
       tokens.forEach((token, tokenIndex) => {
-        result[token.symbol] = wallets[token.symbol].map((wallet, walletIndex) => ({
-          ...wallet,
-          // amount: wallets[token.symbol][walletIndex].amount + 1, // for test purpose
-          amount: +balances[tokenIndex][walletIndex],
-        }))
+        result[token.symbol] = wallets[token.symbol].map((wallet, walletIndex) => {
+          
+          return {
+            ...wallet,
+            amount: walletIndex ? +balances[tokenIndex][walletIndex - 1] : wallet.amount,
+          }
+        })
       })
 
       return result
