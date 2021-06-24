@@ -91,6 +91,14 @@ const getWalletTransactions = (token: Token, walletId: number, mocked = false): 
     throw Error(`Can't connect to ${token.symbol}`)
   }
 
+  //#region TODO: Fix after implementing private transactions history
+  if (walletId === 0) {
+    return of([])
+  }
+
+  walletId -= 1
+  //#endregion ---------------------------------------------------------
+
   const tr =
     token.symbol === 'ETH'
       ? from(
