@@ -10,7 +10,7 @@ import { Transaction as Tr } from 'wallet/state/models/transaction'
 import { Wallet } from 'wallet/state/models'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-import { beautifyAdress } from 'shared/helpers/addres.helper'
+import { beautifyAdress, beautifyAmount } from 'shared/helpers/addres.helper'
 
 export const componentId = 'Transaction'
 
@@ -45,15 +45,19 @@ export const Transaction: React.FC<TransactionProps> = ({ transaction, wallet })
       <span className={css('Direction')}> {isIncoming ? 'From :' : 'To :'} </span>
 
       <span className={css('Adress')}>
-        {' '}
-        {beautifyAdress(isIncoming ? transaction.from : transaction.to, 6)}
+          {' '}
+        <Tooltip title={isIncoming ? transaction.from : transaction.to} placement="bottom">
+          <span>
+            {beautifyAdress(isIncoming ? transaction.from : transaction.to, 6)}
+          </span>
+        </Tooltip>
       </span>
 
       <span className={css('Amount')}>
         {' '}
         <Tooltip title={transaction.amount} placement="bottom">
           <span>
-            {isIncoming ? '+' : '-'} {beautifyAdress(transaction.amount)} {wallet.token.symbol}
+            {isIncoming ? '+' : '-'} {beautifyAmount(transaction.amount)} {wallet.token.symbol}
           </span>
         </Tooltip>
       </span>
