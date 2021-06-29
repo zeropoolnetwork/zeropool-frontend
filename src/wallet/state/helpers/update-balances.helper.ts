@@ -60,7 +60,7 @@ export const updateBalances = (
     map((balances) => {
       tokens.forEach((token, tokenIndex) => {
         result[token.symbol] = wallets[token.symbol].map((wallet, walletIndex) => {
-          
+
           return {
             ...wallet,
             amount: walletIndex ? +balances[tokenIndex][walletIndex - 1] : wallet.amount,
