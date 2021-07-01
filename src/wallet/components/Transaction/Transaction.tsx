@@ -45,11 +45,9 @@ export const Transaction: React.FC<TransactionProps> = ({ transaction, wallet })
       <span className={css('Direction')}> {isIncoming ? 'From :' : 'To :'} </span>
 
       <span className={css('Adress')}>
-          {' '}
+        {' '}
         <Tooltip title={isIncoming ? transaction.from : transaction.to} placement="bottom">
-          <span>
-            {beautifyAdress(isIncoming ? transaction.from : transaction.to, 6)}
-          </span>
+          <span>{beautifyAdress(isIncoming ? transaction.from : transaction.to, 6)}</span>
         </Tooltip>
       </span>
 
