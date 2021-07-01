@@ -3,10 +3,11 @@ import { WalletState } from 'wallet/state/wallet.reducer'
 import { WalletView } from 'wallet/state/models/wallet-view'
 
 import { Token } from 'shared/models/token'
+import { Wallet } from 'wallet/state/models'
 
 export const _testToken: Token = { id: 1, symbol: 'ETH', name: 'testName' }
 
-export const _testWalletsEth = [
+export const _testWalletsEth: Wallet[] = [
   {
     id: 0,
     account: 0,
