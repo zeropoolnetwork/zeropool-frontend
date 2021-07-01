@@ -1,20 +1,19 @@
-import React, { ComponentProps } from 'react'
-import { Story } from '@storybook/react/types-6-0'
+import { ComponentProps } from 'react'
 
 import { Transaction } from './Transaction'
 
-import { Transaction as Tr, TxStatus } from 'zeropool-api-js/lib/coins/transaction'
+import { Transaction as Tr } from 'zeropool-api-js/lib/coins/transaction'
 
 import { _testWalletsEth } from 'shared/helpers/test/app-state.helper'
 import { Wallet } from 'wallet/state/models'
+
+type TransactionArgs = ComponentProps<typeof Transaction>
 
 // This default export determines where your story goes in the story list
 export default {
   title: 'Transaction',
   component: Transaction,
 }
-
-const Template: Story<ComponentProps<typeof Transaction>> = (args) => <Transaction {...args} />
 
 const wallet: Wallet = {
   id: 0,
@@ -31,8 +30,8 @@ const trIncoming: Tr = {
   from: '0xA646dc3DD68338Ee960eA131cfc798D9bF66070d',
   to: '0xedd09e322B0b741508f72A5d2613B17C2f96891d',
   timestamp: 1616329084,
-  blockHash: '0x36ee558c0e10023ad3c2de8ee5fc6ee369809920edbe3fbbd7009a2f25d4c5a3',
-  hash: '0x084d420dbc7cce7c756b19213f5b4b42b2b179c495d50a45514d0c0219d8b879',
+  blockHash: 'something',
+  hash: 'something',
 }
 
 const trOutgoing: Tr = {
@@ -41,23 +40,22 @@ const trOutgoing: Tr = {
   from: '0xedd09e322B0b741508f72A5d2613B17C2f96891d',
   to: '0xA646dc3DD68338Ee960eA131cfc798D9bF66070d',
   timestamp: 1616329084,
-  blockHash: '0x36ee558c0e10023ad3c2de8ee5fc6ee369809920edbe3fbbd7009a2f25d4c5a3',
-  hash: '0x084d420dbc7cce7c756b19213f5b4b42b2b179c495d50a45514d0c0219d8b879',
+  blockHash: 'something',
+  hash: 'something',
 }
 
-export const IncomingTransaction = Template.bind({})
+export const incomingTransaction = (args: TransactionArgs) => <Transaction {...args} />
 
-IncomingTransaction.args = {
+incomingTransaction.args = {
   transaction: trIncoming,
   wallet,
 }
 
-export const OutgoingTransaction = Template.bind({})
+export const outgoingTransaction = (args: TransactionArgs) => <Transaction {...args} />
 
-OutgoingTransaction.args = {
+outgoingTransaction.args = {
   transaction: {
     ...trOutgoing,
-    status: TxStatus.Pending,
     amount: '999',
   },
   wallet,

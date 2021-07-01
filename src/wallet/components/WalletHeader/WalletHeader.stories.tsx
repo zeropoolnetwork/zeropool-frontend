@@ -1,7 +1,8 @@
-import React, { ComponentProps } from 'react'
-import { Story } from '@storybook/react/types-6-0'
+import { ComponentProps } from 'react'
 
 import { WalletHeader } from './WalletHeader'
+
+type WalletHeaderArgs = ComponentProps<typeof WalletHeader>
 
 const decoratorCss = { align: 'senter', padding: '3rem' }
 
@@ -11,10 +12,8 @@ export default {
   decorators: [(panel: any) => <div style={decoratorCss}> {panel()} </div>],
 }
 
-const Template: Story<ComponentProps<typeof WalletHeader>> = (args) => <WalletHeader {...args} />
+export const StoryOne = (args: WalletHeaderArgs) => <WalletHeader {...args} />
+StoryOne.args = {}
 
-export const StoryOme = Template.bind({})
-StoryOme.args = {}
-
-export const StoryTwo = Template.bind({})
+export const StoryTwo = (args: WalletHeaderArgs) => <WalletHeader {...args} />
 StoryTwo.args = {}
