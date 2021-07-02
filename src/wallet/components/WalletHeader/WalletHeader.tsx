@@ -21,6 +21,7 @@ export type WalletHeaderProps = {
   hideBackButton?: boolean
   label: string
   mode: WalletHeaderMode
+  priv?: boolean
   tokenAmount?: number
   tokenName?: string
   tokenSymbol?: string
@@ -36,6 +37,7 @@ export const WalletHeader: React.FC<WalletHeaderProps> = ({
   label,
   fiatValue,
   hideBackButton,
+  priv,
   tokenName,
   onBackClick,
 }) => {
@@ -56,7 +58,7 @@ export const WalletHeader: React.FC<WalletHeaderProps> = ({
         </Tooltip>
       ) : null}
 
-      <div className={css('Title')}>
+      <div className={css('Title', { Private: priv })}>
         <span>{label}</span>
       </div>
 

@@ -359,6 +359,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
               mode={walletHeaderMode}
               label={walletHeaderLabels[view]}
               hideBackButton={view === WalletView.Balance}
+              priv={!!wallet && !wallet.address}
               fiatValue={
                 walletHeaderMode === WalletHeaderMode.Info
                   ? undefined

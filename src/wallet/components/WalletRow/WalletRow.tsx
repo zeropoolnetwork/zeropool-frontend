@@ -95,12 +95,16 @@ export const WalletRow: React.FC<WalletRowProps> = ({
       </div>
 
       <div className={css('Buttons', { Hidden: !showButtons })}>
-        <RoundButton className={css('Button1')} label={'Send'} onClick={() => onSendClick(wallet)}>
+        <RoundButton
+          className={css('Button', { Private: !wallet.address })}
+          label={'Send'}
+          onClick={() => onSendClick(wallet)}
+        >
           <VerticalAlignTopIcon />
         </RoundButton>
 
         <RoundButton
-          className={css('Button2')}
+          className={css('Button', { Private: !wallet.address })}
           label={'Receive'}
           onClick={() => onReceiveClick(wallet)}
         >
@@ -109,7 +113,7 @@ export const WalletRow: React.FC<WalletRowProps> = ({
 
         {!!wallet.address ? (
           <RoundButton
-            className={css('Button2')}
+            className={css('Button', { Private: !wallet.address })}
             label={'Edit'}
             onClick={() => onEditClick(wallet)}
           >

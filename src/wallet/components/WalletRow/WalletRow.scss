@@ -31,7 +31,7 @@
     font-weight: bold;
 
     &_Private {
-      color: #af0000;
+      color: $private;
     }
   }
 
@@ -50,7 +50,7 @@
     }
 
     &_Private button {
-      background: #af0000 !important;
+      background: $private !important;
     }
   }
 
@@ -65,6 +65,12 @@
       opacity: 0;
       padding: 0px 0;
       visibility: hidden;
+    }
+  }
+
+  &-Button {
+    &_Private {
+      background-color: $private !important;
     }
   }
 }

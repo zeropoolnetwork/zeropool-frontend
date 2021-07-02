@@ -5,7 +5,7 @@
   @include hover($blue-light);
   @include size($round-button-size);
 
-  background: $button-background-color !important;
+  background: $button-background-color;
   box-shadow: 2px 2px 4px $button-shadow-color;
   border: 1px solid $button-border-color !important;
   color: $button-color !important;

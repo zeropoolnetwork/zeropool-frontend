@@ -46,7 +46,7 @@ export const navigationHelper = {
               ...state,
               activeView: state.previousView || WalletView.Balance,
               activeToken: state.previousView ? state.activeToken : null,
-              activeWallet: state.previousView ? state.activeWallet : null,
+              activeWallet: null,
               amounts: state.previousView
                 ? amountsHelper.getAmountsForToken(
                     state.activeToken,

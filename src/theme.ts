@@ -52,6 +52,15 @@ export const theme = createMuiTheme({
       },
     },
 
+    MuiIconButton: {
+      root: {
+        backgroundColor: COLOR_PRIMARY,
+        '&:hover': {
+          backgroundColor: COLOR_PRIMARY,
+        },
+      },
+    },
+
     MuiLinearProgress: {
       barColorPrimary: {
         backgroundColor: GREEN,
