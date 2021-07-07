@@ -2,7 +2,7 @@ import { CoinType, HDWallet } from 'zeropool-api-js'
 import { from, Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
-import { nearBug } from 'shared/util/waves-bug'
+import { nearBug } from 'shared/util/near-bug'
 import { notImplemented } from 'shared/util/not-implemented'
 import { Token, TokenSymbol } from 'shared/models/token'
 

@@ -1,2 +1,2 @@
 export const notImplemented = (err: Error) =>
-  typeof err?.message === 'string' && err.message.includes('not implemented')
+  typeof err?.message === 'string' && /(?=.*not)(?=.*implemented)/.test(err.message.toLowerCase())
