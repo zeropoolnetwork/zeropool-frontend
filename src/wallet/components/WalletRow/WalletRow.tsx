@@ -15,6 +15,8 @@ import { Icon } from 'shared/components/Icon/Icon'
 
 import { ExpandButton } from 'wallet/components/ExpandButton/ExpandButton'
 import { Wallet } from 'wallet/state/models/wallet'
+import { beautifyAmount } from 'shared/helpers/addres.helper'
+import { walletReducer } from 'wallet/state/wallet.reducer'
 
 export const componentId = 'WalletRow'
 
@@ -73,7 +75,7 @@ export const WalletRow: React.FC<WalletRowProps> = ({
         <Icon className={css('Icon')} icon={wallet.token.symbol as IconOption} />
 
         <div className={css('Values')}>
-          <Tooltip title={'View transactions'} placement="bottom">
+          <Tooltip title={'Click to view transactions'} placement="bottom">
             <div
               className={css('WalletName', { Private: !wallet.address }, ['noselect'])}
               onClick={() => onWalletNameClick(wallet)}
@@ -82,9 +84,11 @@ export const WalletRow: React.FC<WalletRowProps> = ({
             </div>
           </Tooltip>
 
-          <div className={css('WalletAmount')}>
-            {wallet.amount} {token.symbol} ({(rate * wallet.amount).toFixed(2)} $)
-          </div>
+          <Tooltip title={`Balance: ${wallet.amount} ${token.symbol}`} placement="bottom">
+            <div className={css('WalletAmount')}>
+              {beautifyAmount(wallet.amount)} {token.symbol} ({(rate * wallet.amount).toFixed(2)} $)
+            </div>
+          </Tooltip>
         </div>
 
         <ExpandButton

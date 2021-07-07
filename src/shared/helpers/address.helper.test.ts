@@ -8,10 +8,33 @@ describe('adress beautifyer', () => {
     expect(beautifyAdress(address, 4)).toBe(result)
   })
 
-  it('transforms amount 0.000000001 to 0.0...1', () => {
-    const amount = '0.000000001'
-    const result = '0.0...1'
+  it('transforms amount 0.0000000000000003 to 0.0...3', () => {
+    const amount = '0.00000000000000003'
+    const result = '0.0...3'
 
     expect(beautifyAmount(amount)).toBe(result)
   })
+
+  it('transforms amount 123456789 to 123...9', () => {
+    const amount = '123456789'
+    const result = '123...9'
+
+    expect(beautifyAmount(amount)).toBe(result)
+  })
+
+  it('transforms amount 999.56789 to 999.5...9', () => {
+    const amount = '999.56789'
+    const result = '999.5...9'
+
+    expect(beautifyAmount(amount)).toBe(result)
+  })
+
+  it('transforms amount 9999.56789 to 999...9', () => {
+    const amount = '9999.56789'
+    const result = '999...9'
+
+    expect(beautifyAmount(amount)).toBe(result)
+  })
+
 })
+

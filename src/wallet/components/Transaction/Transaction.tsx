@@ -36,9 +36,9 @@ export const Transaction: React.FC<TransactionProps> = ({ transaction, wallet })
       <span>
         {' '}
         {isIncoming ? (
-          <CallMadeIcon className={css('Icon')} />
-        ) : (
           <CallReceivedIcon className={css('Icon')} />
+        ) : (
+          <CallMadeIcon className={css('Icon')} />
         )}{' '}
       </span>
 

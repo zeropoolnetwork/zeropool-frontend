@@ -36,14 +36,28 @@ export const beautifyAdress = (address: string, limit = 6): string => {
   return result
 }
 
-export const beautifyAmount = (amount: string): string => {
-  if (Number(amount) < 0.0001) {
-    const pattern = /[0-9]e/
-    const arr = amount.toString().match(pattern)
-    const lastDigit = arr ? arr[0].slice(0,1) : 1
+export const beautifyAmount = (amount: string | number): string => {
+  if (typeof amount === 'number') {
+    amount = amount.toString()
+  }
+
+  if (amount === '0') {
+    return amount
+  }
+
+  const amountNum = Number(amount)
+
+  if (amountNum < 0.0001) {
+    const lastDigit = amount[amount.length - 1]
 
     return `0.0...${lastDigit}`
-  }
+  } else if (amount.length > 7) {
+    const lastDigit = amount[amount.length - 1]
+    const prefixLength = amountNum > 1 && amountNum < 1000 ? 5 : 3
+    const prefix = amount.slice(0, prefixLength)
+      
+    return `${prefix}...${lastDigit}`
+  } 
 
   return amount
 }

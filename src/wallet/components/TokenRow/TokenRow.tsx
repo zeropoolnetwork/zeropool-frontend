@@ -1,5 +1,6 @@
 import React from 'react'
 import { cn } from '@bem-react/classname'
+import { Tooltip } from '@material-ui/core'
 import NumberFormat from 'react-number-format'
 
 import './TokenRow.scss'
@@ -8,6 +9,7 @@ import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { IconOption } from 'shared/components/Icon/IconOption'
 import { Token } from 'shared/models/token'
 import { Icon } from 'shared/components/Icon/Icon'
+import { beautifyAmount } from 'shared/helpers/addres.helper'
 
 export const componentId = 'TokenRow'
 
@@ -45,15 +47,14 @@ export const TokenRow: React.FC<TokenRowProps> = ({ amount = 0, token, rate, onS
       </div>
 
       <div className={css('Amounts')}>
-        <NumberFormat
-          className={css('TokenAmount')}
-          data-testid={test('TokenAmount')}
-          value={amount}
-          displayType={'text'}
-          thousandSeparator={true}
-          suffix={' ' + token.symbol}
-          decimalScale={6}
-        />
+        <Tooltip title={`Balance: ${amount} ${token.symbol}`} placement="bottom">
+          <div 
+            className={css('TokenAmount')}
+            data-testid={test('TokenAmount')}
+          >
+            {beautifyAmount(amount)} {token.symbol}
+          </div>
+        </Tooltip>
 
         <NumberFormat
           className={css('FiatAmount')}
