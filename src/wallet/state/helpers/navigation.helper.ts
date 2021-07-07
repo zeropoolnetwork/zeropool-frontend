@@ -74,6 +74,7 @@ export const navigationHelper = {
           activeView: WalletView.Receive,
           activeWallet: wallet,
           amounts: amountsHelper.getAmountsForWallet(wallet),
+          previousView: state.activeView,
         }
       : state,
 
@@ -84,6 +85,7 @@ export const navigationHelper = {
           activeView: WalletView.Send,
           activeWallet: wallet,
           amounts: amountsHelper.getAmountsForWallet(wallet),
+          previousView: state.activeView,
         }
       : state,
 

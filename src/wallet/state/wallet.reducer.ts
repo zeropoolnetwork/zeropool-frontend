@@ -88,6 +88,8 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
   .handleAction(actions.openSendConfirmView, (state, { payload }) => ({
     ...state,
     activeView: WalletView.SendConfirmation,
+    activeWallet: payload.wallet,
+    previousView: state.activeView,
     send: {
       wallet: payload.wallet,
       address: payload.address,
