@@ -122,7 +122,7 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
   .handleAction(actions.resetAccount, () => initialWalletState)
   .handleAction(actions.edit, (state, { payload }) => ({
     ...state,
-    wallets: !(state.activeToken && state.wallets)
+    wallets: !state.activeToken || !state.wallets
       ? state.wallets
       : {
           ...state.wallets,
@@ -139,7 +139,7 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
   }))
   .handleAction(actions.hideWallet, (state, { payload }) => ({
     ...state,
-    wallets: !(state.activeToken && state.wallets)
+    wallets: !state.activeToken || !state.wallets
       ? state.wallets
       : {
           ...state.wallets,
