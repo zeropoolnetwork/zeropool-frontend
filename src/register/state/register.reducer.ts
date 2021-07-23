@@ -5,7 +5,7 @@ import { getPreviousStage } from 'register/state/helpers/stage.helper'
 import { RegisterStage } from 'register/state/models/register-stage'
 import { generateSeed } from 'register/state/helpers/seed.helper'
 
-export interface RegisterState {
+export type RegisterState = {
   stage: RegisterStage | undefined
   seed: string[]
   seedConfirmed: boolean
