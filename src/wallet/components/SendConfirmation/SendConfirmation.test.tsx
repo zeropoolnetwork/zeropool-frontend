@@ -16,7 +16,7 @@ describe('SendConfirmation', () => {
         amount={123}
         address={'0x123'}
         rate={123}
-        fee={123}
+        fee={'123'}
         wallet={_testWalletsEth[0]}
         onConfirmClick={outputSpy}
       />

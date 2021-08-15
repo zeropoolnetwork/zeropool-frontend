@@ -182,7 +182,7 @@ const getPrivateAddress$: Epic = (action$: Observable<Actions>, state$: Observab
 const openSendConfirmView$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(
     filter(isActionOf(walletActions.prepareSendConfirmView)),
-    getPayload(),
+    getPayload<{ wallet: Wallet; address: string; amount: number }>(),
     switchMap((payload) =>
       api.getNetworkFee(payload.wallet.token).pipe(
         map((fee) =>
