@@ -1,10 +1,10 @@
 const { addBeforeLoader, loaderByName } = require('@craco/craco');
 
 module.exports = {
-/*  experiments: {
+  experiments: {
     asyncWebAssembly: true,
-    importAsync: true,
-  },*/
+  },
+  /*
   webpack: {
     configure: (webpackConfig) => {
       const wasmExtensionRegExp = /\.wasm$/;
@@ -29,4 +29,5 @@ module.exports = {
       return webpackConfig;
     },
   },
+  */
 };
