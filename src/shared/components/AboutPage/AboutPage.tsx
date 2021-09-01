@@ -15,7 +15,7 @@ const css = cn(componentId)
 const test = testIdBuilder(componentId)
 
 interface AboutPageProps {
-  showBackButton: boolean
+  showBackButton?: boolean
 }
 
 export const AboutPage: React.FC<AboutPageProps> = ({ showBackButton = true }) => {

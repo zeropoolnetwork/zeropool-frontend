@@ -1,7 +1,7 @@
 import { HDWallet, CoinType, devConfig, Balance, Coin } from 'zeropool-api-js'
 import { from, Observable, of } from 'rxjs'
 import { Transaction } from 'zeropool-api-js/lib/coins/transaction'
-import { map, tap } from 'rxjs/operators'
+import { map } from 'rxjs/operators'
 
 import { Token } from 'shared/models'
 import { fixTimestamp } from 'shared/util/fix-timestamp'
@@ -14,8 +14,9 @@ import mocks from './mocks.json'
 export let hdWallet: HDWallet | null = null
 export let transaction$: Observable<Transaction> | null = null
 
-function initHDWallet(seed: string, coins: CoinType[]): HDWallet {
-  hdWallet = new HDWallet(seed, devConfig, coins)
+async function initHDWallet(seed: string, coins: CoinType[]): Promise<HDWallet> {
+  hdWallet = new HDWallet(seed, devConfig)
+  await hdWallet.init(coins)
 
   return hdWallet
 }
@@ -46,7 +47,6 @@ const getPrivateAddress = (token: Token) => {
   }
 
   const coin = hdWallet.getCoin(token.name as CoinType)
-  const e = `Can't estimate fee for ${token.name}`
 
   if (!coin) {
     throw Error(`Can't estimate fee for ${token.symbol}`)
