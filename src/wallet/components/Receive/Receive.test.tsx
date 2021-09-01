@@ -14,7 +14,7 @@ jest.mock('notistack', () => ({
 //#endregion
 describe('Receive view', () => {
   const componentFactory = (address = '0x123asd', token = _testToken) => (
-    <Receive address={address} token={token} />
+    <Receive address={address} token={token} privateAddress="test" getPrivateAddress={() => true} />
   )
 
   beforeEach(() => {
@@ -36,19 +36,40 @@ describe('Receive view', () => {
   })
 
   it('shows qr-code if has adress', () => {
-    const renderResult = render(<Receive address={'123'} token={_testToken} />)
+    const renderResult = render(
+      <Receive
+        address={'123'}
+        token={_testToken}
+        privateAddress="test"
+        getPrivateAddress={() => true}
+      />,
+    )
 
     expect(renderResult.getByTestId(componentId + '-Code')).toBeInTheDocument()
   })
 
   it('not shows qr-code if has no adress', () => {
-    const renderResult = render(<Receive address={''} token={_testToken} />)
+    const renderResult = render(
+      <Receive
+        address={''}
+        token={_testToken}
+        privateAddress="test"
+        getPrivateAddress={() => true}
+      />,
+    )
 
     expect(renderResult.queryByTestId(componentId + '-Code')).toBeNull()
   })
 
   it('shows buttun if has no adress', () => {
-    const renderResult = render(<Receive address={''} token={_testToken} />)
+    const renderResult = render(
+      <Receive
+        address={''}
+        token={_testToken}
+        privateAddress="test"
+        getPrivateAddress={() => true}
+      />,
+    )
 
     expect(renderResult.getByTestId(componentId + '-Button')).toBeInTheDocument()
   })
