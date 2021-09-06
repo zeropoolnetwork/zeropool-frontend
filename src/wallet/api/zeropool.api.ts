@@ -132,7 +132,14 @@ const transfer = (account: number, to: string, amount: number, token: Token) => 
   )
 }
 
-export default {
+const convertValues = (coin: Coin) => (transactions: Transaction[]) =>
+  transactions.map((transaction) => ({
+    ...transaction,
+    amount: coin.fromBaseUnit(transaction.amount),
+    timestamp: fixTimestamp(transaction.timestamp),
+  }))
+
+const api = {
   getAllBalances,
   getWalletBalance,
   getNetworkFee,
@@ -142,9 +149,4 @@ export default {
   transfer,
 }
 
-const convertValues = (coin: Coin) => (transactions: Transaction[]) =>
-  transactions.map((transaction) => ({
-    ...transaction,
-    amount: coin.fromBaseUnit(transaction.amount),
-    timestamp: fixTimestamp(transaction.timestamp),
-  }))
+export default api
