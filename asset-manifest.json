@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/zeropool-frontend/static/css/main.3526d736.css",
-    "main.js": "/zeropool-frontend/static/js/main.0a3d7f07.js",
-    "module.wasm": "/zeropool-frontend/aa1097c7d0c88483bf66.module.wasm",
+    "main.css": "/zeropool-frontend/static/css/main.20efbfdf.css",
+    "main.js": "/zeropool-frontend/static/js/main.57470d9e.js",
+    "module.wasm": "/zeropool-frontend/b188dce775ee0d745a33.module.wasm",
     "static/media/exo-2-all-400-italic.woff": "/zeropool-frontend/static/media/exo-2-all-400-italic.14e07a74841b07043932.woff",
     "static/media/exo-2-all-400-normal.woff": "/zeropool-frontend/static/media/exo-2-all-400-normal.46168c0af0c5d985a57c.woff",
     "static/media/exo-2-latin-400-italic.woff2": "/zeropool-frontend/static/media/exo-2-latin-400-italic.7db86de8ac69231ce872.woff2",
@@ -18,12 +18,10 @@
     "static/media/exo-2-vietnamese-400-normal.woff2": "/zeropool-frontend/static/media/exo-2-vietnamese-400-normal.cb6b6cf7e1b0ee4fc229.woff2",
     "static/media/logo.svg": "/zeropool-frontend/static/media/logo.a7790139a6a1053218d65955db11af27.svg",
     "static/media/exo-2-vietnamese-400-italic.woff2": "/zeropool-frontend/static/media/exo-2-vietnamese-400-italic.8e7ab3081270cc47af71.woff2",
-    "index.html": "/zeropool-frontend/index.html",
-    "main.3526d736.css.map": "/zeropool-frontend/static/css/main.3526d736.css.map",
-    "main.0a3d7f07.js.map": "/zeropool-frontend/static/js/main.0a3d7f07.js.map"
+    "index.html": "/zeropool-frontend/index.html"
   },
   "entrypoints": [
-    "static/css/main.3526d736.css",
-    "static/js/main.0a3d7f07.js"
+    "static/css/main.20efbfdf.css",
+    "static/js/main.57470d9e.js"
   ]
 }
