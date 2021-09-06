@@ -21,7 +21,9 @@ export const updateBalances = (
     const walletPromises: Promise<string>[] = []
     const coin = hdWallet?.getCoin(token.name as CoinType)
 
-    if (!coin) {
+    if (!coin) {debugger
+      console.error(`Coin ${token.name} not found in wallet`)
+
       throw Error(`Can not access ${token.name} data!`)
     }
 

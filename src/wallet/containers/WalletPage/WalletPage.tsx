@@ -151,8 +151,6 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   const seed = useSelector(getSeed)
   const privateAddress = useSelector(getPrivateAddress)
 
-  const generateAddres = () => '123'
-
   const handleExportSeed = () => {
     navigator.clipboard.writeText(seed || 'No seed set').then(
       () => {

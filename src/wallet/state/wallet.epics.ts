@@ -1,7 +1,7 @@
 import { push } from 'connected-react-router'
 import { CoinType } from 'zeropool-api-js'
 import { Epic, combineEpics } from 'redux-observable'
-import { iif, Observable, of } from 'rxjs'
+import { from, iif, Observable, of } from 'rxjs'
 import { ActionType, isActionOf } from 'typesafe-actions'
 import {
   switchMapTo,
@@ -86,13 +86,16 @@ const initApi$: Epic = (action$: Observable<Actions>, state$: Observable<RootSta
         () => !!_seed,
         of(_seed).pipe(
           filter((seed): seed is string => typeof seed === 'string'),
-          tap((seed) =>
-            api.initHDWallet(
-              seed,
-              tokens.map((item) => item.name as CoinType),
+          switchMap((seed) =>
+            from(
+              api.initHDWallet(
+                seed,
+                tokens.map((item) => item.name as CoinType),
+              ),
+            ).pipe(
+              map(() => (!wallets ? walletActions.initWallets() : walletActions.updateBalances())),
             ),
           ),
-          map(() => (!wallets ? walletActions.initWallets() : walletActions.updateBalances())),
         ),
         of(false).pipe(
           mergeMap(() => of(push('/welcome'), walletActions.setSeedError('Seed phrase not set'))),
@@ -242,9 +245,9 @@ const getTransactions$: Epic = (action$: Observable<Actions>) =>
     filter(isActionOf(walletActions.getTransactions)),
     getPayload(),
     switchMap((wallet) =>
-      api.getWalletTransactions(wallet.token, wallet.id, false).pipe(
-        map((transactions) => walletActions.getTransactionsSuccess(transactions)),
-      ),
+      api
+        .getWalletTransactions(wallet.token, wallet.id, false)
+        .pipe(map((transactions) => walletActions.getTransactionsSuccess(transactions))),
     ),
     handleEpicError(walletActions.apiError),
   )

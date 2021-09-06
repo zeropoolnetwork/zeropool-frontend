@@ -42,6 +42,8 @@ const sortByDays = (transactions: Transaction[]) => {
   return result
 }
 
-export default {
+const helper = {
   sortByDays,
 }
+
+export default helper

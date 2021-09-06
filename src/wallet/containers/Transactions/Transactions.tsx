@@ -27,7 +27,6 @@ export type TransactionsProps = {
 
 export const Transactions: React.FC<TransactionsProps> = ({ wallet }) => {
   let sorted: SortedTransactions[] = []
-  const dispatch = useDispatch()
   const transactions = useSelector(getTransactions)
   const { enqueueSnackbar } = useSnackbar()
   const [opened, setOpened] = useState<boolean[]>([])
