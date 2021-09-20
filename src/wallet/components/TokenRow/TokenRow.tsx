@@ -48,10 +48,7 @@ export const TokenRow: React.FC<TokenRowProps> = ({ amount = 0, token, rate, onS
 
       <div className={css('Amounts')}>
         <Tooltip title={`Balance: ${amount} ${token.symbol}`} placement="bottom">
-          <div 
-            className={css('TokenAmount')}
-            data-testid={test('TokenAmount')}
-          >
+          <div className={css('TokenAmount')} data-testid={test('TokenAmount')}>
             {beautifyAmount(amount)} {token.symbol}
           </div>
         </Tooltip>
