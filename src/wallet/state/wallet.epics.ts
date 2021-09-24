@@ -51,7 +51,7 @@ const getRates$: Epic = (action$: Observable<Actions>, state$: Observable<RootSt
   action$.pipe(
     filterActions(walletActions.getRates),
     switchMapTo(
-      (RatesApi.getRates() as Observable<Rate<Token>[]>).pipe(
+      RatesApi.getRates().pipe(
         withLatestFrom(state$.pipe(map(getSupportedTokens))),
         map(([ratesData, tokens]) => mapRatesToTokens(ratesData, tokens)),
         map((rates) => walletActions.getRatesSuccess(rates)),

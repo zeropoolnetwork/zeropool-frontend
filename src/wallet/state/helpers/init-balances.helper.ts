@@ -1,6 +1,7 @@
 import { Balance, CoinType, HDWallet } from 'zeropool-api-js'
 
 import { Token, TokenSymbol } from 'shared/models'
+import { isErrorWithMessage } from 'shared/util/is-error-with-message'
 import { notImplemented } from 'shared/util/not-implemented'
 
 import { Wallet } from 'wallet/state/models'
@@ -37,10 +38,14 @@ export const initBalances = (
           ? +coin.fromBaseUnit((balanceData as Balance).balance)
           : +(balanceData as Balance).balance
       } catch (err) {
-        if (notImplemented(err)) {
-          amount = 0
+        if (isErrorWithMessage(err)) {
+          if (notImplemented(err)) {
+            amount = 0
+          } else {
+            throw Error(err.message)
+          }
         } else {
-          throw Error(err.message)
+          throw Error()
         }
       }
 

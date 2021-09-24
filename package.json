@@ -1,6 +1,6 @@
 {
   "name": "zeropool",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "homepage": "http://zeropoolnetwork.github.io/zeropool-frontend/",
   "scripts": {
@@ -44,20 +44,20 @@
     "react-number-format": "^4.4.1",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "5.0.0-next.31",
+    "react-scripts": "^5.0.0-next.37",
     "redux": "^4.0.5",
-    "redux-observable": "^1.2.0",
+    "redux-observable": "^2.0.0",
     "redux-persist": "^6.0.0",
     "reselect": "^4.0.0",
-    "rxjs": "^6.6.3",
+    "rxjs": "^7.0.0",
     "stream-http": "^3.2.0",
     "typesafe-actions": "^5.1.0",
-    "typescript": "^4.1.0",
+    "typescript": "^4.3.5",
     "wallet.ts": "1.0.1",
-    "zeropool-api-js": "github:zeropoolnetwork/zeropool-api-js#635b56e3c214a57b969c2c2f241355b5c0d2b8c4"
+    "zeropool-api-js": "git+https://github.com/zeropoolnetwork/zeropool-api-js.git"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.3",
+    "@babel/core": "^7.15.5",
     "@craco/craco": "^6.1.2",
     "@hookform/devtools": "^2.2.1",
     "@storybook/addon-actions": "^6.0.28",

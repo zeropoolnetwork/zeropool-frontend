@@ -1,11 +1,11 @@
-import { of } from 'rxjs'
 import { map } from 'rxjs/operators'
+import { Observable, of } from 'rxjs'
 
 import { http, RequestConfig } from 'shared/http/http'
+import { isObjectWithData } from 'shared/util/is-object-with-data'
 import { getHTTPData } from 'shared/operators/get-http-data.operator'
+import { Rate, Token } from 'shared/models'
 import { Provider } from 'shared/models/provider'
-import { Token } from 'shared/models/token'
-import { Rate } from 'shared/models/rate'
 
 import ratesMock from 'assets/mocks/rates.mock.json'
 import proxy from 'assets/settings/proxy.json'
@@ -13,7 +13,7 @@ import proxy from 'assets/settings/proxy.json'
 const useMock = true
 
 export const RatesApi = {
-  getRates() {
+  getRates(): Observable<Rate<Token>[]> {
     const url = proxy.cors + `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest`
     const config: RequestConfig = {
       params: {},
@@ -31,10 +31,10 @@ export const RatesApi = {
     }
 
     return http()
-      .get<{ status: any; data: Rate<Token>[] }>(url, config)
+      .get<Rate<Token>[]>(url, config)
       .pipe(
         getHTTPData(),
-        map(({ status, data }) => data),
+        map((resp) => (isObjectWithData<Rate<Token>[]>(resp) ? resp.data : [])),
       )
   },
 }

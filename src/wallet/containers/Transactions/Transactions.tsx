@@ -2,19 +2,19 @@ import React, { useState } from 'react'
 import { cn } from '@bem-react/classname'
 import { useSnackbar } from 'notistack'
 import { CircularProgress } from '@material-ui/core'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import './Transactions.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
+import { isErrorWithMessage } from 'shared/util/is-error-with-message'
 
-import { Wallet } from 'wallet/state/models'
+import { SortedTransactions } from 'wallet/state/models/sorted-transactions'
+import { Transaction as Tr } from 'wallet/state/models/transaction'
 import { getTransactions } from 'wallet/state/wallet.selectors'
 import transactionHelper from 'wallet/state/helpers/transaction.helper'
-import { SortedTransactions } from 'wallet/state/models/sorted-transactions'
-import { beautifyAdress } from 'shared/helpers/addres.helper'
 import { Transaction } from 'wallet/components/Transaction/Transaction'
-import { Transaction as Tr } from 'wallet/state/models/transaction'
+import { Wallet } from 'wallet/state/models'
 
 export const componentId = 'Transactions'
 
@@ -52,8 +52,10 @@ export const Transactions: React.FC<TransactionsProps> = ({ wallet }) => {
         arr[0] = true
         setOpened(arr)
       }
-    } catch (e) {
-      enqueueSnackbar(e.message, { variant: 'error' })
+    } catch (err) {
+      if (isErrorWithMessage(err)) {
+        enqueueSnackbar(err.message, { variant: 'error' })
+      }
     }
   }
 

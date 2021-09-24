@@ -38,12 +38,16 @@ module.exports = {
         rules: [{
           test: /\.wasm$/,
           type: 'webassembly/async',
-        },]
+          },
+          {
+            test: /\.bin/,
+            type: 'asset/resource',
+          },
+        ],
       },
       experiments: {
         asyncWebAssembly: true,
       },
-
     },
     plugins: {
       add: [

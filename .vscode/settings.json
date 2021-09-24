@@ -56,4 +56,5 @@
   "javascript.preferences.importModuleSpecifier": "non-relative",
   "javascript.preferences.quoteStyle": "single",
   "prettier.endOfLine": "crlf",
+  "typescript.tsdk": "node_modules\\typescript\\lib",
 }

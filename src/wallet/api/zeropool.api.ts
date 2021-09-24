@@ -9,14 +9,24 @@ import { fixTimestamp } from 'shared/util/fix-timestamp'
 import { promiceErrorHandler } from 'wallet/api/promice-error.handler'
 import { getEthTransactions } from 'wallet/api/es.api'
 
+import transferParamsUrl from 'assets/transfer_params.bin'
+import treeParamsUrl from 'assets/tree_update_params.bin'
+
 import mocks from './mocks.json'
 
 export let hdWallet: HDWallet | null = null
 export let transaction$: Observable<Transaction> | null = null
+export let config = devConfig as any
 
 async function initHDWallet(seed: string, coins: CoinType[]): Promise<HDWallet> {
-  hdWallet = new HDWallet(seed, devConfig)
-  await hdWallet.init(coins)
+  config.transferParamsUrl = transferParamsUrl
+  config.treeParamsUrl = treeParamsUrl
+
+  // config.ethereum.contractAddress = '0x7d6748e900326c726C1daf6eD020D9dFc8fee2bA'
+  config.ethereum.httpProviderUrl = 'http://127.0.0.1:7545'
+  console.log(config)
+
+  hdWallet = await HDWallet.init(seed, config, coins)
 
   return hdWallet
 }

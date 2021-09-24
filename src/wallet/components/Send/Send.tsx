@@ -8,6 +8,8 @@ import './Send.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { validateAddress } from 'shared/helpers/addres.helper'
+import logo from 'assets/zeropool-logo.jpeg'
+
 
 import { Wallet } from 'wallet/state/models/wallet'
 
@@ -64,6 +66,14 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
       <div className={css('Title')}>Send {wallet.token.symbol}</div>
 
       <form className={css('Inputs')} noValidate={true} autoComplete="off">
+        <img
+          src={logo}
+          className={css('Logo')}
+          data-testid={test('Logo')}
+          alt="logo"
+          title="Private address"
+        />
+
         <TextField
           className={css('AddressInput')}
           id="address"

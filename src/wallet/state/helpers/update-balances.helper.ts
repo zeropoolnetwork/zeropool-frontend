@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators'
 import { nearBug } from 'shared/util/near-bug'
 import { notImplemented } from 'shared/util/not-implemented'
 import { Token, TokenSymbol } from 'shared/models/token'
+import { isErrorWithMessage } from 'shared/util/is-error-with-message'
 
 import { Wallet } from 'wallet/state/models'
 
@@ -21,7 +22,7 @@ export const updateBalances = (
     const walletPromises: Promise<string>[] = []
     const coin = hdWallet?.getCoin(token.name as CoinType)
 
-    if (!coin) {debugger
+    if (!coin) {
       console.error(`Coin ${token.name} not found in wallet`)
 
       throw Error(`Can not access ${token.name} data!`)
@@ -45,10 +46,13 @@ export const updateBalances = (
                 return coin.fromBaseUnit(balance)
               } catch (err) {
                 // Waves Fix
-                if (notImplemented(err)) {
-                  return '0'
+                if (isErrorWithMessage(err)) {
+                  if (notImplemented(err)) {
+                    return '0'
+                  }
                 }
-                throw Error(err?.message)
+
+                throw Error()
               }
             }),
         )
