@@ -35,7 +35,7 @@ describe('Receive view', () => {
     expect(getByText('Receive ETH')).toBeInTheDocument()
   })
 
-  it('shows qr-code if has adress', () => {
+  it('shows qr-code if has address', () => {
     const renderResult = render(
       <Receive
         address={'123'}
@@ -46,31 +46,35 @@ describe('Receive view', () => {
     )
 
     expect(renderResult.getByTestId(componentId + '-Code')).toBeInTheDocument()
+    expect(renderResult.queryByTestId(componentId + '-Button')).toBeNull()
   })
 
-  it('not shows qr-code if has no adress', () => {
+  it('shows qr-code if has private address', () => {
     const renderResult = render(
       <Receive
         address={''}
         token={_testToken}
-        privateAddress="test"
+        privateAddress={'123'}
         getPrivateAddress={() => true}
       />,
     )
 
-    expect(renderResult.queryByTestId(componentId + '-Code')).toBeNull()
+    expect(renderResult.getByTestId(componentId + '-Code')).toBeInTheDocument()
+    expect(renderResult.queryByTestId(componentId + '-Button')).toBeNull()
   })
 
-  it('shows buttun if has no adress', () => {
+  it('shows GENERATE buttun if has no normal or private adress', () => {
     const renderResult = render(
       <Receive
         address={''}
         token={_testToken}
-        privateAddress="test"
+        privateAddress={''}
         getPrivateAddress={() => true}
       />,
     )
 
     expect(renderResult.getByTestId(componentId + '-Button')).toBeInTheDocument()
+    expect(renderResult.queryByTestId(componentId + '-Code')).toBeNull()
   })
 })
+

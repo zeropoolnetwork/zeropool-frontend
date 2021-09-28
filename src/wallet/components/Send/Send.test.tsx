@@ -1,11 +1,12 @@
 import React from 'react'
 import { useSnackbar } from 'notistack'
-import { fireEvent, render } from '@testing-library/react'
+import { act, fireEvent, render } from '@testing-library/react'
 
 import { Send, componentId, SendProps } from './Send'
 
-import { _testWalletsEth } from 'shared/helpers/test/app-state.helper'
+import { _testWalletsEth, testIdBuilder } from 'shared/helpers/test'
 
+const test = testIdBuilder(componentId)
 const useSnackbarMock = useSnackbar as jest.Mock
 const outputSpy = jest.fn()
 
@@ -31,10 +32,25 @@ describe('Send', () => {
     expect(getByTestId(componentId)).toBeInTheDocument()
   })
 
-  it('calls onNextClick() prop when Next button clicked', () => {
+  it('calls onNextClick() prop when Next button clicked', async () => {
+    let call: any
     const { getByTestId } = render(component)
-    fireEvent.click(getByTestId(componentId + '-Next'))
+    const addressInput = getByTestId(test('AddressInput')) as HTMLInputElement
+    const amountInput = getByTestId(test('AmountInput')) as HTMLInputElement
+    const nextButton = getByTestId(test('NextButton')) as HTMLButtonElement
 
-    // expect(outputSpy).toHaveBeenCalledTimes(1);
+    await act(async () => {
+      await fireEvent.input(addressInput, {
+        target: { value: 'test-address' },
+      })
+      await fireEvent.input(amountInput, {
+        target: { value: '1' },
+      })
+      await fireEvent.click(nextButton)
+    })
+
+    call = outputSpy.mock.calls[0]
+
+    expect(outputSpy).toHaveBeenCalledTimes(1)
   })
 })
