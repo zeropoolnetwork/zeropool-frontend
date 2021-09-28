@@ -71,10 +71,11 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
           className={css('Logo')}
           data-testid={test('Logo')}
           alt="logo"
-          title="Private address"
+          title="You going do transaction to private address"
         />
 
         <TextField
+          inputProps={{ 'data-testid': test('AddressInput') }}
           className={css('AddressInput')}
           id="address"
           label="Address"
@@ -88,6 +89,7 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
 
         <TextField
           className={css('AmountInput', { Invalid: !amountValid })}
+          inputProps={{ 'data-testid': test('AmountInput') }}
           id="amount"
           label="Token amount"
           value={amount}
@@ -113,10 +115,10 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
       <div className={css('Next')}>
         <Button
           className={css('NextButton')}
-          data-testid={test('Next')}
+          data-testid={test('NextButton')}
           onClick={() => onNextClick(address, +amount)}
           color="primary"
-          disabled={!(address && +amount > 0 && amountValid)}
+          disabled={!address || +amount <= 0 || !amountValid}
           disableElevation={!(address && amount)}
           variant="contained"
         >
