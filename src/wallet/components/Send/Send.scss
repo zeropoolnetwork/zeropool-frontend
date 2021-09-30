@@ -12,9 +12,18 @@
   }
 
   &-Inputs {
-    row-gap: 10px;
     display: grid;
     grid-template-columns: 1fr 30px;
+    row-gap: 10px;
+    position: relative;
+  }
+
+  &-Logo {
+    width: 25px;
+    color: red;
+    position: absolute;
+    left: -35px;
+    top: 20px;
   }
 
   &-Next {

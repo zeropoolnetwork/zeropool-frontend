@@ -16,7 +16,7 @@ import {
 } from 'rxjs/operators'
 
 import toast from 'shared/helpers/toast.helper'
-import { Token, Rate } from 'shared/models'
+import { Token } from 'shared/models'
 import { handleEpicError } from 'shared/operators/handle-epic-error.operator'
 import { filterActions } from 'shared/operators/filter-actions.operator'
 

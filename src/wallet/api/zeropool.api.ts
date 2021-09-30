@@ -1,13 +1,13 @@
-import { HDWallet, CoinType, devConfig, Balance, Coin } from 'zeropool-api-js'
+import { HDWallet, CoinType, devConfig, Balance, Coin, validateAddress } from 'zeropool-api-js'
 import { from, Observable, of } from 'rxjs'
 import { Transaction } from 'zeropool-api-js/lib/coins/transaction'
 import { map } from 'rxjs/operators'
 
-import { Token } from 'shared/models'
 import { fixTimestamp } from 'shared/util/fix-timestamp'
+import { Token, TokenSymbol } from 'shared/models'
 
-import { promiceErrorHandler } from 'wallet/api/promice-error.handler'
 import { getEthTransactions } from 'wallet/api/es.api'
+import { promiceErrorHandler } from 'wallet/api/promice-error.handler'
 
 import transferParamsUrl from 'assets/transfer_params.bin'
 import treeParamsUrl from 'assets/tree_update_params.bin'
@@ -142,6 +142,14 @@ const transfer = (account: number, to: string, amount: number, token: Token) => 
   )
 }
 
+const isPrivateAddress = (address: string, token: TokenSymbol) => {
+  if (!hdWallet) {
+    throw Error('API not available!')
+  }
+
+  return validateAddress(address)
+}
+
 const convertValues = (coin: Coin) => (transactions: Transaction[]) =>
   transactions.map((transaction) => ({
     ...transaction,
@@ -157,6 +165,7 @@ const api = {
   getPrivateAddress,
   initHDWallet,
   transfer,
+  isPrivateAddress,
 }
-
+ 
 export default api
