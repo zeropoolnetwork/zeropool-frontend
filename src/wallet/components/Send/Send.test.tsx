@@ -5,7 +5,8 @@ import { act, fireEvent, render } from '@testing-library/react'
 import { Send, componentId, SendProps } from './Send'
 
 import { _testWalletsEth, testIdBuilder } from 'shared/helpers/test'
-
+var isAddressValid = true
+var isAddressPrivate = true
 const test = testIdBuilder(componentId)
 const useSnackbarMock = useSnackbar as jest.Mock
 const outputSpy = jest.fn()
@@ -15,10 +16,24 @@ jest.mock('notistack', () => ({
   useSnackbar: jest.fn(),
 }))
 
+jest.mock('wallet/api/zeropool.api', () => ({
+  isPrivateAddress: jest.fn(() => isAddressPrivate),
+}))
+
+jest.mock('shared/helpers/addres.helper', () => ({
+  validateAddress: jest.fn(() => {
+    debugger
+    return isAddressValid
+  }),
+}))
+
 describe('Send', () => {
   let component: React.ReactElement<SendProps>
 
   beforeEach(() => {
+    // isAddressPrivate = false
+    // isAddressValid = false
+
     useSnackbarMock.mockImplementation(() => ({
       enqueueSnackbar: jest.fn(),
     }))
@@ -48,9 +63,14 @@ describe('Send', () => {
       })
       await fireEvent.click(nextButton)
     })
-
+  
     call = outputSpy.mock.calls[0]
 
     expect(outputSpy).toHaveBeenCalledTimes(1)
+  })
+
+  it('shows private logo when address is private', async () => {
+    // const { getByTestId } = render(component)
+
   })
 })

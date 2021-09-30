@@ -1,4 +1,4 @@
-import { Button, TextField } from '@material-ui/core'
+import { Button, TextField, Tooltip } from '@material-ui/core'
 import React, { useState } from 'react'
 import { useSnackbar } from 'notistack'
 import NumberFormat from 'react-number-format'
@@ -10,7 +10,7 @@ import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { validateAddress } from 'shared/helpers/addres.helper'
 import logo from 'assets/zeropool-logo.jpeg'
 
-
+import api from 'wallet/api/zeropool.api'
 import { Wallet } from 'wallet/state/models/wallet'
 
 export const componentId = 'Send'
@@ -26,12 +26,14 @@ export type SendProps = {
 
 export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
   const [address, setAddress] = useState('')
+  const [addressValid, setAddressValid] = useState(false)
   const [amount, setAmount] = useState('')
   const [amountValid, setAmountValid] = useState(true)
   const { enqueueSnackbar } = useSnackbar()
 
   const handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAddress(event.target.value)
+    setAddressValid(validateAddress(event.target.value, wallet.token.symbol) || false)
   }
 
   const handleAddressPaste = async (event: React.MouseEvent) => {
@@ -39,6 +41,7 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
 
     if (validateAddress(text, wallet.token.symbol)) {
       setAddress(text)
+      setAddressValid(true)
       enqueueSnackbar('Address added from the clipboard', {
         variant: 'success',
       })
@@ -66,13 +69,11 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
       <div className={css('Title')}>Send {wallet.token.symbol}</div>
 
       <form className={css('Inputs')} noValidate={true} autoComplete="off">
-        <img
-          src={logo}
-          className={css('Logo')}
-          data-testid={test('Logo')}
-          alt="logo"
-          title="You going do transaction to private address"
-        />
+        {address && api.isPrivateAddress(address, wallet.token.symbol) ? (
+          <Tooltip title="You going to transfer to private address" placement="bottom">
+            <img src={logo} className={css('Logo')} data-testid={test('Logo')} />
+          </Tooltip>
+        ) : null}
 
         <TextField
           inputProps={{ 'data-testid': test('AddressInput') }}
@@ -118,7 +119,7 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
           data-testid={test('NextButton')}
           onClick={() => onNextClick(address, +amount)}
           color="primary"
-          disabled={!address || +amount <= 0 || !amountValid}
+          disabled={!addressValid || +amount <= 0 || !amountValid}
           disableElevation={!(address && amount)}
           variant="contained"
         >

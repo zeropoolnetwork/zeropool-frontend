@@ -28,9 +28,10 @@ export const Receive: React.FC<ReceiveProps> = ({
 }) => {
   const { enqueueSnackbar } = useSnackbar()
   const QRCode = require('qrcode.react')
+  const getAddress = () => address || privateAddress || ''
   const handleCodeClick = (): void => {
-    if (address) {
-      navigator.clipboard.writeText(address).then(
+    if (getAddress()) {
+      navigator.clipboard.writeText(getAddress()).then(
         () => {
           enqueueSnackbar('Address copied to the clipboard', {
             variant: 'success',
@@ -47,7 +48,7 @@ export const Receive: React.FC<ReceiveProps> = ({
     <div className={css()} data-testid={test()}>
       <div className={css('Title')}>Receive {token.symbol}</div>
 
-      <Tooltip title={address} placement="bottom">
+      <Tooltip title={address || privateAddress || ''} placement="bottom">
         <div className={css('Code')} onClick={handleCodeClick}>
           {address || privateAddress ? (
             <QRCode value={address || privateAddress} data-testid={test('Code')} />
