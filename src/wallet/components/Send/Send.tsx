@@ -28,7 +28,7 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
   const [address, setAddress] = useState('')
   const [addressValid, setAddressValid] = useState(false)
   const [amount, setAmount] = useState('')
-  const [amountValid, setAmountValid] = useState(true)
+  const [amountValid, setAmountValid] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
 
   const handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +77,7 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
 
         <TextField
           inputProps={{ 'data-testid': test('AddressInput') }}
-          className={css('AddressInput')}
+          className={css('AddressInput', { Invalid: address && !addressValid })}
           id="address"
           label="Address"
           value={address}
@@ -89,7 +89,7 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
         </span>
 
         <TextField
-          className={css('AmountInput', { Invalid: !amountValid })}
+          className={css('AmountInput', { Invalid: amount && !amountValid })}
           inputProps={{ 'data-testid': test('AmountInput') }}
           id="amount"
           label="Token amount"
@@ -115,11 +115,11 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
 
       <div className={css('Next')}>
         <Button
-          className={css('NextButton')}
+          className={css(`NextButton ${addressValid} ${amountValid}`)}
           data-testid={test('NextButton')}
           onClick={() => onNextClick(address, +amount)}
           color="primary"
-          disabled={!addressValid || +amount <= 0 || !amountValid}
+          disabled={!addressValid || !amountValid}
           disableElevation={!(address && amount)}
           variant="contained"
         >

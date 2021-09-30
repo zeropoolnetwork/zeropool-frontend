@@ -20,7 +20,6 @@
 
   &-Logo {
     width: 25px;
-    color: red;
     position: absolute;
     left: -35px;
     top: 20px;
@@ -40,9 +39,15 @@
     margin: auto 0 0 10px;
   }
 
+  &-AddressInput {
+    &_Invalid .MuiInput-underline:before {
+      border-bottom-color: red !important;
+    }
+  }
+
   &-AmountInput {
-    &_Invalid {
-      border-bottom: solid 2px red !important;
+    &_Invalid .MuiInput-underline:before{
+      border-bottom-color: red !important;
     }
   }
 
