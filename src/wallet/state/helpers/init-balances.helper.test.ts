@@ -51,7 +51,7 @@ describe('init-balances helper', () => {
     expect(initBalances(hdWallet, balances, tokens).ETH.length).toEqual(4)
   })
 
-  it('names public wallets starting from 01: "Wallet 01", "Wallet 02", etc.', () => {
-    expect(initBalances(hdWallet, balances, tokens).ETH[1].name).toEqual('Wallet 01')
+  it('names public wallets starting from 1: "WalletETH1", "WalletETH2", etc.', () => {
+    expect(initBalances(hdWallet, balances, tokens).ETH[1].name).toEqual('WalletETH1')
   })
 })

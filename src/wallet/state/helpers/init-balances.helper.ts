@@ -54,7 +54,7 @@ export const initBalances = (
         address: (balanceData as Balance).address,
         id,
         amount,
-        name: `Wallet ${id < 10 ? '0' + id : id}`,
+        name: `Wallet${token.symbol}${id}`,
         token,
       })
     }
