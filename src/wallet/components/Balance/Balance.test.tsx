@@ -3,6 +3,12 @@ import { render } from '@testing-library/react'
 
 import { Balance, componentId, BalanceProps } from './Balance'
 
+jest.mock('shared/helpers/addres.helper', () => {
+  return {
+    beautifyAmount: jest.fn(),
+  }
+})
+
 describe('Balance', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<BalanceProps>

@@ -28,7 +28,7 @@ export const validateAddress = (address: string, symbol: TokenSymbol): boolean |
   return result
 }
 
-export const beautifyAdress = (address: string, limit = 6): string => {
+export const beautifyAddress = (address: string, limit = 6): string => {
   let result = ''
 
   if (address.length > limit) {

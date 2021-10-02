@@ -167,5 +167,5 @@ const api = {
   transfer,
   isPrivateAddress,
 }
- 
+
 export default api

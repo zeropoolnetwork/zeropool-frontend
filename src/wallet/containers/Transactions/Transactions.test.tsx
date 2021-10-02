@@ -8,6 +8,13 @@ import { _testWalletsEth } from 'shared/helpers/test/app-state.helper'
 //#region Mocks
 const useSnackbarMock = useSnackbar as jest.Mock
 
+jest.mock('shared/helpers/addres.helper', () => {
+  return {
+    beautifyAmount: jest.fn(),
+    beautifyAddress: jest.fn(),
+  }
+})
+
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
   useSelector: jest.fn(),

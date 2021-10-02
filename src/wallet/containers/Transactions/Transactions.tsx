@@ -81,11 +81,11 @@ export const Transactions: React.FC<TransactionsProps> = ({ wallet }) => {
               //   {incoming(transaction) ? (
               //     <span>
               //       <b>From: </b>
-              //       {beautifyAdress(transaction.from)}
+              //       {beautifyAddress(transaction.from)}
               //     </span>
               //   ) : (
               //     <span>
-              //       <b>To: </b> {beautifyAdress(transaction.to)}
+              //       <b>To: </b> {beautifyAddress(transaction.to)}
               //     </span>
               //   )}
 

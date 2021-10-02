@@ -5,6 +5,12 @@ import { WalletRow, componentId, WalletRowProps } from './WalletRow'
 
 import { _testToken, _testWalletsEth } from 'shared/helpers/test/app-state.helper'
 
+jest.mock('shared/helpers/addres.helper', () => {
+  return {
+    beautifyAmount: jest.fn(),
+  }
+})
+
 describe('WalletRow', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<WalletRowProps>
