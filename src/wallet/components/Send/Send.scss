@@ -40,13 +40,15 @@
   }
 
   &-AddressInput {
-    &_Invalid .MuiInput-underline:before {
+    &_Invalid .MuiInput-underline:before,
+    &_Invalid .MuiInput-underline:after {
       border-bottom-color: red !important;
     }
   }
 
   &-AmountInput {
-    &_Invalid .MuiInput-underline:before{
+    &_Invalid .MuiInput-underline:before,
+    &_Invalid .MuiInput-underline:after {
       border-bottom-color: red !important;
     }
   }

@@ -1,80 +1,145 @@
 import { useSnackbar } from 'notistack'
-import { render } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 
-import { Receive, componentId } from './Receive'
+import { Receive, componentId, ReceiveProps } from './Receive'
 
-import { _testToken } from 'shared/helpers/test/app-state.helper'
+import { testIdBuilder, _testToken } from 'shared/helpers/test'
+
+const testId = testIdBuilder(componentId)
+
 //#region Mocks
 const useSnackbarMock = useSnackbar as jest.Mock
+const getPrivateAddressSpy = jest.fn()
+const snackbarSpy = jest.fn()
+const clipboardSpy = jest.fn()
 
 jest.mock('notistack', () => ({
-  ...jest.requireActual('notistack'),
   useSnackbar: jest.fn(),
 }))
 //#endregion
 describe('Receive view', () => {
-  const componentFactory = (address = '0x123asd', token = _testToken) => (
-    <Receive address={address} token={token} privateAddress="test" getPrivateAddress={() => true} />
+  const factory = ({
+    address = '123',
+    token = _testToken,
+    getPrivateAddress = getPrivateAddressSpy,
+    privateAddress = null,
+  }: Partial<ReceiveProps>) => (
+    <Receive
+      address={address}
+      token={token}
+      privateAddress={privateAddress}
+      getPrivateAddress={getPrivateAddress}
+    />
   )
 
   beforeEach(() => {
     useSnackbarMock.mockImplementation(() => ({
-      enqueueSnackbar: jest.fn(),
+      enqueueSnackbar: snackbarSpy,
     }))
   })
 
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   it('renders component', () => {
-    const { getByTestId } = render(componentFactory())
+    const { getByTestId } = render(factory({}))
 
     expect(getByTestId(componentId)).toBeInTheDocument()
   })
 
   it('shows "Receive <currency>" title', () => {
-    const { getByText } = render(componentFactory('', { ..._testToken, name: 'ETH' }))
+    const { getByText } = render(factory({ token: { ..._testToken, name: 'ETH' } }))
 
     expect(getByText('Receive ETH')).toBeInTheDocument()
   })
 
-  it('shows qr-code if has address', () => {
-    const renderResult = render(
-      <Receive
-        address={'123'}
-        token={_testToken}
-        privateAddress="test"
-        getPrivateAddress={() => true}
-      />,
-    )
+  it('shows qr-code if it has an address', () => {
+    const { getByTestId, queryByTestId } = render(factory({}))
 
-    expect(renderResult.getByTestId(componentId + '-Code')).toBeInTheDocument()
-    expect(renderResult.queryByTestId(componentId + '-Button')).toBeNull()
+    expect(getByTestId(testId('Code'))).toBeInTheDocument()
+    expect(queryByTestId(testId('Button'))).toBeNull()
   })
 
   it('shows qr-code if has private address', () => {
-    const renderResult = render(
-      <Receive
-        address={''}
-        token={_testToken}
-        privateAddress={'123'}
-        getPrivateAddress={() => true}
-      />,
-    )
+    const { getByTestId, queryByTestId } = render(factory({ address: '', privateAddress: '123' }))
 
-    expect(renderResult.getByTestId(componentId + '-Code')).toBeInTheDocument()
-    expect(renderResult.queryByTestId(componentId + '-Button')).toBeNull()
+    expect(getByTestId(testId('Code'))).toBeInTheDocument()
+    expect(queryByTestId(testId('Button'))).toBeNull()
   })
 
   it('shows GENERATE buttun if has no normal or private adress', () => {
-    const renderResult = render(
-      <Receive
-        address={''}
-        token={_testToken}
-        privateAddress={''}
-        getPrivateAddress={() => true}
-      />,
-    )
+    const { getByTestId, queryByTestId } = render(factory({ address: '', privateAddress: null }))
 
-    expect(renderResult.getByTestId(componentId + '-Button')).toBeInTheDocument()
-    expect(renderResult.queryByTestId(componentId + '-Code')).toBeNull()
+    expect(getByTestId(testId('Button'))).toBeInTheDocument()
+    expect(queryByTestId(testId('Code'))).toBeNull()
+  })
+
+  it('shows qr-code after click on GENERATE buttun, that hiding after that', async () => {
+    const { getByTestId, queryByTestId, rerender } = render(factory({ address: '' }))
+
+    getByTestId(testId('Button')).click()
+
+    await fireEvent.click(getByTestId(testId('Button')))
+
+    rerender(factory({ privateAddress: '123', address: '' }))
+
+    expect(getPrivateAddressSpy).toHaveBeenCalled()
+    expect(getByTestId(testId('Code'))).toBeInTheDocument()
+    expect(queryByTestId(testId('Button'))).toBeNull()
+  })
+
+  it('copy address to clipboard when clicking on qr-code', async () => {
+    const { getByTestId } = render(factory({}))
+
+    clipboardSpy.mockResolvedValueOnce(true)
+
+    Object.assign(navigator, {
+      clipboard: {
+        writeText: clipboardSpy,
+      },
+    })
+
+    await fireEvent.click(getByTestId(testId('Code')))
+
+    expect(clipboardSpy).toHaveBeenCalled()
+  })
+
+  it('shows snackbar with info when clicking on qr-code', async () => {
+    const { getByTestId } = render(factory({}))
+
+    clipboardSpy.mockResolvedValueOnce(true)
+
+    Object.assign(navigator, {
+      clipboard: {
+        writeText: clipboardSpy,
+      },
+    })
+
+    await fireEvent.click(getByTestId(testId('Code')))
+
+    const callParams = snackbarSpy.mock.calls[0][1]
+
+    expect(snackbarSpy).toHaveBeenCalled()
+    expect(callParams.variant).toBe('success')
+  })
+
+  it('shows snackbar with warning when can not access clipboard', async () => {
+    const { getByTestId } = render(factory({}))
+
+    clipboardSpy.mockRejectedValueOnce(true)
+
+    Object.assign(navigator, {
+      clipboard: {
+        writeText: clipboardSpy,
+      },
+    })
+
+    await fireEvent.click(getByTestId(testId('Code')))
+
+    const callParams = snackbarSpy.mock.calls[0][1]
+
+    expect(snackbarSpy).toHaveBeenCalled()
+    expect(callParams.variant).toBe('error')
   })
 })
-

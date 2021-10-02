@@ -4,6 +4,13 @@ import { render } from '@testing-library/react'
 import { Transaction, componentId, TransactionProps } from './Transaction'
 import { Transaction as Tr } from 'wallet/state/models/transaction'
 
+jest.mock('shared/helpers/addres.helper', () => {
+  return {
+    beautifyAmount: jest.fn(),
+    beautifyAddress: jest.fn(),
+  }
+})
+
 const tr1: Tr = {
   status: 0,
   amount: '0.21',

@@ -12,6 +12,17 @@ const useSelectorMock = useSelector as jest.Mock
 const useDispatchMock = useDispatch as jest.Mock
 const dispatchSpy = jest.fn()
 
+jest.mock('wallet/api/zeropool.api', () => ({
+  isPrivateAddress: jest.fn(),
+}))
+
+jest.mock('shared/helpers/addres.helper', () => {
+  return {
+    beautifyAmount: jest.fn(),
+    beautifyAddress: jest.fn(),
+  }
+})
+
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
   useSelector: jest.fn(),

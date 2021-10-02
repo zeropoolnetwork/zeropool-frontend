@@ -28,7 +28,6 @@ jest.mock('shared/helpers/addres.helper', () => ({
   validateAddress: jest.fn(),
 }))
 
-
 describe('Send', () => {
   let component: React.ReactElement<SendProps>
 

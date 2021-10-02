@@ -1,11 +1,21 @@
-import { beautifyAdress, beautifyAmount } from 'shared/helpers/addres.helper'
+import { beautifyAddress, beautifyAmount } from 'shared/helpers/addres.helper'
+
+jest.mock('shared/helpers/validators/eth.validator', () => {
+  return {
+    isEthereumAddress: jest.fn(),
+  }
+})
+
+jest.mock('wallet/api/zeropool.api', () => ({
+  isPrivateAddress: jest.fn(),
+}))
 
 describe('adress beautifyer', () => {
   it('transorms adress to 0x123...abcd', () => {
     const address = '0xA646dc3DD68338Ee960eA131cfc798D9bF66070d'
     const result = '0xA6...070d'
 
-    expect(beautifyAdress(address, 4)).toBe(result)
+    expect(beautifyAddress(address, 4)).toBe(result)
   })
 
   it('transforms amount 0.0000000000000003 to 0.0...3', () => {
