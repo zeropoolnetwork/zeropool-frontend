@@ -143,7 +143,7 @@ const addWallet$: Epic = (action$: Observable<Actions>, state$: Observable<RootS
       (value): value is { wallets: WalletRecord; token: Token } => !!value.wallets && !!value.token,
     ),
     switchMap(({ wallets, token }) =>
-      api.getWalletBalance(token, nextWalletId(wallets, token)).pipe(
+      api.getWalletBalance(token, nextWalletId(wallets, token) - 1).pipe(
         map((balance) =>
           walletActions.addWalletSuccess({
             ...wallets,
@@ -209,7 +209,7 @@ const sendTransaction$: Epic = (action$: Observable<Actions>, state$: Observable
         !!value.sendData && !!value.wallet,
     ),
     switchMap(({ sendData, wallet }) =>
-      api.transfer(wallet.id, sendData.address, sendData.amount, wallet.token).pipe(
+      api.transfer(wallet.id - 1, sendData.address, sendData.amount, wallet.token).pipe(
         tap(() => toast.success('Transaction completed successfully')),
         mapTo(walletActions.openTransactionsView(wallet)),
       ),

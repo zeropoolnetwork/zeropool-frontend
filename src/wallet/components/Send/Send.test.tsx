@@ -57,7 +57,7 @@ describe('Send', () => {
 
     await act(async () => {
       await fireEvent.input(addressInput, { target: { value: 'test' } })
-      await fireEvent.input(amountInput, { target: { value: '1' } })
+      await fireEvent.input(amountInput, { target: { value: '1.1' } })
       await fireEvent.click(nextButton)
     })
 
