@@ -5,7 +5,7 @@ import api from 'wallet/api/zeropool.api'
 
 export const validateAddress = (address: string, symbol: TokenSymbol): boolean | undefined => {
   let result
-  const supportedSymbols = ['ETH', 'WAWES', 'NEAR']
+  const supportedSymbols = ['ETH', 'WAVES', 'NEAR']
 
   if (!supportedSymbols.includes(symbol)) {
     return undefined
@@ -23,6 +23,9 @@ export const validateAddress = (address: string, symbol: TokenSymbol): boolean |
     case 'NEAR':
       result = true
       break
+
+    default:
+      result = true
   }
 
   return result
