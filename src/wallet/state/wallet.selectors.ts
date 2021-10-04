@@ -49,3 +49,5 @@ export const getPollSettings = createSelector(getWalletState, (state) => state.p
 export const getTransactions = createSelector(getWalletState, (state) => state.transactions)
 
 export const getPrivateAddress = createSelector(getWalletState, (state) => state.privateAddress)
+
+export const getProcessing = createSelector(getWalletState, (state) => state.processing)

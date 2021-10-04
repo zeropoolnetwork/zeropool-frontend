@@ -32,6 +32,9 @@ export type WalletState = {
   wallets: Record<TokenSymbol, Wallet[]> | null
   previousView: WalletView | null
   privateAddress: string | null
+  processing: {
+    send: boolean
+  }
 }
 
 export const initialWalletState: WalletState = {
@@ -49,6 +52,9 @@ export const initialWalletState: WalletState = {
   wallets: null,
   previousView: null,
   privateAddress: null,
+  processing: {
+    send: false,
+  },
 }
 
 export const walletReducer = createReducer<WalletState, ActionType<typeof actions>>(
@@ -122,16 +128,17 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
   .handleAction(actions.resetAccount, () => initialWalletState)
   .handleAction(actions.edit, (state, { payload }) => ({
     ...state,
-    wallets: !state.activeToken || !state.wallets
-      ? state.wallets
-      : {
-          ...state.wallets,
-          [state.activeToken.symbol]: walletsHelper.renameWallet(
-            state.wallets[state.activeToken.symbol],
-            payload.wallet,
-            payload.name,
-          ),
-        },
+    wallets:
+      !state.activeToken || !state.wallets
+        ? state.wallets
+        : {
+            ...state.wallets,
+            [state.activeToken.symbol]: walletsHelper.renameWallet(
+              state.wallets[state.activeToken.symbol],
+              payload.wallet,
+              payload.name,
+            ),
+          },
   }))
   .handleAction(actions.addWalletSuccess, (state, { payload }) => ({
     ...state,
@@ -139,15 +146,16 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
   }))
   .handleAction(actions.hideWallet, (state, { payload }) => ({
     ...state,
-    wallets: !state.activeToken || !state.wallets
-      ? state.wallets
-      : {
-          ...state.wallets,
-          [state.activeToken.symbol]: walletsHelper.hideWallet(
-            state.wallets[state.activeToken.symbol],
-            payload,
-          ),
-        },
+    wallets:
+      !state.activeToken || !state.wallets
+        ? state.wallets
+        : {
+            ...state.wallets,
+            [state.activeToken.symbol]: walletsHelper.hideWallet(
+              state.wallets[state.activeToken.symbol],
+              payload,
+            ),
+          },
   }))
   .handleAction(actions.getRatesSuccess, (state, { payload }) => ({
     ...state,
@@ -156,4 +164,18 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
   .handleAction(actions.getPrivateAddressSuccess, (state, { payload }) => ({
     ...state,
     privateAddress: payload,
+  }))
+  .handleAction(actions.send, (state) => ({
+    ...state,
+    processing: {
+      ...state.processing,
+      send: true,
+    },
+  }))
+  .handleAction(actions.apiError, (state) => ({
+    ...state,
+    processing: {
+      ...state.processing,
+      send: false,
+    },
   }))

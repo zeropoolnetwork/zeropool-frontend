@@ -35,11 +35,13 @@ describe('StepFour', () => {
     expect(getByTestId(test())).toBeInTheDocument()
   })
 
-  it('not calls onRegister if input form is invalid', () => {
+  it('not calls onRegister if input form is invalid', async () => {
     const { submit } = setup(component)
     let call: any
 
-    fireEvent.click(submit)
+    await act(async () => {
+      await fireEvent.click(submit)
+    })
 
     call = outputSpy.mock.calls[0] // "calls[0] is undefined" means no call was fired
 
@@ -47,8 +49,6 @@ describe('StepFour', () => {
     expect(call).toBeUndefined()
   })
 
-  // TODO: Fix needed
-  // Warning: When testing, code that causes React state updates should be wrapped into act(...)
   it('calls onRegister with password if input form is valid', async () => {
     let call: any
     const { getByTestId } = render(component)

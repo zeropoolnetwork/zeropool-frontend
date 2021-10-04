@@ -1,8 +1,7 @@
 # Important
 
-In current version ethereum transactions performing only with localy running Ganache running
-on port 7545. Run it with same mnemonic frase that you use in the app (you can export it wia the app menu). Also to start the app you need to copy two bin-files to the 'src/assets' folder.
-Thay available by this link: https://drive.google.com/drive/folders/1D2rBlzHIfdUmsqUX1dFeroxhn6r8OIaC?usp=sharing
+In current version ethereum transactions performing only with locally running Ganache on port 7545. Run it with same mnemonic phrase as you use in the app itself (you can export it via the app menu). Also to start the app you need to copy two special binary files to the 'src/assets' folder.
+This files available by this link: https://drive.google.com/drive/folders/1D2rBlzHIfdUmsqUX1dFeroxhn6r8OIaC?usp=sharing
 # Available Scripts
 
 In the project directory, you can run:
@@ -26,7 +25,7 @@ Build the test coverage report.
 
 ## `yarn storybook`
 
-Run Storybook. Currently brocken.
+Run Storybook. Currently broken due to using Alpha version of CRA5.
 
 ## `yarn build`
 
@@ -37,16 +36,6 @@ The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-## `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
 # Learn More
 
