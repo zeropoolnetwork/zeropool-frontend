@@ -17,6 +17,7 @@ export type SendConfirmationProps = {
   address: string
   amount: number
   fee: string
+  processing: boolean
   rate: number
   wallet: Wallet
   onConfirmClick: () => void
@@ -27,15 +28,10 @@ export const SendConfirmation: React.FC<SendConfirmationProps> = ({
   amount,
   fee,
   rate,
+  processing,
   wallet,
   onConfirmClick,
 }) => {
-  const [processing, setProcessing] = useState(false)
-
-  const handleConfirm = () => {
-    onConfirmClick()
-    setProcessing(true)
-  }
 
   return (
     <div className={css()} data-testid={test()}>
@@ -84,7 +80,7 @@ export const SendConfirmation: React.FC<SendConfirmationProps> = ({
           <Button
             className={css('ConfirmButton')}
             data-testid={test('Confirm')}
-            onClick={handleConfirm}
+            onClick={onConfirmClick}
             color="primary"
             disabled={!fee}
             disableElevation={true}

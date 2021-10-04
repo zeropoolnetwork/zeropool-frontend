@@ -120,7 +120,7 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
           onClick={() => onNextClick(address, +amount)}
           color="primary"
           disabled={!addressValid || !amountValid}
-          disableElevation={!(address && amount)}
+          disableElevation={!address || !amount}
           variant="contained"
         >
           Next

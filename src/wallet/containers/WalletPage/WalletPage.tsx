@@ -43,6 +43,7 @@ import {
   getSendData,
   getSeed,
   getPrivateAddress,
+  getProcessing,
 } from 'wallet/state/wallet.selectors'
 import { Wallets, WalletsHandlers } from 'wallet/components/Wallets/Wallets'
 import { SendConfirmation } from 'wallet/components/SendConfirmation/SendConfirmation'
@@ -150,6 +151,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   const send = useSelector(getSendData)
   const seed = useSelector(getSeed)
   const privateAddress = useSelector(getPrivateAddress)
+  const processing = useSelector(getProcessing)
 
   const handleExportSeed = () => {
     navigator.clipboard.writeText(seed || 'No seed set').then(
@@ -264,6 +266,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
             amount={send.amount}
             address={send.address}
             fee={send.fee}
+            processing={processing.send}
             rate={rates[token.symbol]}
             wallet={wallet}
             onConfirmClick={() => dispatch(walletActions.send())}

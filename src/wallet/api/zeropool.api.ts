@@ -136,9 +136,8 @@ const transfer = (account: number, to: string, amount: number, token: Token) => 
   }
 
   return from(
-    coin
-      .transfer(account, to, coin.toBaseUnit(amount.toString()))
-      .catch(promiceErrorHandler<Transaction[]>([], e)),
+    coin.transfer(account, to, coin.toBaseUnit(amount.toString())),
+    // .catch(promiceErrorHandler<Transaction[]>([], e)),
   )
 }
 

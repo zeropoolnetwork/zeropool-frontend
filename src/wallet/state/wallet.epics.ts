@@ -57,7 +57,7 @@ const getRates$: Epic = (action$: Observable<Actions>, state$: Observable<RootSt
         map((rates) => walletActions.getRatesSuccess(rates)),
       ),
     ),
-    handleEpicError(walletActions.getRatesError),
+    handleEpicError(walletActions.getRatesError, 'Failed to get rates'),
   )
 
 const redirectToTheWalletOnSetSeed$: Epic = (
@@ -102,7 +102,7 @@ const initApi$: Epic = (action$: Observable<Actions>, state$: Observable<RootSta
         ),
       ),
     ),
-    handleEpicError(walletActions.setSeedError),
+    handleEpicError(walletActions.setSeedError, 'Failed to set seed phrase'),
   )
 
 const initWallets$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
@@ -117,7 +117,7 @@ const initWallets$: Epic = (action$: Observable<Actions>, state$: Observable<Roo
         ),
       ),
     ),
-    handleEpicError(walletActions.updateWalletsError),
+    handleEpicError(walletActions.updateWalletsError, 'Failed to init wallets'),
   )
 
 const updateBalances$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
@@ -131,7 +131,7 @@ const updateBalances$: Epic = (action$: Observable<Actions>, state$: Observable<
     mergeMap((wallets) =>
       of(walletActions.getRates(), walletActions.updateWalletsSuccess(wallets)),
     ),
-    handleEpicError(walletActions.updateWalletsError),
+    handleEpicError(walletActions.updateWalletsError, 'Fail to update balances'),
   )
 
 const addWallet$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
@@ -162,7 +162,7 @@ const addWallet$: Epic = (action$: Observable<Actions>, state$: Observable<RootS
         ),
       ),
     ),
-    handleEpicError(walletActions.addWalletError),
+    handleEpicError(walletActions.addWalletError, 'Failed to add wallet'),
   )
 
 const refreshAmounts$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
@@ -179,7 +179,7 @@ const getPrivateAddress$: Epic = (action$: Observable<Actions>, state$: Observab
         .getPrivateAddress(payload)
         .pipe(map((address) => walletActions.getPrivateAddressSuccess(address))),
     ),
-    handleEpicError(walletActions.apiError),
+    handleEpicError(walletActions.apiError, 'Falied to get private address'),
   )
 
 const openSendConfirmView$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
@@ -196,7 +196,7 @@ const openSendConfirmView$: Epic = (action$: Observable<Actions>, state$: Observ
         ),
       ),
     ),
-    handleEpicError(walletActions.apiError),
+    handleEpicError(walletActions.apiError, 'Failed to get network fee'),
   )
 
 const sendTransaction$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
@@ -214,7 +214,7 @@ const sendTransaction$: Epic = (action$: Observable<Actions>, state$: Observable
         mapTo(walletActions.openTransactionsView(wallet)),
       ),
     ),
-    handleEpicError(walletActions.apiError),
+    handleEpicError(walletActions.apiError, 'Failed to send transaction'),
   )
 
 const callGetTransactionsOnOpenTransactionsView$: Epic = (
@@ -249,7 +249,7 @@ const getTransactions$: Epic = (action$: Observable<Actions>) =>
         .getWalletTransactions(wallet.token, wallet.id, false)
         .pipe(map((transactions) => walletActions.getTransactionsSuccess(transactions))),
     ),
-    handleEpicError(walletActions.apiError),
+    handleEpicError(walletActions.apiError, 'Failed to get transactions'),
   )
 
 const handleErrorActions$: Epic = (action$: Observable<Actions>) =>
