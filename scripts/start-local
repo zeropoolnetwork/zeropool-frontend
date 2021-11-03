@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-npm i && npm run dev
+npm i && npm start
