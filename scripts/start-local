@@ -1,2 +1,9 @@
 #!/usr/bin/env bash
+
+cd ./deps/pool-evm-single-l1
+
+echo 'Copying addresses to app assets folder...'
+cp addresses.json ../../src/assets/
+
+cd ../../
 npm i && npm start

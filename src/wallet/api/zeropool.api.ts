@@ -9,8 +9,11 @@ import { Token, TokenSymbol } from 'shared/models'
 import { getEthTransactions } from 'wallet/api/es.api'
 import { promiceErrorHandler } from 'wallet/api/promice-error.handler'
 
-import transferParamsUrl from 'assets/transfer_params.bin'
-import treeParamsUrl from 'assets/tree_update_params.bin'
+import transferParamsUrl from 'assets/tx_params.bin'
+import treeParamsUrl from 'assets/tree_params.bin'
+import transferVk from 'assets/tx_vk.json'
+import treeVk from 'assets/tree_vk.json'
+import addresses from 'assets/addresses.json'
 
 import mocks from './mocks.json'
 
@@ -19,11 +22,15 @@ export let transaction$: Observable<Transaction> | null = null
 export let config = devConfig as any
 
 async function initHDWallet(seed: string, coins: CoinType[]): Promise<HDWallet> {
-  config.transferParamsUrl = transferParamsUrl
-  config.treeParamsUrl = treeParamsUrl
+  config.snarkParams = {}
+  config.snarkParams.transferParamsUrl = transferParamsUrl
+  config.snarkParams.treeParamsUrl = treeParamsUrl;
+  config.snarkParams.transferVk = transferVk;
+  config.snarkParams.treeVk = treeVk;
 
-  // config.ethereum.contractAddress = '0x7d6748e900326c726C1daf6eD020D9dFc8fee2bA'
-  config.ethereum.httpProviderUrl = 'http://127.0.0.1:7545'
+  config.ethereum.contractAddress = addresses.pool;
+  config.ethereum.tokenContractAddress = addresses.token;
+  config.ethereum.httpProviderUrl = 'http://127.0.0.1:8545'
   console.log(config)
 
   hdWallet = await HDWallet.init(seed, config, coins)

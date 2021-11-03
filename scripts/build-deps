@@ -7,7 +7,7 @@ cargo run --release setup -c tree_update -p tree_params.bin -v tree_vk.json && \
     cargo run --release setup -c transfer -p tx_params.bin -v tx_vk.json && \
     cargo run --release generate-verifier -s TransferVerifier.sol -n TransferVerifier -v tx_vk.json
 
-echo 'Copying params to console...'
+echo 'Copying params to app assets folder...'
 cp tree_params.bin tx_params.bin tx_vk.json tree_vk.json  ../../src/assets/
 
 echo 'Copying contracts to pool-evm-single-l1...'
