@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+cd ../zeropool-api-js && \
+yarn upgrade libzeropool-rs-wasm-bundler && \
+yarn build && \
+
+cd -
+yarn upgrade zeropool-api-js && \
+yarn dev

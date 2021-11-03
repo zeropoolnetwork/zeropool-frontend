@@ -1,0 +1,8 @@
+ #!/usr/bin/env bash
+
+export MOCK_TX_VERIFIER=false
+export MOCK_TREE_VERIFIER=false
+
+cd deps/pool-evm-single-l1
+npm install && \
+./scripts/start.sh

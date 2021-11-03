@@ -1,0 +1,6 @@
+[submodule "deps/pool-evm-single-l1"]
+	path = deps/pool-evm-single-l1
+	url = https://github.com/zeropoolnetwork/pool-evm-single-l1.git
+[submodule "deps/libzeropool"]
+	path = deps/libzeropool
+	url = https://github.com/zeropoolnetwork/libzeropool.git

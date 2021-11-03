@@ -1,4 +1,12 @@
-# Important
+# Important! How to run project:
+
+## git clone --recurse-submodules https://github.com/zeropoolnetwork/zeropool-console.git`
+If you forget to use '--recurse-submodules' flag, then try to use 'git submodule update --init --recursive' command after cloning repository.
+
+In gitbush run this commands from the root folder of the project:
+## `./scripts/build-deps` - to build parameters and contracts
+## `./scripts/start-node` - start a hardhat node
+
 
 In current version ethereum transactions performing only with locally running Ganache on port 7545. Run it with same mnemonic phrase as you use in the app itself (you can export it via the app menu). Also to start the app you need to copy two special binary files to the 'src/assets' folder.
 This files available by this link: https://drive.google.com/drive/folders/1D2rBlzHIfdUmsqUX1dFeroxhn6r8OIaC?usp=sharing
