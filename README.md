@@ -16,6 +16,8 @@ If blockchain node process halted remove it (from powershell if needed):
 - netstat -ano | findstr :8545
 - taskkill /PID [Process Id] /F 
 
+If you want to define your seed phrase, change it in `deps/pool-evm-single-l1/hardhat.config.json`
+
 # Available Scripts
 
 In the project directory, you can run:
