@@ -141,10 +141,9 @@ const transfer = (account: number, to: string, amount: number, token: Token) => 
   if (!coin) {
     throw Error(`Can't estimate fee for ${token.symbol}`)
   }
-
+debugger
   return from(
     coin.transfer(account, to, coin.toBaseUnit(amount.toString())),
-    // .catch(promiceErrorHandler<Transaction[]>([], e)),
   )
 }
 

@@ -63,9 +63,12 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
   .handleAction(actions.menu, (state, { payload }) => ({
     ...state,
     activeView: payload !== WalletView.Reset ? payload : state.activeView,
+    processing: initialWalletState.processing,
   }))
   .handleAction(actions.headerBack, (state) => ({
     ...navigationHelper.handleBackClick(state),
+    processing: initialWalletState.processing,
+
   }))
   .handleAction(actions.openBalanceView, (state) => ({
     ...navigationHelper.getBalanceView(state),
@@ -114,6 +117,7 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
   .handleAction(actions.updateWalletsSuccess, (state, { payload }) => ({
     ...state,
     wallets: payload,
+    processing: initialWalletState.processing,
     activeWallet:
       state.activeWallet && state.activeToken
         ? payload[state.activeToken.symbol][
@@ -174,8 +178,5 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
   }))
   .handleAction(actions.apiError, (state) => ({
     ...state,
-    processing: {
-      ...state.processing,
-      send: false,
-    },
+    processing: initialWalletState.processing,
   }))

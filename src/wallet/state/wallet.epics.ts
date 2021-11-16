@@ -1,7 +1,7 @@
 import { push } from 'connected-react-router'
 import { CoinType } from 'zeropool-api-js'
 import { Epic, combineEpics } from 'redux-observable'
-import { from, iif, Observable, of } from 'rxjs'
+import { from, iif, mergeMapTo, Observable, of } from 'rxjs'
 import { ActionType, isActionOf } from 'typesafe-actions'
 import {
   switchMapTo,
@@ -211,7 +211,11 @@ const sendTransaction$: Epic = (action$: Observable<Actions>, state$: Observable
     switchMap(({ sendData, wallet }) =>
       api.transfer(wallet.id - 1, sendData.address, sendData.amount, wallet.token).pipe(
         tap(() => toast.success('Transaction completed successfully')),
-        mapTo(walletActions.openTransactionsView(wallet)),
+        // mapTo(walletActions.openTransactionsView(wallet)), // TODO: change after implementing the Log
+        mergeMap(() => of(
+          walletActions.openWalletsView(wallet.token),
+          walletActions.updateBalances(),
+        )),
       ),
     ),
     handleEpicError(walletActions.apiError, 'Failed to send transaction'),
