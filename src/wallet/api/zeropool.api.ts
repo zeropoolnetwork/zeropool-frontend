@@ -141,7 +141,30 @@ const transfer = (account: number, to: string, amount: number, token: Token) => 
   if (!coin) {
     throw Error(`Can't estimate fee for ${token.symbol}`)
   }
-debugger
+
+  if (isPrivateAddress(to, token.symbol)) {
+    if (isPrivateAddress(account.toString(), token.symbol)) {
+      throw Error(`Not implemented.`)
+      // return from(
+      //   coin.updatePrivateState().then(() =>
+      //     coin.withdrawPrivate(+to, amount.toString())
+      //   )
+      // )
+    }
+    
+    return from(
+      coin.updatePrivateState().then(() => {
+        return coin.depositPrivate(account, amount.toString())
+
+      }
+      )
+    )
+  }
+
+  if (isPrivateAddress(account.toString(), token.symbol)) {
+    throw Error(`Private local to public remote transactions are not implemented.`)
+  }
+
   return from(
     coin.transfer(account, to, coin.toBaseUnit(amount.toString())),
   )

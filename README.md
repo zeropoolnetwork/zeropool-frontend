@@ -6,7 +6,7 @@
 If you forget to use '--recurse-submodules' flag, then try to use 'git submodule update --init --recursive' command after cloning repository.
 
 ## 2. Init
-In standalone terminal run this commands from the root folder of the project:
+In standalone terminal (use gitbush on Windows) run this commands from the root folder of the project:
 - `./scripts/build-deps` - to build parameters and contracts
 - If you want to define your seed phrase, change it in `deps/pool-evm-single-l1/hardhat.config.json`
 - `./scripts/start-node` - start a hardhat node
