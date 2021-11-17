@@ -6,11 +6,13 @@ import { Send, componentId, SendProps } from './Send'
 
 import { _testWalletsEth, testIdBuilder } from 'shared/helpers/test'
 import { validateAddress } from 'shared/helpers/addres.helper'
+import { isPrivateAddress } from 'wallet/api/zeropool.api'
 
 let addressValid: boolean
 let addressPrivate: boolean
 
 const test = testIdBuilder(componentId)
+const isPrivateAddressMock = isPrivateAddress as jest.Mock
 const useSnackbarMock = useSnackbar as jest.Mock
 const validateAddressMock = validateAddress as jest.Mock
 const outputSpy = jest.fn()
@@ -35,6 +37,7 @@ describe('Send', () => {
     addressValid = false
     addressPrivate = false
 
+    isPrivateAddressMock.mockImplementation(() => addressPrivate)
     validateAddressMock.mockImplementation(() => addressValid)
     useSnackbarMock.mockImplementation(() => ({ enqueueSnackbar: jest.fn() }))
 
@@ -64,8 +67,37 @@ describe('Send', () => {
     expect(outputSpy).toHaveBeenCalledTimes(1)
   })
 
-  it('shows private logo when address is private', async () => {
-    // const { getByTestId } = render(component)
+  describe('Private logo', () => {
+    it('shows private logo when address is private', async () => {
+      const { getByTestId, queryByTestId } = render(component)
+      const addressInput = getByTestId('Send-AddressInput') as HTMLInputElement
 
-  })
+      addressPrivate = true
+
+      await act(async () => {
+        await fireEvent.input(addressInput, { target: {value: '123'}})
+      })
+
+      expect(addressInput.value).toBe('123')
+      expect(queryByTestId('Send-Logo')).toBeInTheDocument()
+    })
+    
+    it('do not shows private logo when address is non-private', async () => {
+      const renderResult = render(component)
+      const addressInput: HTMLInputElement = renderResult.getByTestId('Send-AddressInput') as HTMLInputElement
+      
+      await act(async () => {
+        await fireEvent.input(addressInput, { target: {value: 'gogogo'}})
+      })
+      
+      expect(addressInput.value).toBe('gogogo')
+      expect(renderResult.queryByTestId('Send-Logo')).toBe(null)
+    })
+
+    it('do not shows private logo when adress feld is empty', () => {
+      const { queryByTestId } = render(component)
+
+      expect(queryByTestId('Send-Logo')).toBe(null)
+    });
+  });
 })
