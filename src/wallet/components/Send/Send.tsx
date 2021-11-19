@@ -76,6 +76,7 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
         ) : null}
 
         <TextField
+          data-testid={test('AddressInputRoot')}
           inputProps={{ 'data-testid': test('AddressInput') }}
           className={css('AddressInput', { Invalid: address && !addressValid })}
           id="address"
@@ -88,7 +89,8 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
           Paste
         </span>
 
-        <TextField
+        <TextField 
+          data-testid={test('AmountInputRoot')}
           className={css('AmountInput', { Invalid: amount && !amountValid })}
           inputProps={{ 'data-testid': test('AmountInput') }}
           id="amount"

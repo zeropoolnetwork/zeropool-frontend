@@ -100,4 +100,70 @@ describe('Send', () => {
       expect(queryByTestId('Send-Logo')).toBe(null)
     });
   });
+
+  describe('Validate', () => {
+    describe('Inputs', () => {
+      it('amount input valid on proper data', async () => {
+        const { getByTestId } = render(component)
+        const invalidClass = 'Send-AmountInput_Invalid'
+        const amountInput = getByTestId('Send-AmountInput') as HTMLInputElement
+        const amountInputRoot = getByTestId('Send-AmountInputRoot') as HTMLElement
+
+        await act(async () => {
+          await fireEvent.input(amountInput, { target: {value: '123'}})
+        })
+
+        expect(amountInputRoot.classList).not.toContain(invalidClass)
+      });
+
+      it('amount input invalid on wrong data', async () => {
+        const { getByTestId } = render(component)
+        const invalidClass = 'Send-AmountInput_Invalid'
+        const amountInput = getByTestId('Send-AmountInput') as HTMLInputElement
+        const amountInputRoot = getByTestId('Send-AmountInputRoot') as HTMLElement
+
+        await act(async () => {
+          await fireEvent.input(amountInput, { target: {value: '123s'}})
+        })
+
+        expect(amountInputRoot.classList).toContain(invalidClass)
+      });
+      
+      it('address input valid on proper data', async () => {
+        const { getByTestId } = render(component)
+        const invalidClass = 'Send-AddressInput_Invalid'
+        const addressInput = getByTestId('Send-AddressInput') as HTMLInputElement
+        const addressInputRoot = getByTestId('Send-AddressInputRoot') as HTMLElement
+        
+        addressValid = true
+        
+        await act(async () => {
+          await fireEvent.input(addressInput, { target: {value: '123'}})
+        })
+
+        expect(addressInputRoot.classList).not.toContain(invalidClass)
+      });
+
+      it('address input invalid on wrong data', async () => {
+        const { getByTestId } = render(component)
+        const invalidClass = 'Send-AddressInput_Invalid'
+        const addressInput = getByTestId('Send-AddressInput') as HTMLInputElement
+        const addressInputRoot = getByTestId('Send-AddressInputRoot') as HTMLElement
+        
+        await act(async () => {
+          await fireEvent.input(addressInput, { target: {value: '123'}})
+        })
+
+        expect(addressInputRoot.classList).toContain(invalidClass)
+      });
+      
+      
+    });
+
+    describe('Button', () => {
+
+      
+    });
+    
+  });
 })
