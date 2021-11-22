@@ -1,7 +1,7 @@
 import { isEthereumAddress } from 'shared/helpers/validators/eth.validator'
 import { TokenSymbol } from 'shared/models'
 
-import api from 'wallet/api/zeropool.api'
+import { api } from 'wallet/api/zeropool.api'
 
 export const validateAddress = (address: string, symbol: TokenSymbol): boolean | undefined => {
   let result

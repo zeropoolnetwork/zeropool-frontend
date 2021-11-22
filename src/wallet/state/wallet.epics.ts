@@ -30,11 +30,11 @@ import {
   getSupportedTokens,
   getWallets,
 } from 'wallet/state/wallet.selectors'
-import api, { hdWallet } from 'wallet/api/zeropool.api'
 import { SendData, Wallet, WalletRecord, WalletView } from 'wallet/state/models'
 import { mapRatesToTokens } from 'wallet/state/helpers/map-rates-to-tokens'
 import { updateBalances } from 'wallet/state/helpers/update-balances.helper'
 import { walletActions } from 'wallet/state/wallet.actions'
+import { api, hdWallet } from 'wallet/api/zeropool.api'
 import { RatesApi } from 'wallet/api/rates.api'
 
 import { RootState } from 'state'

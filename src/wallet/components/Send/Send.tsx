@@ -10,7 +10,7 @@ import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { validateAddress } from 'shared/helpers/addres.helper'
 import logo from 'assets/zeropool-logo.jpeg'
 
-import api from 'wallet/api/zeropool.api'
+import { api } from 'wallet/api/zeropool.api'
 import { Wallet } from 'wallet/state/models/wallet'
 
 export const componentId = 'Send'
