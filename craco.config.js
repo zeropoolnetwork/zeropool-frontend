@@ -1,5 +1,6 @@
-const { addBeforeLoader, loaderByName } = require('@craco/craco');
-const { ProvidePlugin } = require('webpack');
+const { addBeforeLoader, loaderByName } = require('@craco/craco')
+const { ProvidePlugin } = require('webpack')
+const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
 
 module.exports = {
   ignoreWarnings: [
@@ -27,6 +28,7 @@ module.exports = {
           'os': require.resolve('os-browserify/browser'),
           'path': require.resolve('path-browserify'),
           'assert': require.resolve('assert'),
+          'constants': require.resolve('constants-browserify'),
           'fs': false,
         },
         alias: {
@@ -37,10 +39,18 @@ module.exports = {
       module: {
         rules: [{
           test: /\.wasm$/,
-          type: 'webassembly/async',
+          type: 'asset/resource',
           },
           {
             test: /\.bin/,
+            type: 'asset/resource',
+          },
+          { 
+            test: /\.js$/, 
+            type: 'javascript/auto'
+          },
+          {
+            resourceQuery: /asset/,
             type: 'asset/resource',
           },
         ],
@@ -51,6 +61,7 @@ module.exports = {
     },
     plugins: {
       add: [
+        new CleanWebpackPlugin(),
         new ProvidePlugin({
           Buffer: ['buffer', 'Buffer'],
           process: 'process'

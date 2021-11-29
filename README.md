@@ -17,6 +17,10 @@ If blockchain node process halted remove it (from powershell if needed):
 - netstat -ano | findstr :8545
 - taskkill /PID [Process Id] /F 
 
+To update submodules:
+
+- git submodule foreach git pull origin master
+
 
 # Available Scripts
 

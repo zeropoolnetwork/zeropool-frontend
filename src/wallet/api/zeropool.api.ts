@@ -1,7 +1,12 @@
-import { HDWallet, CoinType, devConfig, Balance, Coin, validateAddress } from 'zeropool-api-js'
+import { HDWallet, CoinType, devConfig, Balance, Coin, validateAddress, init } from 'zeropool-api-js'
 import { from, Observable, of } from 'rxjs'
 import { Transaction } from 'zeropool-api-js/lib/coins/transaction'
 import { map } from 'rxjs/operators'
+// @ts-ignore
+import wasmPath from 'libzeropool-rs-wasm-web/libzeropool_rs_wasm_bg.wasm';
+// @ts-ignore
+import workerPath from 'zeropool-api-js/lib/worker.js?asset';
+import { Config } from 'zeropool-api-js/lib/config';
 
 import { fixTimestamp } from 'shared/util/fix-timestamp'
 import { Token, TokenSymbol } from 'shared/models'
@@ -19,19 +24,25 @@ import mocks from './mocks.json'
 
 export let hdWallet: HDWallet | null = null
 export let transaction$: Observable<Transaction> | null = null
-export let config = devConfig as any
+export let config: Config = devConfig as any
 
 async function initHDWallet(seed: string, coins: CoinType[]): Promise<HDWallet> {
-  config.snarkParams = {}
-  config.snarkParams.transferParamsUrl = transferParamsUrl
-  config.snarkParams.treeParamsUrl = treeParamsUrl;
-  config.snarkParams.transferVk = transferVk;
-  config.snarkParams.treeVk = treeVk;
+  config.snarkParams = {
+    transferParamsUrl: transferParamsUrl,
+    treeParamsUrl: treeParamsUrl,
+    transferVk: transferVk,
+    treeVk: treeVk,
+  }
+  // @ts-ignore
+  config.wasmPath = wasmPath;
+  config.workerPath = workerPath;
 
   config.ethereum.contractAddress = addresses.pool;
   config.ethereum.tokenContractAddress = addresses.token;
   config.ethereum.httpProviderUrl = 'http://127.0.0.1:8545'
   console.log(config)
+
+  await init(wasmPath)
 
   hdWallet = await HDWallet.init(seed, config, coins)
 
