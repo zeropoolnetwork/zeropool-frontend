@@ -10,7 +10,7 @@ import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { validateAddress } from 'shared/helpers/addres.helper'
 import logo from 'assets/zeropool-logo.jpeg'
 
-import { api } from 'wallet/api/zeropool.api'
+import { isPrivateAddress } from 'wallet/api/zeropool.api'
 import { Wallet } from 'wallet/state/models/wallet'
 
 export const componentId = 'Send'
@@ -69,7 +69,7 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
       <div className={css('Title')}>Send {wallet.token.symbol}</div>
 
       <form className={css('Inputs')} noValidate={true} autoComplete="off">
-        {address && api.isPrivateAddress(address, wallet.token.symbol) ? (
+        {address && isPrivateAddress(address, wallet.token.symbol) ? (
           <Tooltip title="You going to transfer to private address" placement="bottom">
             <img src={logo} className={css('Logo')} data-testid={test('Logo')} />
           </Tooltip>

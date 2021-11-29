@@ -75,21 +75,23 @@ describe('Send', () => {
       addressPrivate = true
 
       await act(async () => {
-        await fireEvent.input(addressInput, { target: {value: '123'}})
+        await fireEvent.input(addressInput, { target: { value: '123' } })
       })
 
       expect(addressInput.value).toBe('123')
       expect(queryByTestId('Send-Logo')).toBeInTheDocument()
     })
-    
+
     it('do not shows private logo when address is non-private', async () => {
       const renderResult = render(component)
-      const addressInput: HTMLInputElement = renderResult.getByTestId('Send-AddressInput') as HTMLInputElement
-      
+      const addressInput: HTMLInputElement = renderResult.getByTestId(
+        'Send-AddressInput',
+      ) as HTMLInputElement
+
       await act(async () => {
-        await fireEvent.input(addressInput, { target: {value: 'gogogo'}})
+        await fireEvent.input(addressInput, { target: { value: 'gogogo' } })
       })
-      
+
       expect(addressInput.value).toBe('gogogo')
       expect(renderResult.queryByTestId('Send-Logo')).toBe(null)
     })
@@ -98,8 +100,8 @@ describe('Send', () => {
       const { queryByTestId } = render(component)
 
       expect(queryByTestId('Send-Logo')).toBe(null)
-    });
-  });
+    })
+  })
 
   describe('Validate', () => {
     describe('Inputs', () => {
@@ -110,11 +112,11 @@ describe('Send', () => {
         const amountInputRoot = getByTestId('Send-AmountInputRoot') as HTMLElement
 
         await act(async () => {
-          await fireEvent.input(amountInput, { target: {value: '123'}})
+          await fireEvent.input(amountInput, { target: { value: '123' } })
         })
 
         expect(amountInputRoot.classList).not.toContain(invalidClass)
-      });
+      })
 
       it('amount input invalid on wrong data', async () => {
         const { getByTestId } = render(component)
@@ -123,47 +125,97 @@ describe('Send', () => {
         const amountInputRoot = getByTestId('Send-AmountInputRoot') as HTMLElement
 
         await act(async () => {
-          await fireEvent.input(amountInput, { target: {value: '123s'}})
+          await fireEvent.input(amountInput, { target: { value: '123s' } })
         })
 
         expect(amountInputRoot.classList).toContain(invalidClass)
-      });
-      
+      })
+
       it('address input valid on proper data', async () => {
         const { getByTestId } = render(component)
         const invalidClass = 'Send-AddressInput_Invalid'
         const addressInput = getByTestId('Send-AddressInput') as HTMLInputElement
         const addressInputRoot = getByTestId('Send-AddressInputRoot') as HTMLElement
-        
+
         addressValid = true
-        
+
         await act(async () => {
-          await fireEvent.input(addressInput, { target: {value: '123'}})
+          await fireEvent.input(addressInput, { target: { value: '123' } })
         })
 
         expect(addressInputRoot.classList).not.toContain(invalidClass)
-      });
+      })
 
       it('address input invalid on wrong data', async () => {
         const { getByTestId } = render(component)
         const invalidClass = 'Send-AddressInput_Invalid'
         const addressInput = getByTestId('Send-AddressInput') as HTMLInputElement
         const addressInputRoot = getByTestId('Send-AddressInputRoot') as HTMLElement
-        
+
         await act(async () => {
-          await fireEvent.input(addressInput, { target: {value: '123'}})
+          await fireEvent.input(addressInput, { target: { value: '123' } })
         })
 
         expect(addressInputRoot.classList).toContain(invalidClass)
-      });
-      
-      
-    });
+      })
+    })
 
     describe('Button', () => {
+      it('button disabled if inputs are empty', async () => {
+        const { getByTestId } = render(component)
+        const addressInput = getByTestId('Send-AddressInput') as HTMLInputElement
+        const amountInput = getByTestId('Send-AmountInput') as HTMLInputElement
 
-      
-    });
-    
-  });
+        await act(async () => {
+          await fireEvent.input(addressInput, { target: { value: '' } })
+          await fireEvent.input(amountInput, { target: { value: '' } })
+        })
+
+        expect(getByTestId('Send-NextButton')).toHaveProperty('disabled')
+      })
+
+      it('button disabled if first input empty', async () => {
+        const { getByTestId } = render(component)
+        const addressInput = getByTestId('Send-AddressInput') as HTMLInputElement
+        const amountInput = getByTestId('Send-AmountInput') as HTMLInputElement
+
+        await act(async () => {
+          await fireEvent.input(addressInput, { target: { value: '' } })
+          await fireEvent.input(amountInput, { target: { value: '123' } })
+        })
+
+        expect(getByTestId('Send-NextButton')).toHaveProperty('disabled')
+      })
+
+      it('button disabled second input empty', async () => {
+        const { getByTestId } = render(component)
+        const addressInput = getByTestId('Send-AddressInput') as HTMLInputElement
+        const amountInput = getByTestId('Send-AmountInput') as HTMLInputElement
+
+        addressValid = true
+
+        await act(async () => {
+          await fireEvent.input(addressInput, { target: { value: '123' } })
+          await fireEvent.input(amountInput, { target: { value: '' } })
+        })
+
+        expect(getByTestId('Send-NextButton')).toHaveProperty('disabled')
+      })
+
+      it('button enabled if all inputs are valid', async () => {
+        const { getByTestId } = render(component)
+        const addressInput = getByTestId('Send-AddressInput') as HTMLInputElement
+        const amountInput = getByTestId('Send-AmountInput') as HTMLInputElement
+
+        addressValid = true
+
+        await act(async () => {
+          await fireEvent.input(addressInput, { target: { value: '123' } })
+          await fireEvent.input(amountInput, { target: { value: '123' } })
+        })
+
+        expect(getByTestId('Send-NextButton')).not.toBeDisabled()
+      })
+    })
+  })
 })
