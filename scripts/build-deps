@@ -11,5 +11,6 @@ echo 'Copying params to app assets folder...'
 cp tree_params.bin tx_params.bin tx_vk.json tree_vk.json  ../../src/assets/
 
 echo 'Copying contracts to pool-evm-single-l1...'
-cp TreeVerifier.sol TransferVerifier.sol ../pool-evm-single-l1/contracts/
+mkdir ../pool-evm-single-l1/contracts/verifiers
+cp TreeVerifier.sol TransferVerifier.sol ../pool-evm-single-l1/contracts/verifiers/
 
