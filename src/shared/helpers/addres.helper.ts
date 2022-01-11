@@ -46,7 +46,7 @@ export const beautifyAmount = (amount: string | number): string => {
     amount = amount.toString()
   }
 
-  if (amount === '0') {
+  if (!amount || amount === '0') {
     return amount
   }
 

@@ -8,6 +8,7 @@ import { Token, TokenSymbol } from 'shared/models/token'
 import { isErrorWithMessage } from 'shared/util/is-error-with-message'
 
 import { Wallet } from 'wallet/state/models'
+import { isPrivateTxsInplemented } from 'wallet/state/helpers/is-private-txs-implemented.helper'
 
 export const updateBalances = (
   hdWallet: HDWallet,
@@ -43,7 +44,9 @@ export const updateBalances = (
             })
             .then((balance) => {
               try {
-                return coin.fromBaseUnit(balance)
+                const bal = coin.fromBaseUnit(balance)
+
+                return bal
               } catch (err) {
                 // Waves Fix
                 if (isErrorWithMessage(err)) {
@@ -56,6 +59,26 @@ export const updateBalances = (
               }
             }),
         )
+      } else if (isPrivateTxsInplemented(wallet.token.symbol)) {
+        walletPromises.push(
+          coin
+            .updatePrivateState()
+            .then(async () => {
+              const balances = await coin.getPrivateBalances()
+              
+              return balances[0];
+            })
+            .catch((err) => {
+              // Near Fix
+              if (nearBug(err)) {
+                return '0';
+              }
+
+              throw Error(err)
+            })
+        )
+      } else {
+        walletPromises.push(Promise.resolve('0'))
       }
     })
 
@@ -69,7 +92,7 @@ export const updateBalances = (
 
           return {
             ...wallet,
-            amount: walletIndex ? +balances[tokenIndex][walletIndex - 1] : wallet.amount,
+            amount: walletIndex ? +balances[tokenIndex][walletIndex] : wallet.amount,
           }
         })
       })

@@ -90,7 +90,7 @@ const initApi$: Epic = (action$: Observable<Actions>, state$: Observable<RootSta
             from(
               api.initHDWallet(
                 seed,
-                tokens.map((item) => item.name as CoinType),
+                // tokens.map((item) => item.name as CoinType),
               ),
             ).pipe(
               map(() => (!wallets ? walletActions.initWallets() : walletActions.updateBalances())),
@@ -197,7 +197,7 @@ const openSendConfirmView$: Epic = (action$: Observable<Actions>, state$: Observ
       ),
     ),
     handleEpicError(walletActions.apiError, 'Failed to get network fee'),
-  )
+)
 
 const sendTransaction$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(

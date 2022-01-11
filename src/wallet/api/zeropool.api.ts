@@ -14,11 +14,12 @@ import { Token, TokenSymbol } from 'shared/models'
 import { getEthTransactions } from 'wallet/api/es.api'
 import { promiceErrorHandler } from 'wallet/api/promice-error.handler'
 
-import transferParamsUrl from 'assets/tx_params.bin'
-import treeParamsUrl from 'assets/tree_params.bin'
-import transferVk from 'assets/tx_vk.json'
-import treeVk from 'assets/tree_vk.json'
-import addresses from 'assets/addresses.json'
+import transferParamsUrl from 'assets/transfer_params.bin'
+import treeParamsUrl from 'assets/tree_update_params.bin'
+  // @ts-ignore
+import transferVk from 'assets/transfer_verification_key.json?asset'
+  // @ts-ignore
+import treeVk from 'assets/tree_update_verification_key.json?asset'
 
 import mocks from './mocks.json'
 
@@ -26,25 +27,25 @@ export let hdWallet: HDWallet | null = null
 export let transaction$: Observable<Transaction> | null = null
 export let config: Config = devConfig as any
 
-async function initHDWallet(seed: string, coins: CoinType[]): Promise<HDWallet> {
+async function initHDWallet(seed: string): Promise<HDWallet> {debugger
   config.snarkParams = {
     transferParamsUrl: transferParamsUrl,
     treeParamsUrl: treeParamsUrl,
-    transferVk: transferVk,
-    treeVk: treeVk,
+    transferVkUrl: transferVk,
+    treeVkUrl: treeVk,
   }
   // @ts-ignore
-  config.wasmPath = wasmPath;
-  config.workerPath = workerPath;
-
-  config.ethereum.contractAddress = addresses.pool;
-  config.ethereum.tokenContractAddress = addresses.token;
-  config.ethereum.httpProviderUrl = 'http://127.0.0.1:8545'
+  config.wasmPath = wasmPath
+  config.workerPath = workerPath
+  config.ethereum!.contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS || ''
+  config.ethereum!.tokenContractAddress = process.env.REACT_APP_TOKEN_ADDRESS || ''
+  config.ethereum!.httpProviderUrl = process.env.REACT_APP_EVM_RPC || ''
+  config.ethereum!.relayerUrl = process.env.REACT_APP_RELAYER_URL || ''
   console.log(config)
 
   await init(wasmPath)
 
-  hdWallet = await HDWallet.init(seed, config, coins)
+  hdWallet = await HDWallet.init(seed, config)
 
   return hdWallet
 }
@@ -165,7 +166,7 @@ const transfer = (account: number, to: string, amount: number, token: Token) => 
     
     return from(
       coin.updatePrivateState().then(() => {
-        return coin.depositPrivate(account, amount.toString())
+        return coin.depositPrivate(account, coin.toBaseUnit(amount.toString()))
 
       }
       )
