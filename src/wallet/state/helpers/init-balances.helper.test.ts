@@ -1,12 +1,10 @@
-import { Balance, Coin, HDWallet } from 'zeropool-api-js'
-
 import { Token, TokenSymbol } from 'shared/models'
 import { initBalances } from 'wallet/state/helpers/init-balances.helper'
 import { balancesMock } from 'shared/helpers/test/app-state.helper'
 import { Wallet } from 'wallet/state/models'
 
 describe('init-balances helper', () => {
-  const balances: Record<TokenSymbol, Balance[]> = balancesMock
+  const balances: Record<TokenSymbol, any[]> = balancesMock
   const hdWallet: any = {
     getCoin: (tokenName: string) => ({
       fromBaseUnit: (balance: number) => balance,

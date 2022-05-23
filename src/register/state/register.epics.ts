@@ -1,7 +1,7 @@
 import { Observable, of } from 'rxjs'
 import { Epic, combineEpics } from 'redux-observable'
-import { ActionType, isActionOf } from 'typesafe-actions'
-import { withLatestFrom, filter, map, switchMap } from 'rxjs/operators'
+import { ActionType } from 'typesafe-actions'
+import { withLatestFrom, map, switchMap } from 'rxjs/operators'
 
 import { filterActions } from 'shared/operators/filter-actions.operator'
 

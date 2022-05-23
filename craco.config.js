@@ -34,7 +34,8 @@ module.exports = {
         alias: {
           process: 'process/browser.js',
           stream: 'stream-browserify',
-        }
+        },
+        modules: [__dirname, path.join(__dirname, '../src'), 'node_modules'],
       },
       module: {
         rules: [{
@@ -60,7 +61,7 @@ module.exports = {
       },
     },
     plugins: {
-      add: [
+      add: [g
         new CleanWebpackPlugin(),
         new ProvidePlugin({
           Buffer: ['buffer', 'Buffer'],

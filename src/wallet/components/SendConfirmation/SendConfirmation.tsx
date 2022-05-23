@@ -1,5 +1,5 @@
 import { Button, TextField, Tooltip } from '@material-ui/core'
-import React, { useState } from 'react'
+import React from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { cn } from '@bem-react/classname'
 
@@ -32,7 +32,6 @@ export const SendConfirmation: React.FC<SendConfirmationProps> = ({
   wallet,
   onConfirmClick,
 }) => {
-
   return (
     <div className={css()} data-testid={test()}>
       <div className={css('Title')}>Confirm transaction</div>

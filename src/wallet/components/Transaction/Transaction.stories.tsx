@@ -2,8 +2,6 @@ import { ComponentProps } from 'react'
 
 import { Transaction } from './Transaction'
 
-import { Transaction as Tr } from 'zeropool-api-js/lib/coins/transaction'
-
 import { _testWalletsEth } from 'shared/helpers/test/app-state.helper'
 import { Wallet } from 'wallet/state/models'
 
@@ -24,7 +22,7 @@ const wallet: Wallet = {
   token: { id: 1, symbol: 'TEST', name: 'testName' },
 }
 
-const trIncoming: Tr = {
+const trIncoming: any = {
   status: 0,
   amount: '0.21',
   from: '0xA646dc3DD68338Ee960eA131cfc798D9bF66070d',
@@ -34,7 +32,7 @@ const trIncoming: Tr = {
   hash: 'something',
 }
 
-const trOutgoing: Tr = {
+const trOutgoing: any = {
   status: 0,
   amount: '0.21',
   from: '0xedd09e322B0b741508f72A5d2613B17C2f96891d',

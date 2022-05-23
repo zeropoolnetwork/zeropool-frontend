@@ -1,7 +1,6 @@
 import { push } from 'connected-react-router'
-import { CoinType } from 'zeropool-api-js'
 import { Epic, combineEpics } from 'redux-observable'
-import { from, iif, mergeMapTo, Observable, of } from 'rxjs'
+import { from, iif, Observable, of } from 'rxjs'
 import { ActionType, isActionOf } from 'typesafe-actions'
 import {
   switchMapTo,
@@ -12,7 +11,6 @@ import {
   mergeMap,
   ignoreElements,
   tap,
-  mapTo,
 } from 'rxjs/operators'
 
 import toast from 'shared/helpers/toast.helper'
@@ -33,175 +31,173 @@ import {
 import { SendData, Wallet, WalletRecord, WalletView } from 'wallet/state/models'
 import { mapRatesToTokens } from 'wallet/state/helpers/map-rates-to-tokens'
 import { updateBalances } from 'wallet/state/helpers/update-balances.helper'
-import { walletActions } from 'wallet/state/wallet.actions'
-import { api, hdWallet } from 'wallet/api/zeropool.api'
+import { walletActions as actions } from 'wallet/state/wallet.actions'
+import * as api from 'wallet/api/zeropool.api'
 import { RatesApi } from 'wallet/api/rates.api'
 
 import { RootState } from 'state'
 import { getPayload } from 'shared/operators/get-payload.operator'
-import { initBalances } from './helpers/init-balances.helper'
+// import { initBalances } from './helpers/init-balances.helper'
 
-type Actions = ActionType<typeof walletActions>
+type Actions = ActionType<typeof actions>
 
-const defaultAccount = 0
-const nextWalletId = (wallets: WalletRecord, token: Token) =>
-  wallets[token.symbol][wallets[token.symbol].length - 1].id + 1
+// const nextWalletId = (wallets: WalletRecord, token: Token) =>
+//   wallets[token.symbol][wallets[token.symbol].length - 1].id + 1
 
 const getRates$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(
-    filterActions(walletActions.getRates),
+    filterActions(actions.getRates),
     switchMapTo(
       RatesApi.getRates().pipe(
         withLatestFrom(state$.pipe(map(getSupportedTokens))),
         map(([ratesData, tokens]) => mapRatesToTokens(ratesData, tokens)),
-        map((rates) => walletActions.getRatesSuccess(rates)),
+        map((rates) => actions.getRatesSuccess(rates)),
       ),
     ),
-    handleEpicError(walletActions.getRatesError, 'Failed to get rates'),
+    handleEpicError(actions.getRatesError, 'Failed to get rates'),
   )
 
 const redirectToTheWalletOnSetSeed$: Epic = (
   action$: Observable<Actions>,
   state$: Observable<RootState>,
-) => action$.pipe(filterActions(walletActions.setSeed), switchMapTo(of(push('/wallet'))))
+) => action$.pipe(filterActions(actions.setSeed), switchMapTo(of(push('/wallet'))))
 
 const resetAccount$: Epic = (action$: Observable<Actions>) =>
   action$.pipe(
-    filterActions(walletActions.menu),
+    filterActions(actions.menu),
     filter((action) => action.payload === WalletView.Reset),
     tap(() => toast.success('Wallet reseted and data cleared')),
-    mergeMap(() => of(push('/welcome'), walletActions.resetAccount())),
+    mergeMap(() => of(push('/welcome'), actions.resetAccount())),
   )
 
 const initApi$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(
-    filterActions(walletActions.openBalanceView),
+    filterActions(actions.openBalanceView),
     withLatestFrom(
       state$.pipe(map(getSeed)),
       state$.pipe(map(getWallets)),
-      state$.pipe(map(getSupportedTokens)),
+      // state$.pipe(map(getSupportedTokens)),
     ),
-    switchMap(([, _seed, wallets, tokens]) =>
+    switchMap(([, _seed, wallets]) =>
       iif(
         () => !!_seed,
         of(_seed).pipe(
           filter((seed): seed is string => typeof seed === 'string'),
           switchMap((seed) =>
             from(
-              api.initHDWallet(
+              api.init(
                 seed,
+                '123455678',
+                'test'
                 // tokens.map((item) => item.name as CoinType),
               ),
-            ).pipe(
-              map(() => (!wallets ? walletActions.initWallets() : walletActions.updateBalances())),
-            ),
+            ).pipe(map(() => (!wallets ? actions.initWallets() : actions.updateBalances()))),
           ),
         ),
         of(false).pipe(
-          mergeMap(() => of(push('/welcome'), walletActions.setSeedError('Seed phrase not set'))),
+          mergeMap(() => of(push('/welcome'), actions.setSeedError('Seed phrase not set'))),
         ),
       ),
     ),
-    handleEpicError(walletActions.setSeedError, 'Failed to set seed phrase'),
+    handleEpicError(actions.setSeedError, 'Failed to set seed phrase'),
   )
 
 const initWallets$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(
-    filterActions(walletActions.initWallets),
+    filterActions(actions.initWallets),
     withLatestFrom(state$.pipe(map(getPollSettings)), state$.pipe(map(getSupportedTokens))),
     switchMap(([, settings, tokens]) =>
-      api.getAllBalances(settings.amount).pipe(
-        map((balances) => initBalances(hdWallet as any, balances, tokens)),
-        mergeMap((wallets) =>
-          of(walletActions.getRates(), walletActions.updateWalletsSuccess(wallets)),
-        ),
+      from(api.getRegularBalance()).pipe(
+        // map(([, balance]) => initBalances(balance, tokens)),
+        mergeMap((wallets) => of(actions.getRates(), actions.updateWalletsSuccess({}))),
       ),
     ),
-    handleEpicError(walletActions.updateWalletsError, 'Failed to init wallets'),
+    handleEpicError(actions.updateWalletsError, 'Failed to init wallets'),
   )
 
 const updateBalances$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(
-    filterActions(walletActions.updateBalances),
+    filterActions(actions.updateBalances),
     withLatestFrom(state$.pipe(map(getWallets)), state$.pipe(map(getSupportedTokens))),
     map(([, wallets, tokens]) => ({ wallets, tokens })),
     filter((value): value is { wallets: WalletRecord; tokens: Token[] } => !!value.wallets),
-    switchMap(({ wallets, tokens }) => updateBalances(hdWallet as any, wallets, tokens)),
+    switchMap(({ wallets, tokens }) => updateBalances({}, wallets, tokens)),
     tap(() => toast.success('Balances updated')),
-    mergeMap((wallets) =>
-      of(walletActions.getRates(), walletActions.updateWalletsSuccess(wallets)),
-    ),
-    handleEpicError(walletActions.updateWalletsError, 'Fail to update balances'),
+    mergeMap((wallets) => of(actions.getRates(), actions.updateWalletsSuccess(wallets))),
+    handleEpicError(actions.updateWalletsError, 'Fail to update balances'),
   )
 
-const addWallet$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
-  action$.pipe(
-    filterActions(walletActions.addWallet),
-    withLatestFrom(state$.pipe(map(getWallets)), state$.pipe(map(getActiveToken))),
-    map(([, wallets, token]) => ({ wallets, token })),
-    filter(
-      (value): value is { wallets: WalletRecord; token: Token } => !!value.wallets && !!value.token,
-    ),
-    switchMap(({ wallets, token }) =>
-      api.getWalletBalance(token, nextWalletId(wallets, token) - 1).pipe(
-        map((balance) =>
-          walletActions.addWalletSuccess({
-            ...wallets,
-            [token.symbol]: [
-              ...wallets[token.symbol],
-              {
-                account: defaultAccount,
-                address: balance.address,
-                token: { ...token },
-                id: nextWalletId(wallets, token),
-                amount: +balance.balance,
-                name: `Wallet${token.symbol}${nextWalletId(wallets, token)}`,
-              },
-            ],
-          }),
-        ),
-      ),
-    ),
-    handleEpicError(walletActions.addWalletError, 'Failed to add wallet'),
-  )
+// const addWallet$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
+//   action$.pipe(
+//     filterActions(actions.addWallet),
+//     withLatestFrom(state$.pipe(map(getWallets)), state$.pipe(map(getActiveToken))),
+//     map(([, wallets, token]) => ({ wallets, token })),
+//     filter(
+//       (value): value is { wallets: WalletRecord; token: Token } =>
+//          !!value.wallets && !!value.token,
+//     ),
+//     switchMap(({ wallets, token }) =>
+//       api.getWalletBalance(token, nextWalletId(wallets, token) - 1).pipe(
+//         map((balance) =>
+//           actions.addWalletSuccess({
+//             ...wallets,
+//             [token.symbol]: [
+//               ...wallets[token.symbol],
+//               {
+//                 account: defaultAccount,
+//                 address: balance.address,
+//                 token: { ...token },
+//                 id: nextWalletId(wallets, token),
+//                 amount: +balance.balance,
+//                 name: `Wallet${token.symbol}${nextWalletId(wallets, token)}`,
+//               },
+//             ],
+//           }),
+//         ),
+//       ),
+//     ),
+//     handleEpicError(actions.addWalletError, 'Failed to add wallet'),
+//   )
 
 const refreshAmounts$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(
-    filterActions(walletActions.updateWalletsSuccess),
-    map(() => walletActions.refreshAmounts()),
+    filterActions(actions.updateWalletsSuccess),
+    map(() => actions.refreshAmounts()),
   )
 
-const getPrivateAddress$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
+const getPrivateAddress$: Epic = (action$: Observable<Actions>) =>
   action$.pipe(
-    filter(isActionOf(walletActions.getPrivateAddress)),
+    filter(isActionOf(actions.getPrivateAddress)),
     switchMap(({ payload }) =>
-      api
-        .getPrivateAddress(payload)
-        .pipe(map((address) => walletActions.getPrivateAddressSuccess(address))),
+      from(api.getShieldedAddress()).pipe(
+        map((address) => actions.getPrivateAddressSuccess(address)),
+      ),
     ),
-    handleEpicError(walletActions.apiError, 'Falied to get private address'),
+    handleEpicError(actions.apiError, 'Falied to get private address'),
   )
 
+// tslint:disable-next-line: max-line-length
 const openSendConfirmView$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(
-    filterActions(walletActions.prepareSendConfirmView),
+    filterActions(actions.prepareSendConfirmView),
     getPayload(),
     switchMap((payload) =>
-      api.getNetworkFee(payload.wallet.token).pipe(
-        map((fee) =>
-          walletActions.openSendConfirmView({
+      //  api.getNetworkFee(payload.wallet.token).pipe(
+      from([0]).pipe(
+        map((fee: any) =>
+          actions.openSendConfirmView({
             ...payload,
             fee: fee.fee,
           }),
         ),
       ),
     ),
-    handleEpicError(walletActions.apiError, 'Failed to get network fee'),
-)
+    handleEpicError(actions.apiError, 'Failed to get network fee'),
+  )
 
 const sendTransaction$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(
-    filterActions(walletActions.send),
+    filterActions(actions.send),
     withLatestFrom(state$.pipe(map(getSendData)), state$.pipe(map(getActiveWallet))),
     map(([, sendData, wallet]) => ({ sendData, wallet })),
     filter(
@@ -209,16 +205,14 @@ const sendTransaction$: Epic = (action$: Observable<Actions>, state$: Observable
         !!value.sendData && !!value.wallet,
     ),
     switchMap(({ sendData, wallet }) =>
-      api.transfer(wallet.id - 1, sendData.address, sendData.amount, wallet.token).pipe(
+      from(api.transfer(sendData.address, sendData.amount)).pipe(
         tap(() => toast.success('Transaction completed successfully')),
-        // mapTo(walletActions.openTransactionsView(wallet)), // TODO: change after implementing the Log
-        mergeMap(() => of(
-          walletActions.openWalletsView(wallet.token),
-          walletActions.updateBalances(),
-        )),
+        // TODO: change after implementing the Log
+        // mapTo(actions.openTransactionsView(wallet)),
+        mergeMap(() => of(actions.openWalletsView(wallet.token), actions.updateBalances())),
       ),
     ),
-    handleEpicError(walletActions.apiError, 'Failed to send transaction'),
+    handleEpicError(actions.apiError, 'Failed to send transaction'),
   )
 
 const callGetTransactionsOnOpenTransactionsView$: Epic = (
@@ -226,9 +220,9 @@ const callGetTransactionsOnOpenTransactionsView$: Epic = (
   state$: Observable<RootState>,
 ) =>
   action$.pipe(
-    filterActions(walletActions.openTransactionsView),
+    filterActions(actions.openTransactionsView),
     getPayload(),
-    map((wallet) => walletActions.getTransactions(wallet)),
+    map((wallet) => actions.getTransactions(wallet)),
   )
 
 const callGetTransactionsOnUpdateWallets$: Epic = (
@@ -236,42 +230,42 @@ const callGetTransactionsOnUpdateWallets$: Epic = (
   state$: Observable<RootState>,
 ) =>
   action$.pipe(
-    filterActions(walletActions.updateBalances),
+    filterActions(actions.updateBalances),
     withLatestFrom(state$.pipe(map(getActiveView)), state$.pipe(map(getActiveWallet))),
     filter(([, view]) => view === WalletView.Transactions),
     map(([, , wallet]) => wallet),
     filter((wallet): wallet is Wallet => !!wallet),
-    map((wallet) => walletActions.getTransactions(wallet)),
+    map((wallet) => actions.getTransactions(wallet)),
   )
 
-const getTransactions$: Epic = (action$: Observable<Actions>) =>
-  action$.pipe(
-    filterActions(walletActions.getTransactions),
-    getPayload(),
-    switchMap((wallet) =>
-      api
-        .getWalletTransactions(wallet.token, wallet.id, false)
-        .pipe(map((transactions) => walletActions.getTransactionsSuccess(transactions))),
-    ),
-    handleEpicError(walletActions.apiError, 'Failed to get transactions'),
-  )
+// const getTransactions$: Epic = (action$: Observable<Actions>) =>
+//   action$.pipe(
+//     filterActions(actions.getTransactions),
+//     getPayload(),
+//     switchMap((wallet) =>
+//       api
+//         .getWalletTransactions(wallet.token, wallet.id, false)
+//         .pipe(map((transactions) => actions.getTransactionsSuccess(transactions))),
+//     ),
+//     handleEpicError(actions.apiError, 'Failed to get transactions'),
+//   )
 
 const handleErrorActions$: Epic = (action$: Observable<Actions>) =>
   action$.pipe(
     filterActions(
-      walletActions.addWalletError,
-      walletActions.setSeedError,
-      walletActions.updateWalletsError,
-      walletActions.apiError,
+      actions.addWalletError,
+      actions.setSeedError,
+      actions.updateWalletsError,
+      actions.apiError,
     ),
     tap(({ payload }) => toast.error(payload)),
     ignoreElements(),
   )
 
 export const walletEpics: Epic = combineEpics(
-  addWallet$,
+  // addWallet$,
   getRates$,
-  getTransactions$,
+  //   getTransactions$,
   callGetTransactionsOnOpenTransactionsView$,
   callGetTransactionsOnUpdateWallets$,
   initApi$,

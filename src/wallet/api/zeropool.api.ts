@@ -1,209 +1,325 @@
-import { HDWallet, CoinType, devConfig, Balance, Coin, validateAddress, init } from 'zeropool-api-js'
-import { from, Observable, of } from 'rxjs'
-import { Transaction } from 'zeropool-api-js/lib/coins/transaction'
-import { map } from 'rxjs/operators'
+import AES from 'crypto-js/aes'
+import Utf8 from 'crypto-js/enc-utf8'
+import bip39 from 'bip39-light'
+import HDWalletProvider from '@truffle/hdwallet-provider'
 // @ts-ignore
-import wasmPath from 'libzeropool-rs-wasm-web/libzeropool_rs_wasm_bg.wasm';
+import wasmPath from 'libzeropool-rs-wasm-web/libzeropool_rs_wasm_bg.wasm'
 // @ts-ignore
-import workerPath from 'zeropool-api-js/lib/worker.js?asset';
-import { Config } from 'zeropool-api-js/lib/config';
+import workerPath from 'zeropool-client-js/lib/worker.js?asset'
 
-import { fixTimestamp } from 'shared/util/fix-timestamp'
-import { Token, TokenSymbol } from 'shared/models'
+import { EthereumClient, PolkadotClient, Client as NetworkClient } from 'zeropool-support-js'
+import { init as initZPClient, ZeropoolClient } from 'zeropool-client-js'
+import { deriveSpendingKey } from 'zeropool-client-js/lib/utils'
+import { NetworkType } from 'zeropool-client-js/lib/network-type'
+import { EvmNetwork } from 'zeropool-client-js/lib/networks/evm'
+import { PolkadotNetwork } from 'zeropool-client-js/lib/networks/polkadot'
 
-import { getEthTransactions } from 'wallet/api/es.api'
-import { promiceErrorHandler } from 'wallet/api/promice-error.handler'
+import { isEvmBased, isSubstrateBased } from 'wallet/api/networks'
 
-import transferParamsUrl from 'assets/transfer_params.bin'
-import treeParamsUrl from 'assets/tree_update_params.bin'
-  // @ts-ignore
-import transferVk from 'assets/transfer_verification_key.json?asset'
-  // @ts-ignore
-import treeVk from 'assets/tree_update_verification_key.json?asset'
+export let client: NetworkClient
+export let zpClient: ZeropoolClient
+export let account: string
 
-import mocks from './mocks.json'
+export const NETWORK = process.env.NETWORK || 'ethereum'
+export const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || ''
+export const TOKEN_ADDRESS = process.env.TOKEN_ADDRESS || ''
+export const RELAYER_URL = process.env.RELAYER_URL || 'http://localhost:8545'
+export const RPC_URL = process.env.RPC_URL || 'http://localhost:8545'
 
-export let hdWallet: HDWallet | null = null
-export let transaction$: Observable<Transaction> | null = null
-export let config: Config = devConfig as any
-
-async function initHDWallet(seed: string): Promise<HDWallet> {debugger
-  config.snarkParams = {
-    transferParamsUrl: transferParamsUrl,
-    treeParamsUrl: treeParamsUrl,
-    transferVkUrl: transferVk,
-    treeVkUrl: treeVk,
-  }
-  // @ts-ignore
-  config.wasmPath = wasmPath
-  config.workerPath = workerPath
-  config.ethereum!.contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS || ''
-  config.ethereum!.tokenContractAddress = process.env.REACT_APP_TOKEN_ADDRESS || ''
-  config.ethereum!.httpProviderUrl = process.env.REACT_APP_EVM_RPC || ''
-  config.ethereum!.relayerUrl = process.env.REACT_APP_RELAYER_URL || ''
-  console.log(config)
-
-  await init(wasmPath)
-
-  hdWallet = await HDWallet.init(seed, config)
-
-  return hdWallet
+export const accountPresent = (): boolean => {
+  return !!localStorage.getItem(`zp.${account}.seed`)
 }
 
-const getWalletBalance = (token: Token, walletId: number) => {
-  if (!hdWallet) {
-    throw Error('API not available!')
+export const init = async (mnemonic: string, password: string, name: string): Promise<void> => {
+  console.log('Dev environment, using local env variables.')
+  let network
+  const snarkParamsConfig = {
+    transferParamsUrl: './assets/transfer_params.bin',
+    treeParamsUrl: './assets/tree_params.bin',
+    transferVkUrl: './assets/transfer_verification_key.json',
+    treeVkUrl: './assets/tree_verification_key.json',
   }
 
-  const coin = hdWallet.getCoin(token.name as CoinType)
+  const { worker, snarkParams } = await initZPClient(wasmPath, workerPath, snarkParamsConfig)
 
-  if (!coin) {
-    throw Error(`Can not access ${token.name} data!`)
+  if (isEvmBased(NETWORK)) {
+    const provider = new HDWalletProvider({
+      mnemonic,
+      providerOrUrl: RPC_URL,
+    })
+
+    client = new EthereumClient(provider)
+    network = new EvmNetwork(RPC_URL)
+  } else if (isSubstrateBased(NETWORK)) {
+    account = name
+    client = await PolkadotClient.create(mnemonic, RPC_URL)
+    network = new PolkadotNetwork()
+  } else {
+    throw new Error(`Unknown network ${NETWORK}`)
   }
 
-  return from(coin.getBalances(1, walletId).catch(promiceErrorHandler<Balance[]>([]))).pipe(
-    map((balances: any[]) => balances[0]),
-    map((balance: any) => ({
-      ...balance,
-      balance: coin.fromBaseUnit(balance.balance),
-    })),
-  )
+  zpClient = await ZeropoolClient.create({
+    sk: deriveSpendingKey(mnemonic, NETWORK as NetworkType),
+    worker,
+    snarkParams,
+    tokens: {
+      [TOKEN_ADDRESS]: {
+        poolAddress: CONTRACT_ADDRESS,
+        relayerUrl: RELAYER_URL,
+      },
+    },
+    networkName: NETWORK,
+    network,
+  })
+
+  console.log('Zeropool client initialized.')
+
+  localStorage.setItem(`zp.${account}.seed`, await AES.encrypt(mnemonic, password).toString())
 }
 
-const getPrivateAddress = (token: Token) => {
-  if (!hdWallet) {
-    throw Error('API not available!')
+export const getSeed = (password: string): string => {
+  let seed
+  const cipherText = localStorage.getItem(`zp.${account}.seed`)
+
+  if (!cipherText) throw new Error('Can not find seed!')
+
+  try {
+    seed = AES.decrypt(cipherText, password).toString(Utf8)
+    if (!bip39.validateMnemonic(seed)) throw new Error('invalid mnemonic')
+  } catch (_) {
+    throw new Error('Incorrect password')
   }
 
-  const coin = hdWallet.getCoin(token.name as CoinType)
-
-  if (!coin) {
-    throw Error(`Can't estimate fee for ${token.symbol}`)
-  }
-
-  return from([coin.generatePrivateAddress()])
+  return seed
 }
 
-const getAllBalances = (amount: number, offset = 0) => {
-  if (!hdWallet) {
-    throw Error('API not available!')
-  }
+export const getRegularAddress = async (): Promise<string> => {
+  apiCheck()
 
-  return from(hdWallet.getBalances(amount, offset).catch(promiceErrorHandler({})))
+  return await client.getAddress()
 }
 
-const getNetworkFee = (token: Token): Observable<{ fee: string }> => {
-  if (!hdWallet) {
-    throw Error('API not available!')
-  }
+export const getShieldedAddress = (): string => {
+  apiCheck()
 
-  const coin = hdWallet.getCoin(token.name as CoinType)
-  const e = `Can't estimate fee for ${token.name}`
-
-  if (!coin) {
-    throw Error(`Can't estimate fee for ${token.symbol}`)
-  }
-
-  return from(coin.estimateTxFee().catch(promiceErrorHandler<{ fee: string }>({ fee: '' }, e)))
+  return zpClient.generateAddress(TOKEN_ADDRESS)
 }
 
-// tslint:disable-next-line: prettier
-const getWalletTransactions = (token: Token, walletId: number, mocked = false): Observable<Transaction[]> => {
-  if (!hdWallet) {
-    throw Error('API not available!')
-  }
+export const getTokenBalance = async (): Promise<string> => {
+  apiCheck()
 
-  const coin = hdWallet.getCoin(token.name as CoinType)
-  const e = `Can't get transactions for ${token.name}`
-
-  if (!coin) {
-    throw Error(`Can't connect to ${token.symbol}`)
-  }
-
-  //#region TODO: Fix after implementing private transactions history
-  if (walletId === 0) {
-    return of([])
-  }
-
-  walletId -= 1
-  //#endregion ---------------------------------------------------------
-
-  const tr =
-    token.symbol === 'ETH'
-      ? from(
-          getEthTransactions(coin.getAddress(walletId), mocked).catch(
-            promiceErrorHandler<Transaction[]>([], e),
-          ),
-        )
-      : mocked
-      ? of(mocks.transactions[token.symbol])
-      : from(coin.getTransactions(walletId, 10, 0).catch(promiceErrorHandler<Transaction[]>([], e)))
-
-  return tr.pipe(map(convertValues(coin)))
+  return await client.getTokenBalance(TOKEN_ADDRESS)
 }
 
-const transfer = (account: number, to: string, amount: number, token: Token) => {
-  if (!hdWallet) {
-    throw Error('API not available!')
-  }
+export const getRegularBalance = async (): Promise<[string, string]> => {
+  apiCheck()
 
-  const coin = hdWallet.getCoin(token.name as CoinType)
-  const e = `Can't transfer ${token.name}`
+  const balance = await client.getBalance()
+  const readable = client.fromBaseUnit(balance)
 
-  if (!coin) {
-    throw Error(`Can't estimate fee for ${token.symbol}`)
-  }
+  return [balance, readable]
+}
 
-  if (isPrivateAddress(to, token.symbol)) {
-    if (isPrivateAddress(account.toString(), token.symbol)) {
-      throw Error(`Not implemented.`)
-      // return from(
-      //   coin.updatePrivateState().then(() =>
-      //     coin.withdrawPrivate(+to, amount.toString())
-      //   )
-      // )
-    }
-    
-    return from(
-      coin.updatePrivateState().then(() => {
-        return coin.depositPrivate(account, coin.toBaseUnit(amount.toString()))
+export const getShieldedBalances = async (): Promise<[string, string, string]> => {
+  apiCheck()
 
-      }
-      )
+  const balances = zpClient.getBalances(TOKEN_ADDRESS)
+
+  return balances
+}
+
+export const depositShielded = async (amount: string): Promise<string> => {
+  let fromAddress = null
+  let jobId = null
+
+  if (isSubstrateBased(NETWORK)) fromAddress = await client.getPublicKey()
+  else if (isEvmBased(NETWORK)) {
+    console.log(
+      'Approving allowance the Pool (%s) to spend our tokens (%s)',
+      CONTRACT_ADDRESS,
+      amount,
     )
+    await client.approve(TOKEN_ADDRESS, CONTRACT_ADDRESS, amount)
   }
 
-  if (isPrivateAddress(account.toString(), token.symbol)) {
-    throw Error(`Private local to public remote transactions are not implemented.`)
-  }
+  console.log('Making deposit...')
+  jobId = await zpClient.deposit(TOKEN_ADDRESS, amount, (data) => client.sign(data), fromAddress)
+  console.log('Please wait relayer complete the job %s...', jobId)
 
-  return from(
-    coin.transfer(account, to, coin.toBaseUnit(amount.toString())),
-  )
+  return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
 }
 
-export const isPrivateAddress = (address: string, token: TokenSymbol) => {
-  if (!hdWallet) {
-    throw Error('API not available!')
-  }
+export const withdrawShielded = async (amount: string): Promise<string> => {
+  apiCheck()
 
-  return validateAddress(address)
+  let address = null
+
+  if (isEvmBased(NETWORK)) address = await client.getAddress()
+  else if (isSubstrateBased(NETWORK)) address = await client.getPublicKey()
+
+  if (!address) throw new Error('No address found for withdrawal')
+
+  console.log('Making withdraw...')
+
+  const jobId = await zpClient.withdraw(TOKEN_ADDRESS, address, amount)
+
+  console.log('Please wait relayer complete the job %s...', jobId)
+
+  return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
 }
 
-const convertValues = (coin: Coin) => (transactions: Transaction[]) =>
-  transactions.map((transaction) => ({
-    ...transaction,
-    amount: coin.fromBaseUnit(transaction.amount),
-    timestamp: fixTimestamp(transaction.timestamp),
-  }))
+export const transfer = async (to: string, amount: string | number): Promise<void> => {
+  apiCheck()
 
-export const api = {
-  getAllBalances,
-  getWalletBalance,
-  getNetworkFee,
-  getWalletTransactions,
-  getPrivateAddress,
-  initHDWallet,
-  transfer,
-  isPrivateAddress,
+  console.log('Making private transfer...')
+
+  await client.transfer(to, String(amount))
+}
+
+export const transferShielded = async (to: string, amount: string): Promise<string> => {
+  apiCheck()
+
+  console.log('Making private transfer...')
+
+  const jobId = await zpClient.transfer(TOKEN_ADDRESS, [{ to, amount }])
+
+  console.log('Please wait relayer complete the job %s...', jobId)
+
+  return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
+}
+
+export const addressShielded = (address: string, token: string): boolean => {
+  return false
+}
+
+/*
+const _getWalletBalance = (token: Token, walletId: string) => {
+  // clientCheck()
+  // const coin = hdWallet.getCoin(token.name as CoinType)
+  // if (!coin) {
+  //   throw Error(`Can not access ${token.name} data!`)
+  // }
+  // return from(coin.getBalances(1, walletId).catch(promiceErrorHandler<Balance[]>([]))).pipe(
+  //   map((balances: any[]) => balances[0]),
+  //   map((balance: any) => ({
+  //     ...balance,
+  //     balance: coin.fromBaseUnit(balance.balance),
+  //   })),
+  // )
+}
+
+const _getPrivateAddress = (token: Token) => {
+  // if (!hdWallet) {
+  //   throw Error('API not available!')
+  // }
+  // const coin = hdWallet.getCoin(token.name as CoinType)
+  // if (!coin) {
+  //   throw Error(`Can't estimate fee for ${token.symbol}`)
+  // }
+  // return from([coin.generatePrivateAddress()])
+}
+
+const _getAllBalances = (amount: number, offset = 0) => {
+  // if (!hdWallet) {
+  //   throw Error('API not available!')
+  // }
+  // return from(hdWallet.getBalances(amount, offset).catch(promiceErrorHandler({})))
+}
+
+const _getNetworkFee = (token: Token) => {
+  // if (!hdWallet) {
+  //   throw Error('API not available!')
+  // }
+  // const coin = hdWallet.getCoin(token.name as CoinType)
+  // const e = `Can't estimate fee for ${token.name}`
+  // if (!coin) {
+  //   throw Error(`Can't estimate fee for ${token.symbol}`)
+  // }
+  // return from(coin.estimateTxFee().catch(promiceErrorHandler<{ fee: string }>({ fee: '' }, e)))
+}
+
+const _getWalletTransactions = (token: Token, walletId: number, mocked = false) => {
+  // if (!hdWallet) {
+  //   throw Error('API not available!')
+  // }
+  // const coin = hdWallet.getCoin(token.name as CoinType)
+  // const e = `Can't get transactions for ${token.name}`
+  // if (!coin) {
+  //   throw Error(`Can't connect to ${token.symbol}`)
+  // }
+  // //#region TODO: Fix after implementing private transactions history
+  // if (walletId === 0) {
+  //   return of([])
+  // }
+  // walletId -= 1
+  // //#endregion ---------------------------------------------------------
+  // const tr =
+  //   token.symbol === 'ETH'
+  //     ? from(
+  //         getEthTransactions(coin.getAddress(walletId), mocked).catch(
+  //           promiceErrorHandler<Transaction[]>([], e),
+  //         ),
+  //       )
+  //     : mocked
+  //     ? of(mocks.transactions[token.symbol])
+  //     : from(coin.getTransactions(walletId, 10, 0).catch(promiceErrorHandler<Transaction[]>([], e)))
+  // return tr.pipe(map(convertValues(coin)))
+}
+
+const _transfer = (account: number, to: string, amount: number, token: Token) => {
+  // if (!hdWallet) {
+  //   throw Error('API not available!')
+  // }
+  // const coin = hdWallet.getCoin(token.name as CoinType)
+  // const e = `Can't transfer ${token.name}`
+  // if (!coin) {
+  //   throw Error(`Can't estimate fee for ${token.symbol}`)
+  // }
+  // if (isPrivateAddress(to, token.symbol)) {
+  //   if (isPrivateAddress(account.toString(), token.symbol)) {
+  //     throw Error(`Not implemented.`)
+  //     // return from(
+  //     //   coin.updatePrivateState().then(() =>
+  //     //     coin.withdrawPrivate(+to, amount.toString())
+  //     //   )
+  //     // )
+  //   }
+  //   return from(
+  //     coin.updatePrivateState().then(() => {
+  //       return coin.depositShielded(account, coin.toBaseUnit(amount.toString()))
+  //     }),
+  //   )
+  // }
+  // if (isPrivateAddress(account.toString(), token.symbol)) {
+  //   throw Error(`Private local to public remote transactions are not implemented.`)
+  // }
+  // return from(coin.transfer(account, to, coin.toBaseUnit(amount.toString())))
+}
+
+const _isPrivateAddress = (address: string, token: TokenSymbol) => {
+  // if (!hdWallet) {
+  //   throw Error('API not available!')
+  // }
+  // return validateAddress(address)
+}
+
+// const _convertValues = (coin: Coin) => (transactions: Transaction[]) =>
+//   transactions.map((transaction) => ({
+//     ...transaction,
+//     amount: coin.fromBaseUnit(transaction.amount),
+//     timestamp: fixTimestamp(transaction.timestamp),
+//   }))
+*/
+
+const networkInitialized = (): boolean => {
+  return !!client
+}
+
+const zpInitialized = (): boolean => {
+  return !!zpClient
+}
+
+const apiCheck = (): void => {
+  if (!networkInitialized()) throw Error('Networt Client not available!')
+  else if (!zpInitialized()) throw Error('ZP client not available!')
 }

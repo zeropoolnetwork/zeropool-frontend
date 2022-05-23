@@ -1,6 +1,6 @@
 export type Token = {
   id: number
-  name: string // CoinType from zeropool-api-js/src/coins/coin-type.ts
+  name: string
   symbol: string
 }
 

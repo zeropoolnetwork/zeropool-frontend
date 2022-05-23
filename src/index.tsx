@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { ThemeProvider } from '@material-ui/core'
-import { ConnectedRouter } from 'connected-react-router'
+// import { ConnectedRouter } from 'connected-react-router'
 import { SnackbarProvider } from 'notistack'
 import { Router, Route, Redirect, Switch } from 'react-router-dom'
 
@@ -32,7 +32,7 @@ async function start() {
         {/* <React.StrictMode> */}
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistedStore}>
-            <ConnectedRouter history={history}>
+            {/* <ConnectedRouter history={history}> */}
               <Router history={history}>
                 <Switch>
                   <Route path="/welcome" exact={true} component={CreateAccountPage} />
@@ -43,7 +43,7 @@ async function start() {
                   </Route>
                 </Switch>
               </Router>
-            </ConnectedRouter>
+            {/* </ConnectedRouter> */}
             <LoadingBar />
           </PersistGate>
         </Provider>

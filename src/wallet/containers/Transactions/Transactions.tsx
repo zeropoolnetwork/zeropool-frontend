@@ -10,7 +10,6 @@ import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { isErrorWithMessage } from 'shared/util/is-error-with-message'
 
 import { SortedTransactions } from 'wallet/state/models/sorted-transactions'
-import { Transaction as Tr } from 'wallet/state/models/transaction'
 import { getTransactions } from 'wallet/state/wallet.selectors'
 import transactionHelper from 'wallet/state/helpers/transaction.helper'
 import { Transaction } from 'wallet/components/Transaction/Transaction'
@@ -31,7 +30,7 @@ export const Transactions: React.FC<TransactionsProps> = ({ wallet }) => {
   const { enqueueSnackbar } = useSnackbar()
   const [opened, setOpened] = useState<boolean[]>([])
 
-  const incoming = (transaction: Tr) =>
+  const incoming = (transaction: any) =>
     wallet.address.toLowerCase() === transaction.to.toLocaleLowerCase()
 
   const openHandler = (index: number) => {

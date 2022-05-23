@@ -5,7 +5,6 @@ import { Token, TokenName } from 'shared/models/token'
 import { WalletView } from 'wallet/state/models/wallet-view'
 import { Wallet } from 'wallet/state/models/wallet'
 import { WalletRecord } from './models'
-import { Transaction } from 'zeropool-api-js/lib/coins/transaction'
 
 export const walletActions = {
   apiError: create('@wallet/apiError')<string>(),
@@ -37,7 +36,7 @@ export const walletActions = {
   updateWalletsError: create('@wallet/updateWalletsError')<string>(),
 
   getTransactions: create('@wallet/getTransactions')<Wallet>(),
-  getTransactionsSuccess: create('@wallet/getTransactionsSussess')<Transaction[]>(),
+  getTransactionsSuccess: create('@wallet/getTransactionsSussess')<any[]>(),
 
   refreshAmounts: create('@wallet/refreshAmounts')<void>(),
 

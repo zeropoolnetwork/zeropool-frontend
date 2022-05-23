@@ -3,37 +3,39 @@
   "editor.tokenColorCustomizations": {
     "comments": "#ffffff3f"
   },
-  "folding": {
-    "*": [
-      {
-        "begin": "{{{",
-        "end": "}}}"
-      },
-    ],
-    "typescript": [
-      {
-        "begin": "[",
-        "end": "]",
-      },
-      {
-        "begin": "{",
-        "end": "}",
-      }
-    ],
-    "typescriptreact": [
-      {
-        "begin": "{/*",
-        "end": "*/}"
-      },
-      {
-        "begin": "[",
-        "end": "]",
-      },
-      {
-        "begin": "{",
-        "end": "}"
-      },
-    ]
+  "explicitFolding": {
+    "rules": {
+      "*": [
+        {
+          "begin": "{{{",
+          "end": "}}}"
+        },
+      ],
+      "typescript": [
+        {
+          "begin": "[",
+          "end": "]",
+        },
+        {
+          "begin": "{",
+          "end": "}",
+        }
+      ],
+      "typescriptreact": [
+        {
+          "begin": "{/*",
+          "end": "*/}"
+        },
+        {
+          "begin": "[",
+          "end": "]",
+        },
+        {
+          "begin": "{",
+          "end": "}"
+        },
+      ]
+    },
   },
   "editor.formatOnSave": false,
   "[javascript]": {
