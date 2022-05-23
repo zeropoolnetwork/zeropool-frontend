@@ -1,5 +1,3 @@
-import { Transaction as Tr, TxStatus } from 'zeropool-api-js/lib/coins/transaction'
+export type Transaction = any
 
-export type Transaction = Tr
-
-export type TransactionStatus = TxStatus
+export type TransactionStatus = any

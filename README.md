@@ -1,15 +1,10 @@
 # Important! How to run project:
 
 ## 1. Clone
-- `git clone --recurse-submodules https://github.com/zeropoolnetwork/zeropool-frontend.git`
-
-If you forget to use '--recurse-submodules' flag, then try to use 'git submodule update --init --recursive' command after cloning repository.
+- `git clone https://github.com/zeropoolnetwork/zeropool-frontend.git`
 
 ## 2. Init
 In standalone terminal (use gitbush on Windows) run this commands from the root folder of the project:
-- `./scripts/build-deps` - to build parameters and contracts
-- If you want to define your seed phrase, change it in `deps/pool-evm-single-l1/hardhat.config.json`
-- `./scripts/start-node` - start a hardhat node
 - `./scripts/start-local` - start the app dev server
 
 If blockchain node process halted remove it (from powershell if needed):
@@ -17,12 +12,7 @@ If blockchain node process halted remove it (from powershell if needed):
 - netstat -ano | findstr :8545
 - taskkill /PID [Process Id] /F 
 
-To update submodules:
-
-- git submodule foreach git pull origin master
-
-
-# Available Scripts
+# Developement 
 
 In the project directory, you can run:
 
@@ -46,3 +36,12 @@ Build the test coverage report.
 ## `npm run storybook`
 
 Run Storybook. Currently broken due to using Alpha version of CRA5.
+
+## `remixd -s ./deps/pool-evm-single-l1 --remix-ide https://remix.ethereum.org`
+
+Connect to Remix IDE.
+
+### Installing Remix and starting Remix IDE:
+
+1) npm i -g remixd
+2) Open https://remix.ethereum.org/ in the browser

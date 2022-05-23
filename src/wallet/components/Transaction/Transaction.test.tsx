@@ -2,7 +2,6 @@ import React from 'react'
 import { render } from '@testing-library/react'
 
 import { Transaction, componentId, TransactionProps } from './Transaction'
-import { Transaction as Tr } from 'wallet/state/models/transaction'
 
 jest.mock('shared/helpers/addres.helper', () => {
   return {
@@ -11,7 +10,7 @@ jest.mock('shared/helpers/addres.helper', () => {
   }
 })
 
-const tr1: Tr = {
+const tr1: any = {
   status: 0,
   amount: '0.21',
   from: '0xA646dc3DD68338Ee960eA131cfc798D9bF66070d',

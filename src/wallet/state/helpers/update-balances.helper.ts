@@ -1,4 +1,3 @@
-import { CoinType, HDWallet } from 'zeropool-api-js'
 import { from, Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
@@ -11,7 +10,7 @@ import { Wallet } from 'wallet/state/models'
 import { isPrivateTxsInplemented } from 'wallet/state/helpers/is-private-txs-implemented.helper'
 
 export const updateBalances = (
-  hdWallet: HDWallet,
+  hdWallet: any,
   wallets: Record<TokenSymbol, Wallet[]>,
   tokens: Token[],
 ): Observable<Record<string, Wallet[]>> => {
@@ -21,7 +20,7 @@ export const updateBalances = (
   tokens.forEach((token) => {
     const tokenWallets = wallets[token.symbol]
     const walletPromises: Promise<string>[] = []
-    const coin = hdWallet?.getCoin(token.name as CoinType)
+    const coin = hdWallet?.getCoin(token.name as any)
 
     if (!coin) {
       console.error(`Coin ${token.name} not found in wallet`)
@@ -34,7 +33,7 @@ export const updateBalances = (
         walletPromises.push(
           coin
             .getBalance(wallet.id - 1)
-            .catch((err) => {
+            .catch((err: any) => {
               // Near Fix
               if (nearBug(err)) {
                 return '0'
@@ -42,7 +41,7 @@ export const updateBalances = (
 
               throw Error(err)
             })
-            .then((balance) => {
+            .then((balance: any) => {
               try {
                 const bal = coin.fromBaseUnit(balance)
 
@@ -65,17 +64,17 @@ export const updateBalances = (
             .updatePrivateState()
             .then(async () => {
               const balances = await coin.getPrivateBalances()
-              
-              return balances[0];
+
+              return balances[0]
             })
-            .catch((err) => {
+            .catch((err: any) => {
               // Near Fix
               if (nearBug(err)) {
-                return '0';
+                return '0'
               }
 
               throw Error(err)
-            })
+            }),
         )
       } else {
         walletPromises.push(Promise.resolve('0'))
@@ -89,7 +88,6 @@ export const updateBalances = (
     map((balances) => {
       tokens.forEach((token, tokenIndex) => {
         result[token.symbol] = wallets[token.symbol].map((wallet, walletIndex) => {
-
           return {
             ...wallet,
             amount: walletIndex ? +balances[tokenIndex][walletIndex] : wallet.amount,

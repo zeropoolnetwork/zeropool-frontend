@@ -6,7 +6,6 @@ import CallReceivedIcon from '@material-ui/icons/CallReceived'
 
 import './Transaction.scss'
 
-import { Transaction as Tr } from 'wallet/state/models/transaction'
 import { Wallet } from 'wallet/state/models'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
@@ -18,7 +17,7 @@ const css = cn(componentId)
 const test = testIdBuilder(componentId)
 
 export type TransactionProps = {
-  transaction: Tr
+  transaction: any
   wallet: Wallet
 }
 

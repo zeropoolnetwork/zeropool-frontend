@@ -1,5 +1,3 @@
-import { Balance, CoinType, HDWallet } from 'zeropool-api-js'
-
 import { Token, TokenSymbol } from 'shared/models'
 import { isErrorWithMessage } from 'shared/util/is-error-with-message'
 import { notImplemented } from 'shared/util/not-implemented'
@@ -8,8 +6,8 @@ import { Wallet } from 'wallet/state/models'
 import { walletsHelper } from 'wallet/state/helpers/wallets.helper'
 
 export const initBalances = (
-  hdWallet: HDWallet,
-  balances: Record<TokenSymbol, Balance[]>,
+  hdWallet: any,
+  balances: Record<TokenSymbol, any[]>,
   tokens: Token[],
   account = 0,
 ): Record<TokenSymbol, Wallet[]> => {
@@ -17,7 +15,7 @@ export const initBalances = (
 
   for (const token of tokens) {
     const tokenId = token.symbol
-    const coin = hdWallet?.getCoin(token.name as CoinType)
+    const coin = hdWallet?.getCoin(token.name as any)
     wallets[tokenId] = []
 
     wallets[tokenId].push({
@@ -35,8 +33,8 @@ export const initBalances = (
 
       try {
         amount = coin
-          ? +coin.fromBaseUnit((balanceData as Balance).balance)
-          : +(balanceData as Balance).balance
+          ? +coin.fromBaseUnit((balanceData as any).balance)
+          : +(balanceData as any).balance
       } catch (err) {
         if (isErrorWithMessage(err)) {
           if (notImplemented(err)) {
@@ -51,7 +49,7 @@ export const initBalances = (
 
       wallets[tokenId].push({
         account,
-        address: (balanceData as Balance).address,
+        address: (balanceData as any).address,
         id,
         amount,
         name: `Wallet${token.symbol}${id}`,

@@ -3,6 +3,11 @@
 export MOCK_TX_VERIFIER=false
 export MOCK_TREE_VERIFIER=false
 
+set -m
 cd deps/pool-evm-single-l1
-npm install && \
-./scripts/start.sh
+# npm install && \
+npx hardhat node &
+sleep 2
+echo 'Deploying contract'
+npx hardhat run scripts/deploy-task.js --network localhost && echo 'Contract deployed'
+fg

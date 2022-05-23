@@ -1,8 +1,6 @@
 import { isEthereumAddress } from 'shared/helpers/validators/eth.validator'
 import { TokenSymbol } from 'shared/models'
 
-import { api } from 'wallet/api/zeropool.api'
-
 export const validateAddress = (address: string, symbol: TokenSymbol): boolean | undefined => {
   let result
   const supportedSymbols = ['ETH', 'WAVES', 'NEAR']
@@ -13,7 +11,7 @@ export const validateAddress = (address: string, symbol: TokenSymbol): boolean |
 
   switch (symbol) {
     case 'ETH':
-      result = isEthereumAddress(address) || api.isPrivateAddress(address, 'ETH')
+      result = isEthereumAddress(address) // || api.isPrivateAddress(address, 'ETH')
       break
 
     case 'WAVES':
