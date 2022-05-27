@@ -1,12 +1,10 @@
-// tslint:disable: prettier
 import storage from 'redux-persist/lib/storage'
 import { PersistConfig } from 'redux-persist/es/types'
-import { configureStore } from '@reduxjs/toolkit'
-import { combineReducers, Reducer } from 'redux'
 import { createBrowserHistory, History } from 'history'
+// import { connectRouter, routerMiddleware } from 'connected-react-router'
 import { combineEpics, createEpicMiddleware } from 'redux-observable'
 import { persistStore, persistReducer, createMigrate } from 'redux-persist'
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 
 import { registerReducer } from 'register/state/register.reducer'
 import { registerEpics } from 'register/state/register.epics'
@@ -16,21 +14,22 @@ import { walletReducer } from 'wallet/state/wallet.reducer'
 import { walletEpics } from 'wallet/state/wallet.epics'
 import { loadingBarReducer } from 'shared/loading-bar/state/loading-bar.reducer'
 
-//#region Setup React Redux Toolkit
+//#region Setup Devtools
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: <R>(a: R) => R
+  }
+}
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch = () => useDispatch<AppDispatch>()
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+const devToolsCompose = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+
+const composeEnhancers = devToolsCompose || compose
 //#endregion
 
 //#region Setup Epics
 const epicMiddleware = createEpicMiddleware()
 
-const epics = combineEpics(
+const rootEpic = combineEpics(
   registerEpics,
   walletEpics,
   // alertsEpics,
@@ -39,6 +38,9 @@ const epics = combineEpics(
 //#endregion
 
 //#region Setup Reducers
+export type RootState = NonNullable<Parameters<ReturnType<typeof createRootReducer>>[0]>
+
+export const history = createBrowserHistory()
 
 export const createRootReducer = (_history: History) =>
   combineReducers({
@@ -63,17 +65,14 @@ const persistConfig: PersistConfig<RootState> = {
   whitelist: ['register', 'account'],
 }
 
-const persistedReducer: Reducer = 
-  persistReducer(persistConfig, createRootReducer(createBrowserHistory()))
+const persistedReducer = persistReducer(persistConfig, createRootReducer(history))
 
-export const store = configureStore({
-  reducer: persistedReducer,
-  middleware: [epicMiddleware],
-})
+export const store = createStore(
+  persistedReducer,
+  composeEnhancers(applyMiddleware(epicMiddleware)),
+)
 
 export const persistedStore = persistStore(store)
 //#endregion
 
-epicMiddleware.run(epics)
-
-
+epicMiddleware.run(rootEpic)
