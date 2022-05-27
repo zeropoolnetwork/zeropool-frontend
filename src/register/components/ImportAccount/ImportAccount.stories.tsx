@@ -1,14 +1,15 @@
-import React, { ComponentProps } from 'react'
-import { Story } from '@storybook/react/types-6-0'
+import { ComponentStory, ComponentMeta } from '@storybook/react'
 
 import { ImportAccount } from './ImportAccount'
 
 export default {
   title: 'ImportAccount',
   component: ImportAccount,
-}
+} as ComponentMeta<typeof ImportAccount>
 
-const Template: Story<ComponentProps<typeof ImportAccount>> = (args) => <ImportAccount {...args} />
+const Template: ComponentStory<typeof ImportAccount> = (args) => (
+  <ImportAccount {...args} />
+)
 
 export const Empty = Template.bind({})
 Empty.args = {

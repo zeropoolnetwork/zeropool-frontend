@@ -1,7 +1,7 @@
 import { cn } from '@bem-react/classname'
-import AddIcon from '@material-ui/icons/Add'
+import { Add } from '@mui/icons-material'
 import React, { useState } from 'react'
-import { Dialog, DialogContent } from '@material-ui/core'
+import { Dialog, DialogContent } from '@mui/material'
 
 import './Wallets.scss'
 
@@ -87,7 +87,7 @@ export const Wallets: React.FC<WalletsProps> = ({
 
       <div className={css('Add')}>
         <RoundButton label={'Add wallet'} onClick={handlers.onAdd}>
-          <AddIcon />
+          <Add />
         </RoundButton>
       </div>
 

@@ -1,4 +1,10 @@
-import { createTheme } from '@material-ui/core/styles'
+import { createTheme } from '@mui/material'
+import { Theme } from '@mui/material/styles'
+
+declare module '@mui/styles/defaultTheme' {
+  // tslint:disable-next-line: no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
 
 const COLOR_PRIMARY = '#020941'
 const COLOR_BLUE_PRIMARY = '#2699fb'
@@ -19,87 +25,99 @@ export const theme = createTheme({
     },
   },
 
-  overrides: {
+  components: {
     MuiAppBar: {
-      colorPrimary: {
-        backgroundColor: COLOR_PRIMARY,
-      },
+      // styleOverrides: ({ ownerState }) => ({
+      //   ...ownerState.color === 'primary' && {
+      //     backgroundColor: COLOR_PRIMARY,
+      //   },
+      // }),
     },
 
     MuiButton: {
-      root: {
-        fontSize: '1rem',
-        fontFamily: '"Exo 2", "Roboto", "Helvetica", "Arial", sans-serif',
-        margin: '5px',
-      },
-      outlinedPrimary: {
-        backgroundColor: COLOR_PRIMARY,
-        border: `solid 2px ${COLOR_BLUE_PRIMARY}`,
-        color: WHITE,
-        '&:hover': {
-          backgroundColor: COLOR_PRIMARY,
-          border: `solid 2px ${COLOR_BLUE_SECCONDARY}`,
+      styleOverrides: {
+        root: {
+          fontSize: '1rem',
+          fontFamily: '"Exo 2", "Roboto", "Helvetica", "Arial", sans-serif',
+          margin: '5px',
         },
-      },
-      containedPrimary: {
-        // backgroundColor: 'linear-gradient(90deg, rgba(132,198,255,1) 10%,
-        // rgba(38,153,251,1) 100%)',
-        backgroundColor: COLOR_BLUE_PRIMARY,
-        color: WHITE,
-        '&:hover': {
-          backgroundColor: COLOR_BLUE_SECCONDARY,
+        outlinedPrimary: {
+          backgroundColor: COLOR_PRIMARY,
+          border: `solid 2px ${COLOR_BLUE_PRIMARY}`,
+          color: WHITE,
+          '&:hover': {
+            backgroundColor: COLOR_PRIMARY,
+            border: `solid 2px ${COLOR_BLUE_SECCONDARY}`,
+          },
+        },
+        containedPrimary: {
+          // backgroundColor: 'linear-gradient(90deg, rgba(132,198,255,1) 10%,
+          // rgba(38,153,251,1) 100%)',
+          backgroundColor: COLOR_BLUE_PRIMARY,
+          color: WHITE,
+          '&:hover': {
+            backgroundColor: COLOR_BLUE_SECCONDARY,
+          },
         },
       },
     },
 
     MuiIconButton: {
-      root: {
-        backgroundColor: COLOR_PRIMARY,
-        '&:hover': {
+      styleOverrides: {
+        root: {
           backgroundColor: COLOR_PRIMARY,
+          '&:hover': {
+            backgroundColor: COLOR_PRIMARY,
+          },
         },
       },
     },
 
     MuiLinearProgress: {
-      barColorPrimary: {
-        backgroundColor: GREEN,
-      },
-      colorPrimary: {
-        backgroundColor: COLOR_PRIMARY,
+      styleOverrides: {
+        barColorPrimary: {
+          backgroundColor: GREEN,
+        },
+        colorPrimary: {
+          backgroundColor: COLOR_PRIMARY,
+        },
       },
     },
 
     MuiDialog: {
-      root: {
-        minWidth: '350px',
+      styleOverrides: {
+        root: {
+          minWidth: '350px',
+        },
       },
     },
 
     MuiInputLabel: {},
 
     MuiInput: {
-      colorSecondary: {
-        color: WHITE,
-      },
-
-      underline: {
-        borderBottomColor: INPUT_UNDERLINE_COLOR,
-
-        '&:not($disabled):after': {
-          borderBottomColor: INPUT_UNDERLINE_COLOR,
+      styleOverrides: {
+        colorSecondary: {
+          color: WHITE,
         },
 
-        '&:hover:not($disabled):after': {
+        underline: {
           borderBottomColor: INPUT_UNDERLINE_COLOR,
-        },
 
-        '&:not($disabled):before': {
-          borderBottomColor: INPUT_UNDERLINE_COLOR,
-        },
+          '&:not($disabled):after': {
+            borderBottomColor: INPUT_UNDERLINE_COLOR,
+          },
 
-        '&:hover:not($disabled):before': {
-          borderBottomColor: INPUT_UNDERLINE_COLOR,
+          '&:hover:not($disabled):after': {
+            borderBottomColor: INPUT_UNDERLINE_COLOR,
+          },
+
+          '&:not($disabled):before': {
+            borderBottomColor: INPUT_UNDERLINE_COLOR,
+          },
+
+          '&:hover:not($disabled):before': {
+            borderBottomColor: INPUT_UNDERLINE_COLOR,
+          },
         },
       },
     },

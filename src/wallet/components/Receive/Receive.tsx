@@ -1,6 +1,6 @@
 import React from 'react'
 import { cn } from '@bem-react/classname'
-import { Button, Tooltip } from '@material-ui/core'
+import { Button, Tooltip } from '@mui/material'
 import { useSnackbar } from 'notistack'
 
 import './Receive.scss'

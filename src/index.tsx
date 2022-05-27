@@ -1,11 +1,12 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+// @ts-nocheck
+import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
-import { ThemeProvider } from '@material-ui/core'
+import { ThemeProvider } from '@mui/material'
 // import { ConnectedRouter } from 'connected-react-router'
 import { SnackbarProvider } from 'notistack'
-import { Router, Route, Redirect, Switch } from 'react-router-dom'
+import { Router, Route, Navigate, Routes } from 'react-router-dom'
+import { createBrowserHistory } from 'history'
 
 import './index.css'
 import * as serviceWorker from './serviceWorker'
@@ -16,34 +17,33 @@ import { LoadingBar } from 'shared/loading-bar/containers/loading-bar/loading-ba
 import { AboutPage } from 'shared/components/AboutPage/AboutPage'
 import { timeout } from 'shared/util/timeout'
 
-import { store, history, persistedStore } from 'state'
+import { store, persistedStore } from 'state'
 import { CreateAccountPage } from 'register/containers/CreateAccount/CreateAccountPage'
 import { WalletPage } from 'wallet/containers/WalletPage/WalletPage'
 import { theme } from 'theme'
+
+const history = createBrowserHistory()
+const root = createRoot(document.getElementById('root'))
 
 setupInterceptors(http(), store)
 
 async function start() {
   await timeout(1000)
 
-  ReactDOM.render(
+  root.render(
     <ThemeProvider theme={theme}>
       <SnackbarProvider maxSnack={5} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
         {/* <React.StrictMode> */}
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistedStore}>
-            {/* <ConnectedRouter history={history}> */}
-              <Router history={history}>
-                <Switch>
-                  <Route path="/welcome" exact={true} component={CreateAccountPage} />
-                  <Route path="/about" exact={true} component={AboutPage} />
-                  <Route path="/wallet" exact={true} component={WalletPage} />
-                  <Route>
-                    <Redirect to="/welcome" />
-                  </Route>
-                </Switch>
-              </Router>
-            {/* </ConnectedRouter> */}
+            <Router navigator={history} location={history.location} basename='zeropool-frontend'>
+              <Routes>
+                <Route path="/welcome" exact={true} element={<CreateAccountPage />} />
+                <Route path="/about" exact={true} element={<AboutPage />} />
+                <Route path="/wallet" exact={true} element={<WalletPage />} />
+                <Route path="/" element={<Navigate to="/welcome" />} />
+              </Routes>
+            </Router>
             <LoadingBar />
           </PersistGate>
         </Provider>
@@ -51,7 +51,6 @@ async function start() {
         <SnackbarUtilsConfigurator />
       </SnackbarProvider>
     </ThemeProvider>,
-    document.getElementById('root'),
   )
 }
 

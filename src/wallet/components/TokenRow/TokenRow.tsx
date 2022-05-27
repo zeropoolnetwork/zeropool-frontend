@@ -1,6 +1,6 @@
 import React from 'react'
 import { cn } from '@bem-react/classname'
-import { Tooltip } from '@material-ui/core'
+import { Tooltip } from '@mui/material'
 import NumberFormat from 'react-number-format'
 
 import './TokenRow.scss'

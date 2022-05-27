@@ -1,5 +1,4 @@
-import React, { ComponentProps } from 'react'
-import { Story } from '@storybook/react/types-6-0'
+import { ComponentStory, ComponentMeta } from '@storybook/react'
 
 import { SeedPanel } from './SeedPanel'
 
@@ -9,9 +8,9 @@ export default {
   title: 'SeedPanel',
   component: SeedPanel,
   decorators: [(panel: any) => <div style={decoratorCss}>{panel()}</div>],
-}
+} as ComponentMeta<typeof SeedPanel>
 
-const Template: Story<ComponentProps<typeof SeedPanel>> = (args) => <SeedPanel {...args} />
+const Template: ComponentStory<typeof SeedPanel> = (args) => <SeedPanel {...args} />
 
 export const PanelEmpty = Template.bind({})
 PanelEmpty.args = {

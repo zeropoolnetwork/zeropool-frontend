@@ -1,6 +1,6 @@
 import { cn } from '@bem-react/classname'
-import { IconButton } from '@material-ui/core'
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
+import { IconButton } from '@mui/material'
+import { ArrowForwardIos } from '@mui/icons-material'
 import React, { HTMLAttributes } from 'react'
 
 import './ExpandButton.scss'
@@ -25,7 +25,7 @@ export const ExpandButton: React.FC<ExpendButtonProps> = ({ expanded, click, ...
       onClick={click}
     >
       <IconButton disableRipple={true} disableFocusRipple={true} disableTouchRipple={true}>
-        <ArrowForwardIosIcon />
+        <ArrowForwardIos />
       </IconButton>
     </div>
   )

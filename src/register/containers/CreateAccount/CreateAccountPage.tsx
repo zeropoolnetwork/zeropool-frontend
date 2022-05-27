@@ -1,12 +1,14 @@
 import React from 'react'
 import { cn } from '@bem-react/classname'
-import { push } from 'connected-react-router'
+// import { push } from 'connected-react-router'
 import { useDispatch, useSelector } from 'react-redux'
+
 import logo from 'assets/images/logo1.svg'
 
 import './CreateAccountPage.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
+import { navigate } from 'shared/shared.actions'
 
 import { StepOne } from 'register/components/StepOne/StepOne'
 import { StepTwo } from 'register/components/StepTwo/StepTwo'
@@ -53,10 +55,10 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
         return (
           <Welcome
             // TODO: remove next line after API is connected
-            onMockedLogin={() => dispatch(push('/wallet'))}
+            onMockedLogin={() => dispatch(navigate.to('/wallet'))}
             onCreate={() => dispatch(actions.startRegisterAccount())}
             onImport={() => dispatch(actions.startImportAccount())}
-            onAbout={() => dispatch(push('/about'))}
+            onAbout={() => dispatch(navigate.to('/about'))}
           />
         )
     }

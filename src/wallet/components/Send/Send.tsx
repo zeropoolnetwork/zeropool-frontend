@@ -1,4 +1,4 @@
-import { Button, TextField, Tooltip } from '@material-ui/core'
+import { Button, TextField, Tooltip } from '@mui/material'
 import React, { useState } from 'react'
 import { useSnackbar } from 'notistack'
 import NumberFormat from 'react-number-format'

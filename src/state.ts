@@ -1,7 +1,7 @@
 import storage from 'redux-persist/lib/storage'
 import { PersistConfig } from 'redux-persist/es/types'
 import { createBrowserHistory, History } from 'history'
-import { connectRouter, routerMiddleware } from 'connected-react-router'
+// import { connectRouter, routerMiddleware } from 'connected-react-router'
 import { combineEpics, createEpicMiddleware } from 'redux-observable'
 import { persistStore, persistReducer, createMigrate } from 'redux-persist'
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
@@ -46,7 +46,7 @@ export const createRootReducer = (_history: History) =>
   combineReducers({
     register: registerReducer,
     account: walletReducer,
-    router: connectRouter(_history),
+    // router: connectRouter(_history),
     shared: combineReducers({
       loadingBar: loadingBarReducer,
       //   // alerts: alertsReducer,
@@ -69,7 +69,7 @@ const persistedReducer = persistReducer(persistConfig, createRootReducer(history
 
 export const store = createStore(
   persistedReducer,
-  composeEnhancers(applyMiddleware(epicMiddleware, routerMiddleware(history))),
+  composeEnhancers(applyMiddleware(epicMiddleware)),
 )
 
 export const persistedStore = persistStore(store)

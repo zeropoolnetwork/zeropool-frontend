@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { cn } from '@bem-react/classname'
-import { Button } from '@material-ui/core'
+import { Button } from '@mui/material'
 
 import './StepThree.scss'
 

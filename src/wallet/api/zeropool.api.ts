@@ -25,6 +25,8 @@ export const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || ''
 export const TOKEN_ADDRESS = process.env.TOKEN_ADDRESS || ''
 export const RELAYER_URL = process.env.RELAYER_URL || 'http://localhost:8545'
 export const RPC_URL = process.env.RPC_URL || 'http://localhost:8545'
+export const TRANSACTION_URL = process.env.TRANSACTION_URL || 'http://localhost:8545'
+// tslint:disable: prettier
 
 export const accountPresent = (): boolean => {
   return !!localStorage.getItem(`zp.${account}.seed`)
@@ -40,7 +42,10 @@ export const init = async (mnemonic: string, password: string, name: string): Pr
     treeVkUrl: './assets/tree_verification_key.json',
   }
 
-  const { worker, snarkParams } = await initZPClient(wasmPath, workerPath, snarkParamsConfig)
+  const { worker, snarkParams } =
+    await initZPClient(wasmPath, workerPath, snarkParamsConfig)
+  const evmConfig = { transactionUrl: TRANSACTION_URL }
+  const substrateConfig = { rpcUrl: RPC_URL, transactionUrl: TRANSACTION_URL }
 
   if (isEvmBased(NETWORK)) {
     const provider = new HDWalletProvider({
@@ -48,12 +53,12 @@ export const init = async (mnemonic: string, password: string, name: string): Pr
       providerOrUrl: RPC_URL,
     })
 
-    client = new EthereumClient(provider)
+    client = new EthereumClient(provider, evmConfig)
     network = new EvmNetwork(RPC_URL)
   } else if (isSubstrateBased(NETWORK)) {
     account = name
-    client = await PolkadotClient.create(mnemonic, RPC_URL)
     network = new PolkadotNetwork()
+    client = await PolkadotClient.create(mnemonic, substrateConfig)
   } else {
     throw new Error(`Unknown network ${NETWORK}`)
   }

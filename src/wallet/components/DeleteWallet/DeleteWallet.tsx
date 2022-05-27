@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, TextField } from '@material-ui/core'
+import { Button, TextField } from '@mui/material'
 import { cn } from '@bem-react/classname'
 
 import './DeleteWallet.scss'
@@ -17,7 +17,11 @@ export type DeleteWalletProps = {
   walletName: string
 }
 
-export const DeleteWallet: React.FC<DeleteWalletProps> = ({ walletName, onCancel, onDelete }) => {
+export const DeleteWallet: React.FC<DeleteWalletProps> = ({
+  walletName,
+  onCancel,
+  onDelete,
+}) => {
   const [confirmName, setConfirmName] = useState('')
 
   return (

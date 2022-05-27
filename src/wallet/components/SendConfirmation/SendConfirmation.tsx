@@ -1,7 +1,6 @@
-import { Button, TextField, Tooltip } from '@material-ui/core'
-import React from 'react'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import { Button, TextField, Tooltip, CircularProgress } from '@mui/material'
 import { cn } from '@bem-react/classname'
+import React from 'react'
 
 import './SendConfirmation.scss'
 

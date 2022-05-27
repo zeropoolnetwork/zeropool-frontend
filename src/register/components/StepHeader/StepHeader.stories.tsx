@@ -1,5 +1,4 @@
-import React, { ComponentProps } from 'react'
-import { Story } from '@storybook/react/types-6-0'
+import { ComponentStory, ComponentMeta } from '@storybook/react'
 
 import { StepHeader } from './StepHeader'
 
@@ -7,9 +6,9 @@ import { StepHeader } from './StepHeader'
 export default {
   title: 'StepHeader',
   component: StepHeader,
-}
+} as ComponentMeta<typeof StepHeader>
 
-const Template: Story<ComponentProps<typeof StepHeader>> = (args) => <StepHeader {...args} />
+const Template: ComponentStory<typeof StepHeader> = (args) => <StepHeader {...args} />
 
 export const FirstStory = Template.bind({})
 FirstStory.args = {

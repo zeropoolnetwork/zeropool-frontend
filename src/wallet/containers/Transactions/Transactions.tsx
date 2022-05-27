@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { cn } from '@bem-react/classname'
 import { useSnackbar } from 'notistack'
-import { CircularProgress } from '@material-ui/core'
+import { CircularProgress } from '@mui/material'
 import { useSelector } from 'react-redux'
 
 import './Transactions.scss'

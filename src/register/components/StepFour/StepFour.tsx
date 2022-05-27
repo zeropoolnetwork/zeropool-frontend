@@ -14,8 +14,8 @@ import {
   Input,
   InputAdornment,
   InputLabel,
-} from '@material-ui/core'
-import { Close, Visibility, VisibilityOff } from '@material-ui/icons'
+} from '@mui/material'
+import { Close, Visibility, VisibilityOff } from '@mui/icons-material'
 export const componentId = 'StepFour'
 
 const css = cn(componentId)
@@ -43,9 +43,8 @@ export interface StepFourProps {
 }
 
 export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
-  const { handleSubmit, register, reset, control, errors } = useForm<FormData>({
-    criteriaMode: 'all',
-  })
+  const { handleSubmit, register, reset, control, formState: { errors }, getValues } = 
+    useForm<FormData>({ criteriaMode: 'all'})
 
   const [showPassword, setShowPassword] = useState(false)
   const [password, setPassword] = useState('')
@@ -66,9 +65,9 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
             color="secondary"
             className={css('Password')}
             inputProps={{ 'data-testid': test('Password') }}
-            inputRef={register(PasswordInputParams)}
+            inputRef={register('password', PasswordInputParams) as any}
             name="password"
-            onChange={() => setPassword(control.getValues().password)}
+            onChange={() => setPassword(getValues().password)}
             type={showPassword ? 'text' : 'password'}
             endAdornment={
               <InputAdornment position="end">
@@ -79,7 +78,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
                     onClick={() => {
                       reset({
                         password: undefined,
-                        confirm: control.getValues().confirm,
+                        confirm: getValues().confirm,
                       })
                       setPassword('')
                     }}
@@ -118,11 +117,13 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
             color="secondary"
             className={css('Password')}
             inputProps={{ 'data-testid': test('Confirm') }}
-            inputRef={register({
-              validate: (value) => value === control.getValues().password,
-            })}
+            inputRef={
+              register('confirm', {
+                validate: (value) => value === getValues().password,
+              }) as any
+            }
             name="confirm"
-            onChange={() => setPasswordConfirm(control.getValues().confirm)}
+            onChange={() => setPasswordConfirm(getValues().confirm)}
             type={showPassword ? 'text' : 'password'}
             endAdornment={
               <InputAdornment position="end">
@@ -132,7 +133,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
                     aria-label="empty confirmation"
                     onClick={() => {
                       reset({
-                        password: control.getValues().password,
+                        password: getValues().password,
                         confirm: undefined,
                       })
                       setPasswordConfirm('')
@@ -167,11 +168,11 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
         </p>
 
         <Button
-          color="primary"
+          // color="primary"
           className={css('Button')}
           data-testid={test('Submit')}
           disableElevation={true}
-          variant="contained"
+          // variant="contained"
           type="submit"
         >
           Register
@@ -179,14 +180,14 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
 
         {/* TODO: remove after testing */}
         <Button
-          color="primary"
+          // color="primary"
           className={css('Button')}
           disableElevation={true}
           onClick={() => {
             reset({ password: 'test1234', confirm: 'test1234' })
             handleSubmit(onRegister)
           }}
-          variant="contained"
+          // variant="contained"
           type="submit"
         >
           Testing: use 'test1234'

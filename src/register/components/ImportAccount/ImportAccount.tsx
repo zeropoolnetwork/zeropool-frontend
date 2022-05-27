@@ -2,7 +2,7 @@ import { cn } from '@bem-react/classname'
 import { DevTool } from '@hookform/devtools'
 import { useForm } from 'react-hook-form'
 import React, { useState } from 'react'
-import { Close, Visibility, VisibilityOff } from '@material-ui/icons'
+import { Close, Visibility, VisibilityOff } from '@mui/icons-material'
 import {
   Button,
   FormControl,
@@ -11,7 +11,7 @@ import {
   Input,
   InputAdornment,
   InputLabel,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import './ImportAccount.scss'
 
@@ -54,9 +54,8 @@ export interface ImportAccountProps {
 }
 
 export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }) => {
-  const { handleSubmit, register, reset, control, errors } = useForm<FormData>({
-    criteriaMode: 'all',
-  })
+  const { handleSubmit, register, reset, control,  formState: { errors }, getValues } =
+    useForm<FormData>({ criteriaMode: 'all' })
 
   const [seed, setSeed] = useState([] as string[])
   const [showPassword, setShowPassword] = useState(false)
@@ -85,14 +84,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
               inputProps={{ 'data-testid': test('Seed') }}
               inputRef={register(seedInputParamsFactory(seed)) as any}
               name="seed"
-              onChange={() =>
-                setSeed(
-                  control
-                    .getValues()
-                    .seed.split(/[ ,.]+/)
-                    .filter((str) => !!str),
-                )
-              }
+              onChange={() => setSeed(getValues().seed.split(/[ ,.]+/).filter((s) => !!s))}
               type={'text'}
               endAdornment={
                 <InputAdornment position="end">
@@ -103,8 +95,8 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                       onClick={() => {
                         reset({
                           seed: undefined,
-                          password: control.getValues().password,
-                          confirm: control.getValues().confirm,
+                          password: getValues().password,
+                          confirm: getValues().confirm,
                         })
                         setSeed([])
                       }}
@@ -137,9 +129,9 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
               color="secondary"
               classes={{ input: css('PasswordInput') }}
               inputProps={{ 'data-testid': test('Password') }}
-              inputRef={register(PasswordInputParams)}
+              inputRef={register('password', PasswordInputParams) as any}
               name="password"
-              onChange={() => setPassword(control.getValues().password)}
+              onChange={() => setPassword(getValues().password)}
               type={showPassword ? 'text' : 'password'}
               endAdornment={
                 <InputAdornment position="end">
@@ -149,9 +141,9 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                       aria-label="empty password"
                       onClick={() => {
                         reset({
-                          seed: control.getValues().seed,
+                          seed: getValues().seed,
                           password: undefined,
-                          confirm: control.getValues().confirm,
+                          confirm: getValues().confirm,
                         })
                         setPassword('')
                       }}
@@ -193,11 +185,13 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
               color="secondary"
               classes={{ input: css('PasswordInput') }}
               inputProps={{ 'data-testid': test('Confirm') }}
-              inputRef={register({
-                validate: (value) => value === control.getValues().password,
-              })}
+              inputRef={
+                register('confirm', {
+                  validate: (value) => value === getValues().password,
+                }) as any
+              }
               name="confirm"
-              onChange={() => setPasswordConfirm(control.getValues().confirm)}
+              onChange={() => setPasswordConfirm(getValues().confirm)}
               type={showPassword ? 'text' : 'password'}
               endAdornment={
                 <InputAdornment position="end">
@@ -207,8 +201,8 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                       aria-label="empty confirmation"
                       onClick={() => {
                         reset({
-                          seed: control.getValues().seed,
-                          password: control.getValues().password,
+                          seed: getValues().seed,
+                          password: getValues().password,
                           confirm: undefined,
                         })
                         setPasswordConfirm('')
@@ -241,23 +235,23 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
           </FormControl>
 
           <Button
-            color="primary"
+            // color="primary"
             className={css('Button')}
             data-testid={test('Import')}
             disableElevation={true}
-            variant="contained"
+            // variant="contained"
             type="submit"
           >
             Import
           </Button>
 
           <Button
-            color="primary"
+            // color="primary"
             className={css('Button')}
             data-testid={test('Back')}
             disableElevation={true}
             onClick={onBack}
-            variant="outlined"
+            // variant="outlined"
           >
             Back
           </Button>

@@ -1,5 +1,4 @@
-import React, { ComponentProps } from 'react'
-import { Story } from '@storybook/react/types-6-0'
+import { ComponentStory, ComponentMeta } from '@storybook/react'
 
 import { SeedTag } from './SeedTag'
 
@@ -7,9 +6,9 @@ import { SeedTag } from './SeedTag'
 export default {
   title: 'SeedTag',
   component: SeedTag,
-}
+} as ComponentMeta<typeof SeedTag>
 
-const Template: Story<ComponentProps<typeof SeedTag>> = (args) => <SeedTag {...args} />
+const Template: ComponentStory<typeof SeedTag> = (args) => <SeedTag {...args} />
 
 export const JustText = Template.bind({})
 JustText.args = {

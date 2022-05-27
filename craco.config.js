@@ -1,6 +1,7 @@
 const { addBeforeLoader, loaderByName } = require('@craco/craco')
-const { ProvidePlugin } = require('webpack')
-const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
+const { ProvidePlugin, DefinePlugin } = require('webpack')
+const path = require('path')
+const Dotenv  = require('dotenv-webpack')
 
 module.exports = {
   ignoreWarnings: [
@@ -61,12 +62,8 @@ module.exports = {
       },
     },
     plugins: {
-      add: [g
-        new CleanWebpackPlugin(),
-        new ProvidePlugin({
-          Buffer: ['buffer', 'Buffer'],
-          process: 'process'
-        })
+      add: [
+        new Dotenv(),
       ]
     }
   }
