@@ -1,5 +1,5 @@
 import { cn } from '@bem-react/classname'
-import { Paper } from '@material-ui/core'
+import { Paper } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 
 import './SeedPanel.scss'

@@ -1,5 +1,4 @@
-import React, { ComponentProps } from 'react'
-import { Story } from '@storybook/react/types-6-0'
+import { ComponentStory, ComponentMeta } from '@storybook/react'
 
 import { Perl } from './Perl'
 
@@ -7,9 +6,9 @@ import { Perl } from './Perl'
 export default {
   title: 'Perl',
   component: Perl,
-}
+} as ComponentMeta<typeof Perl>
 
-const Template: Story<ComponentProps<typeof Perl>> = (args) => <Perl {...args} />
+const Template: ComponentStory<typeof Perl> = (args) => <Perl {...args} />
 
 export const NumberOne = Template.bind({})
 NumberOne.args = {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { cn } from '@bem-react/classname'
-import { ArrowBack } from '@material-ui/icons'
-import { Button, MobileStepper, Tooltip } from '@material-ui/core'
+import { ArrowBack } from '@mui/icons-material'
+import { Button, MobileStepper, Tooltip } from '@mui/material'
 
 import './StepHeader.scss'
 

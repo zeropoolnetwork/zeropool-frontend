@@ -1,5 +1,5 @@
 import React from 'react'
-import { push } from 'connected-react-router'
+// import { push } from 'connected-react-router'
 import { render } from '@testing-library/react'
 import { useDispatch } from 'react-redux'
 
@@ -7,7 +7,7 @@ import { AboutPage } from './AboutPage'
 
 //#region Mocks
 const useDispatchMock = useDispatch as jest.Mock
-const pushMock = push as jest.Mock
+// const pushMock = push as jest.Mock
 const dispatchSpy = jest.fn()
 const pushSpy = jest.fn()
 

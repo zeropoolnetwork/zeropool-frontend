@@ -1,8 +1,8 @@
 import { cn } from '@bem-react/classname'
-import { Tooltip } from '@material-ui/core'
-import SettingsIcon from '@material-ui/icons/Settings'
-import VerticalAlignTopIcon from '@material-ui/icons/VerticalAlignTop'
-import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom'
+import { Tooltip } from '@mui/material'
+import { Settings } from '@mui/icons-material'
+import { VerticalAlignTop } from '@mui/icons-material'
+import { VerticalAlignBottom } from '@mui/icons-material'
 import React, { useEffect, useState } from 'react'
 
 import './WalletRow.scss'
@@ -103,7 +103,7 @@ export const WalletRow: React.FC<WalletRowProps> = ({
           label={'Send'}
           onClick={() => onSendClick(wallet)}
         >
-          <VerticalAlignTopIcon />
+          <VerticalAlignTop />
         </RoundButton>
 
         <RoundButton
@@ -111,7 +111,7 @@ export const WalletRow: React.FC<WalletRowProps> = ({
           label={'Receive'}
           onClick={() => onReceiveClick(wallet)}
         >
-          <VerticalAlignBottomIcon />
+          <VerticalAlignBottom />
         </RoundButton>
 
         {!!wallet.address ? (
@@ -120,7 +120,7 @@ export const WalletRow: React.FC<WalletRowProps> = ({
             label={'Edit'}
             onClick={() => onEditClick(wallet)}
           >
-            <SettingsIcon />
+            <Settings />
           </RoundButton>
         ) : null}
       </div>

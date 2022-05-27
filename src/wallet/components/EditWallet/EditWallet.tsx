@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { cn } from '@bem-react/classname'
-import { Button, TextField } from '@material-ui/core'
+import { Button, TextField } from '@mui/material'
 
 import './EditWallet.scss'
 

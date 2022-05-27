@@ -1,8 +1,8 @@
 import React from 'react'
 import { cn } from '@bem-react/classname'
 import NumberFormat from 'react-number-format'
-import { ArrowBack } from '@material-ui/icons'
-import { Tooltip, Button } from '@material-ui/core'
+import { ArrowBack } from '@mui/icons-material'
+import { Tooltip, Button } from '@mui/material'
 
 import './WalletHeader.scss'
 

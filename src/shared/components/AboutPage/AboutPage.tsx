@@ -1,13 +1,14 @@
 import React from 'react'
 import { cn } from '@bem-react/classname'
-import { push } from 'connected-react-router'
-import { Button } from '@material-ui/core'
+// import { push } from 'connected-react-router'
+import { Button } from '@mui/material'
 import { useDispatch } from 'react-redux'
 
 import './AboutPage.scss'
 import logo from 'assets/logo.svg'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
+import { navigate } from 'shared/shared.actions'
 
 export const componentId = 'AboutPage'
 
@@ -44,7 +45,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ showBackButton = true }) =
           <Button
             color="primary"
             data-testid={test('BackButton')}
-            onClick={() => dispatch(push('/'))}
+            onClick={() => dispatch(navigate.to('/'))}
             variant="contained"
           >
             Back

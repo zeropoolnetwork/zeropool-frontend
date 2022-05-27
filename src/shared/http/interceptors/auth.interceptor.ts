@@ -17,7 +17,8 @@ export const authInterceptor = (store: Store<RootState>) => (
   }
 
   const authHeaders: Record<string, string>[] = []
-  const provider: { authHeader: string; authValue: string } = providers[Provider[context.provider]]
+  const provider: { authHeader: string; authValue: string } =
+    providers[Provider[context.provider]]
 
   authHeaders[provider.authHeader] = provider.authValue
 
@@ -26,6 +27,6 @@ export const authInterceptor = (store: Store<RootState>) => (
     headers: {
       ...request.headers,
       ...authHeaders,
-    },
+    } as any,
   }
 }

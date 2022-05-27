@@ -1,8 +1,8 @@
 import React from 'react'
 import { cn } from '@bem-react/classname'
-import { Tooltip } from '@material-ui/core'
-import CallMadeIcon from '@material-ui/icons/CallMade'
-import CallReceivedIcon from '@material-ui/icons/CallReceived'
+import { Tooltip } from '@mui/material'
+import { CallMade } from '@mui/icons-material'
+import { CallReceived } from '@mui/icons-material'
 
 import './Transaction.scss'
 
@@ -35,9 +35,9 @@ export const Transaction: React.FC<TransactionProps> = ({ transaction, wallet })
       <span>
         {' '}
         {isIncoming ? (
-          <CallReceivedIcon className={css('Icon')} />
+          <CallReceived className={css('Icon')} />
         ) : (
-          <CallMadeIcon className={css('Icon')} />
+          <CallMade className={css('Icon')} />
         )}{' '}
       </span>
 

@@ -1,5 +1,4 @@
-import React, { ComponentProps } from 'react';
-import { Story } from '@storybook/react/types-6-0';
+import { ComponentStory, ComponentMeta } from '@storybook/react'
 
 import { TemplateName } from './TemplateName';
 
@@ -11,7 +10,7 @@ export default {
   decorators: [(panel: any) => <div style={decoratorCss}>{panel()}</div>],
 };
 
-const Template: Story<ComponentProps<typeof TemplateName>> = (args) => (
+const Template: ComponentStory<typeof TemplateName> = (args) => (
   <TemplateName {...args} />
 );
 

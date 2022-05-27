@@ -1,4 +1,4 @@
-import { NoEncryption } from '@material-ui/icons'
+import { NoEncryption } from '@mui/icons-material'
 
 export enum AccountStatus {
   None,

@@ -4,7 +4,7 @@ import { cn } from '@bem-react/classname'
 import './RoundButton.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-import { IconButton } from '@material-ui/core'
+import { IconButton } from '@mui/material'
 import { cssMod } from 'shared/util/css-mod'
 
 export const componentId = 'RoundButton'

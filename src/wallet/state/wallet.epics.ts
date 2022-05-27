@@ -1,4 +1,4 @@
-import { push } from 'connected-react-router'
+// import { push } from 'connected-react-router'
 import { Epic, combineEpics } from 'redux-observable'
 import { from, iif, Observable, of } from 'rxjs'
 import { ActionType, isActionOf } from 'typesafe-actions'
@@ -37,6 +37,7 @@ import { RatesApi } from 'wallet/api/rates.api'
 
 import { RootState } from 'state'
 import { getPayload } from 'shared/operators/get-payload.operator'
+import { navigate } from 'shared/shared.actions'
 // import { initBalances } from './helpers/init-balances.helper'
 
 type Actions = ActionType<typeof actions>
@@ -60,14 +61,14 @@ const getRates$: Epic = (action$: Observable<Actions>, state$: Observable<RootSt
 const redirectToTheWalletOnSetSeed$: Epic = (
   action$: Observable<Actions>,
   state$: Observable<RootState>,
-) => action$.pipe(filterActions(actions.setSeed), switchMapTo(of(push('/wallet'))))
+) => action$.pipe(filterActions(actions.setSeed), switchMapTo(of(navigate.to('/wallet'))))
 
 const resetAccount$: Epic = (action$: Observable<Actions>) =>
   action$.pipe(
     filterActions(actions.menu),
     filter((action) => action.payload === WalletView.Reset),
     tap(() => toast.success('Wallet reseted and data cleared')),
-    mergeMap(() => of(push('/welcome'), actions.resetAccount())),
+    mergeMap(() => of(navigate.to('/welcome'), actions.resetAccount())),
   )
 
 const initApi$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
@@ -88,14 +89,18 @@ const initApi$: Epic = (action$: Observable<Actions>, state$: Observable<RootSta
               api.init(
                 seed,
                 '123455678',
-                'test'
+                'test',
                 // tokens.map((item) => item.name as CoinType),
               ),
             ).pipe(map(() => (!wallets ? actions.initWallets() : actions.updateBalances()))),
           ),
         ),
         of(false).pipe(
-          mergeMap(() => of(push('/welcome'), actions.setSeedError('Seed phrase not set'))),
+          // tslint:disable-next-line: prettier
+          mergeMap(() => of(
+            navigate.to('/welcome'),
+            actions.setSeedError('Seed phrase not set')),
+          ),
         ),
       ),
     ),

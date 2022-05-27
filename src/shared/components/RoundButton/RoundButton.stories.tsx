@@ -1,5 +1,4 @@
-import React, { ComponentProps } from 'react'
-import { Story } from '@storybook/react/types-6-0'
+import { ComponentStory, ComponentMeta } from '@storybook/react'
 
 import { RoundButton } from './RoundButton'
 
@@ -7,9 +6,9 @@ import { RoundButton } from './RoundButton'
 export default {
   title: 'RoundButton',
   component: RoundButton,
-}
+} as ComponentMeta<typeof RoundButton>
 
-const Template: Story<ComponentProps<typeof RoundButton>> = (args) => <RoundButton {...args} />
+const Template: ComponentStory<typeof RoundButton> = (args) => <RoundButton {...args} />
 
 export const IconContent = Template.bind({})
 IconContent.args = {

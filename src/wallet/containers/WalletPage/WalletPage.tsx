@@ -1,3 +1,8 @@
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useSnackbar } from 'notistack'
+import { makeStyles } from '@mui/styles'
+import { cn } from '@bem-react/classname'
 import {
   AppBar,
   Toolbar,
@@ -8,22 +13,19 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  makeStyles,
   Tooltip,
-} from '@material-ui/core'
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined'
-import NotificationsIcon from '@material-ui/icons/Notifications'
-import BuildOutlinedIcon from '@material-ui/icons/BuildOutlined'
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
-import { useSnackbar } from 'notistack'
-import FileCopyIcon from '@material-ui/icons/FileCopy'
-import RefreshIcon from '@material-ui/icons/Refresh'
-import MenuIcon from '@material-ui/icons/Menu'
-import Divider from '@material-ui/core/Divider'
-import { cn } from '@bem-react/classname'
+} from '@mui/material'
+import {
+  AttachMoneyOutlined,
+  SafetyDivider,
+  Notifications,
+  BuildOutlined,
+  InfoOutlined,
+  HelpOutline,
+  FileCopy,
+  Refresh,
+  Menu,
+} from '@mui/icons-material'
 
 import logo from 'assets/images/logo1.svg'
 import { Token } from 'shared/models/token'
@@ -193,7 +195,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
             onClick={() => dispatch(walletActions.menu(text))}
           >
             <ListItemIcon className={classes.drowerItemIcon}>
-              {[<AttachMoneyOutlinedIcon key={index} />, <BuildOutlinedIcon key={index} />][index]}
+              {[<AttachMoneyOutlined key={index} />, <BuildOutlined key={index} />][index]}
             </ListItemIcon>
             <ListItemText className={classes.drowerItemText} primary={text} />
           </ListItem>
@@ -201,19 +203,19 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
 
         <ListItem className={classes.drowerItem} button={true} onClick={handleExportSeed}>
           <ListItemIcon className={classes.drowerItemIcon}>
-            <FileCopyIcon />
+            <FileCopy />
           </ListItemIcon>
           <ListItemText className={classes.drowerItemText} primary="Export Seed" />
         </ListItem>
       </List>
 
-      <Divider />
+      <SafetyDivider />
 
       <List>
         {[WalletView.Help, WalletView.About].map((text, index) => (
           <ListItem button={true} key={text} onClick={() => dispatch(walletActions.menu(text))}>
             <ListItemIcon className={css('DrowerMenu-ItemIcon')}>
-              {[<InfoOutlinedIcon key={index} />, <HelpOutlineIcon key={index} />][index]}
+              {[<InfoOutlined key={index} />, <HelpOutline key={index} />][index]}
             </ListItemIcon>
             <ListItemText className={css('DrowerMenu-ItemText')} primary={text} />
           </ListItem>
@@ -332,14 +334,14 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
               aria-label="menu"
               edge="start"
             >
-              <MenuIcon />
+              <Menu />
             </IconButton>
 
             <div className={classes.toolbarHeaderItems}>
               <Tooltip title="No new messages" placement="bottom">
                 <IconButton color="inherit" className={classes.zeroPaddingRight}>
                   <Badge badgeContent={0} color="secondary">
-                    <NotificationsIcon />
+                    <Notifications />
                   </Badge>
                 </IconButton>
               </Tooltip>
@@ -349,7 +351,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
                   color="inherit"
                   onClick={() => dispatch(walletActions.updateBalances())}
                 >
-                  <RefreshIcon />
+                  <Refresh />
                 </IconButton>
               </Tooltip>
             </div>
