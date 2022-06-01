@@ -68,7 +68,6 @@ export const walletReducer = createReducer<WalletState, ActionType<typeof action
   .handleAction(actions.headerBack, (state) => ({
     ...navigationHelper.handleBackClick(state),
     processing: initialWalletState.processing,
-
   }))
   .handleAction(actions.openBalanceView, (state) => ({
     ...navigationHelper.getBalanceView(state),
