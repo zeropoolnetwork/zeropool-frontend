@@ -20,13 +20,13 @@ describe('Register reducer', () => {
   })
 
   it('handles generateSeed action', () => {
-    const state = registerReducer(initialState, actions.generateSeed())
+    const state = registerReducer.reducer(initialState, actions.generateSeed())
 
     expect(state.seed.length).toBe(12)
   })
 
   it('handles submitSeed action', () => {
-    const state = registerReducer({ ...initialState, seed }, actions.submitSeed())
+    const state = registerReducer.reducer({ ...initialState, seed }, actions.submitSeed())
 
     expect(state.seed.length).toBe(12)
   })
@@ -40,9 +40,9 @@ describe('Register reducer', () => {
         seed: ['test'],
       }
 
-      const newState = registerReducer(oldState, actions.stepBack())
+      const newState = registerReducer.reducer(oldState, actions.stepBack())
 
-      expect(newState).toEqual(initialRegisterState) 
+      expect(newState).toEqual(initialRegisterState)
     });
 
     it('should reset stage if on step 1', () => {
@@ -51,9 +51,9 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP1,
       }
 
-      const newState = registerReducer(oldState, actions.stepBack())
+      const newState = registerReducer.reducer(oldState, actions.stepBack())
 
-      expect(newState).toEqual(initialRegisterState) 
+      expect(newState).toEqual(initialRegisterState)
     });
 
     it('should reduce stage by 1', () => {
@@ -62,9 +62,9 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP2,
       }
 
-      const newState = registerReducer(oldState, actions.stepBack())
+      const newState = registerReducer.reducer(oldState, actions.stepBack())
 
-      expect(newState.stage).toEqual(RegisterStage.STEP1) 
+      expect(newState.stage).toEqual(RegisterStage.STEP1)
     });
 
     it('should set showSteps property to false if stage undifinded', () => {
@@ -74,9 +74,9 @@ describe('Register reducer', () => {
         showSteps: true,
       }
 
-      const newState = registerReducer(oldState, actions.stepBack())
+      const newState = registerReducer.reducer(oldState, actions.stepBack())
 
-      expect(newState.showSteps).toBe(false) 
+      expect(newState.showSteps).toBe(false)
     });
 
     it('should set showSteps property to false if stage 1', () => {
@@ -86,9 +86,9 @@ describe('Register reducer', () => {
         showSteps: true,
       }
 
-      const newState = registerReducer(oldState, actions.stepBack())
+      const newState = registerReducer.reducer(oldState, actions.stepBack())
 
-      expect(newState.showSteps).toBe(false) 
+      expect(newState.showSteps).toBe(false)
     });
 
     it('should set showSteps property to true if stage > 1', () => {
@@ -98,9 +98,9 @@ describe('Register reducer', () => {
         showSteps: false,
       }
 
-      const newState = registerReducer(oldState, actions.stepBack())
+      const newState = registerReducer.reducer(oldState, actions.stepBack())
 
-      expect(newState.showSteps).toBe(true) 
+      expect(newState.showSteps).toBe(true)
     });
 
     it('resets seed frase if stage is not 2', () => {
@@ -109,9 +109,9 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP2,
       }
 
-      const newState = registerReducer(oldState, actions.stepBack())
+      const newState = registerReducer.reducer(oldState, actions.stepBack())
 
-      expect(newState.seed).toEqual([]) 
+      expect(newState.seed).toEqual([])
     });
 
     it('keeps seed frase if stage is not 2', () => {
@@ -121,9 +121,9 @@ describe('Register reducer', () => {
         seed: ['test'],
       }
 
-      const newState = registerReducer(oldState, actions.stepBack())
+      const newState = registerReducer.reducer(oldState, actions.stepBack())
 
-      expect(newState.seed).toBe(oldState.seed) 
+      expect(newState.seed).toBe(oldState.seed)
     });
   });
 
@@ -134,9 +134,9 @@ describe('Register reducer', () => {
         showSteps: false,
       }
 
-      const newState = registerReducer(oldState, actions.startRegisterAccount())
+      const newState = registerReducer.reducer(oldState, actions.startRegisterAccount())
 
-      expect(newState.showSteps).toBe(true) 
+      expect(newState.showSteps).toBe(true)
     });
 
     it('sets stage to step 1', () => {
@@ -145,9 +145,9 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP3,
       }
 
-      const newState = registerReducer(oldState, actions.startRegisterAccount())
+      const newState = registerReducer.reducer(oldState, actions.startRegisterAccount())
 
-      expect(newState.stage).toBe(RegisterStage.STEP1) 
+      expect(newState.stage).toBe(RegisterStage.STEP1)
     });
   });
 
@@ -158,9 +158,9 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP3,
       }
 
-      const newState = registerReducer(oldState, actions.generateSeed())
+      const newState = registerReducer.reducer(oldState, actions.generateSeed())
 
-      expect(newState.stage).toBe(RegisterStage.STEP2) 
+      expect(newState.stage).toBe(RegisterStage.STEP2)
     });
 
     it('sets generateSeed to false', () => {
@@ -169,14 +169,14 @@ describe('Register reducer', () => {
         seedConfirmed: true,
       }
 
-      const newState = registerReducer(oldState, actions.generateSeed())
+      const newState = registerReducer.reducer(oldState, actions.generateSeed())
 
-      expect(newState.seedConfirmed).toBe(false) 
+      expect(newState.seedConfirmed).toBe(false)
     });
 
     it('generates new seed', () => {
-      const newState = registerReducer({ ...initialState, seed: []}, actions.generateSeed())
-  
+      const newState = registerReducer.reducer({ ...initialState, seed: [] }, actions.generateSeed())
+
       expect(newState.seed.length).toBe(12)
     })
   });
@@ -188,9 +188,9 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP2,
       }
 
-      const newState = registerReducer(oldState, actions.submitSeed())
+      const newState = registerReducer.reducer(oldState, actions.submitSeed())
 
-      expect(newState.stage).toBe(RegisterStage.STEP3) 
+      expect(newState.stage).toBe(RegisterStage.STEP3)
     });
 
     it('sets seedConfirmed to false', () => {
@@ -199,9 +199,9 @@ describe('Register reducer', () => {
         seedConfirmed: true,
       }
 
-      const newState = registerReducer(oldState, actions.submitSeed())
+      const newState = registerReducer.reducer(oldState, actions.submitSeed())
 
-      expect(newState.seedConfirmed).toBe(false) 
+      expect(newState.seedConfirmed).toBe(false)
     });
   });
 
@@ -212,9 +212,9 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP1,
       }
 
-      const newState = registerReducer(oldState, actions.confirmSeed())
+      const newState = registerReducer.reducer(oldState, actions.confirmSeed())
 
-      expect(newState.stage).toBe(RegisterStage.STEP4) 
+      expect(newState.stage).toBe(RegisterStage.STEP4)
     });
 
     it('sets seedConfirmed to false', () => {
@@ -223,9 +223,9 @@ describe('Register reducer', () => {
         seedConfirmed: false,
       }
 
-      const newState = registerReducer(oldState, actions.confirmSeed())
+      const newState = registerReducer.reducer(oldState, actions.confirmSeed())
 
-      expect(newState.seedConfirmed).toBe(true) 
+      expect(newState.seedConfirmed).toBe(true)
     });
   });
 
@@ -236,9 +236,9 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP1,
       }
 
-      const newState = registerReducer(oldState, actions.register('test'))
+      const newState = registerReducer.reducer(oldState, actions.register('test'))
 
-      expect(newState.stage).toBe(undefined) 
+      expect(newState.stage).toBe(undefined)
     });
 
     it('sets showSteps to false', () => {
@@ -247,9 +247,9 @@ describe('Register reducer', () => {
         showSteps: true,
       }
 
-      const newState = registerReducer(oldState, actions.register('test'))
+      const newState = registerReducer.reducer(oldState, actions.register('test'))
 
-      expect(newState.showSteps).toBe(false) 
+      expect(newState.showSteps).toBe(false)
     });
   });
 
@@ -260,9 +260,9 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP1,
       }
 
-      const newState = registerReducer(oldState, actions.startImportAccount())
+      const newState = registerReducer.reducer(oldState, actions.startImportAccount())
 
-      expect(newState.stage).toBe(RegisterStage.IMPORT) 
+      expect(newState.stage).toBe(RegisterStage.IMPORT)
     });
 
     it('sets seedConfirmed to false', () => {
@@ -271,9 +271,9 @@ describe('Register reducer', () => {
         showSteps: true,
       }
 
-      const newState = registerReducer(oldState, actions.startImportAccount())
+      const newState = registerReducer.reducer(oldState, actions.startImportAccount())
 
-      expect(newState.showSteps).toBe(false) 
+      expect(newState.showSteps).toBe(false)
     });
   });
 
@@ -285,9 +285,9 @@ describe('Register reducer', () => {
         seed: ['test'],
       }
 
-      const newState = registerReducer(oldState, actions.reset())
+      const newState = registerReducer.reducer(oldState, actions.reset())
 
-      expect(newState).toEqual(initialRegisterState) 
+      expect(newState).toEqual(initialRegisterState)
     });
   });
 
@@ -298,9 +298,9 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP1,
       }
 
-      const newState = registerReducer(oldState, actions.importAccount({seed:[''], password: ''}))
+      const newState = registerReducer.reducer(oldState, actions.importAccount({ seed: [''], password: '' }))
 
-      expect(newState.stage).toBe(undefined) 
+      expect(newState.stage).toBe(undefined)
     });
 
     it('sets seedConfirmed to false', () => {
@@ -309,9 +309,9 @@ describe('Register reducer', () => {
         showSteps: true,
       }
 
-      const newState = registerReducer(oldState, actions.importAccount({seed:[''], password: ''}))
+      const newState = registerReducer.reducer(oldState, actions.importAccount({ seed: [''], password: '' }))
 
-      expect(newState.showSteps).toBe(false) 
+      expect(newState.showSteps).toBe(false)
     });
   });
 })
