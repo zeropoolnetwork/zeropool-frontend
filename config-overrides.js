@@ -24,7 +24,7 @@ module.exports = function override(config, env) {
         Buffer: ['buffer', 'Buffer'],
         process: 'process',
     }),
-    new Dotenv(),
+    // new Dotenv(),
 
     // new webpack.DefinePlugin(process.env)
 ]) 
