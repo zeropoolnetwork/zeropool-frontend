@@ -39,10 +39,9 @@ const epics = combineEpics(
 //#endregion
 
 //#region Setup Reducers
-
 export const createRootReducer = (_history: History) =>
   combineReducers({
-    register: registerReducer,
+    register: registerReducer.reducer,
     account: walletReducer,
     // router: connectRouter(_history),
     shared: combineReducers({

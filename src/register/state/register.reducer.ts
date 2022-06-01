@@ -1,4 +1,5 @@
 import { ActionType, createReducer } from 'typesafe-actions'
+import { CaseReducer, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { registerActions as actions } from 'register/state/register.actions'
 import { getPreviousStage } from 'register/state/helpers/stage.helper'
@@ -19,9 +20,52 @@ export const initialRegisterState: RegisterState = {
   showSteps: false,
 }
 
-export const registerReducer = createReducer<RegisterState, ActionType<typeof actions>>(
-  initialRegisterState,
-)
+export const registerReducer = createSlice({
+  name: 'register',
+  initialState: initialRegisterState,
+  reducers: {
+    // REGISTER ACCOUNT
+    startRegister: (state, action: PayloadAction) => {
+      state.stage = RegisterStage.STEP1
+      state.showSteps = true
+    },
+    stepBack: (state, action: PayloadAction) => {
+      state = { ...state, ...getPreviousStage(state) }
+    },
+    generateSeed: (state, action: PayloadAction) => {
+      state.seed = generateSeed()
+      state.seedConfirmed = false
+      state.stage = RegisterStage.STEP2
+    },
+    submitSeed: (state, action: PayloadAction) => {
+      state.seedConfirmed = true
+      state.stage = RegisterStage.STEP3
+    },
+    confirmSeed: (state, action: PayloadAction) => {
+      state.seedConfirmed = true
+      state.stage = RegisterStage.STEP4
+    },
+    register: (state, action: PayloadAction<string>) => {
+      state.stage = undefined
+      state.showSteps = false
+    },
+    // IMPORT ACCOUNT
+    startImportAccount: (state, action: PayloadAction) => {
+      state.stage = RegisterStage.IMPORT
+      state.showSteps = false
+    },
+    importAccount: (state) => {
+      state.stage = undefined
+      state.showSteps = false
+    },
+    // RESET
+    reset: (state) => {
+      state = initialRegisterState
+    },
+  },
+})
+
+/*
   .handleAction(actions.stepBack, (state) => ({
     ...state,
     ...getPreviousStage(state),
@@ -65,3 +109,4 @@ export const registerReducer = createReducer<RegisterState, ActionType<typeof ac
     showSteps: false,
     stage: undefined,
   }))
+*/
