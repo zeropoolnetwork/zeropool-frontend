@@ -37,6 +37,7 @@ export const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
+          color: WHITE,
           fontSize: '1rem',
           fontFamily: '"Exo 2", "Roboto", "Helvetica", "Arial", sans-serif',
           margin: '5px',
@@ -45,7 +46,7 @@ export const theme = createTheme({
           backgroundColor: COLOR_PRIMARY,
           border: `solid 2px ${COLOR_BLUE_PRIMARY}`,
           color: WHITE,
-          '&:hover': {
+          ':hover': {
             backgroundColor: COLOR_PRIMARY,
             border: `solid 2px ${COLOR_BLUE_SECCONDARY}`,
           },
@@ -55,7 +56,7 @@ export const theme = createTheme({
           // rgba(38,153,251,1) 100%)',
           backgroundColor: COLOR_BLUE_PRIMARY,
           color: WHITE,
-          '&:hover': {
+          ':hover': {
             backgroundColor: COLOR_BLUE_SECCONDARY,
           },
         },
@@ -66,7 +67,8 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: COLOR_PRIMARY,
-          '&:hover': {
+          padding: 0,
+          ':hover': {
             backgroundColor: COLOR_PRIMARY,
           },
         },
@@ -96,28 +98,26 @@ export const theme = createTheme({
 
     MuiInput: {
       styleOverrides: {
+        root: {
+          color: WHITE,
+          ':after': {
+            borderBottomColor: INPUT_UNDERLINE_COLOR,
+          },
+          ':not(.Mui-disabled):after': {
+            borderBottomColor: INPUT_UNDERLINE_COLOR,
+          },
+          ':hover:not(.Mui-disabled):after': {
+            borderBottomColor: INPUT_UNDERLINE_COLOR,
+          },
+          ':not(.Mui-disabled):before': {
+            borderBottomColor: INPUT_UNDERLINE_COLOR,
+          },
+          ':hover:not(.Mui-disabled):before': {
+            borderBottomColor: INPUT_UNDERLINE_COLOR,
+          },
+        },
         colorSecondary: {
           color: WHITE,
-        },
-
-        underline: {
-          borderBottomColor: INPUT_UNDERLINE_COLOR,
-
-          '&:not($disabled):after': {
-            borderBottomColor: INPUT_UNDERLINE_COLOR,
-          },
-
-          '&:hover:not($disabled):after': {
-            borderBottomColor: INPUT_UNDERLINE_COLOR,
-          },
-
-          '&:not($disabled):before': {
-            borderBottomColor: INPUT_UNDERLINE_COLOR,
-          },
-
-          '&:hover:not($disabled):before': {
-            borderBottomColor: INPUT_UNDERLINE_COLOR,
-          },
         },
       },
     },

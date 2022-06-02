@@ -13,11 +13,15 @@ import { RootState } from 'state'
 
 type Actions = ActionType<typeof registerActions>
 
-const importAccount$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
+const importAccount$: Epic = (
+  action$: Observable<Actions>,
+  state$: Observable<RootState>,
+) =>
   action$.pipe(
     filterActions(registerActions.importAccount),
     switchMap((action) => {
       const seed = action.payload.seed.join(' ')
+
       return of(registerActions.reset(), walletActions.setSeed(seed))
     }),
   )

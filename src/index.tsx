@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { ThemeProvider } from '@mui/material'
-// import { ConnectedRouter } from 'connected-react-router'
 import { SnackbarProvider } from 'notistack'
 import { Router, Route, Navigate, Routes } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
@@ -32,7 +31,10 @@ async function start() {
 
   root.render(
     <ThemeProvider theme={theme}>
-      <SnackbarProvider maxSnack={5} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+      <SnackbarProvider
+        maxSnack={5}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
         {/* <React.StrictMode> */}
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistedStore}>
@@ -43,10 +45,11 @@ async function start() {
                   <Route path="about" element={<AboutPage />} />
                   <Route path="wallet" element={<WalletPage />} />
                 </Route>
-                
+
                 <Route path="/*" element={<Navigate to="/zeropool/welcome" />} />
               </Routes>
             </Router>
+
             <LoadingBar />
           </PersistGate>
         </Provider>

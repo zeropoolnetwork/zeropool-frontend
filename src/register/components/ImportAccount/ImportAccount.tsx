@@ -1,47 +1,24 @@
+// tslint:disable: max-line-length prettier
 import { cn } from '@bem-react/classname'
 import { DevTool } from '@hookform/devtools'
 import { useForm } from 'react-hook-form'
 import React, { useState } from 'react'
 import { Close, Visibility, VisibilityOff } from '@mui/icons-material'
-import {
-  Button,
-  FormControl,
-  FormHelperText,
-  IconButton,
-  Input,
-  InputAdornment,
-  InputLabel,
-} from '@mui/material'
+import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
+
+import { confirmValidator, passwordValidator, seedValidator } from 'shared/util/form-validators'
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
+import { strToArray } from 'shared/util/str-to-array'
+import { SeedPanel } from 'register/components/SeedPanel/SeedPanel'
 
 import './ImportAccount.scss'
-
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-
-import { SeedPanel } from 'register/components/SeedPanel/SeedPanel'
-import { validateSeed } from 'register/state/helpers/seed.helper'
+// tslint:enable: max-line-length prettier
 
 export const componentId = 'ImportAccount'
-
 const css = cn(componentId)
 const test = testIdBuilder(componentId)
 
-const PasswordInputParams = {
-  required: 'Required',
-  pattern: {
-    value: /^(?=.*?\d)(?=.*?[a-zA-Z])[a-zA-Z\d]+$/,
-    message: 'Use letters and numbers',
-  },
-  minLength: {
-    value: 8,
-    message: 'Use at least 8 characters',
-  },
-}
-
-const seedInputParamsFactory = (seed: string[]): any => ({
-  required: 'Required',
-  validate: (value: string[]) => validateSeed(seed),
-})
-
+// #region INTERFACES
 interface FormData {
   seed: string
   password: string
@@ -52,24 +29,29 @@ export interface ImportAccountProps {
   onBack: () => void
   onImport: (data: { seed: string[]; password: string }) => void
 }
+// #endregion
 
 export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }) => {
-  const { handleSubmit, register, reset, control,  formState: { errors }, getValues } =
-    useForm<FormData>({ criteriaMode: 'all' })
-
-  const [seed, setSeed] = useState([] as string[])
+  // tslint:disable: max-line-length prettier
   const [showPassword, setShowPassword] = useState(false)
-  const [password, setPassword] = useState('')
-  const [passwordConfirm, setPasswordConfirm] = useState('')
+
+  const { handleSubmit, register, control, formState: { errors }, getValues, setValue, watch } = useForm<FormData>()
+  const { onChange: onChangeSeed, onBlur: onBlurSeed, name: nameSeed, ref: refSeed } = register('seed', seedValidator)
+  const { onChange: onChangePassword, onBlur: onBlurPassword, name: namePassword, ref: refPassword } = register('password', passwordValidator)
+  const { onChange: onChangeConfirm, onBlur: onBlurConfirm, name: nameConfirm, ref: refConfirm } = register('confirm', confirmValidator(getValues))
+  const watchSeed = watch('seed', '')
+  const watchPassword = watch('password', '')
+  const watchConfirm = watch('confirm', '')
+  // tslint:enable: max-line-length prettier
 
   return (
     <div className={css()} data-testid={test()}>
       {process.env.NODE_ENV !== 'production' && <DevTool control={control} />}
       <section>
-        <SeedPanel classes={[css('SeedPanel')]} seed={seed} />
+        <SeedPanel classes={[css('SeedPanel')]} seed={strToArray(watchSeed)} />
 
         <form
-          onSubmit={handleSubmit((data: FormData) => onImport({ password: data.password, seed }))}
+          onSubmit={handleSubmit((data: FormData) => onImport({ password: data.password, seed: strToArray(watchSeed) }))}
           className={css('Form')}
         >
           <FormControl className={css('FormControl')} error={!!errors.seed}>
@@ -82,23 +64,20 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
               className={css('Seed')}
               color="secondary"
               inputProps={{ 'data-testid': test('Seed') }}
-              inputRef={register(seedInputParamsFactory(seed)) as any}
-              name="seed"
-              onChange={() => setSeed(getValues().seed.split(/[ ,.]+/).filter((s) => !!s))}
+              ref={refSeed}
+              name={nameSeed}
+              onChange={onChangeSeed}
+              onBlur={onBlurSeed}
               type={'text'}
               endAdornment={
                 <InputAdornment position="end">
-                  {seed.length ? (
+                  {watchSeed.length ? (
                     <IconButton
                       className={css('FormControlButton')}
                       aria-label="empty seed"
                       onClick={() => {
-                        reset({
-                          seed: undefined,
-                          password: getValues().password,
-                          confirm: getValues().confirm,
-                        })
-                        setSeed([])
+                        setValue('seed', '')
+                        errors.seed = undefined
                       }}
                       onMouseDown={(event) => event.preventDefault()}
                     >
@@ -129,23 +108,22 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
               color="secondary"
               classes={{ input: css('PasswordInput') }}
               inputProps={{ 'data-testid': test('Password') }}
-              inputRef={register('password', PasswordInputParams) as any}
-              name="password"
-              onChange={() => setPassword(getValues().password)}
+              ref={refPassword}
+              name={namePassword}
+              onChange={onChangePassword}
+              onBlur={onBlurPassword}
               type={showPassword ? 'text' : 'password'}
               endAdornment={
                 <InputAdornment position="end">
-                  {password ? (
+                  {watchPassword ? (
                     <IconButton
                       className={css('FormControlButton')}
                       aria-label="empty password"
                       onClick={() => {
-                        reset({
-                          seed: getValues().seed,
-                          password: undefined,
-                          confirm: getValues().confirm,
-                        })
-                        setPassword('')
+                        setValue('password', '')
+                        setValue('confirm', '')
+                        errors.password = undefined
+                        errors.confirm = undefined
                       }}
                       onMouseDown={(event) => event.preventDefault()}
                     >
@@ -185,27 +163,20 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
               color="secondary"
               classes={{ input: css('PasswordInput') }}
               inputProps={{ 'data-testid': test('Confirm') }}
-              inputRef={
-                register('confirm', {
-                  validate: (value) => value === getValues().password,
-                }) as any
-              }
-              name="confirm"
-              onChange={() => setPasswordConfirm(getValues().confirm)}
+              ref={refConfirm}
+              name={nameConfirm}
+              onChange={onChangeConfirm}
+              onBlur={onBlurConfirm}
               type={showPassword ? 'text' : 'password'}
               endAdornment={
                 <InputAdornment position="end">
-                  {passwordConfirm ? (
+                  {watchConfirm ? (
                     <IconButton
                       className={css('FormControlButton')}
                       aria-label="empty confirmation"
                       onClick={() => {
-                        reset({
-                          seed: getValues().seed,
-                          password: getValues().password,
-                          confirm: undefined,
-                        })
-                        setPasswordConfirm('')
+                        errors.confirm = undefined
+                        setValue('confirm', '')
                       }}
                       onMouseDown={(event) => event.preventDefault()}
                     >
@@ -235,23 +206,21 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
           </FormControl>
 
           <Button
-            // color="primary"
+            color="primary"
+            variant="contained"
             className={css('Button')}
             data-testid={test('Import')}
-            disableElevation={true}
-            // variant="contained"
             type="submit"
           >
             Import
           </Button>
 
           <Button
-            // color="primary"
+            color="primary"
+            variant="outlined"
             className={css('Button')}
             data-testid={test('Back')}
-            disableElevation={true}
             onClick={onBack}
-            // variant="outlined"
           >
             Back
           </Button>
