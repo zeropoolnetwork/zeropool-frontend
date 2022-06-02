@@ -16,9 +16,9 @@ export const getPreviousStage = (state: RegisterState): RegisterStageStateSlice 
     }
   }
 
-  return {
-    stage: state.stage === RegisterStage.STEP1 ? undefined : Number(state.stage) - 1,
-    showSteps: [1, undefined].includes(state.stage) ? false : true,
-    seed: state.stage === RegisterStage.STEP2 ? [] : state.seed,
-  }
+  const stage = state.stage === RegisterStage.STEP1 ? undefined : Number(state.stage) - 1
+  const showSteps = [1, undefined].includes(state.stage) ? false : true
+  const seed = state.stage === RegisterStage.STEP2 ? [] : state.seed
+
+  return { stage, showSteps, seed }
 }

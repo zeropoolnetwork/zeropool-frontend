@@ -18,13 +18,14 @@ import { StepThree } from 'register/components/StepThree/StepThree'
 import { StepHeader } from 'register/components/StepHeader/StepHeader'
 import { ImportAccount } from 'register/components/ImportAccount/ImportAccount'
 import { RegisterStage } from 'register/state/models/register-stage'
-import { registerActions as actions } from 'register/state/register.actions'
+import { registerSlice } from 'register/state/register.reducer'
 import { getRegisterSeed, getRegisterStage, getShowSteps } from 'register/state/register.selectors'
 
 export const componentId = 'CreateAccountPage'
 
 const css = cn(componentId)
 const test = testIdBuilder(componentId)
+const rsa = registerSlice.actions
 
 type CreateAccountProps = {}
 
@@ -37,18 +38,18 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
   const components = () => {
     switch (stage) {
       case RegisterStage.STEP1:
-        return <StepOne onGenerate={() => dispatch(actions.generateSeed())} />
+        return <StepOne onGenerate={() => dispatch(rsa.generateSeed())} />
       case RegisterStage.STEP2:
-        return <StepTwo seed={seed} onSubmit={() => dispatch(actions.submitSeed())} />
+        return <StepTwo seed={seed} onSubmit={() => dispatch(rsa.submitSeed())} />
       case RegisterStage.STEP3:
-        return <StepThree seed={seed} onConfirm={() => dispatch(actions.confirmSeed())} />
+        return <StepThree seed={seed} onConfirm={() => dispatch(rsa.confirmSeed())} />
       case RegisterStage.STEP4:
-        return <StepFour onRegister={(data) => dispatch(actions.register(data.password))} />
+        return <StepFour onRegister={(data) => dispatch(rsa.register(data.password))} />
       case RegisterStage.IMPORT:
         return (
           <ImportAccount
-            onImport={(data) => dispatch(actions.importAccount(data))}
-            onBack={() => dispatch(actions.stepBack())}
+            onImport={(data) => dispatch(rsa.import(data))}
+            onBack={() => dispatch(rsa.stepBack())}
           />
         )
       default:
@@ -56,8 +57,8 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
           <Welcome
             // TODO: remove next line after API is connected
             onMockedLogin={() => dispatch(navigate.to('/wallet'))}
-            onCreate={() => dispatch(actions.startRegisterAccount())}
-            onImport={() => dispatch(actions.startImportAccount())}
+            onCreate={() => dispatch(rsa.startRegister())}
+            onImport={() => dispatch(rsa.startImport())}
             onAbout={() => dispatch(navigate.to('/about'))}
           />
         )
@@ -67,7 +68,7 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
   return (
     <div className={css()} data-testid={test()}>
       {stage && showSteps ? (
-        <StepHeader step={stage} total={4} onBack={() => dispatch(actions.stepBack())} />
+        <StepHeader step={stage} total={4} onBack={() => dispatch(rsa.stepBack())} />
       ) : null}
 
       {components()}

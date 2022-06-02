@@ -6,7 +6,7 @@ import { combineEpics, createEpicMiddleware } from 'redux-observable'
 import { persistStore, persistReducer, createMigrate } from 'redux-persist'
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 
-import { registerReducer } from 'register/state/register.reducer'
+import { registerSlice } from 'register/state/register.reducer'
 import { registerEpics } from 'register/state/register.epics'
 
 import { stateMigrations } from 'state-migrations'
@@ -44,7 +44,7 @@ export const history = createBrowserHistory()
 
 export const createRootReducer = (_history: History) =>
   combineReducers({
-    register: registerReducer,
+    register: registerSlice,
     account: walletReducer,
     // router: connectRouter(_history),
     shared: combineReducers({

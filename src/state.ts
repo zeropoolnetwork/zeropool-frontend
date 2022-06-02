@@ -8,7 +8,7 @@ import { combineEpics, createEpicMiddleware } from 'redux-observable'
 import { persistStore, persistReducer, createMigrate } from 'redux-persist'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
-import { registerReducer } from 'register/state/register.reducer'
+import { registerSlice } from 'register/state/register.reducer'
 import { registerEpics } from 'register/state/register.epics'
 
 import { stateMigrations } from 'state-migrations'
@@ -33,22 +33,16 @@ const epicMiddleware = createEpicMiddleware()
 const epics = combineEpics(
   registerEpics,
   walletEpics,
-  // alertsEpics,
-  // notificationsEpics,
 )
 //#endregion
 
 //#region Setup Reducers
-export const createRootReducer = (_history: History) =>
+export const createRootReducer = () =>
   combineReducers({
-    register: registerReducer.reducer,
+    register: registerSlice.reducer,
     account: walletReducer,
-    // router: connectRouter(_history),
     shared: combineReducers({
       loadingBar: loadingBarReducer,
-      //   // alerts: alertsReducer,
-      //   // notifications: notificationsReducer,
-      //   // menuBar: menuBarReducer,
     }),
   })
 //#endregion
@@ -63,7 +57,7 @@ const persistConfig: PersistConfig<RootState> = {
 }
 
 const persistedReducer: Reducer = 
-  persistReducer(persistConfig, createRootReducer(createBrowserHistory()))
+  persistReducer(persistConfig, createRootReducer())
 
 export const store = configureStore({
   reducer: persistedReducer,

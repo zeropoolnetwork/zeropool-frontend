@@ -3,7 +3,7 @@ import { deepFreeze } from 'shared/util/deep-freeze'
 import { registerActions as actions } from 'register/state/register.actions'
 import { generateSeed } from 'register/state/helpers/seed.helper'
 
-import { initialRegisterState, registerReducer, RegisterState } from './register.reducer'
+import { initialRegisterState, registerSlice, RegisterState } from './register.reducer'
 import { RegisterStage } from 'register/state/models/register-stage'
 
 const generateSeedMock = generateSeed as jest.Mock
@@ -20,13 +20,13 @@ describe('Register reducer', () => {
   })
 
   it('handles generateSeed action', () => {
-    const state = registerReducer.reducer(initialState, actions.generateSeed())
+    const state = registerSlice.reducer(initialState, actions.generateSeed())
 
     expect(state.seed.length).toBe(12)
   })
 
   it('handles submitSeed action', () => {
-    const state = registerReducer.reducer({ ...initialState, seed }, actions.submitSeed())
+    const state = registerSlice.reducer({ ...initialState, seed }, actions.submitSeed())
 
     expect(state.seed.length).toBe(12)
   })
@@ -40,7 +40,7 @@ describe('Register reducer', () => {
         seed: ['test'],
       }
 
-      const newState = registerReducer.reducer(oldState, actions.stepBack())
+      const newState = registerSlice.reducer(oldState, actions.stepBack())
 
       expect(newState).toEqual(initialRegisterState)
     });
@@ -51,7 +51,7 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP1,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.stepBack())
+      const newState = registerSlice.reducer(oldState, actions.stepBack())
 
       expect(newState).toEqual(initialRegisterState)
     });
@@ -62,7 +62,7 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP2,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.stepBack())
+      const newState = registerSlice.reducer(oldState, actions.stepBack())
 
       expect(newState.stage).toEqual(RegisterStage.STEP1)
     });
@@ -74,7 +74,7 @@ describe('Register reducer', () => {
         showSteps: true,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.stepBack())
+      const newState = registerSlice.reducer(oldState, actions.stepBack())
 
       expect(newState.showSteps).toBe(false)
     });
@@ -86,7 +86,7 @@ describe('Register reducer', () => {
         showSteps: true,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.stepBack())
+      const newState = registerSlice.reducer(oldState, actions.stepBack())
 
       expect(newState.showSteps).toBe(false)
     });
@@ -98,7 +98,7 @@ describe('Register reducer', () => {
         showSteps: false,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.stepBack())
+      const newState = registerSlice.reducer(oldState, actions.stepBack())
 
       expect(newState.showSteps).toBe(true)
     });
@@ -109,7 +109,7 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP2,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.stepBack())
+      const newState = registerSlice.reducer(oldState, actions.stepBack())
 
       expect(newState.seed).toEqual([])
     });
@@ -121,7 +121,7 @@ describe('Register reducer', () => {
         seed: ['test'],
       }
 
-      const newState = registerReducer.reducer(oldState, actions.stepBack())
+      const newState = registerSlice.reducer(oldState, actions.stepBack())
 
       expect(newState.seed).toBe(oldState.seed)
     });
@@ -134,7 +134,7 @@ describe('Register reducer', () => {
         showSteps: false,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.startRegisterAccount())
+      const newState = registerSlice.reducer(oldState, actions.startRegisterAccount())
 
       expect(newState.showSteps).toBe(true)
     });
@@ -145,7 +145,7 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP3,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.startRegisterAccount())
+      const newState = registerSlice.reducer(oldState, actions.startRegisterAccount())
 
       expect(newState.stage).toBe(RegisterStage.STEP1)
     });
@@ -158,7 +158,7 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP3,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.generateSeed())
+      const newState = registerSlice.reducer(oldState, actions.generateSeed())
 
       expect(newState.stage).toBe(RegisterStage.STEP2)
     });
@@ -169,13 +169,13 @@ describe('Register reducer', () => {
         seedConfirmed: true,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.generateSeed())
+      const newState = registerSlice.reducer(oldState, actions.generateSeed())
 
       expect(newState.seedConfirmed).toBe(false)
     });
 
     it('generates new seed', () => {
-      const newState = registerReducer.reducer({ ...initialState, seed: [] }, actions.generateSeed())
+      const newState = registerSlice.reducer({ ...initialState, seed: [] }, actions.generateSeed())
 
       expect(newState.seed.length).toBe(12)
     })
@@ -188,7 +188,7 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP2,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.submitSeed())
+      const newState = registerSlice.reducer(oldState, actions.submitSeed())
 
       expect(newState.stage).toBe(RegisterStage.STEP3)
     });
@@ -199,7 +199,7 @@ describe('Register reducer', () => {
         seedConfirmed: true,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.submitSeed())
+      const newState = registerSlice.reducer(oldState, actions.submitSeed())
 
       expect(newState.seedConfirmed).toBe(false)
     });
@@ -212,7 +212,7 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP1,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.confirmSeed())
+      const newState = registerSlice.reducer(oldState, actions.confirmSeed())
 
       expect(newState.stage).toBe(RegisterStage.STEP4)
     });
@@ -223,7 +223,7 @@ describe('Register reducer', () => {
         seedConfirmed: false,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.confirmSeed())
+      const newState = registerSlice.reducer(oldState, actions.confirmSeed())
 
       expect(newState.seedConfirmed).toBe(true)
     });
@@ -236,7 +236,7 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP1,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.register('test'))
+      const newState = registerSlice.reducer(oldState, actions.register('test'))
 
       expect(newState.stage).toBe(undefined)
     });
@@ -247,7 +247,7 @@ describe('Register reducer', () => {
         showSteps: true,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.register('test'))
+      const newState = registerSlice.reducer(oldState, actions.register('test'))
 
       expect(newState.showSteps).toBe(false)
     });
@@ -260,7 +260,7 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP1,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.startImportAccount())
+      const newState = registerSlice.reducer(oldState, actions.startImportAccount())
 
       expect(newState.stage).toBe(RegisterStage.IMPORT)
     });
@@ -271,7 +271,7 @@ describe('Register reducer', () => {
         showSteps: true,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.startImportAccount())
+      const newState = registerSlice.reducer(oldState, actions.startImportAccount())
 
       expect(newState.showSteps).toBe(false)
     });
@@ -285,7 +285,7 @@ describe('Register reducer', () => {
         seed: ['test'],
       }
 
-      const newState = registerReducer.reducer(oldState, actions.reset())
+      const newState = registerSlice.reducer(oldState, actions.reset())
 
       expect(newState).toEqual(initialRegisterState)
     });
@@ -298,7 +298,7 @@ describe('Register reducer', () => {
         stage: RegisterStage.STEP1,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.importAccount({ seed: [''], password: '' }))
+      const newState = registerSlice.reducer(oldState, actions.importAccount({ seed: [''], password: '' }))
 
       expect(newState.stage).toBe(undefined)
     });
@@ -309,7 +309,7 @@ describe('Register reducer', () => {
         showSteps: true,
       }
 
-      const newState = registerReducer.reducer(oldState, actions.importAccount({ seed: [''], password: '' }))
+      const newState = registerSlice.reducer(oldState, actions.importAccount({ seed: [''], password: '' }))
 
       expect(newState.showSteps).toBe(false)
     });

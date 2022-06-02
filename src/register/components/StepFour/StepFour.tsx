@@ -1,27 +1,23 @@
-import React, { useState } from 'react'
+// tslint:disable: max-line-length prettier
 import { cn } from '@bem-react/classname'
 import { useForm } from 'react-hook-form'
 import { DevTool } from '@hookform/devtools'
+import React, { useState } from 'react'
+import { Close, Visibility, VisibilityOff } from '@mui/icons-material'
+import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
+
+import { confirmValidator, passwordValidator } from 'shared/util/form-validators'
+import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
 import './StepFour.scss'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-import {
-  Button,
-  FormControl,
-  FormHelperText,
-  IconButton,
-  Input,
-  InputAdornment,
-  InputLabel,
-} from '@mui/material'
-import { Close, Visibility, VisibilityOff } from '@mui/icons-material'
 export const componentId = 'StepFour'
+// tslint:enable: max-line-length prettier
 
 const css = cn(componentId)
 const test = testIdBuilder(componentId)
 
-const PasswordInputParams = {
+const PasswordValodator = {
   required: 'Required',
   pattern: {
     value: /^(?=.*?\d)(?=.*?[a-zA-Z])[a-zA-Z\d]+$/,
@@ -33,6 +29,10 @@ const PasswordInputParams = {
   },
 }
 
+const ConfirmValodator = (getValues: () => any) => ({
+  required: 'Required',
+  validate: (value: string) => value === getValues().password,
+})
 interface FormData {
   password: string
   confirm: string
@@ -43,12 +43,15 @@ export interface StepFourProps {
 }
 
 export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
-  const { handleSubmit, register, reset, control, formState: { errors }, getValues } = 
-    useForm<FormData>({ criteriaMode: 'all'})
-
+  // tslint:disable: max-line-length prettier
   const [showPassword, setShowPassword] = useState(false)
-  const [password, setPassword] = useState('')
-  const [passwordConfirm, setPasswordConfirm] = useState('')
+
+  const { handleSubmit, register, reset, control, formState: { errors }, getValues, setValue, watch } = useForm<FormData>()
+  const { onChange: onChangePassword, onBlur: onBlurPassword, name: namePassword, ref: refPassword } = register('password', passwordValidator)
+  const { onChange: onChangeConfirm, onBlur: onBlurConfirm, name: nameConfirm, ref: refConfirm } = register('confirm', confirmValidator(getValues))
+  const watchPassword = watch('password', '')
+  const watchConfirm = watch('confirm', '')
+  // tslint:enable: max-line-length prettier
 
   return (
     <div className={css()} data-testid={test()}>
@@ -65,22 +68,22 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
             color="secondary"
             className={css('Password')}
             inputProps={{ 'data-testid': test('Password') }}
-            inputRef={register('password', PasswordInputParams) as any}
-            name="password"
-            onChange={() => setPassword(getValues().password)}
+            ref={refPassword}
+            name={namePassword}
+            onChange={onChangePassword}
+            onBlur={onBlurPassword}
             type={showPassword ? 'text' : 'password'}
             endAdornment={
               <InputAdornment position="end">
-                {password ? (
+                {watchPassword ? (
                   <IconButton
                     className={css('FormControlButton')}
                     aria-label="empty password"
                     onClick={() => {
-                      reset({
-                        password: undefined,
-                        confirm: getValues().confirm,
-                      })
-                      setPassword('')
+                      setValue('password', '')
+                      setValue('confirm', '')
+                      errors.password = undefined
+                      errors.confirm = undefined
                     }}
                     onMouseDown={(event) => event.preventDefault()}
                   >
@@ -117,26 +120,20 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
             color="secondary"
             className={css('Password')}
             inputProps={{ 'data-testid': test('Confirm') }}
-            inputRef={
-              register('confirm', {
-                validate: (value) => value === getValues().password,
-              }) as any
-            }
-            name="confirm"
-            onChange={() => setPasswordConfirm(getValues().confirm)}
+            ref={refConfirm}
+            name={nameConfirm}
+            onChange={onChangeConfirm}
+            onBlur={onBlurConfirm}
             type={showPassword ? 'text' : 'password'}
             endAdornment={
               <InputAdornment position="end">
-                {passwordConfirm ? (
+                {watchConfirm ? (
                   <IconButton
                     className={css('FormControlButton')}
                     aria-label="empty confirmation"
                     onClick={() => {
-                      reset({
-                        password: getValues().password,
-                        confirm: undefined,
-                      })
-                      setPasswordConfirm('')
+                      errors.confirm = undefined
+                      setValue('confirm', '')
                     }}
                     onMouseDown={(event) => event.preventDefault()}
                   >
@@ -168,11 +165,10 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
         </p>
 
         <Button
-          // color="primary"
+          color="primary"
+          variant="contained"
           className={css('Button')}
           data-testid={test('Submit')}
-          disableElevation={true}
-          // variant="contained"
           type="submit"
         >
           Register
@@ -180,14 +176,13 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
 
         {/* TODO: remove after testing */}
         <Button
-          // color="primary"
+          color="primary"
+          variant="contained"
           className={css('Button')}
-          disableElevation={true}
           onClick={() => {
             reset({ password: 'test1234', confirm: 'test1234' })
             handleSubmit(onRegister)
           }}
-          // variant="contained"
           type="submit"
         >
           Testing: use 'test1234'

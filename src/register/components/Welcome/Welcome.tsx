@@ -19,7 +19,12 @@ export interface WelcomeProps {
 const css = cn(componentId)
 const test = testIdBuilder(componentId)
 
-export const Welcome: React.FC<WelcomeProps> = ({ onCreate, onImport, onAbout, onMockedLogin }) => {
+export const Welcome: React.FC<WelcomeProps> = ({
+  onCreate,
+  onImport,
+  onAbout,
+  onMockedLogin,
+}) => {
   return (
     <div className={css()} data-testid={test()}>
       <section className="noselect">
@@ -45,7 +50,6 @@ export const Welcome: React.FC<WelcomeProps> = ({ onCreate, onImport, onAbout, o
         variant="contained"
         className={css('Button')}
         data-testid={test('CreateButton')}
-        disableElevation={true}
         onClick={onCreate}
       >
         Create new wallet
