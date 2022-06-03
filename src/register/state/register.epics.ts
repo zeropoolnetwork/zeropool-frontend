@@ -7,7 +7,7 @@ import { filterActions } from 'shared/operators/filter-actions.operator'
 
 import { walletActions } from 'wallet/state/wallet.actions'
 import { registerActions } from 'register/state/register.actions'
-import { getRegisterSeed } from 'register/state/register.selectors'
+import { selectSeed } from 'register/state/register.selectors'
 
 import { RootState } from 'state'
 
@@ -29,7 +29,7 @@ const importAccount$: Epic = (
 const register$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(
     filterActions(registerActions.register),
-    withLatestFrom(state$.pipe(map(getRegisterSeed))),
+    withLatestFrom(state$.pipe(map(selectSeed))),
     switchMap(([, seed]) => {
       return of(registerActions.reset(), walletActions.setSeed(seed.join(' ')))
     }),

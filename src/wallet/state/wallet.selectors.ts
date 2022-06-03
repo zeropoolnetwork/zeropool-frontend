@@ -5,7 +5,7 @@ import { RootState } from 'state'
 import { WalletState } from 'wallet/state/wallet.reducer'
 import { walletsHelper } from 'wallet/state/helpers/wallets.helper'
 
-export const getWalletState = (state: RootState): WalletState => state.account
+export const getWalletState = (state: RootState) => state.account
 
 export const getActiveView = createSelector(getWalletState, (state) => state.activeView)
 
