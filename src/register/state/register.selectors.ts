@@ -1,16 +1,18 @@
-import { createSelector } from 'reselect'
-
+import { createSelector } from '@reduxjs/toolkit'
 import { RootState } from 'state'
 
-export const getRegisterState = (state: RootState) => state.register
+export const selectRegisterSlice = (state: RootState) => state.register
 
-export const getRegisterStage = createSelector(getRegisterState, (state) => state.stage)
+export const selectStage = createSelector(selectRegisterSlice, (state) => state.stage)
 
-export const getRegisterSeed = createSelector(getRegisterState, (state) => state.seed)
+export const selectSeed = createSelector(selectRegisterSlice, (state) => state.seed)
 
-export const getRegisterSeedConfirmed = createSelector(
-  getRegisterState,
+export const selectIsSeedConfirmed = createSelector(
+  selectRegisterSlice,
   (state) => state.seedConfirmed,
 )
 
-export const getShowSteps = createSelector(getRegisterState, (state) => state.showSteps)
+export const selectShowSteps = createSelector(
+  selectRegisterSlice,
+  (state) => state.showSteps,
+)

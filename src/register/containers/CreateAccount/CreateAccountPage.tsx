@@ -1,7 +1,6 @@
+// tslint:disable: prettier
 import React from 'react'
 import { cn } from '@bem-react/classname'
-// import { push } from 'connected-react-router'
-import { useDispatch, useSelector } from 'react-redux'
 
 import logo from 'assets/images/logo1.svg'
 
@@ -19,7 +18,10 @@ import { StepHeader } from 'register/components/StepHeader/StepHeader'
 import { ImportAccount } from 'register/components/ImportAccount/ImportAccount'
 import { RegisterStage } from 'register/state/models/register-stage'
 import { registerSlice } from 'register/state/register.reducer'
-import { getRegisterSeed, getRegisterStage, getShowSteps } from 'register/state/register.selectors'
+import { selectSeed, selectStage, selectShowSteps } from 'register/state/register.selectors'
+
+import { useAppSelector, useAppDispatch} from 'state'
+// tslint:enable: prettier
 
 export const componentId = 'CreateAccountPage'
 
@@ -30,10 +32,10 @@ const rsa = registerSlice.actions
 type CreateAccountProps = {}
 
 export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
-  const seed = useSelector(getRegisterSeed)
-  const stage = useSelector(getRegisterStage)
-  const showSteps = useSelector(getShowSteps)
-  const dispatch = useDispatch()
+  const seed = useAppSelector(selectSeed)
+  const stage = useAppSelector(selectStage)
+  const showSteps = useAppSelector(selectShowSteps)
+  const dispatch = useAppDispatch()
 
   const components = () => {
     switch (stage) {
