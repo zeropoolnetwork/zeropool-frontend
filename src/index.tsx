@@ -40,13 +40,13 @@ async function start() {
           <PersistGate loading={null} persistor={persistedStore}>
             <Router navigator={history} location={history.location}>
               <Routes>
-                <Route path="/zeropool">
+                <Route path="zeropool">
                   <Route path="welcome" element={<CreateAccountPage />} />
                   <Route path="about" element={<AboutPage />} />
                   <Route path="wallet" element={<WalletPage />} />
                 </Route>
 
-                <Route path="/*" element={<Navigate to="/zeropool/welcome" />} />
+                <Route path="*" element={<Navigate to="zeropool/welcome" />} />
               </Routes>
             </Router>
 

@@ -26,7 +26,7 @@ const epics = combineEpics(registerEpics, walletEpics, sharedEpics)
 export const createRootReducer = () =>
   combineReducers({
     register: registerSlice.reducer,
-    account: walletReducer,
+    wallet: walletReducer,
     shared: combineReducers({
       loadingBar: loadingBarReducer,
     }),
@@ -39,7 +39,7 @@ const persistConfig: PersistConfig<RootState> = {
   version: 0,
   storage,
   migrate: createMigrate(stateMigrations, { debug: false }),
-  whitelist: ['register', 'account'],
+  whitelist: ['register', 'wallet'],
 }
 
 const persistedReducer = persistReducer<any, any>(persistConfig, createRootReducer())
@@ -55,7 +55,7 @@ export const persistedStore = persistStore(store)
 //#region Setup React Redux Toolkit
 export type RootState = CombinedState<{
   register: RegisterState
-  account: WalletState
+  wallet: WalletState
   shared: CombinedState<{
     loadingBar: LoadingBarState;
   }>;
