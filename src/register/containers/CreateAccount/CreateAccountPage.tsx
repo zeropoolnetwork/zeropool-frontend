@@ -7,7 +7,6 @@ import logo from 'assets/images/logo1.svg'
 import './CreateAccountPage.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-import { navigate } from 'shared/shared.actions'
 
 import { StepOne } from 'register/components/StepOne/StepOne'
 import { StepTwo } from 'register/components/StepTwo/StepTwo'
@@ -20,7 +19,8 @@ import { RegisterStage } from 'register/state/models/register-stage'
 import { registerSlice } from 'register/state/register.reducer'
 import { selectSeed, selectStage, selectShowSteps } from 'register/state/register.selectors'
 
-import { useAppSelector, useAppDispatch} from 'state'
+import { useAppSelector, useAppDispatch } from 'state'
+import { useNavigate } from 'react-router-dom'
 // tslint:enable: prettier
 
 export const componentId = 'CreateAccountPage'
@@ -32,6 +32,7 @@ const rsa = registerSlice.actions
 type CreateAccountProps = {}
 
 export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
+  const navigate = useNavigate()
   const seed = useAppSelector(selectSeed)
   const stage = useAppSelector(selectStage)
   const showSteps = useAppSelector(selectShowSteps)
@@ -58,10 +59,10 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
         return (
           <Welcome
             // TODO: remove next line after API is connected
-            onMockedLogin={() => dispatch(navigate.to('/wallet'))}
+            onMockedLogin={() => navigate('/wallet')}
             onCreate={() => dispatch(rsa.startRegister())}
             onImport={() => dispatch(rsa.startImport())}
-            onAbout={() => dispatch(navigate.to('/about'))}
+            onAbout={() => { navigate('/zeropool/about', { replace: true }); navigate(0) }}
           />
         )
     }
