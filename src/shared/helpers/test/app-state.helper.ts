@@ -124,12 +124,12 @@ export const balancesMock = {
 
 export const mockAppState: {
   register: Partial<RegisterState>
-  account: Partial<WalletState>
+  wallet: Partial<WalletState>
 } = {
   register: {
     stage: undefined,
   },
-  account: {
+  wallet: {
     amounts: { testToken: 1 },
     activeView: WalletView.About,
     activeToken: _testToken,

@@ -47,22 +47,37 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
       case RegisterStage.STEP3:
         return <StepThree seed={seed} onConfirm={() => dispatch(rsa.confirmSeed())} />
       case RegisterStage.STEP4:
-        return <StepFour onRegister={(data) => dispatch(rsa.register(data.password))} />
+        return (
+          <StepFour
+            onRegister={({ password }) => {
+              dispatch(rsa.register(password))
+              navigate('/zeropool/wallet')
+              navigate(0)
+            }}
+          />
+        )
       case RegisterStage.IMPORT:
         return (
           <ImportAccount
-            onImport={(data) => dispatch(rsa.import(data))}
             onBack={() => dispatch(rsa.stepBack())}
+            onImport={(data) => {
+              dispatch(rsa.import(data))
+              navigate('/zeropool/wallet')
+              navigate(0)
+            }}
           />
         )
       default:
         return (
           <Welcome
             // TODO: remove next line after API is connected
-            onMockedLogin={() => navigate('/wallet')}
+            onMockedLogin={() => navigate('/zeropool/wallet')}
             onCreate={() => dispatch(rsa.startRegister())}
             onImport={() => dispatch(rsa.startImport())}
-            onAbout={() => { navigate('/zeropool/about', { replace: true }); navigate(0) }}
+            onAbout={() => {
+              navigate('/zeropool/about')
+              navigate(0)
+            }}
           />
         )
     }
