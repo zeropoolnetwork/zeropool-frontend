@@ -13,7 +13,7 @@ import { RootState } from 'state'
 
 type Actions = ActionType<typeof registerActions>
 
-const importAccount$: Epic = (
+const importAccount = (
   action$: Observable<Actions>,
   state$: Observable<RootState>,
 ) =>
@@ -26,7 +26,7 @@ const importAccount$: Epic = (
     }),
   )
 
-const register$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
+const register: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
   action$.pipe(
     filterActions(registerActions.register),
     withLatestFrom(state$.pipe(map(selectSeed))),
@@ -35,4 +35,4 @@ const register$: Epic = (action$: Observable<Actions>, state$: Observable<RootSt
     }),
   )
 
-export const registerEpics: Epic = combineEpics(importAccount$, register$)
+export const registerEpics: Epic = combineEpics(importAccount, register)

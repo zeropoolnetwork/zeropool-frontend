@@ -1,14 +1,13 @@
 import React from 'react'
 import { cn } from '@bem-react/classname'
-// import { push } from 'connected-react-router'
 import { Button } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 import './AboutPage.scss'
 import logo from 'assets/logo.svg'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-import { navigate } from 'shared/shared.actions'
 
 export const componentId = 'AboutPage'
 
@@ -21,6 +20,8 @@ interface AboutPageProps {
 
 export const AboutPage: React.FC<AboutPageProps> = ({ showBackButton = true }) => {
   const dispatch = useDispatch()
+
+  const navigate = useNavigate()
 
   return (
     <div className={css()} data-testid="AboutPage">
@@ -45,7 +46,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ showBackButton = true }) =
           <Button
             color="primary"
             data-testid={test('BackButton')}
-            onClick={() => dispatch(navigate.to('/'))}
+            onClick={() => { navigate('/zeropool/welcome'); navigate(0) }}
             variant="contained"
           >
             Back

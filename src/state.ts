@@ -14,11 +14,12 @@ import { stateMigrations } from 'state-migrations'
 import { walletReducer, WalletState } from 'wallet/state/wallet.reducer'
 import { walletEpics } from 'wallet/state/wallet.epics'
 import { loadingBarReducer, LoadingBarState } from 'shared/loading-bar/state/loading-bar.reducer'
+import { sharedEpics } from 'shared/state/shared.epics'
 
 //#region Setup Epics
 const epicMiddleware = createEpicMiddleware()
 
-const epics = combineEpics(registerEpics, walletEpics)
+const epics = combineEpics(registerEpics, walletEpics, sharedEpics)
 //#endregion
 
 //#region Setup Reducers
@@ -56,7 +57,7 @@ export type RootState = CombinedState<{
   register: RegisterState
   account: WalletState
   shared: CombinedState<{
-      loadingBar: LoadingBarState;
+    loadingBar: LoadingBarState;
   }>;
 }>
 

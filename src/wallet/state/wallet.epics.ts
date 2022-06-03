@@ -37,7 +37,6 @@ import { RatesApi } from 'wallet/api/rates.api'
 
 import { RootState } from 'state'
 import { getPayload } from 'shared/operators/get-payload.operator'
-import { navigate } from 'shared/shared.actions'
 // import { initBalances } from './helpers/init-balances.helper'
 
 type Actions = ActionType<typeof actions>
@@ -58,17 +57,17 @@ const getRates$: Epic = (action$: Observable<Actions>, state$: Observable<RootSt
     handleEpicError(actions.getRatesError, 'Failed to get rates'),
   )
 
-const redirectToTheWalletOnSetSeed$: Epic = (
-  action$: Observable<Actions>,
-  state$: Observable<RootState>,
-) => action$.pipe(filterActions(actions.setSeed), switchMapTo(of(navigate.to('/wallet'))))
+// const redirectToTheWalletOnSetSeed$: Epic = (
+//   action$: Observable<Actions>,
+//   state$: Observable<RootState>,
+// ) => action$.pipe(filterActions(actions.setSeed), switchMapTo(of(navigate.to('/wallet'))))
 
 const resetAccount$: Epic = (action$: Observable<Actions>) =>
   action$.pipe(
     filterActions(actions.menu),
     filter((action) => action.payload === WalletView.Reset),
     tap(() => toast.success('Wallet reseted and data cleared')),
-    mergeMap(() => of(navigate.to('/welcome'), actions.resetAccount())),
+    mergeMap(() => of(/*navigate.to('/welcome'),*/ actions.resetAccount())),
   )
 
 const initApi$: Epic = (action$: Observable<Actions>, state$: Observable<RootState>) =>
@@ -98,7 +97,7 @@ const initApi$: Epic = (action$: Observable<Actions>, state$: Observable<RootSta
         of(false).pipe(
           // tslint:disable-next-line: prettier
           mergeMap(() => of(
-            navigate.to('/welcome'),
+            // navigate.to('/welcome'),
             actions.setSeedError('Seed phrase not set')),
           ),
         ),
@@ -275,7 +274,7 @@ export const walletEpics: Epic = combineEpics(
   callGetTransactionsOnUpdateWallets$,
   initApi$,
   resetAccount$,
-  redirectToTheWalletOnSetSeed$,
+  // redirectToTheWalletOnSetSeed$,
   initWallets$,
   updateBalances$,
   handleErrorActions$,
