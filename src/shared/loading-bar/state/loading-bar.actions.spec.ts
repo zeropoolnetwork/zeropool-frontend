@@ -1,17 +1,17 @@
-import { loadingBarActions } from 'shared/loading-bar/state/loading-bar.actions'
+import { loadingBarActions as actions } from 'shared/loading-bar/state/loading-bar.reducer'
 
 describe('loadingBarActions actions', () => {
   it('should create an action addRequest of loadingBarActions', () => {
     const expectedAction = {
       type: '@loadingBar/addRequest',
     }
-    expect(loadingBarActions.addRequest()).toEqual(expectedAction)
+    expect(actions.addRequest()).toEqual(expectedAction)
   })
 
   it('should create an action removeRequest of loadingBarActions', () => {
     const expectedAction = {
       type: '@loadingBar/removeRequest',
     }
-    expect(loadingBarActions.removeRequest()).toEqual(expectedAction)
+    expect(actions.removeRequest()).toEqual(expectedAction)
   })
 })

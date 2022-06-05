@@ -1,3 +1,4 @@
+// tslint:disable: prettier
 import { AnyAction } from 'redux'
 import { Observable, of } from 'rxjs'
 import { Epic, combineEpics, ofType } from 'redux-observable'
@@ -7,26 +8,25 @@ import { walletActions } from 'wallet/state/wallet.actions'
 import { selectSeed } from 'register/state/register.selectors'
 
 import { RootState } from 'state'
-import { registerSlice } from 'register/state/register.reducer'
+import { registerActions as actions } from 'register/state/register.reducer'
+// tslint:enable: prettier
 
-
-const rsa = registerSlice.actions
 const importAccount = (action$: Observable<AnyAction>, state$: Observable<RootState>) =>
   action$.pipe(
-    ofType(rsa.import.type),
+    ofType(actions.import.type),
     switchMap((action) => {
       const seed = action.payload.seed.join(' ')
 
-      return of(rsa.reset(), walletActions.setSeed(seed))
+      return of(actions.reset(), walletActions.setSeed(seed))
     }),
   )
 
 const register: Epic = (action$: Observable<AnyAction>, state$: Observable<RootState>) =>
   action$.pipe(
-    ofType(rsa.register.type),
+    ofType(actions.register.type),
     withLatestFrom(state$.pipe(map(selectSeed))),
     switchMap(([, seed]) => {
-      return of(rsa.reset(), walletActions.setSeed(seed.join(' ')))
+      return of(actions.reset(), walletActions.setSeed(seed.join(' ')))
     }),
   )
 

@@ -1,4 +1,4 @@
-import { ActionCreatorBuilder } from 'typesafe-actions'
+import { PayloadAction, PayloadActionCreator } from '@reduxjs/toolkit'
 import { catchError } from 'rxjs/operators'
 import { merge, of } from 'rxjs'
 
@@ -9,7 +9,7 @@ const errorMessage = (title: string) =>
   `
 
 export const handleEpicError = (
-  errorAction: ActionCreatorBuilder<string, string>,
+  errorAction: PayloadActionCreator<string, string>,
   title?: string,
 ) =>
   catchError((error, caught) => {

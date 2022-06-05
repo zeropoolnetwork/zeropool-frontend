@@ -46,7 +46,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ showBackButton = true }) =
           <Button
             color="primary"
             data-testid={test('BackButton')}
-            onClick={() => { navigate('/zeropool/welcome'); navigate(0) }}
+            onClick={() => { navigate('/register'); navigate(0) }}
             variant="contained"
           >
             Back

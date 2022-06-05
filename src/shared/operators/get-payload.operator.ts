@@ -1,4 +1,5 @@
 import { map } from 'rxjs/operators'
-import { PayloadAction } from 'typesafe-actions'
+import { PayloadAction } from '@reduxjs/toolkit'
 
-export const getPayload = <T>() => map((action: PayloadAction<string, T>) => action.payload)
+export const getPayload = <T>() =>
+  map((action: PayloadAction<T, string>) => action.payload)

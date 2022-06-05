@@ -43,7 +43,7 @@ import {
   getWalletsForActiveToken,
   getActiveWallet,
   getSendData,
-  getSeed,
+  selectSeed,
   getPrivateAddress,
   getProcessing,
 } from 'wallet/state/wallet.selectors'
@@ -151,7 +151,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   const wallet = useSelector(getActiveWallet)
   const wallets = useSelector(getWalletsForActiveToken)
   const send = useSelector(getSendData)
-  const seed = useSelector(getSeed)
+  const seed = useSelector(selectSeed)
   const privateAddress = useSelector(getPrivateAddress)
   const processing = useSelector(getProcessing)
 

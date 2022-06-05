@@ -1,5 +1,3 @@
-import { ActionType, createReducer } from 'typesafe-actions'
-
 import supportedTokens from 'assets/settings/supported-tokens.json'
 
 import { recordFromArray } from 'shared/util/from'
@@ -12,6 +10,7 @@ import { amountsHelper } from 'wallet/state/helpers/amounts.helper'
 import { walletsHelper } from 'wallet/state/helpers/wallets.helper'
 import { Transaction } from 'wallet/state/models/transaction'
 import { WalletView } from 'wallet/state/models/wallet-view'
+import { createReducer } from '@reduxjs/toolkit'
 
 export const initialWalletName = 'Main wallet'
 
@@ -57,125 +56,128 @@ export const initialWalletState: WalletState = {
   },
 }
 
-export const walletReducer = createReducer<WalletState, ActionType<typeof actions>>(
-  initialWalletState,
+export const walletReducer = createReducer(initialWalletState, (builder) =>
+  builder
+    .addCase(actions.menu, (state, { payload }) => ({
+      ...state,
+      activeView: payload !== WalletView.Reset ? payload : state.activeView,
+      processing: initialWalletState.processing,
+    }))
+    .addCase(actions.headerBack, (state) => ({
+      ...navigationHelper.handleBackClick(state),
+      processing: initialWalletState.processing,
+    }))
+    .addCase(actions.openBalanceView, (state) => ({
+      ...navigationHelper.getBalanceView(state),
+    }))
+    .addCase(actions.openWalletsView, (state, { payload }) => ({
+      ...state,
+      activeView: WalletView.Wallets,
+      activeToken: payload,
+      previousView: state.activeView,
+    }))
+    .addCase(actions.openTransactionsView, (state, { payload }) => ({
+      ...state,
+      activeView: WalletView.Transactions,
+      activeWallet: payload,
+      previousView: state.activeView,
+      transactions: null,
+      amounts: amountsHelper.getAmountsForWallet(payload),
+    }))
+    .addCase(actions.openReceiveView, (state, { payload }) => ({
+      ...navigationHelper.getReceiveView(state, payload),
+      privateAddress: null,
+    }))
+    .addCase(actions.openSendInitialView, (state, { payload }) => ({
+      ...navigationHelper.getSendInitialView(state, payload),
+    }))
+    .addCase(actions.openSendConfirmView, (state, { payload }) => ({
+      ...state,
+      activeView: WalletView.SendConfirmation,
+      activeWallet: payload.wallet,
+      previousView: state.activeView,
+      send: {
+        wallet: payload.wallet,
+        address: payload.address,
+        amount: payload.amount,
+        fee: payload.fee,
+      },
+    }))
+    .addCase(actions.getTransactionsSuccess, (state, { payload }) => ({
+      ...state,
+      transactions: payload,
+    }))
+    .addCase(actions.setSeed, (state, { payload }) => ({
+      ...state,
+      seed: payload,
+    }))
+    .addCase(actions.updateWalletsSuccess, (state, { payload }) => ({
+      ...state,
+      wallets: payload,
+      processing: initialWalletState.processing,
+      activeWallet:
+        state.activeWallet && state.activeToken
+          ? payload[state.activeToken.symbol][
+              walletsHelper.getActiveIndex(
+                payload[state.activeToken.symbol],
+                state.activeWallet,
+              )
+            ]
+          : null,
+    }))
+    .addCase(actions.refreshAmounts, (state) => ({
+      ...state,
+      amounts: amountsHelper.getAmounts(state),
+    }))
+    .addCase(actions.resetAccount, () => initialWalletState)
+    .addCase(actions.edit, (state, { payload }) => ({
+      ...state,
+      wallets:
+        !state.activeToken || !state.wallets
+          ? state.wallets
+          : {
+              ...state.wallets,
+              [state.activeToken.symbol]: walletsHelper.renameWallet(
+                state.wallets[state.activeToken.symbol],
+                payload.wallet,
+                payload.name,
+              ),
+            },
+    }))
+    .addCase(actions.addWalletSuccess, (state, { payload }) => ({
+      ...state,
+      wallets: payload,
+    }))
+    .addCase(actions.hideWallet, (state, { payload }) => ({
+      ...state,
+      wallets:
+        !state.activeToken || !state.wallets
+          ? state.wallets
+          : {
+              ...state.wallets,
+              [state.activeToken.symbol]: walletsHelper.hideWallet(
+                state.wallets[state.activeToken.symbol],
+                payload,
+              ),
+            },
+    }))
+    .addCase(actions.getRatesSuccess, (state, { payload }) => ({
+      ...state,
+      usdRates: payload,
+    }))
+    .addCase(actions.getPrivateAddressSuccess, (state, { payload }) => ({
+      ...state,
+      privateAddress: payload,
+    }))
+    .addCase(actions.send, (state) => ({
+      ...state,
+      processing: {
+        ...state.processing,
+        send: true,
+      },
+    }))
+    .addCase(actions.apiError, (state) => ({
+      ...state,
+      processing: initialWalletState.processing,
+    })),
 )
-  .handleAction(actions.menu, (state, { payload }) => ({
-    ...state,
-    activeView: payload !== WalletView.Reset ? payload : state.activeView,
-    processing: initialWalletState.processing,
-  }))
-  .handleAction(actions.headerBack, (state) => ({
-    ...navigationHelper.handleBackClick(state),
-    processing: initialWalletState.processing,
-  }))
-  .handleAction(actions.openBalanceView, (state) => ({
-    ...navigationHelper.getBalanceView(state),
-  }))
-  .handleAction(actions.openWalletsView, (state, { payload }) => ({
-    ...state,
-    activeView: WalletView.Wallets,
-    activeToken: payload,
-    previousView: state.activeView,
-  }))
-  .handleAction(actions.openTransactionsView, (state, { payload }) => ({
-    ...state,
-    activeView: WalletView.Transactions,
-    activeWallet: payload,
-    previousView: state.activeView,
-    transactions: null,
-    amounts: amountsHelper.getAmountsForWallet(payload),
-  }))
-  .handleAction(actions.openReceiveView, (state, { payload }) => ({
-    ...navigationHelper.getReceiveView(state, payload),
-    privateAddress: null,
-  }))
-  .handleAction(actions.openSendInitialView, (state, { payload }) => ({
-    ...navigationHelper.getSendInitialView(state, payload),
-  }))
-  .handleAction(actions.openSendConfirmView, (state, { payload }) => ({
-    ...state,
-    activeView: WalletView.SendConfirmation,
-    activeWallet: payload.wallet,
-    previousView: state.activeView,
-    send: {
-      wallet: payload.wallet,
-      address: payload.address,
-      amount: payload.amount,
-      fee: payload.fee,
-    },
-  }))
-  .handleAction(actions.getTransactionsSuccess, (state, { payload }) => ({
-    ...state,
-    transactions: payload,
-  }))
-  .handleAction(actions.setSeed, (state, { payload }) => ({
-    ...state,
-    seed: payload,
-  }))
-  .handleAction(actions.updateWalletsSuccess, (state, { payload }) => ({
-    ...state,
-    wallets: payload,
-    processing: initialWalletState.processing,
-    activeWallet:
-      state.activeWallet && state.activeToken
-        ? payload[state.activeToken.symbol][
-            walletsHelper.getActiveIndex(payload[state.activeToken.symbol], state.activeWallet)
-          ]
-        : null,
-  }))
-  .handleAction(actions.refreshAmounts, (state) => ({
-    ...state,
-    amounts: amountsHelper.getAmounts(state),
-  }))
-  .handleAction(actions.resetAccount, () => initialWalletState)
-  .handleAction(actions.edit, (state, { payload }) => ({
-    ...state,
-    wallets:
-      !state.activeToken || !state.wallets
-        ? state.wallets
-        : {
-            ...state.wallets,
-            [state.activeToken.symbol]: walletsHelper.renameWallet(
-              state.wallets[state.activeToken.symbol],
-              payload.wallet,
-              payload.name,
-            ),
-          },
-  }))
-  .handleAction(actions.addWalletSuccess, (state, { payload }) => ({
-    ...state,
-    wallets: payload,
-  }))
-  .handleAction(actions.hideWallet, (state, { payload }) => ({
-    ...state,
-    wallets:
-      !state.activeToken || !state.wallets
-        ? state.wallets
-        : {
-            ...state.wallets,
-            [state.activeToken.symbol]: walletsHelper.hideWallet(
-              state.wallets[state.activeToken.symbol],
-              payload,
-            ),
-          },
-  }))
-  .handleAction(actions.getRatesSuccess, (state, { payload }) => ({
-    ...state,
-    usdRates: payload,
-  }))
-  .handleAction(actions.getPrivateAddressSuccess, (state, { payload }) => ({
-    ...state,
-    privateAddress: payload,
-  }))
-  .handleAction(actions.send, (state) => ({
-    ...state,
-    processing: {
-      ...state.processing,
-      send: true,
-    },
-  }))
-  .handleAction(actions.apiError, (state) => ({
-    ...state,
-    processing: initialWalletState.processing,
-  }))

@@ -1,6 +1,9 @@
-import { _testToken, _testWalletsEth, _testWalletsNear } from 'shared/helpers/test/app-state.helper'
+import {
+  _testToken,
+  _testWalletsEth,
+  _testWalletsNear,
+} from 'shared/helpers/test/app-state.helper'
 import { deepFreeze } from 'shared/util/deep-freeze'
-import { action } from 'typesafe-actions'
 import { WalletView } from 'wallet/state/models'
 
 import { walletActions as actions } from 'wallet/state/wallet.actions'
@@ -225,7 +228,8 @@ describe('wallet reducer', () => {
           ...initialState,
           ...requiredPart,
         },
-        actions.openSendInitialView(payload))
+        actions.openSendInitialView(payload),
+      )
 
       expect(state.activeWallet?.name).toBe(payload.name)
     })
@@ -291,7 +295,9 @@ describe('wallet reducer', () => {
   })
 
   describe('Handles `updateWalletsSuccess` action', () => {
-    const payload = { TEST: [..._testWalletsEth, { address: '0x123test', amount: 123 } as any] }
+    const payload = {
+      TEST: [..._testWalletsEth, { address: '0x123test', amount: 123 } as any],
+    }
 
     it('saves wallets record to the state', () => {
       const state = walletReducer(initialState, actions.updateWalletsSuccess(payload))
@@ -320,156 +326,177 @@ describe('wallet reducer', () => {
   })
 
   describe('Handles `refreshAmounts` action', () => {
-    it.todo('recalculates amounts');
-  });
+    it.todo('recalculates amounts')
+  })
 
   describe('Handles `resetAccount` action', () => {
     it('resets account state', () => {
       const oldState: WalletState = {
-        ...initialWalletState, 
+        ...initialWalletState,
         activeToken: _testToken,
         seed: 'hi',
-        privateAddress: 'bla-bla-bla', 
+        privateAddress: 'bla-bla-bla',
       }
       const newState = walletReducer(oldState, actions.resetAccount())
 
       expect(newState).toEqual(initialWalletState)
-    });
-  });
+    })
+  })
 
   describe('Handles `edit` action', () => {
     it('does not change state if no active token', () => {
       const oldState: WalletState = {
-        ...initialWalletState, 
+        ...initialWalletState,
         seed: 'hi',
-        privateAddress: 'bla-bla-bla', 
+        privateAddress: 'bla-bla-bla',
         wallets: { test: _testWalletsEth },
       }
-      const newState = walletReducer(oldState, actions.edit({
-        wallet: _testWalletsEth[1],
-        name: 'test name',
-      }))
+      const newState = walletReducer(
+        oldState,
+        actions.edit({
+          wallet: _testWalletsEth[1],
+          name: 'test name',
+        }),
+      )
 
       expect(newState).toEqual(oldState)
-    });
+    })
 
     it('does not change state if no wallets', () => {
       const oldState: WalletState = {
-        ...initialWalletState, 
+        ...initialWalletState,
         seed: 'hi',
-        privateAddress: 'bla-bla-bla', 
-        activeToken: _testToken ,
+        privateAddress: 'bla-bla-bla',
+        activeToken: _testToken,
       }
-      const newState = walletReducer(oldState, actions.edit({
-        wallet: _testWalletsEth[1],
-        name: 'test name',
-      }))
+      const newState = walletReducer(
+        oldState,
+        actions.edit({
+          wallet: _testWalletsEth[1],
+          name: 'test name',
+        }),
+      )
 
       expect(newState).toEqual(oldState)
-    });
+    })
 
     it('renames wallet if state has active token and wallets', () => {
       const oldState: WalletState = {
         ...initialState,
         activeToken: {
           ..._testToken,
-          symbol: 'test'
+          symbol: 'test',
         },
         wallets: {
           test: _testWalletsEth,
         },
       }
 
-      const newState = walletReducer(oldState, actions.edit({
-        wallet: _testWalletsEth[0],
-        name: 'test1'
-      }))
+      const newState = walletReducer(
+        oldState,
+        actions.edit({
+          wallet: _testWalletsEth[0],
+          name: 'test1',
+        }),
+      )
 
+      // tslint:disable-next-line: no-string-literal
       expect(newState.wallets && newState.wallets['test'][0].name).toEqual('test1')
-    });
-  });
+    })
+  })
 
   describe('Handles `addWalletSuccess` action', () => {
     it('saves wallets to state', () => {
       const oldState: WalletState = {
-        ...initialWalletState, 
+        ...initialWalletState,
         wallets: { test: _testWalletsEth },
       }
-      const newState = walletReducer(oldState, actions.addWalletSuccess({
-        test2: _testWalletsNear,
-      }))
+      const newState = walletReducer(
+        oldState,
+        actions.addWalletSuccess({
+          test2: _testWalletsNear,
+        }),
+      )
 
+      // tslint:disable-next-line: no-string-literal
       expect(newState.wallets && newState.wallets['test2']).toEqual(_testWalletsNear)
-    });
-  });
+    })
+  })
 
   describe('Handles `getRatesSuccess` action', () => {
     it('saves rates to state', () => {
       const oldState: WalletState = {
-        ...initialWalletState, 
+        ...initialWalletState,
       }
-      const newState = walletReducer(oldState, actions.getRatesSuccess({
-        test1: 123,
-        test2: 321,
-      }))
+      const newState = walletReducer(
+        oldState,
+        actions.getRatesSuccess({
+          test1: 123,
+          test2: 321,
+        }),
+      )
 
+      // tslint:disable-next-line: no-string-literal
       expect(newState.usdRates && newState.usdRates['test1']).toEqual(123)
-    });
-  });
+    })
+  })
 
   describe('Handles `hideWallet` action', () => {
     it('does not change state if no active token', () => {
       const oldState: WalletState = {
-        ...initialWalletState, 
-        wallets: { test: _testWalletsEth }
+        ...initialWalletState,
+        wallets: { test: _testWalletsEth },
       }
       const newState = walletReducer(oldState, actions.hideWallet(_testWalletsEth[1]))
 
       expect(newState).toEqual(oldState)
-    });
+    })
 
     it('does not change state if no wallets', () => {
       const oldState: WalletState = {
-        ...initialWalletState, 
+        ...initialWalletState,
         activeToken: _testToken,
       }
       const newState = walletReducer(oldState, actions.hideWallet(_testWalletsEth[1]))
 
       expect(newState).toEqual(oldState)
-    });
+    })
 
     it('removes wallet from state', () => {
       const oldState: WalletState = {
-        ...initialWalletState, 
+        ...initialWalletState,
         activeToken: _testToken,
       }
       const newState = walletReducer(oldState, actions.hideWallet(_testWalletsEth[1]))
 
-      expect(newState.wallets && newState.wallets[_testToken.symbol].find((item) =>
-        _testWalletsEth[1].id !== item.id
-      )).toBe(null)
-    });
-  });
+      expect(
+        newState.wallets &&
+          newState.wallets[_testToken.symbol].find(
+            (item: any) => _testWalletsEth[1].id !== item.id,
+          ),
+      ).toBe(null)
+    })
+  })
 
   describe('Handles `menu` action', () => {
     it('does not change active view if reset flag in payload', () => {
       const oldState: WalletState = {
-        ...initialWalletState, 
+        ...initialWalletState,
         activeView: WalletView.Balance,
       }
       const newState = walletReducer(oldState, actions.menu(WalletView.Reset))
 
       expect(newState).toEqual(oldState)
-    });
+    })
 
     it('change active view if no reset flag in payload', () => {
       const oldState: WalletState = {
-        ...initialWalletState, 
+        ...initialWalletState,
         activeView: WalletView.Balance,
       }
       const newState = walletReducer(oldState, actions.menu(WalletView.About))
-      
+
       expect(newState.activeView).toEqual(WalletView.About)
-    });
+    })
   })
 })
