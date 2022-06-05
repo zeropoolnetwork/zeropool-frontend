@@ -2,20 +2,21 @@
 import storage from 'redux-persist/lib/storage'
 import { PersistConfig } from 'redux-persist/es/types'
 import { configureStore } from '@reduxjs/toolkit'
-import { AnyAction, CombinedState, combineReducers, Reducer } from 'redux'
 import { combineEpics, createEpicMiddleware } from 'redux-observable'
 import { persistStore, persistReducer, createMigrate } from 'redux-persist'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+import { AnyAction, CombinedState, combineReducers, Reducer } from 'redux'
 
 import { registerSlice, RegisterState } from 'register/state/register.reducer'
 import { registerEpics } from 'register/state/register.epics'
 
-import { stateMigrations } from 'state-migrations'
-import { walletReducer, WalletState } from 'wallet/state/wallet.reducer'
 import { walletEpics } from 'wallet/state/wallet.epics'
-import { loadingBarReducer, LoadingBarState } from 'shared/loading-bar/state/loading-bar.reducer'
-import { sharedEpics } from 'shared/state/shared.epics'
+import { walletReducer, WalletState } from 'wallet/state/wallet.reducer'
 
+import { sharedEpics } from 'shared/state/shared.epics'
+import { loadingBarSlice, LoadingBarState } from 'shared/loading-bar/state/loading-bar.reducer'
+
+import { stateMigrations } from 'state-migrations'
 //#region Setup Epics
 const epicMiddleware = createEpicMiddleware()
 
@@ -28,7 +29,7 @@ export const createRootReducer = () =>
     register: registerSlice.reducer,
     wallet: walletReducer,
     shared: combineReducers({
-      loadingBar: loadingBarReducer,
+      loadingBar: loadingBarSlice.reducer,
     }),
   })
 //#endregion

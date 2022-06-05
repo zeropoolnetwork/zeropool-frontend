@@ -62,3 +62,6 @@ export const registerSlice = createSlice({
     },
   },
 })
+
+export const registerActions = registerSlice.actions
+export const registerReducer = registerSlice.reducer

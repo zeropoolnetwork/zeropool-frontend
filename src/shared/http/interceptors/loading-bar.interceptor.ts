@@ -3,7 +3,7 @@ import { Store } from 'redux'
 
 import { RootState } from 'state'
 import { RequestConfig } from 'shared/http/http'
-import { loadingBarActions } from 'shared/loading-bar/state/loading-bar.actions'
+import { loadingBarActions as actions } from 'shared/loading-bar/state/loading-bar.reducer'
 
 export const loadingBarRequestInterceptor = (store: Store<RootState>) => (
   request: AxiosRequestConfig,
@@ -12,7 +12,7 @@ export const loadingBarRequestInterceptor = (store: Store<RootState>) => (
   const noBar = !!context?.noLoadingBar
 
   if (!noBar) {
-    store.dispatch(loadingBarActions.addRequest())
+    store.dispatch(actions.addRequest())
   }
 
   return request
@@ -25,7 +25,7 @@ export const loadingBarResponseInterceptor = (store: Store<RootState>) => (
   const noBar = !!context?.noLoadingBar
 
   if (!noBar) {
-    store.dispatch(loadingBarActions.removeRequest())
+    store.dispatch(actions.removeRequest())
   }
 
   return response
@@ -38,7 +38,7 @@ export const loadingBarErrorResponseInterceptor = (store: Store<RootState>) => (
   const noBar = !!context?.noLoadingBar
 
   if (!noBar) {
-    store.dispatch(loadingBarActions.removeRequest())
+    store.dispatch(actions.removeRequest())
   }
 
   throw error

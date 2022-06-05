@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect'
+import { createSelector } from '@reduxjs/toolkit'
 
 import { RootState } from 'state'
 
@@ -42,7 +42,7 @@ export const getUsdRates = createSelector(getWalletState, (state) => state.usdRa
 
 export const getSendData = createSelector(getWalletState, (state) => state.send)
 
-export const getSeed = createSelector(getWalletState, (state) => state.seed)
+export const selectSeed = createSelector(getWalletState, (state) => state.seed)
 
 export const getPollSettings = createSelector(getWalletState, (state) => state.pollSettings)
 

@@ -1,28 +1,25 @@
-import { ActionType, createReducer } from 'typesafe-actions'
-
-import { loadingBarActions } from 'shared/loading-bar/state/loading-bar.actions'
+import { createSlice } from '@reduxjs/toolkit'
 
 export interface LoadingBarState {
   requestsInProgress: number
 }
 
-export const initialState: LoadingBarState = {
+export const initialLoadingBarState: LoadingBarState = {
   requestsInProgress: 0,
 }
 
-export const loadingBarReducer = createReducer<
-  LoadingBarState,
-  ActionType<typeof loadingBarActions>
->(initialState)
-  .handleAction(
-    loadingBarActions.addRequest,
-    (state): LoadingBarState => ({
-      requestsInProgress: state.requestsInProgress + 1,
-    }),
-  )
-  .handleAction(
-    loadingBarActions.removeRequest,
-    (state): LoadingBarState => ({
-      requestsInProgress: state.requestsInProgress - 1,
-    }),
-  )
+export const loadingBarSlice = createSlice({
+  name: 'loadingBar',
+  initialState: initialLoadingBarState,
+  reducers: {
+    addRequest: (state) => {
+      state.requestsInProgress = state.requestsInProgress + 1
+    },
+    removeRequest: (state) => {
+      state.requestsInProgress = state.requestsInProgress - 1
+    },
+  },
+})
+
+export const loadingBarActions = loadingBarSlice.actions
+export const loadingBarReducer = loadingBarSlice.reducer

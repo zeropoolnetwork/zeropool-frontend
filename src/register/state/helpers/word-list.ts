@@ -1993,7 +1993,7 @@ export const wordList = [
   'wedding',
   'weekend',
   'weird',
-  'welcome',
+  'register',
   'west',
   'wet',
   'whale',

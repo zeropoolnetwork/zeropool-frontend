@@ -1,6 +1,5 @@
-import { loadingBarReducer } from 'shared/loading-bar/state/loading-bar.reducer'
-
-import { loadingBarActions } from 'shared/loading-bar/state/loading-bar.actions'
+// tslint:disable-next-line: prettier
+import { loadingBarActions as actions, loadingBarReducer as reducer } from 'shared/loading-bar/state/loading-bar.reducer'
 
 export interface LoadingBarState {
   requestsInProgress: number
@@ -18,13 +17,13 @@ describe('loading bar Reducers', () => {
   })
 
   it('properly handles the addRequest of loadingBar', () => {
-    expect(loadingBarReducer(initialState, loadingBarActions.addRequest())).toEqual({
+    expect(reducer(initialState, actions.addRequest())).toEqual({
       requestsInProgress: 1,
     })
   })
 
   it('properly handles the removeRequest of loadingBar', () => {
-    expect(loadingBarReducer(initialState, loadingBarActions.removeRequest())).toEqual({
+    expect(reducer(initialState, actions.removeRequest())).toEqual({
       requestsInProgress: -1,
     })
   })

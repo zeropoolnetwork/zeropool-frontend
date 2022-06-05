@@ -1,4 +1,4 @@
-import { createAction as create } from 'typesafe-actions'
+import { createAction as create } from '@reduxjs/toolkit'
 
 import { Token, TokenName } from 'shared/models/token'
 
@@ -7,57 +7,57 @@ import { Wallet } from 'wallet/state/models/wallet'
 import { WalletRecord } from './models'
 
 export const walletActions = {
-  apiError: create('@wallet/apiError')<string>(),
+  apiError: create<string>('wallet/apiError'),
 
-  addWallet: create('@wallet/addWallet')<void>(),
-  addWalletSuccess: create('@wallet/addWalletSuccess')<WalletRecord>(),
-  addWalletError: create('@wallet/addWalletError')<string>(),
+  addWallet: create('wallet/addWallet'),
+  addWalletSuccess: create<WalletRecord>('wallet/addWalletSuccess'),
+  addWalletError: create<string>('wallet/addWalletError'),
 
-  openBalanceView: create('@wallet/openBalanceView')<void>(), // called on wallet first load
-  openWalletsView: create('@wallet/openWalletsView')<Token>(),
-  openTransactionsView: create('@wallet/openTransactionsView')<Wallet>(), // Transactions View
-  openReceiveView: create('@wallet/openReceiveView')<Wallet>(),
-  openSendInitialView: create('@wallet/openSendInitialView')<Wallet>(),
-  prepareSendConfirmView: create('@wallet/prepareSendConfirmView')<{
+  openBalanceView: create('wallet/openBalanceView'),
+  openWalletsView: create<Token>('wallet/openWalletsView'),
+  openTransactionsView: create<Wallet>('wallet/openTransactionsView'),
+  openReceiveView: create<Wallet>('wallet/openReceiveView'),
+  openSendInitialView: create<Wallet>('wallet/openSendInitialView'),
+  prepareSendConfirmView: create<{
     wallet: Wallet
     address: string
     amount: number
-  }>(),
-  openSendConfirmView: create('@wallet/openSendConfirmView')<{
+  }>('wallet/prepareSendConfirmView'),
+  openSendConfirmView: create<{
     wallet: Wallet
     address: string
     amount: number
     fee: string
-  }>(),
+  }>('wallet/openSendConfirmView'),
 
-  initWallets: create('@wallet/initWallets')<void>(),
-  updateBalances: create('@wallet/updateBalances')<void>(),
-  updateWalletsSuccess: create('@wallet/updateWalletsSuccess')<WalletRecord>(),
-  updateWalletsError: create('@wallet/updateWalletsError')<string>(),
+  initWallets: create('wallet/initWallets'),
+  updateBalances: create('wallet/updateBalances'),
+  updateWalletsSuccess: create<WalletRecord>('wallet/updateWalletsSuccess'),
+  updateWalletsError: create<string>('wallet/updateWalletsError'),
 
-  getTransactions: create('@wallet/getTransactions')<Wallet>(),
-  getTransactionsSuccess: create('@wallet/getTransactionsSussess')<any[]>(),
+  getTransactions: create<Wallet>('wallet/getTransactions'),
+  getTransactionsSuccess: create<any[]>('wallet/getTransactionsSussess'),
 
-  refreshAmounts: create('@wallet/refreshAmounts')<void>(),
+  refreshAmounts: create('wallet/refreshAmounts'),
 
-  getRates: create('@wallet/getRates')<void>(),
-  getRatesSuccess: create('@wallet/getRatesSuccess')<Record<TokenName, number>>(),
-  getRatesError: create('@wallet/getRates')<string>(),
+  getRates: create('wallet/getRates'),
+  getRatesSuccess: create<Record<TokenName, number>>('wallet/getRatesSuccess'),
+  getRatesError: create<string>('wallet/getRates'),
 
-  headerBack: create('@wallet/header/back')<void>(),
+  headerBack: create('wallet/header/back'),
 
-  menu: create('@wallet/menu')<WalletView>(),
-  edit: create('@wallet/edit')<{ wallet: Wallet; name: string }>(),
-  send: create('@wallet/send')<void>(),
+  menu: create<WalletView>('wallet/menu'),
+  edit: create<{ wallet: Wallet; name: string }>('wallet/edit'),
+  send: create('wallet/send'),
 
-  setSeed: create('@wallet/setSeed')<string>(),
-  setSeedSuccess: create('@wallet/setSeedSuccess')<void>(),
-  setSeedError: create('@wallet/setSeedError')<string>(),
+  setSeed: create<string>('wallet/setSeed'),
+  setSeedSuccess: create('wallet/setSeedSuccess'),
+  setSeedError: create<string>('wallet/setSeedError'),
 
-  hideWallet: create('@wallet/hideWallet')<Wallet>(),
+  hideWallet: create<Wallet>('wallet/hideWallet'),
 
-  resetAccount: create('@wallet/resetAccount')<void>(),
+  resetAccount: create('wallet/resetAccount'),
 
-  getPrivateAddress: create('@wallet/getPrivateAddress')<Token>(),
-  getPrivateAddressSuccess: create('@wallet/getPrivateAddressSuccess')<string>(),
+  getPrivateAddress: create<Token>('wallet/getPrivateAddress'),
+  getPrivateAddressSuccess: create<string>('wallet/getPrivateAddressSuccess'),
 }

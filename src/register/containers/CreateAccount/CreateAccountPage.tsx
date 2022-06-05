@@ -1,5 +1,5 @@
 // tslint:disable: prettier
-import React from 'react'
+import React, { useEffect } from 'react'
 import { cn } from '@bem-react/classname'
 
 import logo from 'assets/images/logo1.svg'
@@ -18,7 +18,7 @@ import { ImportAccount } from 'register/components/ImportAccount/ImportAccount'
 import { RegisterStage } from 'register/state/models/register-stage'
 import { registerSlice } from 'register/state/register.reducer'
 import { selectSeed, selectStage, selectShowSteps } from 'register/state/register.selectors'
-
+import { selectSeed as selectSeedInWallet } from 'wallet/state/wallet.selectors'
 import { useAppSelector, useAppDispatch } from 'state'
 import { useNavigate } from 'react-router-dom'
 // tslint:enable: prettier
@@ -33,10 +33,18 @@ type CreateAccountProps = {}
 
 export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
   const navigate = useNavigate()
+  const seedInWallet = useAppSelector(selectSeedInWallet)
   const seed = useAppSelector(selectSeed)
   const stage = useAppSelector(selectStage)
   const showSteps = useAppSelector(selectShowSteps)
   const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (seedInWallet) {
+      navigate('/wallet')
+      navigate(0)
+    }
+  })
 
   const components = () => {
     switch (stage) {
@@ -51,7 +59,7 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
           <StepFour
             onRegister={({ password }) => {
               dispatch(rsa.register(password))
-              navigate('/zeropool/wallet')
+              navigate('/wallet')
               navigate(0)
             }}
           />
@@ -59,10 +67,12 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
       case RegisterStage.IMPORT:
         return (
           <ImportAccount
-            onBack={() => dispatch(rsa.stepBack())}
+            onBack={() => {
+              dispatch(rsa.stepBack())
+            }}
             onImport={(data) => {
               dispatch(rsa.import(data))
-              navigate('/zeropool/wallet')
+              navigate('/wallet')
               navigate(0)
             }}
           />
@@ -71,11 +81,11 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
         return (
           <Welcome
             // TODO: remove next line after API is connected
-            onMockedLogin={() => navigate('/zeropool/wallet')}
+            onMockedLogin={() => navigate('/wallet')}
             onCreate={() => dispatch(rsa.startRegister())}
             onImport={() => dispatch(rsa.startImport())}
             onAbout={() => {
-              navigate('/zeropool/about')
+              navigate('/about')
               navigate(0)
             }}
           />

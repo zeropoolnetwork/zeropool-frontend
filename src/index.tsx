@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { ThemeProvider } from '@mui/material'
 import { SnackbarProvider } from 'notistack'
-import { Router, Route, Navigate, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Navigate, Routes } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 
 import './index.css'
@@ -38,17 +38,15 @@ async function start() {
         {/* <React.StrictMode> */}
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistedStore}>
-            <Router navigator={history} location={history.location}>
+            <BrowserRouter navigator={history} location={history.location}>
               <Routes>
-                <Route path="zeropool">
-                  <Route path="welcome" element={<CreateAccountPage />} />
-                  <Route path="about" element={<AboutPage />} />
-                  <Route path="wallet" element={<WalletPage />} />
-                </Route>
+                <Route path="register" element={<CreateAccountPage />} />
+                <Route path="wallet" element={<WalletPage />} />
+                <Route path="about" element={<AboutPage />} />
 
-                <Route path="*" element={<Navigate to="zeropool/welcome" />} />
+                <Route path="*" element={<Navigate to="/register" />} />
               </Routes>
-            </Router>
+            </BrowserRouter>
 
             <LoadingBar />
           </PersistGate>
