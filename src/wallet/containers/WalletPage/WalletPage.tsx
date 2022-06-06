@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSnackbar } from 'notistack'
 import { useNavigate } from 'react-router-dom'
-import { makeStyles } from '@mui/styles'
 import { cn } from '@bem-react/classname'
 import {
   AppBar,
@@ -33,6 +32,8 @@ import { Token } from 'shared/models/token'
 import { HelpPage } from 'shared/components/HelpPage/HelpPage'
 import { AboutPage } from 'shared/components/AboutPage/AboutPage'
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
+
+import './WalletPage.scss'
 
 import {
   getActiveToken,
@@ -68,82 +69,11 @@ const test = testIdBuilder(componentId)
 
 export type WalletPageProps = {}
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    backgroundColor: 'white',
-    flexGrow: 1,
-    flexDirection: 'column',
-    display: 'flex',
-    height: '100vh',
-    minWidth: '350px',
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  toolbar: {
-    alignItems: 'flex-start',
-    flexDirection: 'column',
-    paddingTop: theme.spacing(1),
-    minHeight: 160,
-    paddingBottom: '0',
-  },
-  toolbarHeader: {
-    display: 'flex',
-    borderBottom: `${theme.palette.grey[600]} 1px solid`,
-    width: '100%',
-  },
-  toolbarHeaderItems: {
-    display: 'flex',
-    flexGrow: 1,
-    justifyContent: 'flex-end',
-    marginRight: '-15px',
-  },
-  toolbarHeaderItemsEdgeStart: {
-    marginLeft: '-15px',
-  },
-  toolbarBody: {
-    margin: 'auto',
-    position: 'relative',
-    width: '100%',
-  },
-  title: {
-    flexGrow: 1,
-    alignSelf: 'flex-end',
-  },
-  drower: {},
-  drowerItem: {
-    paddingRight: '20px',
-  },
-  drowerItemIcon: {
-    color: theme.palette.grey[600],
-  },
-  drowerItemText: {},
-  wrapper: {
-    display: 'flex',
-    margin: '50px auto',
-  },
-  footer: {
-    backgroundColor: '#020941',
-    bottom: 0,
-    display: 'flex',
-    position: 'fixed',
-    height: '70px',
-    width: '100%',
-  },
-  AboutPage: {
-    height: '50vh',
-  },
-  zeroPaddingRight: {
-    paddingRight: '0',
-  },
-}))
-
 export const WalletPage: React.FC<WalletPageProps> = () => {
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
-  const [state, setState] = useState({ drower: false })
+  const [state, setState] = useState({ Drower: false })
   const dispatch = useDispatch()
-  const classes = useStyles()
   const view = useSelector(getActiveView)
   const token = useSelector(getActiveToken)
   const rates = useSelector(getUsdRates)
@@ -180,12 +110,12 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
       return
     }
 
-    setState({ ...state, drower: open === undefined ? !state.drower : open })
+    setState({ ...state, Drower: open === undefined ? !state.Drower : open })
   }
 
   const drowerMenu = () => (
     <div
-      className={classes.drower}
+      className={css('Drower')}
       role="presentation"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
@@ -193,27 +123,27 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
       <List>
         {[WalletView.Balance, WalletView.Reset].map((text, index) => (
           <ListItem
-            className={classes.drowerItem}
+            className={css('DrowerItem')}
             button={true}
             key={text}
             onClick={() => dispatch(walletActions.menu(text))}
           >
-            <ListItemIcon className={classes.drowerItemIcon}>
+            <ListItemIcon className={css('DrowerItemIcon')}>
               {
                 [<AttachMoneyOutlined key={index} />, <BuildOutlined key={index} />][
                   index
                 ]
               }
             </ListItemIcon>
-            <ListItemText className={classes.drowerItemText} primary={text} />
+            <ListItemText className={css('DrowerItemText')} primary={text} />
           </ListItem>
         ))}
 
-        <ListItem className={classes.drowerItem} button={true} onClick={handleExportSeed}>
-          <ListItemIcon className={classes.drowerItemIcon}>
+        <ListItem className={css('DrowerItem')} button={true} onClick={handleExportSeed}>
+          <ListItemIcon className={css('DrowerItemIcon')}>
             <FileCopy />
           </ListItemIcon>
-          <ListItemText className={classes.drowerItemText} primary="Export Seed" />
+          <ListItemText className={css('DrowerItemText')} primary="Export Seed" />
         </ListItem>
       </List>
 
@@ -346,10 +276,10 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   }, [seed])
 
   return (
-    <div className={css('', [classes.root])} data-testid={test()} id={componentId}>
+    <div className={css('')} data-testid={test()} id={componentId}>
       <AppBar position="static" className={css('AppBar')}>
-        <Toolbar className={classes.toolbar}>
-          <div className={classes.toolbarHeader}>
+        <Toolbar className={css('Toolbar')}>
+          <div className={css('ToolbarHeader')}>
             <IconButton
               onClick={toggleDrawer()}
               color="inherit"
@@ -360,11 +290,11 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
               <Menu />
             </IconButton>
 
-            <div className={classes.toolbarHeaderItems}>
+            <div className={css('ToolbarHeaderItems')}>
               <Tooltip title="No new messages" placement="bottom">
                 <IconButton
                   color="inherit"
-                  className={classes.zeroPaddingRight}
+                  className={css('zeroPaddingRight')}
                   sx={{ padding: '12px 0px' }}
                 >
                   <Badge badgeContent={0} color="secondary">
@@ -385,7 +315,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
             </div>
           </div>
 
-          <div className={classes.toolbarBody}>
+          <div className={css('ToolbarBody')}>
             <WalletHeader
               mode={walletHeaderMode}
               label={walletHeaderLabels[view]}
@@ -405,14 +335,14 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
         </Toolbar>
       </AppBar>
 
-      <div className={css('Wrapper', [classes.wrapper])}>{actualView()}</div>
+      <div className={css('Wrapper')}>{actualView()}</div>
 
-      <div className={css('Footer', [classes.footer])}>
+      <div className={css('Footer')}>
         <img src={logo} alt="ZeroPool" style={{ margin: 'auto' }} />
       </div>
 
       <SwipeableDrawer
-        open={state.drower}
+        open={state.Drower}
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
       >

@@ -1,0 +1,76 @@
+@import "../../../styles/styles.scss";
+
+.WalletPage{
+  background-color: white;
+  flex-grow: 1;
+  flex-direction: column;
+  display: flex;
+  height: 100vh;
+  min-width: 350px;
+
+  &-Toolbar{
+    align-items: flex-start;
+    flex-direction: column;
+    padding-top: 5px;
+    min-height: 160;
+    padding-bottom: 0;
+  }
+
+  &-ToolbarHeader{
+    display: flex;
+    border-bottom: grey 1px solid;
+    width: 100%;
+  }
+
+  &-ToolbarHeaderItems{
+    display: flex;
+    flex-grow: 1;
+    justify-content: flex-end;
+    margin-right: -15px;
+  }
+
+  &-ToolbarHeaderItemsEdgeStart{
+    margin-left: -15px;
+  }
+
+  &-ToolbarBody{
+    margin: auto;
+    position: relative;
+    width: 100%;
+  }
+
+  &-Title{
+    flex-grow: 1;
+    align-self: flex-end;
+  }
+
+  &-DrowerItem{
+    padding-right: 20px;
+  }
+
+  &-DrowerItemIcon{
+    color: gray;
+  }
+
+  &-Wrapper{
+    display: flex;
+    margin: 50px auto;
+  }
+
+  &-Footer{
+    background-color: #020941;
+    bottom: 0;
+    display: flex;
+    position: fixed;
+    height: 70px;
+    width: 100%;
+  }
+
+  &-AboutPage{
+    height: 50vh;
+  }
+
+  &-ZeroPaddingRight{
+    padding-right: 0;
+  }
+}

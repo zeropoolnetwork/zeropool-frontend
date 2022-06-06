@@ -1,11 +1,6 @@
 import { createTheme } from '@mui/material'
 import { Theme } from '@mui/material/styles'
 
-declare module '@mui/styles/defaultTheme' {
-  // tslint:disable-next-line: no-empty-interface
-  interface DefaultTheme extends Theme {}
-}
-
 const COLOR_PRIMARY = '#020941'
 const COLOR_BLUE_PRIMARY = '#2699fb'
 const COLOR_BLUE_SECCONDARY = '#84c6ff'
