@@ -32,55 +32,62 @@ export const accountPresent = (): boolean => {
   return !!localStorage.getItem(`zp.${account}.seed`)
 }
 
-export const init = async (mnemonic: string, password: string, name: string): Promise<void> => {
-  console.log('Dev environment, using local env variables.')
-  let network
-  const snarkParamsConfig = {
-    transferParamsUrl: './assets/transfer_params.bin',
-    treeParamsUrl: './assets/tree_params.bin',
-    transferVkUrl: './assets/transfer_verification_key.json',
-    treeVkUrl: './assets/tree_verification_key.json',
-  }
+export const init =
+  async (mnemonic: string, password: string, name: string): Promise<void> => {
+    console.log('Dev environment, using local env variables.')
+    
+    let network
+    
+    const snarkParamsConfig = {
+      transferParamsUrl: './assets/transfer_params.bin',
+      treeParamsUrl: './assets/tree_params.bin',
+      transferVkUrl: './assets/transfer_verification_key.json',
+      treeVkUrl: './assets/tree_verification_key.json',
+    }
 
-  const { worker, snarkParams } =
-    await initZPClient(wasmPath, workerPath, snarkParamsConfig)
-  const evmConfig = { transactionUrl: TRANSACTION_URL }
-  const substrateConfig = { rpcUrl: RPC_URL, transactionUrl: TRANSACTION_URL }
+    const { worker, snarkParams } =
+      await initZPClient(wasmPath, workerPath, snarkParamsConfig)
+    
+    const evmConfig = { transactionUrl: TRANSACTION_URL }
+    const substrateConfig = { rpcUrl: RPC_URL, transactionUrl: TRANSACTION_URL }
 
-  if (isEvmBased(NETWORK)) {
-    const provider = new HDWalletProvider({
-      mnemonic,
-      providerOrUrl: RPC_URL,
+    if (isEvmBased(NETWORK)) {
+      const provider = new HDWalletProvider({
+        mnemonic,
+        providerOrUrl: RPC_URL,
+      })
+
+      client = new EthereumClient(provider, evmConfig)
+      network = new EvmNetwork(RPC_URL)
+    } else if (isSubstrateBased(NETWORK)) {
+      account = name
+      network = new PolkadotNetwork()
+      client = await PolkadotClient.create(mnemonic, substrateConfig)
+    } else {
+      throw new Error(`Unknown network ${NETWORK}`)
+    }
+
+    zpClient = await ZeropoolClient.create({
+      sk: deriveSpendingKey(mnemonic, NETWORK as NetworkType),
+      worker,
+      snarkParams,
+      tokens: {
+        [TOKEN_ADDRESS]: {
+          poolAddress: CONTRACT_ADDRESS,
+          relayerUrl: RELAYER_URL,
+        },
+      },
+      networkName: NETWORK,
+      network,
     })
 
-    client = new EthereumClient(provider, evmConfig)
-    network = new EvmNetwork(RPC_URL)
-  } else if (isSubstrateBased(NETWORK)) {
-    account = name
-    network = new PolkadotNetwork()
-    client = await PolkadotClient.create(mnemonic, substrateConfig)
-  } else {
-    throw new Error(`Unknown network ${NETWORK}`)
+    console.log('Zeropool client initialized.')
+
+    localStorage.setItem(
+      `zp.${account}.seed`,
+      await AES.encrypt(mnemonic, password).toString()
+    )
   }
-
-  zpClient = await ZeropoolClient.create({
-    sk: deriveSpendingKey(mnemonic, NETWORK as NetworkType),
-    worker,
-    snarkParams,
-    tokens: {
-      [TOKEN_ADDRESS]: {
-        poolAddress: CONTRACT_ADDRESS,
-        relayerUrl: RELAYER_URL,
-      },
-    },
-    networkName: NETWORK,
-    network,
-  })
-
-  console.log('Zeropool client initialized.')
-
-  localStorage.setItem(`zp.${account}.seed`, await AES.encrypt(mnemonic, password).toString())
-}
 
 export const getSeed = (password: string): string => {
   let seed

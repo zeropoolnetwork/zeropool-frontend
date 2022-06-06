@@ -52,6 +52,7 @@ export const WalletHeader: React.FC<WalletHeaderProps> = ({
             data-testid={test('BackButton')}
             onClick={onBackClick}
             disableRipple={true}
+            sx={{padding: 0}}
           >
             <ArrowBack className={css('Icon')} />
           </Button>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSnackbar } from 'notistack'
+import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@mui/styles'
 import { cn } from '@bem-react/classname'
 import {
@@ -14,10 +15,10 @@ import {
   ListItemIcon,
   ListItemText,
   Tooltip,
+  Divider,
 } from '@mui/material'
 import {
   AttachMoneyOutlined,
-  SafetyDivider,
   Notifications,
   BuildOutlined,
   InfoOutlined,
@@ -52,13 +53,13 @@ import { SendConfirmation } from 'wallet/components/SendConfirmation/SendConfirm
 import { WalletHeaderMode } from 'wallet/components/WalletHeader/WalletHeaderMode'
 import { walletActions } from 'wallet/state/wallet.actions'
 import { WalletHeader } from 'wallet/components/WalletHeader/WalletHeader'
-import { total } from 'wallet/state/helpers/total.helper'
+import { Transactions } from 'wallet/containers/Transactions/Transactions'
 import { WalletView } from 'wallet/state/models/wallet-view'
 import { Balance } from 'wallet/components/Balance/Balance'
 import { Receive } from 'wallet/components/Receive/Receive'
 import { Wallet } from 'wallet/state/models/wallet'
 import { Send } from 'wallet/components/Send/Send'
-import { Transactions } from 'wallet/containers/Transactions/Transactions'
+import { total } from 'wallet/state/helpers/total.helper'
 
 export const componentId = 'WalletPage'
 
@@ -138,6 +139,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const WalletPage: React.FC<WalletPageProps> = () => {
+  const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
   const [state, setState] = useState({ drower: false })
   const dispatch = useDispatch()
@@ -166,7 +168,9 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
     )
   }
 
-  const toggleDrawer = (open?: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+  const toggleDrawer = (open?: boolean) => (
+    event: React.KeyboardEvent | React.MouseEvent,
+  ) => {
     if (
       event &&
       event.type === 'keydown' &&
@@ -195,7 +199,11 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
             onClick={() => dispatch(walletActions.menu(text))}
           >
             <ListItemIcon className={classes.drowerItemIcon}>
-              {[<AttachMoneyOutlined key={index} />, <BuildOutlined key={index} />][index]}
+              {
+                [<AttachMoneyOutlined key={index} />, <BuildOutlined key={index} />][
+                  index
+                ]
+              }
             </ListItemIcon>
             <ListItemText className={classes.drowerItemText} primary={text} />
           </ListItem>
@@ -209,11 +217,15 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
         </ListItem>
       </List>
 
-      <SafetyDivider />
+      <Divider />
 
       <List>
         {[WalletView.Help, WalletView.About].map((text, index) => (
-          <ListItem button={true} key={text} onClick={() => dispatch(walletActions.menu(text))}>
+          <ListItem
+            button={true}
+            key={text}
+            onClick={() => dispatch(walletActions.menu(text))}
+          >
             <ListItemIcon className={css('DrowerMenu-ItemIcon')}>
               {[<InfoOutlined key={index} />, <HelpOutline key={index} />][index]}
             </ListItemIcon>
@@ -243,7 +255,9 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
             rate={rates[token.symbol]}
             token={token}
             wallets={wallets ? Object.values(wallets) : []}
-            getPrivateAddress={(_token) => dispatch(walletActions.getPrivateAddress(_token))}
+            getPrivateAddress={(_token) =>
+              dispatch(walletActions.getPrivateAddress(_token))
+            }
           />
         ) : null
       case WalletView.Send:
@@ -279,7 +293,9 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
           <Receive
             address={wallet.address}
             token={token}
-            getPrivateAddress={(_token) => dispatch(walletActions.getPrivateAddress(_token))}
+            getPrivateAddress={(_token) =>
+              dispatch(walletActions.getPrivateAddress(_token))
+            }
             privateAddress={privateAddress}
           />
         ) : null
@@ -322,24 +338,35 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
     dispatch(walletActions.openBalanceView())
   }, [dispatch])
 
+  useEffect(() => {
+    if (!seed) {
+      navigate('/register')
+      navigate(0)
+    }
+  }, [seed])
+
   return (
     <div className={css('', [classes.root])} data-testid={test()} id={componentId}>
       <AppBar position="static" className={css('AppBar')}>
         <Toolbar className={classes.toolbar}>
           <div className={classes.toolbarHeader}>
             <IconButton
-              classes={{ edgeStart: classes.toolbarHeaderItemsEdgeStart }}
               onClick={toggleDrawer()}
               color="inherit"
               aria-label="menu"
               edge="start"
+              sx={{ padding: '12px' }}
             >
               <Menu />
             </IconButton>
 
             <div className={classes.toolbarHeaderItems}>
               <Tooltip title="No new messages" placement="bottom">
-                <IconButton color="inherit" className={classes.zeroPaddingRight}>
+                <IconButton
+                  color="inherit"
+                  className={classes.zeroPaddingRight}
+                  sx={{ padding: '12px 0px' }}
+                >
                   <Badge badgeContent={0} color="secondary">
                     <Notifications />
                   </Badge>
@@ -350,6 +377,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
                 <IconButton
                   color="inherit"
                   onClick={() => dispatch(walletActions.updateBalances())}
+                  sx={{ padding: '12px' }}
                 >
                   <Refresh />
                 </IconButton>

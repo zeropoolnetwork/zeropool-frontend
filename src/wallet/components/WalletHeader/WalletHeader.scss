@@ -4,12 +4,13 @@
   align-self: flex-end;
   display: flex;
   flex-direction: column;
+  padding: 26px 0px;
 
   &-BackButton {
     color: white !important;
     left: -28px;
     position: absolute !important;
-    top: -28px;
+    top: 5px;
   }
 
   &-Title {
