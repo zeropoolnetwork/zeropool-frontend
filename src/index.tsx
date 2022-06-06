@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { ThemeProvider } from '@mui/material'
 import { SnackbarProvider } from 'notistack'
-import { BrowserRouter, Route, Navigate, Routes } from 'react-router-dom'
+import { BrowserRouter, Router, Route, Navigate, Routes } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 
 import './index.css'
@@ -15,7 +15,6 @@ import { http, setupInterceptors } from 'shared/http/http'
 import { LoadingBar } from 'shared/loading-bar/containers/loading-bar/loading-bar.component'
 import { AboutPage } from 'shared/components/AboutPage/AboutPage'
 import { timeout } from 'shared/util/timeout'
-
 import { store, persistedStore } from 'state'
 import { CreateAccountPage } from 'register/containers/CreateAccount/CreateAccountPage'
 import { WalletPage } from 'wallet/containers/WalletPage/WalletPage'
@@ -38,15 +37,15 @@ async function start() {
         {/* <React.StrictMode> */}
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistedStore}>
-            <BrowserRouter navigator={history} location={history.location}>
+            <Router navigator={history} location={history.location}>
               <Routes>
                 <Route path="register" element={<CreateAccountPage />} />
                 <Route path="wallet" element={<WalletPage />} />
                 <Route path="about" element={<AboutPage />} />
 
-                <Route path="*" element={<Navigate to="/register" />} />
+                <Route path="/*" element={<Navigate to="/register" />} />
               </Routes>
-            </BrowserRouter>
+            </Router>
 
             <LoadingBar />
           </PersistGate>

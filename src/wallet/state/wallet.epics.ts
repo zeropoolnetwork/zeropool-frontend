@@ -18,6 +18,7 @@ import { RatesApi } from 'wallet/api/rates.api'
 import * as api from 'wallet/api/zeropool.api'
 
 import { RootState } from 'state'
+import { debug } from 'shared/operators/debug.operator'
 // tslint:enable: prettier max-line-length
 // import { initBalances } from './helpers/init-balances.helper'
 
@@ -50,7 +51,7 @@ const resetAccount$: Epic = (action$: Observable<PayloadAction>) =>
     filter(actions.menu.match),
     filter(({ payload }) => payload === WalletView.Reset),
     tap((a) => toast.success('Wallet reseted and data cleared')),
-    mergeMap(() => of(/*navigate.to('/register'),*/ actions.resetAccount())),
+    mergeMap(() => of(actions.resetAccount())),
   )
 
 const initApi$: Epic = (
