@@ -10,9 +10,17 @@
     margin: auto;
   }
 
-  &-Amount {
-    font-size: 30px;
+  &-Amounts {
     margin: auto;
+    display: flex;
+    flex-direction: column;
+
+  }
+
+  &-Amount {
+    font-size: 25px;
+    margin: auto;
+    padding-left: 5px;
   }
 
   &-Tokens {
