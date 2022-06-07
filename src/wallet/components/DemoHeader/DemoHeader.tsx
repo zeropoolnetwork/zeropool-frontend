@@ -29,25 +29,33 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
       </div>
 
       <div className={css('Amounts')}>
-        <NumberFormat
-          className={css('Amount')}
-          data-testid={test('TokenAmount')}
-          value={tokenAmount}
-          displayType={'text'}
-          thousandSeparator={true}
-          suffix={' $'}
-          decimalScale={2}
-        />
+        <div>
+          Wallet:
 
-        <NumberFormat
-          className={css('Amount')}
-          data-testid={test('PrivateAmount')}
-          value={privateAmount}
-          displayType={'text'}
-          thousandSeparator={true}
-          suffix={' $'}
-          decimalScale={2}
-        />
+          <NumberFormat
+            className={css('Amount')}
+            data-testid={test('TokenAmount')}
+            value={tokenAmount}
+            displayType={'text'}
+            thousandSeparator={true}
+            suffix={' tokens'}
+            decimalScale={2}
+          />
+        </div>
+
+        <div>
+          Private:
+
+          <NumberFormat
+            className={css('Amount')}
+            data-testid={test('PrivateAmount')}
+            value={privateAmount}
+            displayType={'text'}
+            thousandSeparator={true}
+            suffix={' tokens'}
+            decimalScale={2}
+          />
+        </div>
       </div>
 
       <div className={css('Tokens')}>
