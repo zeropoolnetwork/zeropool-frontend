@@ -19,6 +19,7 @@ import { store, persistedStore } from 'state'
 import { CreateAccountPage } from 'register/containers/CreateAccount/CreateAccountPage'
 import { WalletPage } from 'wallet/containers/WalletPage/WalletPage'
 import { theme } from 'theme'
+import { DemoPage } from 'wallet/containers/DemoPage/DemoPage'
 
 const history = createBrowserHistory()
 const root = createRoot(document.getElementById('root'))
@@ -42,6 +43,7 @@ async function start() {
                 <Route path="register" element={<CreateAccountPage />} />
                 <Route path="wallet" element={<WalletPage />} />
                 <Route path="about" element={<AboutPage />} />
+                <Route path="demo" element={<DemoPage />} />
 
                 <Route path="/*" element={<Navigate to="/register" />} />
               </Routes>

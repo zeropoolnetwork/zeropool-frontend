@@ -1,0 +1,26 @@
+@import "../../../styles/styles.scss";
+
+.DemoHeader {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  padding: 26px 0px;
+
+  &-Title {
+    margin: auto;
+  }
+
+  &-Amount {
+    font-size: 30px;
+    margin: auto;
+  }
+
+  &-Tokens {
+    color: $blue-secondary;
+    position: absolute;
+    bottom: -17px;
+    font-size: 13px;
+    width: 100%;
+    text-align: center;
+  }
+}
