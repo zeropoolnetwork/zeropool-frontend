@@ -5,13 +5,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import { combineEpics, createEpicMiddleware } from 'redux-observable'
 import { persistStore, persistReducer, createMigrate } from 'redux-persist'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import { AnyAction, CombinedState, combineReducers, Reducer } from 'redux'
+import { CombinedState, combineReducers, Reducer } from 'redux'
 
 import { registerSlice, RegisterState } from 'register/state/register.reducer'
 import { registerEpics } from 'register/state/register.epics'
 
-import { walletEpics } from 'wallet/state/wallet.epics'
 import { walletReducer, WalletState } from 'wallet/state/wallet.reducer'
+import { demoReducer, DemoState } from 'wallet/state/demo.reducer'
+import { walletEpics } from 'wallet/state/wallet.epics'
 
 import { sharedEpics } from 'shared/state/shared.epics'
 import { loadingBarSlice, LoadingBarState } from 'shared/loading-bar/state/loading-bar.reducer'
@@ -31,6 +32,7 @@ export const createRootReducer = () =>
     shared: combineReducers({
       loadingBar: loadingBarSlice.reducer,
     }),
+    demo: demoReducer,
   })
 //#endregion
 
@@ -58,8 +60,9 @@ export type RootState = CombinedState<{
   register: RegisterState
   wallet: WalletState
   shared: CombinedState<{
-    loadingBar: LoadingBarState;
+    loadingBar: LoadingBarState
   }>;
+  demo: DemoState
 }>
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
