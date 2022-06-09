@@ -31,3 +31,4 @@ yarn-error.log*
 *.bin
 *_vk.json
 addresses.json
+/assets/*

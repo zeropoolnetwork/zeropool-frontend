@@ -62,10 +62,7 @@ export const DemoPage: React.FC<{}> = () => {
           </div>
 
           <div className={css('ToolbarBody')}>
-            <DemoHeader
-              tokenAmount={tokenAmount}
-              privateAmount={privateAmount}
-            />
+            <DemoHeader tokenAmount={tokenAmount} privateAmount={privateAmount} />
           </div>
         </Toolbar>
       </AppBar>
@@ -87,7 +84,7 @@ export const DemoPage: React.FC<{}> = () => {
             variant="contained"
             className={css('Button')}
             data-testid={test('Import')}
-            disabled={minting === true || mintAmount === '0' || !mintAmount || isNaN(+mintAmount)}
+            disabled={minting === true || mintAmount === '0' || isNaN(+mintAmount)}
             onClick={() => dispatch(demoActions.mint(mintAmount))}
           >
             Mint
