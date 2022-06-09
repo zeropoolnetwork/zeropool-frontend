@@ -75,7 +75,6 @@ const initApi$: Epic = (
               api.init(
                 seed,
                 '123455678',
-                'test',
                 // tokens.map((item) => item.name as CoinType),
               ),
             ).pipe(

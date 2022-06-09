@@ -1,4 +1,4 @@
-import { ActionCreatorWithoutPayload, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export type DemoState = {
   tokenAmount: number | undefined
@@ -12,12 +12,13 @@ export const initialDemoState: DemoState = {
   minting: false,
 }
 
+// tslint:disable: no-empty
 export const demoSlice = createSlice({
   name: 'demo',
   initialState: initialDemoState,
   reducers: {
-    updateBalances: (state, action: PayloadAction<null>) => {
-    },
+    initApi: (state, action: PayloadAction<null>) => {},
+    updateBalances: (state, action: PayloadAction<null>) => {},
     tokenAmount: (state, action) => {
       state.tokenAmount = action.payload
     },
@@ -30,10 +31,10 @@ export const demoSlice = createSlice({
     mintSuccess: (state, action: PayloadAction<number>) => {
       state.minting = false
       state.tokenAmount = action.payload + (state.tokenAmount || 0)
-    }
-  }
+    },
+    resetAccount: (state, action: PayloadAction<null>) => {},
+  },
 })
 
 export const demoActions = demoSlice.actions
 export const demoReducer = demoSlice.reducer
-
