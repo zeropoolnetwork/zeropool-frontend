@@ -39,7 +39,7 @@ async function start() {
             <Router navigator={history} location={history.location}>
               <Routes>
                 <Route path="register" element={<CreateAccountPage />} />
-                <Route path="wallet" element={<WalletPage />} />
+                <Route path="wallet" element={<DemoPage />} />
                 <Route path="about" element={<AboutPage />} />
                 <Route path="demo" element={<DemoPage />} />
 

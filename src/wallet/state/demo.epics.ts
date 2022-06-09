@@ -3,11 +3,14 @@ import { filter, from, ignoreElements, map, Observable, switchMap, tap, withLate
 import { combineEpics, Epic, ofType } from 'redux-observable'
 import { PayloadAction } from '@reduxjs/toolkit'
 
+import * as api from 'wallet/api/zeropool.api'
 import { selectSeed } from 'wallet/state/wallet.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
 
 import { RootState } from 'state'
-import * as api from 'wallet/api/zeropool.api'
+import toast from 'shared/helpers/toast.helper'
+import { debug } from 'shared/operators/debug.operator'
+import { isString } from 'shared/util/is'
 import toast from 'shared/helpers/toast.helper'
 // tslint:enable: prettier max-line-length
 
@@ -33,7 +36,7 @@ const initApi = (action$: Action$, state$: State$) =>
     withLatestFrom(state$.pipe(map(selectSeed))),
     filter(([, seed]) => seed !== null),
     map(([, seed]) => seed),
-    filter((seed): seed is string => typeof seed === 'string'),
+    filter(isString),
     switchMap((seed) =>
       from(
         api.init(
@@ -41,11 +44,11 @@ const initApi = (action$: Action$, state$: State$) =>
           '123455678',
           // tokens.map((item) => item.name as CoinType),
         ),
-        // ).pipe(
-        // map(() => (!wallets ? actions.initWallets() : actions.updateBalances())),
+      ).pipe(
+        debug(),
+        map(() => demoActions.updateBalances(null)),
       ),
     ),
-    ignoreElements(),
   )
 
 export const demoEpics: Epic = combineEpics(initApi, mint)
