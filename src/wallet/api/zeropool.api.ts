@@ -32,7 +32,7 @@ export const accountPresent = (): boolean => {
   return !!localStorage.getItem(`zp.${account}.seed`)
 }
 
-export const init = async (mnemonic: string, password: string): Promise<void> => {debugger
+export const init = async (mnemonic: string, password: string): Promise<void> => {
   let network
   const snarkParamsConfig = {
       transferParamsUrl: './assets/transfer_params.bin',
