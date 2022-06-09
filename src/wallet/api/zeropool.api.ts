@@ -32,56 +32,52 @@ export const accountPresent = (): boolean => {
   return !!localStorage.getItem(`zp.${account}.seed`)
 }
 
-export const init =
-  async (mnemonic: string, password: string, name: string): Promise<void> => {
-    console.log('Dev environment, using local env variables.')
-    
-    let network
-    
-    const snarkParamsConfig = {
+export const init = async (mnemonic: string, password: string): Promise<void> => {
+  let network
+  const snarkParamsConfig = {
       transferParamsUrl: './assets/transfer_params.bin',
       treeParamsUrl: './assets/tree_params.bin',
       transferVkUrl: './assets/transfer_verification_key.json',
       treeVkUrl: './assets/tree_verification_key.json',
-    }
+  }
 
-    const { worker, snarkParams } =
-      await initZPClient(wasmPath, workerPath, snarkParamsConfig)
-    
-    const evmConfig = { transactionUrl: TRANSACTION_URL }
-    const substrateConfig = { rpcUrl: RPC_URL, transactionUrl: TRANSACTION_URL }
+  const { worker, snarkParams } =
+    await initZPClient(wasmPath, workerPath, snarkParamsConfig)
 
     if (isEvmBased(NETWORK)) {
       const provider = new HDWalletProvider({
-        mnemonic,
-        providerOrUrl: RPC_URL,
+          mnemonic,
+          providerOrUrl: RPC_URL,
       })
 
-      client = new EthereumClient(provider, evmConfig)
+      client = new EthereumClient(provider, { transactionUrl: TRANSACTION_URL })
       network = new EvmNetwork(RPC_URL)
     } else if (isSubstrateBased(NETWORK)) {
-      account = name
-      network = new PolkadotNetwork()
-      client = await PolkadotClient.create(mnemonic, substrateConfig)
+      network = new PolkadotNetwork();
+      client = await PolkadotClient.create(
+        mnemonic, 
+        { rpcUrl: RPC_URL, transactionUrl: TRANSACTION_URL },
+      )
     } else {
       throw new Error(`Unknown network ${NETWORK}`)
     }
 
+    const networkType = NETWORK as NetworkType
+    const sk = deriveSpendingKey(mnemonic, networkType)
+    
     zpClient = await ZeropoolClient.create({
-      sk: deriveSpendingKey(mnemonic, NETWORK as NetworkType),
+      sk,
       worker,
       snarkParams,
       tokens: {
-        [TOKEN_ADDRESS]: {
-          poolAddress: CONTRACT_ADDRESS,
-          relayerUrl: RELAYER_URL,
-        },
+          [TOKEN_ADDRESS]: {
+              poolAddress: CONTRACT_ADDRESS,
+              relayerUrl: RELAYER_URL,
+          }
       },
       networkName: NETWORK,
       network,
     })
-
-    console.log('Zeropool client initialized.')
 
     localStorage.setItem(
       `zp.${account}.seed`,

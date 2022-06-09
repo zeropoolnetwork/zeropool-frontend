@@ -1,17 +1,19 @@
+// tslint:disable: prettier max-line-length
 import { AppBar, IconButton, Toolbar, Tooltip } from '@mui/material'
-import { Button, FormControl, FormHelperText, Input, InputAdornment, InputLabel } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { Button, Input } from '@mui/material'
 import { Refresh, Menu } from '@mui/icons-material'
 import { testIdBuilder } from 'shared/helpers/test'
 import { cn } from '@bem-react/classname'
 
-import logo from 'assets/images/logo1.svg'
 import './DemoPage.scss'
+import logo from 'assets/images/logo1.svg'
 
 import { selectMinting, selectPrivateAmount, selectTokenAmount } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
-import { useState } from 'react'
+// tslint:enable: prettier max-line-length
 
 export const componentId = 'DemoPage'
 
@@ -26,6 +28,11 @@ export const DemoPage: React.FC<{}> = () => {
 
   const [mintAmount, setMintAmount] = useState('0')
 
+  useEffect(() => {
+    if (tokenAmount === undefined) {
+      dispatch(demoActions.initApi(null))
+    }
+  }, [dispatch])
 
   return (
     <div className={css('')} data-testid={test()} id={componentId}>
