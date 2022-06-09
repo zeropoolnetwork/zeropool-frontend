@@ -3,11 +3,13 @@ import { ActionCreatorWithoutPayload, createSlice, PayloadAction } from '@reduxj
 export type DemoState = {
   tokenAmount: number | undefined
   privateAmount: number | undefined
+  minting: boolean
 }
 
 export const initialDemoState: DemoState = {
-  tokenAmount: 0,
-  privateAmount: 0,
+  tokenAmount: undefined,
+  privateAmount: undefined,
+  minting: false,
 }
 
 export const demoSlice = createSlice({
@@ -22,6 +24,13 @@ export const demoSlice = createSlice({
     privateAmount: (state, action) => {
       state.privateAmount = action.payload
     },
+    mint: (state, action) => {
+      state.minting = true
+    },
+    mintSuccess: (state, action: PayloadAction<number>) => {
+      state.minting = false
+      state.tokenAmount = action.payload + (state.tokenAmount || 0)
+    }
   }
 })
 
