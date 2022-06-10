@@ -5,6 +5,7 @@ export type DemoState = {
   privateAmount: number | undefined
   minting: boolean
   walletAddress: string | undefined
+  backdrop: boolean
 }
 
 export const initialDemoState: DemoState = {
@@ -12,6 +13,7 @@ export const initialDemoState: DemoState = {
   privateAmount: undefined,
   minting: false,
   walletAddress: undefined,
+  backdrop: false,
 }
 
 // tslint:disable: no-empty
@@ -19,9 +21,15 @@ export const demoSlice = createSlice({
   name: 'demo',
   initialState: initialDemoState,
   reducers: {
-    initApi: (state, action: PayloadAction<null>) => {},
-    initApiSuccess: (state, action: PayloadAction<null>) => {},
-    initApiFailure: (state, action: PayloadAction<string>) => {},
+    initApi: (state, action: PayloadAction<null>) => {
+      state.backdrop = true
+    },
+    initApiSuccess: (state, action: PayloadAction<null>) => {
+      state.backdrop = false
+    },
+    initApiFailure: (state, action: PayloadAction<string>) => {
+      state.backdrop = false
+    },
 
     updateBalances: (state, action: PayloadAction<null>) => {},
     updateBalancesFailure: (state, action: PayloadAction<string>) => {},

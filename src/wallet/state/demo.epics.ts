@@ -46,6 +46,7 @@ const initApi = (action$: Action$, state$: State$) =>
     filter(([, seed]) => seed !== null),
     map(([, seed]) => seed),
     filter(isString),
+    tap(() => toast.info('Initializing wallet...')),
     switchMap((seed) =>
       from(
         api.init(
@@ -55,6 +56,7 @@ const initApi = (action$: Action$, state$: State$) =>
         ),
       ).pipe(
         map(() => demoActions.initApiSuccess(null)),
+        tap(() => toast.success('Wallet initialized')),
         catchError((errMsg: string) => {
           toast.error(errMsg)
 
@@ -64,7 +66,7 @@ const initApi = (action$: Action$, state$: State$) =>
     ),
   )
 
-const getWalletBalance = (action$: Action$, state$: State$) =>
+const getPublicBalance = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.updateBalances.match),
     mergeMap(() =>
@@ -73,6 +75,21 @@ const getWalletBalance = (action$: Action$, state$: State$) =>
         catchError((errMsg: string) => {
           toast.error(errMsg)
 
+          return of(demoActions.updateBalancesFailure(errMsg))
+        }),
+      ),
+    ),
+  )
+
+const getPrivateBalance = (action$: Action$, state$: State$) =>
+  action$.pipe(
+    filter(demoActions.updateBalances.match),
+    mergeMap(() =>
+      from(api.getShieldedBalances()).pipe(
+        map((balances) => demoActions.privateAmount(balances[0])),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
+         
           return of(demoActions.updateBalancesFailure(errMsg))
         }),
       ),
@@ -94,7 +111,7 @@ const getWalletAddress = (action$: Action$, state$: State$) =>
     ),
   )
 
-const refreshWalletAddress = (action$: Action$, state$: State$) =>
+const updateDataAfterInitialization = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.initApiSuccess.match),
     mergeMap(() => of(
@@ -106,8 +123,9 @@ const refreshWalletAddress = (action$: Action$, state$: State$) =>
 export const demoEpics: Epic = combineEpics(
   initApi,
   mint,
-  getWalletBalance,
+  getPublicBalance,
+  getPrivateBalance,
   resetAccount,
   getWalletAddress,
-  refreshWalletAddress,
+  updateDataAfterInitialization,
 )

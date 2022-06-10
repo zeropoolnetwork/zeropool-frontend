@@ -1,5 +1,5 @@
 // tslint:disable: prettier max-line-length
-import { AppBar, IconButton, Toolbar, Tooltip } from '@mui/material'
+import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { Button, Input } from '@mui/material'
@@ -10,7 +10,7 @@ import { cn } from '@bem-react/classname'
 import './DemoPage.scss'
 import logo from 'assets/images/logo1.svg'
 
-import { selectMinting, selectPrivateAmount, selectTokenAmount, selectWalletAddress } from 'wallet/state/demo.selectors'
+import { selectBackdrop, selectMinting, selectPrivateAmount, selectTokenAmount, selectWalletAddress } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
 // tslint:enable: prettier max-line-length
@@ -26,6 +26,7 @@ export const DemoPage: React.FC<{}> = () => {
   const privateAmount = useSelector(selectPrivateAmount)
   const minting = useSelector(selectMinting)
   const walletAddress = useSelector(selectWalletAddress)
+  const backdrop = useSelector(selectBackdrop)
 
   const [mintAmount, setMintAmount] = useState('0')
 
@@ -100,6 +101,13 @@ export const DemoPage: React.FC<{}> = () => {
       <div className={css('Footer')}>
         <img src={logo} alt="ZeroPool" style={{ margin: 'auto' }} />
       </div>
+
+      <Backdrop
+        sx={{ color: '#fff', zIndex: 1000 }}
+        open={backdrop}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   )
 }
