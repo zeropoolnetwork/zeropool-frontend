@@ -18,10 +18,11 @@ import { sharedEpics } from 'shared/state/shared.epics'
 import { loadingBarSlice, LoadingBarState } from 'shared/loading-bar/state/loading-bar.reducer'
 
 import { stateMigrations } from 'state-migrations'
+import { demoEpics } from 'wallet/state/demo.epics'
 //#region Setup Epics
 const epicMiddleware = createEpicMiddleware()
 
-const epics = combineEpics(registerEpics, walletEpics, sharedEpics)
+const epics = combineEpics(registerEpics, walletEpics, sharedEpics, demoEpics)
 //#endregion
 
 //#region Setup Reducers

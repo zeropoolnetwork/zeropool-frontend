@@ -7,19 +7,20 @@ import { SnackbarProvider } from 'notistack'
 import { createBrowserHistory } from 'history'
 import { Router, Route, Navigate, Routes } from 'react-router-dom'
 
-import './index.css'
 import * as serviceWorker from './serviceWorker'
+import './index.css'
 
-import { SnackbarUtilsConfigurator } from 'shared/helpers/toast.helper'
-import { http, setupInterceptors } from 'shared/http/http'
-import { LoadingBar } from 'shared/loading-bar/containers/loading-bar/loading-bar.component'
-import { AboutPage } from 'shared/components/AboutPage/AboutPage'
 import { timeout } from 'shared/util/timeout'
+import { AboutPage } from 'shared/components/AboutPage/AboutPage'
+import { LoadingBar } from 'shared/loading-bar/containers/loading-bar/loading-bar.component'
+import { http, setupInterceptors } from 'shared/http/http'
+import { SnackbarUtilsConfigurator } from 'shared/helpers/toast.helper'
+
 import { store, persistedStore } from 'state'
 import { CreateAccountPage } from 'register/containers/CreateAccount/CreateAccountPage'
 import { WalletPage } from 'wallet/containers/WalletPage/WalletPage'
-import { theme } from 'theme'
 import { DemoPage } from 'wallet/containers/DemoPage/DemoPage'
+import { theme } from 'theme'
 
 const history = createBrowserHistory()
 const root = createRoot(document.getElementById('root'))
@@ -31,17 +32,14 @@ async function start() {
 
   root.render(
     <ThemeProvider theme={theme}>
-      <SnackbarProvider
-        maxSnack={5}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
+      <SnackbarProvider maxSnack={5} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
         {/* <React.StrictMode> */}
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistedStore}>
             <Router navigator={history} location={history.location}>
               <Routes>
                 <Route path="register" element={<CreateAccountPage />} />
-                <Route path="wallet" element={<WalletPage />} />
+                <Route path="wallet" element={<DemoPage />} />
                 <Route path="about" element={<AboutPage />} />
                 <Route path="demo" element={<DemoPage />} />
 

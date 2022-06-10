@@ -1,8 +1,8 @@
 {
   "name": "zeropool",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "private": true,
-  "homepage": "http://zeropoolnetwork.github.io/zeropool-frontend/",
+  "homepage": "http://zeropoolnetwork.github.io/wallet/",
   "scripts": {
     "bdd": "cucumber-js --publish",
     "dev": "react-scripts start",
