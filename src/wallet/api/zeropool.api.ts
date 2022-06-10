@@ -7,6 +7,12 @@ import wasmPath from 'libzeropool-rs-wasm-web/libzeropool_rs_wasm_bg.wasm'
 // @ts-ignore
 import workerPath from 'zeropool-client-js/lib/worker.js?asset'
 
+import transferParamsUrl from 'assets/transfer_params.bin'
+import treeParamsUrl from 'assets/tree_params.bin'
+import transferVkUrl from 'assets/transfer_verification_key.json'
+import treeVkUrl from 'assets/tree_verification_key.json'
+
+
 import { EthereumClient, PolkadotClient, Client as NetworkClient } from 'zeropool-support-js'
 import { init as initZPClient, ZeropoolClient } from 'zeropool-client-js'
 import { deriveSpendingKey } from 'zeropool-client-js/lib/utils'
@@ -21,10 +27,10 @@ export let zpClient: ZeropoolClient
 export let account: string
 
 export const NETWORK = process.env.NETWORK || 'ethereum'
-export const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || ''
-export const TOKEN_ADDRESS = process.env.TOKEN_ADDRESS || ''
-export const RELAYER_URL = process.env.RELAYER_URL || 'http://localhost:8545'
-export const RPC_URL = process.env.RPC_URL || 'http://localhost:8545'
+export const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || '0xC40Dd5B1250F4A7E70E1823d1D8eAbEA247cB1B3'
+export const TOKEN_ADDRESS = process.env.TOKEN_ADDRESS || '0xcda2B3489aCDB31A428bd33fcAEE5c7c50919b35'
+export const RELAYER_URL = process.env.RELAYER_URL || 'https://kovan.testnet.relayer.v2.zeropool.network/'
+export const RPC_URL = process.env.RPC_URL || 'https://kovan.poa.network/'
 export const TRANSACTION_URL = process.env.TRANSACTION_URL || 'http://localhost:8545'
 // tslint:disable: prettier
 
@@ -32,58 +38,91 @@ export const accountPresent = (): boolean => {
   return !!localStorage.getItem(`zp.${account}.seed`)
 }
 
-export const init = async (mnemonic: string, password: string): Promise<void> => {debugger
+export const init = async (mnemonic: string, password: string): Promise<void> => {
+  console.log('------------------------------------------------------')
+  console.log('wasmPath: ', wasmPath)
+  console.log('workerPath: ', workerPath)
+  console.log('transferParamsUrl: ', transferParamsUrl)
+  console.log('treeParamsUrl: ', treeParamsUrl)
+  console.log('transferVkUrl: ', transferVkUrl)
+  console.log('treeVkUrl: ', treeVkUrl)
+  console.log('NETWORK: ', NETWORK)
+  console.log('CONTRACT_ADDRESS: ', CONTRACT_ADDRESS)
+  console.log('TOKEN_ADDRESS: ', TOKEN_ADDRESS)
+  console.log('RELAYER_URL: ', RELAYER_URL)
+  console.log('RPC_URL: ', RPC_URL)
+  console.log('------------------------------------------------------')
+
   let network
+  let worker
+  let snarkParams
   const snarkParamsConfig = {
-      transferParamsUrl: './assets/transfer_params.bin',
-      treeParamsUrl: './assets/tree_params.bin',
-      transferVkUrl: './assets/transfer_verification_key.json',
-      treeVkUrl: './assets/tree_verification_key.json',
+      transferParamsUrl,
+      treeParamsUrl,
+      transferVkUrl,
+      treeVkUrl,
+  }
+  
+  try {
+    const initialized =
+      await initZPClient(wasmPath, workerPath, snarkParamsConfig as any)
+    worker = initialized.worker
+    snarkParams = initialized.snarkParams
+  } catch (e: any) {
+      console.error(e);
+      return Promise.reject(`Can't init ZeropoolClient: ${e.message}`)
   }
 
-  const { worker, snarkParams } =
-    await initZPClient(wasmPath, workerPath, snarkParamsConfig)
-
-    if (isEvmBased(NETWORK)) {
-      const provider = new HDWalletProvider({
-          mnemonic,
-          providerOrUrl: RPC_URL,
-      })
-
-      client = new EthereumClient(provider, { transactionUrl: TRANSACTION_URL })
-      network = new EvmNetwork(RPC_URL)
-    } else if (isSubstrateBased(NETWORK)) {
-      network = new PolkadotNetwork();
-      client = await PolkadotClient.create(
-        mnemonic, 
-        { rpcUrl: RPC_URL, transactionUrl: TRANSACTION_URL },
-      )
-    } else {
-      throw new Error(`Unknown network ${NETWORK}`)
-    }
-
-    const networkType = NETWORK as NetworkType
-    const sk = deriveSpendingKey(mnemonic, networkType)
-    
-    zpClient = await ZeropoolClient.create({
-      sk,
-      worker,
-      snarkParams,
-      tokens: {
-          [TOKEN_ADDRESS]: {
-              poolAddress: CONTRACT_ADDRESS,
-              relayerUrl: RELAYER_URL,
-          }
-      },
-      networkName: NETWORK,
-      network,
+  if (isEvmBased(NETWORK)) {
+    const provider = new HDWalletProvider({
+        mnemonic,
+        providerOrUrl: RPC_URL,
     })
 
-    localStorage.setItem(
-      `zp.${account}.seed`,
-      await AES.encrypt(mnemonic, password).toString()
+    client = new EthereumClient(provider, { transactionUrl: TRANSACTION_URL })
+    network = new EvmNetwork(RPC_URL)
+  } else if (isSubstrateBased(NETWORK)) {
+    network = new PolkadotNetwork();
+    client = await PolkadotClient.create(
+      mnemonic, 
+      { rpcUrl: RPC_URL, transactionUrl: TRANSACTION_URL },
     )
+  } else {
+    throw new Error(`Unknown network ${NETWORK}`)
   }
+
+  const networkType = NETWORK as NetworkType
+  const sk = deriveSpendingKey(mnemonic, networkType)
+  
+  zpClient = await ZeropoolClient.create({
+    sk,
+    worker,
+    snarkParams,
+    tokens: {
+        [TOKEN_ADDRESS]: {
+            poolAddress: CONTRACT_ADDRESS,
+            relayerUrl: RELAYER_URL,
+        }
+    },
+    networkName: NETWORK,
+    network,
+  })
+
+  localStorage.setItem(
+    `zp.${account}.seed`,
+    await AES.encrypt(mnemonic, password).toString()
+  )
+}
+
+export const mint = async (amount: string): Promise<void> => {
+  try {
+    apiCheck()
+  } catch (e: any) {
+    return Promise.reject(e.message)
+  }
+
+  return await client.mint(TOKEN_ADDRESS, amount)
+}
 
 export const getSeed = (password: string): string => {
   let seed
@@ -102,25 +141,41 @@ export const getSeed = (password: string): string => {
 }
 
 export const getRegularAddress = async (): Promise<string> => {
-  apiCheck()
+  try {
+    apiCheck()
+  } catch (e: any) {
+    return Promise.reject(e.message)
+  }
 
   return await client.getAddress()
 }
 
-export const getShieldedAddress = (): string => {
-  apiCheck()
+export const getShieldedAddress = (): Promise<string> => {
+  try {
+    apiCheck()
+  } catch (e: any) {
+    return Promise.reject(e.message)
+  }
 
-  return zpClient.generateAddress(TOKEN_ADDRESS)
+  return Promise.resolve(zpClient.generateAddress(TOKEN_ADDRESS))
 }
 
 export const getTokenBalance = async (): Promise<string> => {
-  apiCheck()
+  try {
+    apiCheck()
+  } catch (e: any) {
+    return Promise.reject(e.message)
+  }
 
   return await client.getTokenBalance(TOKEN_ADDRESS)
 }
 
 export const getRegularBalance = async (): Promise<[string, string]> => {
-  apiCheck()
+  try {
+    apiCheck()
+  } catch (e: any) {
+    return Promise.reject(e.message)
+  }
 
   const balance = await client.getBalance()
   const readable = client.fromBaseUnit(balance)
@@ -129,7 +184,11 @@ export const getRegularBalance = async (): Promise<[string, string]> => {
 }
 
 export const getShieldedBalances = async (): Promise<[string, string, string]> => {
-  apiCheck()
+  try {
+    apiCheck()
+  } catch (e: any) {
+    return Promise.reject(e.message)
+  }
 
   const balances = zpClient.getBalances(TOKEN_ADDRESS)
 
