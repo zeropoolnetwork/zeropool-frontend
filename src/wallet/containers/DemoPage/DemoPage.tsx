@@ -10,7 +10,7 @@ import { cn } from '@bem-react/classname'
 import './DemoPage.scss'
 import logo from 'assets/images/logo1.svg'
 
-import { selectMinting, selectPrivateAmount, selectTokenAmount } from 'wallet/state/demo.selectors'
+import { selectMinting, selectPrivateAmount, selectTokenAmount, selectWalletAddress } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
 // tslint:enable: prettier max-line-length
@@ -25,6 +25,7 @@ export const DemoPage: React.FC<{}> = () => {
   const tokenAmount = useSelector(selectTokenAmount)
   const privateAmount = useSelector(selectPrivateAmount)
   const minting = useSelector(selectMinting)
+  const walletAddress = useSelector(selectWalletAddress)
 
   const [mintAmount, setMintAmount] = useState('0')
 
@@ -62,7 +63,11 @@ export const DemoPage: React.FC<{}> = () => {
           </div>
 
           <div className={css('ToolbarBody')}>
-            <DemoHeader tokenAmount={tokenAmount} privateAmount={privateAmount} />
+            <DemoHeader
+              tokenAmount={tokenAmount}
+              privateAmount={privateAmount}
+              walletAddress={walletAddress}
+            />
           </div>
         </Toolbar>
       </AppBar>

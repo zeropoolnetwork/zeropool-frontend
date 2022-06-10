@@ -46,13 +46,6 @@ module.exports = function override(config, env) {
     }),
     new Dotenv(),
 
-    // new webpack.EnvironmentPlugin({
-    //   NETWORK: null,
-    //   CONTRACT_ADDRESS: null,
-    //   TOKEN_ADDRESS: null,
-    //   RELAYER_URL: null,
-    //   RPC_URL: null,
-    // }),
   ]) 
 
   return config

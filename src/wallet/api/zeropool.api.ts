@@ -6,11 +6,12 @@ import HDWalletProvider from '@truffle/hdwallet-provider'
 import wasmPath from 'libzeropool-rs-wasm-web/libzeropool_rs_wasm_bg.wasm'
 // @ts-ignore
 import workerPath from 'zeropool-client-js/lib/worker.js?asset'
-
+// @ts-ignore
+import transferVkUrl from 'assets/transfer_verification_key.json?asset'
+// @ts-ignore
+import treeVkUrl from 'assets/tree_verification_key.json?asset'
 import transferParamsUrl from 'assets/transfer_params.bin'
 import treeParamsUrl from 'assets/tree_params.bin'
-import transferVkUrl from 'assets/transfer_verification_key.json'
-import treeVkUrl from 'assets/tree_verification_key.json'
 
 
 import { EthereumClient, PolkadotClient, Client as NetworkClient } from 'zeropool-support-js'
@@ -66,11 +67,12 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
   try {
     const initialized =
       await initZPClient(wasmPath, workerPath, snarkParamsConfig as any)
+
     worker = initialized.worker
     snarkParams = initialized.snarkParams
   } catch (e: any) {
-      console.error(e);
-      return Promise.reject(`Can't init ZeropoolClient: ${e.message}`)
+    console.error(e);
+    return Promise.reject(`Can't init ZeropoolClient: ${e.message}`)
   }
 
   if (isEvmBased(NETWORK)) {
@@ -170,17 +172,14 @@ export const getTokenBalance = async (): Promise<string> => {
   return await client.getTokenBalance(TOKEN_ADDRESS)
 }
 
-export const getRegularBalance = async (): Promise<[string, string]> => {
+export const getRegularBalance = async (): Promise<string> => {
   try {
     apiCheck()
   } catch (e: any) {
     return Promise.reject(e.message)
   }
 
-  const balance = await client.getBalance()
-  const readable = client.fromBaseUnit(balance)
-
-  return [balance, readable]
+  return await client.getBalance()
 }
 
 export const getShieldedBalances = async (): Promise<[string, string, string]> => {

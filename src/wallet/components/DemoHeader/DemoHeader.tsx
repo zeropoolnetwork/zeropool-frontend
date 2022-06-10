@@ -6,7 +6,6 @@ import './DemoHeader.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
-
 export const componentId = 'DemoHeader'
 
 const css = cn(componentId)
@@ -15,23 +14,23 @@ const test = testIdBuilder(componentId)
 export type DemoHeaderProps = {
   tokenAmount?: number
   privateAmount?: number
+  walletAddress?: string
 }
 
 export const DemoHeader: React.FC<DemoHeaderProps> = ({
   tokenAmount,
   privateAmount,
+  walletAddress,
 }) => {
-
   return (
     <div className={css()} data-testid={test()}>
       <div className={css('Title')}>
-        <span>Balances</span>
+        <span>Address: {walletAddress}</span>
       </div>
 
       <div className={css('Amounts')}>
         <div>
-          Wallet:
-
+          Public balance:
           <NumberFormat
             className={css('Amount')}
             data-testid={test('TokenAmount')}
@@ -44,8 +43,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
         </div>
 
         <div>
-          Private:
-
+          Private balance:
           <NumberFormat
             className={css('Amount')}
             data-testid={test('PrivateAmount')}
@@ -58,8 +56,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
         </div>
       </div>
 
-      <div className={css('Tokens')}>
-      </div>
+      <div className={css('Tokens')}></div>
     </div>
   )
 }

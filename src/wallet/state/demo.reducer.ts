@@ -4,12 +4,14 @@ export type DemoState = {
   tokenAmount: number | undefined
   privateAmount: number | undefined
   minting: boolean
+  walletAddress: string | undefined
 }
 
 export const initialDemoState: DemoState = {
   tokenAmount: undefined,
   privateAmount: undefined,
   minting: false,
+  walletAddress: undefined,
 }
 
 // tslint:disable: no-empty
@@ -18,6 +20,7 @@ export const demoSlice = createSlice({
   initialState: initialDemoState,
   reducers: {
     initApi: (state, action: PayloadAction<null>) => {},
+    initApiSuccess: (state, action: PayloadAction<null>) => {},
     initApiFailure: (state, action: PayloadAction<string>) => {},
 
     updateBalances: (state, action: PayloadAction<null>) => {},
@@ -42,6 +45,14 @@ export const demoSlice = createSlice({
     },
 
     resetAccount: (state, action: PayloadAction<null>) => {},
+
+    getWalletAddress: (state, action: PayloadAction<null>) => {},
+    getWalletAddressSuccess: (state, action: PayloadAction<string>) => {
+      state.walletAddress = action.payload
+    },
+    getWalletAddressFailure: (state, action: PayloadAction<string>) => {
+      state.walletAddress = 'Cant get wallet address'
+    },
   },
 })
 

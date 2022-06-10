@@ -54,7 +54,7 @@ const initApi = (action$: Action$, state$: State$) =>
           // tokens.map((item) => item.name as CoinType),
         ),
       ).pipe(
-        map(() => demoActions.updateBalances(null)),
+        map(() => demoActions.initApiSuccess(null)),
         catchError((errMsg: string) => {
           toast.error(errMsg)
 
@@ -64,9 +64,9 @@ const initApi = (action$: Action$, state$: State$) =>
     ),
   )
 
-const getBalance = (action$: Action$, state$: State$) =>
+const getWalletBalance = (action$: Action$, state$: State$) =>
   action$.pipe(
-    ofType(demoActions.updateBalances.type),
+    filter(demoActions.updateBalances.match),
     mergeMap(() =>
       from(api.getRegularBalance()).pipe(
         map((balance) => demoActions.tokenAmount(balance)),
@@ -79,4 +79,35 @@ const getBalance = (action$: Action$, state$: State$) =>
     ),
   )
 
-export const demoEpics: Epic = combineEpics(initApi, mint, getBalance, resetAccount)
+const getWalletAddress = (action$: Action$, state$: State$) =>
+  action$.pipe(
+    filter(demoActions.getWalletAddress.match),
+    mergeMap(() =>
+      from(api.getRegularAddress()).pipe(
+        map((address) => demoActions.getWalletAddressSuccess(address)),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
+
+          return of(demoActions.getWalletAddressFailure(errMsg))
+        }),
+      ),
+    ),
+  )
+
+const refreshWalletAddress = (action$: Action$, state$: State$) =>
+  action$.pipe(
+    filter(demoActions.initApiSuccess.match),
+    mergeMap(() => of(
+      demoActions.getWalletAddress(null),
+      demoActions.updateBalances(null),
+    )),
+  )
+
+export const demoEpics: Epic = combineEpics(
+  initApi,
+  mint,
+  getWalletBalance,
+  resetAccount,
+  getWalletAddress,
+  refreshWalletAddress,
+)
