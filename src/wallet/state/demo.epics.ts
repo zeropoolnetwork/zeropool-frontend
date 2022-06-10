@@ -1,5 +1,5 @@
 // tslint:disable: prettier max-line-length
-import { filter, from, ignoreElements, map, Observable, switchMap, tap, withLatestFrom } from 'rxjs'
+import { catchError, filter, from, map, mergeMap, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs'
 import { combineEpics, Epic, ofType } from 'redux-observable'
 import { PayloadAction } from '@reduxjs/toolkit'
 
@@ -8,16 +8,16 @@ import { selectSeed } from 'wallet/state/wallet.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
 
 import { RootState } from 'state'
+
 import toast from 'shared/helpers/toast.helper'
 import { debug } from 'shared/operators/debug.operator'
 import { isString } from 'shared/util/is'
-import toast from 'shared/helpers/toast.helper'
 // tslint:enable: prettier max-line-length
 
 type Action$ = Observable<PayloadAction>
 type State$ = Observable<RootState>
 
-const resetAccount$: Epic = (action$: Action$) =>
+const resetAccount: Epic = (action$: Action$) =>
   action$.pipe(
     filter(demoActions.resetAccount.match),
     tap((a) => toast.success('Wallet reseted and data cleared')),
@@ -27,7 +27,16 @@ const resetAccount$: Epic = (action$: Action$) =>
 const mint: Epic = (action$, state$) =>
   action$.pipe(
     filter(demoActions.mint.match),
-    map(({ payload }) => demoActions.mintSuccess(+payload)),
+    switchMap(({ payload }) =>
+      from(api.mint(payload)).pipe(
+        map((res) => demoActions.mintSuccess(payload)),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
+
+          return of(demoActions.mintFalure(errMsg))
+        }),
+      ),
+    ),
   )
 
 const initApi = (action$: Action$, state$: State$) =>
@@ -45,10 +54,29 @@ const initApi = (action$: Action$, state$: State$) =>
           // tokens.map((item) => item.name as CoinType),
         ),
       ).pipe(
-        debug(),
         map(() => demoActions.updateBalances(null)),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
+
+          return of(demoActions.initApiFailure(errMsg))
+        }),
       ),
     ),
   )
 
-export const demoEpics: Epic = combineEpics(initApi, mint)
+const getBalance = (action$: Action$, state$: State$) =>
+  action$.pipe(
+    ofType(demoActions.updateBalances.type),
+    mergeMap(() =>
+      from(api.getRegularBalance()).pipe(
+        map((balance) => demoActions.tokenAmount(balance)),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
+
+          return of(demoActions.updateBalancesFailure(errMsg))
+        }),
+      ),
+    ),
+  )
+
+export const demoEpics: Epic = combineEpics(initApi, mint, getBalance, resetAccount)

@@ -18,13 +18,18 @@ export const demoSlice = createSlice({
   initialState: initialDemoState,
   reducers: {
     initApi: (state, action: PayloadAction<null>) => {},
+    initApiFailure: (state, action: PayloadAction<string>) => {},
+
     updateBalances: (state, action: PayloadAction<null>) => {},
+    updateBalancesFailure: (state, action: PayloadAction<string>) => {},
+
     tokenAmount: (state, action) => {
       state.tokenAmount = action.payload
     },
     privateAmount: (state, action) => {
       state.privateAmount = action.payload
     },
+
     mint: (state, action) => {
       state.minting = true
     },
@@ -32,6 +37,10 @@ export const demoSlice = createSlice({
       state.minting = false
       state.tokenAmount = action.payload + (state.tokenAmount || 0)
     },
+    mintFalure: (state, action: PayloadAction<string>) => {
+      state.minting = false
+    },
+
     resetAccount: (state, action: PayloadAction<null>) => {},
   },
 })
