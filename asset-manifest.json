@@ -1,13 +1,17 @@
 {
   "files": {
     "main.css": "/zeropool-frontend/static/css/main.1656fd89.css",
-    "main.js": "/zeropool-frontend/static/js/main.41f09c36.js",
+    "main.js": "/zeropool-frontend/static/js/main.611b73ad.js",
+    "static/js/415.f7258c50.chunk.js": "/zeropool-frontend/static/js/415.f7258c50.chunk.js",
+    "static/js/404.8e40668a.chunk.js": "/zeropool-frontend/static/js/404.8e40668a.chunk.js",
+    "static/js/417.79b5e835.chunk.js": "/zeropool-frontend/static/js/417.79b5e835.chunk.js",
+    "static/js/0.720f5a6b.chunk.js": "/zeropool-frontend/static/js/0.720f5a6b.chunk.js",
+    "static/js/178.d0f0cecb.chunk.js": "/zeropool-frontend/static/js/178.d0f0cecb.chunk.js",
     "static/media/transfer_params.bin": "/zeropool-frontend/static/media/transfer_params.f90dfa42f9f901038aba.bin",
     "static/media/tree_params.bin": "/zeropool-frontend/static/media/tree_params.6ab2927b9041f1c39fb8.bin",
-    "static/media/libzeropool_rs_wasm_bg.wasm": "/zeropool-frontend/static/media/libzeropool_rs_wasm_bg.30c4faf1fcc260fb215b.wasm",
+    "static/media/libzeropool_rs_wasm_bg.wasm": "/zeropool-frontend/static/media/libzeropool_rs_wasm_bg.adfb08cfec4bcffccb95.wasm",
     "static/media/exo-2-all-400-italic.woff": "/zeropool-frontend/static/media/exo-2-all-400-italic.14e07a74841b07043932.woff",
     "static/media/exo-2-all-400-normal.woff": "/zeropool-frontend/static/media/exo-2-all-400-normal.46168c0af0c5d985a57c.woff",
-    "static/media/worker.js?asset": "/zeropool-frontend/static/media/worker.4d701e66f1f57a12ddd0.js",
     "static/media/exo-2-latin-400-italic.woff2": "/zeropool-frontend/static/media/exo-2-latin-400-italic.7db86de8ac69231ce872.woff2",
     "static/media/guy_welcomes@2x.png": "/zeropool-frontend/static/media/guy_welcomes@2x.49f9ac603d9296ee758b.png",
     "static/media/exo-2-latin-400-normal.woff2": "/zeropool-frontend/static/media/exo-2-latin-400-normal.6c08c76589e8e6138328.woff2",
@@ -28,6 +32,6 @@
   },
   "entrypoints": [
     "static/css/main.1656fd89.css",
-    "static/js/main.41f09c36.js"
+    "static/js/main.611b73ad.js"
   ]
 }
