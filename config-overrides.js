@@ -1,5 +1,4 @@
 const webpack = require('webpack');
-const path = require('path')
 
 module.exports = function override(config, env) {
   // config.devServer.headers = {
@@ -25,11 +24,6 @@ module.exports = function override(config, env) {
     ...config.resolve.alias,
     process: 'process/browser.js',
   }
-
-  config.resolve.modules = [
-    ...config.resolve.modules,
-    
-  ]
 
   config.module.rules = [
     ...config.module.rules,

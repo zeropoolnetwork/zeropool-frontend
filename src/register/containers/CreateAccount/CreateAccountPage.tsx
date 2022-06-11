@@ -42,7 +42,7 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
   useEffect(() => {
     if (seedInWallet) {
       navigate('/wallet')
-      navigate(0)
+      // navigate(0)
     }
   })
 
@@ -60,7 +60,7 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
             onRegister={({ password }) => {
               dispatch(rsa.register(password))
               navigate('/wallet')
-              navigate(0)
+              // navigate(0)
             }}
           />
         )
@@ -73,7 +73,7 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
             onImport={(data) => {
               dispatch(rsa.import(data))
               navigate('/wallet')
-              navigate(0)
+              // navigate(0)
             }}
           />
         )
@@ -86,7 +86,7 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
             onImport={() => dispatch(rsa.startImport())}
             onAbout={() => {
               navigate('/about')
-              navigate(0)
+              // navigate(0)
             }}
           />
         )

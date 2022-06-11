@@ -38,7 +38,7 @@ export const DemoPage: React.FC<{}> = () => {
   useEffect(() => {
     if (!seed) {
       navigate('/register')
-      navigate(0)
+      // navigate(0)
     } else {
       dispatch(demoActions.initApi(null))
     }

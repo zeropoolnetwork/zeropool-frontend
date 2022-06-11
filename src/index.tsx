@@ -25,7 +25,7 @@ const root = createRoot(document.getElementById('root'))
 
 setupInterceptors(http(), store)
 console.log(`Environment: ${process.env.REACT_APP_ENV}`)
-console.log(`process.env.REACT_APP_PUBLIC_URL: ${process.env.REACT_APP_PUBLIC_URL}`)
+// console.log(`process.env.REACT_APP_PUBLIC_URL: ${process.env.REACT_APP_PUBLIC_URL}`)
 
 async function start() {
   await timeout(1000)
@@ -36,18 +36,17 @@ async function start() {
         {/* <React.StrictMode> */}
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistedStore}>
-            <BrowserRouter basename={process.env.REACT_APP_PUBLIC_URL}>
-            {/* <HashRouter basename={process.env.REACT_APP_PUBLIC_URL}> */}
+            {/* <BrowserRouter basename={process.env.REACT_APP_PUBLIC_URL}> */}
+            <HashRouter>
               <Routes>
                 <Route path="register" element={<CreateAccountPage />} />
                 <Route path="wallet" element={<DemoPage />} />
                 <Route path="about" element={<AboutPage />} />
                 <Route path="demo" element={<DemoPage />} />
-
                 <Route path="/*" element={<Navigate to="/register" />} />
               </Routes>
-            {/* </HashRouter> */}
-            </BrowserRouter>
+            </HashRouter>
+            {/* </BrowserRouter> */}
             <LoadingBar />
           </PersistGate>
         </Provider>
