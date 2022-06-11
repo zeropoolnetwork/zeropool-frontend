@@ -13,7 +13,6 @@ import treeVkUrl from 'assets/tree_verification_key.json?asset'
 import transferParamsUrl from 'assets/transfer_params.bin'
 import treeParamsUrl from 'assets/tree_params.bin'
 
-
 import { EthereumClient, PolkadotClient, Client as NetworkClient } from 'zeropool-support-js'
 import { init as initZPClient, ZeropoolClient } from 'zeropool-client-js'
 import { deriveSpendingKey } from 'zeropool-client-js/lib/utils'

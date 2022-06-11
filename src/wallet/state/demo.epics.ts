@@ -89,7 +89,7 @@ const getPrivateBalance = (action$: Action$, state$: State$) =>
         map((balances) => demoActions.privateAmount(balances[0])),
         catchError((errMsg: string) => {
           toast.error(errMsg)
-         
+
           return of(demoActions.updateBalancesFailure(errMsg))
         }),
       ),

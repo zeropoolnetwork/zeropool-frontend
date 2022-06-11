@@ -5,10 +5,12 @@ import { useEffect, useState } from 'react'
 import { Button, Input } from '@mui/material'
 import { Refresh, Menu } from '@mui/icons-material'
 import { testIdBuilder } from 'shared/helpers/test'
+import { useNavigate } from 'react-router-dom'
 import { cn } from '@bem-react/classname'
 
 import './DemoPage.scss'
 import logo from 'assets/images/logo1.svg'
+import { selectSeed } from 'register/state/register.selectors'
 
 import { selectBackdrop, selectMinting, selectPrivateAmount, selectTokenAmount, selectWalletAddress } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
@@ -21,12 +23,15 @@ const css = cn(componentId)
 const test = testIdBuilder(componentId)
 
 export const DemoPage: React.FC<{}> = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
-  const tokenAmount = useSelector(selectTokenAmount)
-  const privateAmount = useSelector(selectPrivateAmount)
-  const minting = useSelector(selectMinting)
-  const walletAddress = useSelector(selectWalletAddress)
+
   const backdrop = useSelector(selectBackdrop)
+  const minting = useSelector(selectMinting)
+  const privateAmount = useSelector(selectPrivateAmount)
+  const seed = useSelector(selectSeed)
+  const tokenAmount = useSelector(selectTokenAmount)
+  const walletAddress = useSelector(selectWalletAddress)
 
   const [mintAmount, setMintAmount] = useState('0')
 
@@ -34,7 +39,11 @@ export const DemoPage: React.FC<{}> = () => {
     if (tokenAmount === undefined) {
       dispatch(demoActions.initApi(null))
     }
-  }, [dispatch])
+    if (!seed) {
+      navigate('/register')
+      navigate(0)
+    }
+  }, [dispatch, seed])
 
   return (
     <div className={css('')} data-testid={test()} id={componentId}>
