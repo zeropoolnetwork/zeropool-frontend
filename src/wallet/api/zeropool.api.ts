@@ -26,12 +26,12 @@ export let client: NetworkClient
 export let zpClient: ZeropoolClient
 export let account: string
 
-export const NETWORK = process.env.NETWORK || 'ethereum'
-export const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || '0xC40Dd5B1250F4A7E70E1823d1D8eAbEA247cB1B3'
-export const TOKEN_ADDRESS = process.env.TOKEN_ADDRESS || '0xcda2B3489aCDB31A428bd33fcAEE5c7c50919b35'
-export const RELAYER_URL = process.env.RELAYER_URL || 'https://kovan.testnet.relayer.v2.zeropool.network/'
-export const RPC_URL = process.env.RPC_URL || 'https://kovan.poa.network/'
-export const TRANSACTION_URL = process.env.TRANSACTION_URL || 'http://localhost:8545'
+export const NETWORK = process.env.REACT_APP_NETWORK as string
+export const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS as string
+export const TOKEN_ADDRESS = process.env.REACT_APP_TOKEN_ADDRESS as string
+export const RELAYER_URL = process.env.REACT_APP_RELAYER_URL as string
+export const RPC_URL = process.env.REACT_APP_RPC_URL as string
+export const TRANSACTION_URL = process.env.REACT_APP_TRANSACTION_URL as string
 // tslint:disable: prettier
 
 export const accountPresent = (): boolean => {
@@ -74,22 +74,26 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
     return Promise.reject(`Can't init ZeropoolClient: ${e.message}`)
   }
 
-  if (isEvmBased(NETWORK)) {
-    const provider = new HDWalletProvider({
-        mnemonic,
-        providerOrUrl: RPC_URL,
-    })
+  try {
+    if (isEvmBased(NETWORK)) {
+      const provider = new HDWalletProvider({
+          mnemonic,
+          providerOrUrl: RPC_URL,
+      })
 
-    client = new EthereumClient(provider, { transactionUrl: TRANSACTION_URL })
-    network = new EvmNetwork(RPC_URL)
-  } else if (isSubstrateBased(NETWORK)) {
-    network = new PolkadotNetwork();
-    client = await PolkadotClient.create(
-      mnemonic, 
-      { rpcUrl: RPC_URL, transactionUrl: TRANSACTION_URL },
-    )
-  } else {
-    throw new Error(`Unknown network ${NETWORK}`)
+      client = new EthereumClient(provider, { transactionUrl: TRANSACTION_URL })
+      network = new EvmNetwork(RPC_URL)
+    } else if (isSubstrateBased(NETWORK)) {
+      network = new PolkadotNetwork();
+      client = await PolkadotClient.create(
+        mnemonic, 
+        { rpcUrl: RPC_URL, transactionUrl: TRANSACTION_URL },
+      )
+    } else {
+      throw new Error(`Unknown network ${NETWORK}`)
+    }
+  } catch (e: any) {
+    return Promise.reject(e.message)
   }
 
   const networkType = NETWORK as NetworkType
@@ -118,11 +122,11 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
 export const mint = async (amount: string): Promise<void> => {
   try {
     apiCheck()
+
+    return await client.mint(TOKEN_ADDRESS, amount)
   } catch (e: any) {
     return Promise.reject(e.message)
   }
-
-  return await client.mint(TOKEN_ADDRESS, amount)
 }
 
 export const getSeed = (password: string): string => {

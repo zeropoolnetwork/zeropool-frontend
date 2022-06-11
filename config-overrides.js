@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const Dotenv  = require('dotenv-webpack')
+const path = require('path')
 
 module.exports = function override(config, env) {
   // config.devServer.headers = {
@@ -26,6 +26,11 @@ module.exports = function override(config, env) {
     process: 'process/browser.js',
   }
 
+  config.resolve.modules = [
+    ...config.resolve.modules,
+    
+  ]
+
   config.module.rules = [
     ...config.module.rules,
   {
@@ -44,7 +49,7 @@ module.exports = function override(config, env) {
         Buffer: ['buffer', 'Buffer'],
         process: 'process',
     }),
-    new Dotenv(),
+    // new Dotenv(),
 
   ]) 
 

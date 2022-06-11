@@ -2,7 +2,6 @@ import React from 'react'
 import { cn } from '@bem-react/classname'
 import { Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 
 import './AboutPage.scss'
 import logo from 'assets/logo.svg'
@@ -19,8 +18,6 @@ interface AboutPageProps {
 }
 
 export const AboutPage: React.FC<AboutPageProps> = ({ showBackButton = true }) => {
-  const dispatch = useDispatch()
-
   const navigate = useNavigate()
 
   return (

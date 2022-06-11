@@ -10,11 +10,11 @@ import { cn } from '@bem-react/classname'
 
 import './DemoPage.scss'
 import logo from 'assets/images/logo1.svg'
-import { selectSeed } from 'register/state/register.selectors'
 
 import { selectBackdrop, selectMinting, selectPrivateAmount, selectTokenAmount, selectWalletAddress } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
+import { selectSeed } from 'wallet/state/wallet.selectors'
 // tslint:enable: prettier max-line-length
 
 export const componentId = 'DemoPage'
@@ -36,12 +36,11 @@ export const DemoPage: React.FC<{}> = () => {
   const [mintAmount, setMintAmount] = useState('0')
 
   useEffect(() => {
-    if (tokenAmount === undefined) {
-      dispatch(demoActions.initApi(null))
-    }
     if (!seed) {
       navigate('/register')
       navigate(0)
+    } else {
+      dispatch(demoActions.initApi(null))
     }
   }, [dispatch, seed])
 

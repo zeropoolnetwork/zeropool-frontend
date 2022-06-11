@@ -2,7 +2,6 @@ import { createSelector } from '@reduxjs/toolkit'
 
 import { RootState } from 'state'
 
-import { WalletState } from 'wallet/state/wallet.reducer'
 import { walletsHelper } from 'wallet/state/helpers/wallets.helper'
 
 export const getWalletState = (state: RootState) => state.wallet

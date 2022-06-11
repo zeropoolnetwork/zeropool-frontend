@@ -9,7 +9,7 @@ import { Token } from 'shared/models'
 import { getPayload } from 'shared/operators/get-payload.operator'
 import { handleEpicError } from 'shared/operators/handle-epic-error.operator'
 
-import { getActiveToken, getActiveView, getActiveWallet, getPollSettings, selectSeed, getSendData, getSupportedTokens, getWallets } from 'wallet/state/wallet.selectors'
+import { getActiveView, getActiveWallet, getPollSettings, selectSeed, getSendData, getSupportedTokens, getWallets } from 'wallet/state/wallet.selectors'
 import { SendData, Wallet, WalletRecord, WalletView } from 'wallet/state/models'
 import { walletActions as actions } from 'wallet/state/wallet.actions'
 import { mapRatesToTokens } from 'wallet/state/helpers/map-rates-to-tokens'
@@ -18,7 +18,7 @@ import { RatesApi } from 'wallet/api/rates.api'
 import * as api from 'wallet/api/zeropool.api'
 
 import { RootState } from 'state'
-import { debug } from 'shared/operators/debug.operator'
+// import { debug } from 'shared/operators/debug.operator'
 // tslint:enable: prettier max-line-length
 // import { initBalances } from './helpers/init-balances.helper'
 

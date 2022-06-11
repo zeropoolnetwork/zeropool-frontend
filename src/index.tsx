@@ -4,8 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { PersistGate } from 'redux-persist/integration/react'
 import { ThemeProvider } from '@mui/material'
 import { SnackbarProvider } from 'notistack'
-import { createBrowserHistory } from 'history'
-import { Router, Route, Navigate, Routes } from 'react-router-dom'
+import { HashRouter, BrowserRouter, Route, Navigate, Routes } from 'react-router-dom'
 
 import * as serviceWorker from './serviceWorker'
 import './index.css'
@@ -22,10 +21,11 @@ import { WalletPage } from 'wallet/containers/WalletPage/WalletPage'
 import { DemoPage } from 'wallet/containers/DemoPage/DemoPage'
 import { theme } from 'theme'
 
-const history = createBrowserHistory()
 const root = createRoot(document.getElementById('root'))
 
 setupInterceptors(http(), store)
+console.log(`Environment: ${process.env.REACT_APP_ENV}`)
+console.log(`process.env.REACT_APP_PUBLIC_URL: ${process.env.REACT_APP_PUBLIC_URL}`)
 
 async function start() {
   await timeout(1000)
@@ -36,7 +36,8 @@ async function start() {
         {/* <React.StrictMode> */}
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistedStore}>
-            <Router navigator={history} location={history.location}>
+            <BrowserRouter basename={process.env.REACT_APP_PUBLIC_URL}>
+            {/* <HashRouter basename={process.env.REACT_APP_PUBLIC_URL}> */}
               <Routes>
                 <Route path="register" element={<CreateAccountPage />} />
                 <Route path="wallet" element={<DemoPage />} />
@@ -45,8 +46,8 @@ async function start() {
 
                 <Route path="/*" element={<Navigate to="/register" />} />
               </Routes>
-            </Router>
-
+            {/* </HashRouter> */}
+            </BrowserRouter>
             <LoadingBar />
           </PersistGate>
         </Provider>

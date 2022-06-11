@@ -272,8 +272,10 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
     if (!seed) {
       navigate('/register')
       navigate(0)
+    } else {
+      dispatch(walletActions.initWallets())
     }
-  }, [seed])
+  }, [dispatch, seed])
 
   return (
     <div className={css('')} data-testid={test()} id={componentId}>
