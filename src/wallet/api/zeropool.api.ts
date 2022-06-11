@@ -3,10 +3,6 @@ import Utf8 from 'crypto-js/enc-utf8'
 import bip39 from 'bip39-light'
 import HDWalletProvider from '@truffle/hdwallet-provider'
 // @ts-ignore
-import wasmPath from 'libzeropool-rs-wasm-web/libzeropool_rs_wasm_bg.wasm'
-// @ts-ignore
-import workerPath from 'zeropool-client-js/lib/worker.js?asset'
-// @ts-ignore
 import transferVkUrl from 'assets/transfer_verification_key.json?asset'
 // @ts-ignore
 import treeVkUrl from 'assets/tree_verification_key.json?asset'
@@ -40,8 +36,6 @@ export const accountPresent = (): boolean => {
 
 export const init = async (mnemonic: string, password: string): Promise<void> => {
   console.log('------------------------------------------------------')
-  console.log('wasmPath: ', wasmPath)
-  console.log('workerPath: ', workerPath)
   console.log('transferParamsUrl: ', transferParamsUrl)
   console.log('treeParamsUrl: ', treeParamsUrl)
   console.log('transferVkUrl: ', transferVkUrl)
@@ -65,7 +59,7 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
   
   try {
     const initialized =
-      await initZPClient(wasmPath, workerPath, snarkParamsConfig as any)
+      await initZPClient(snarkParamsConfig as any)
 
     worker = initialized.worker
     snarkParams = initialized.snarkParams
@@ -198,24 +192,31 @@ export const getShieldedBalances = async (): Promise<[string, string, string]> =
 }
 
 export const depositShielded = async (amount: string): Promise<string> => {
-  let fromAddress = null
-  let jobId = null
+  try {
+    apiCheck()
+    
+    let fromAddress = null
+    let jobId = null
 
-  if (isSubstrateBased(NETWORK)) fromAddress = await client.getPublicKey()
-  else if (isEvmBased(NETWORK)) {
-    console.log(
-      'Approving allowance the Pool (%s) to spend our tokens (%s)',
-      CONTRACT_ADDRESS,
-      amount,
-    )
-    await client.approve(TOKEN_ADDRESS, CONTRACT_ADDRESS, amount)
+    if (isSubstrateBased(NETWORK)) fromAddress = await client.getPublicKey()
+    else if (isEvmBased(NETWORK)) {
+      console.log(
+        'Approving allowance the Pool (%s) to spend our tokens (%s)',
+        CONTRACT_ADDRESS,
+        amount,
+      )
+      await client.approve(TOKEN_ADDRESS, CONTRACT_ADDRESS, amount)
+    }
+
+    console.log('Making deposit...')
+    jobId = await zpClient.deposit(TOKEN_ADDRESS, amount, (data) => client.sign(data), fromAddress)
+    console.log('Please wait relayer complete the job %s...', jobId)
+
+    return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
+  } catch (e: any) {
+    console.error(e);
+    return Promise.reject(`Can't init ZeropoolClient: ${e.message}`)
   }
-
-  console.log('Making deposit...')
-  jobId = await zpClient.deposit(TOKEN_ADDRESS, amount, (data) => client.sign(data), fromAddress)
-  console.log('Please wait relayer complete the job %s...', jobId)
-
-  return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
 }
 
 export const withdrawShielded = async (amount: string): Promise<string> => {

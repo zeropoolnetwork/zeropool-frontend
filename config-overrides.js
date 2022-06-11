@@ -28,6 +28,10 @@ module.exports = function override(config, env) {
   config.module.rules = [
     ...config.module.rules,
   {
+    test: /\.js$/,
+    enforce: 'pre',
+    use: ['source-map-loader'],
+  }, {
     test: /\.wasm$/,
     type: 'asset/resource',
   }, {
@@ -43,9 +47,9 @@ module.exports = function override(config, env) {
         Buffer: ['buffer', 'Buffer'],
         process: 'process',
     }),
-    // new Dotenv(),
-
   ]) 
+
+  config.ignoreWarnings = [/Failed to parse source map/]
 
   return config
 }
