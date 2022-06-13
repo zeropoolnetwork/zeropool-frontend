@@ -86,7 +86,7 @@ const getPrivateBalance = (action$: Action$, state$: State$) =>
     filter(demoActions.updateBalances.match),
     mergeMap(() =>
       from(api.getShieldedBalances()).pipe(
-        map((balances) => demoActions.privateAmount(balances[0])),
+        map((balances) => demoActions.privateBalance(balances[0])),
         catchError((errMsg: string) => {
           toast.error(errMsg)
 

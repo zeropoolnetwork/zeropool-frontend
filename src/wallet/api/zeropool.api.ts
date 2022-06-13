@@ -65,6 +65,7 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
     snarkParams = initialized.snarkParams
   } catch (e: any) {
     console.error(e);
+
     return Promise.reject(`Can't init ZeropoolClient: ${e.message}`)
   }
 
@@ -108,7 +109,7 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
   })
 
   localStorage.setItem(
-    `zp.${account}.seed`,
+    `zp.${'demo_account'}.seed`,
     await AES.encrypt(mnemonic, password).toString()
   )
 }
@@ -119,6 +120,8 @@ export const mint = async (amount: string): Promise<void> => {
 
     return await client.mint(TOKEN_ADDRESS, amount)
   } catch (e: any) {
+    console.error(e)
+
     return Promise.reject(e.message)
   }
 }
@@ -132,63 +135,68 @@ export const getSeed = (password: string): string => {
   try {
     seed = AES.decrypt(cipherText, password).toString(Utf8)
     if (!bip39.validateMnemonic(seed)) throw new Error('invalid mnemonic')
+    
+    return seed
   } catch (_) {
     throw new Error('Incorrect password')
   }
-
-  return seed
 }
 
 export const getRegularAddress = async (): Promise<string> => {
   try {
     apiCheck()
-  } catch (e: any) {
-    return Promise.reject(e.message)
-  }
 
-  return await client.getAddress()
+    return await client.getAddress()
+  } catch (e: any) {
+    console.error(e)
+
+    return Promise.reject(String(e.message))
+  }
 }
 
 export const getShieldedAddress = (): Promise<string> => {
   try {
     apiCheck()
-  } catch (e: any) {
-    return Promise.reject(e.message)
-  }
 
-  return Promise.resolve(zpClient.generateAddress(TOKEN_ADDRESS))
+    return Promise.resolve(zpClient.generateAddress(TOKEN_ADDRESS))
+  } catch (e: any) {
+    console.error(e)
+
+    return Promise.reject(String(e.message))
+  }
 }
 
 export const getTokenBalance = async (): Promise<string> => {
   try {
     apiCheck()
+    return await client.getTokenBalance(TOKEN_ADDRESS)
   } catch (e: any) {
-    return Promise.reject(e.message)
+    return Promise.reject(String(e.message))
   }
-
-  return await client.getTokenBalance(TOKEN_ADDRESS)
 }
 
 export const getRegularBalance = async (): Promise<string> => {
   try {
     apiCheck()
+    debugger
+    return await client.getBalance()
   } catch (e: any) {
-    return Promise.reject(e.message)
-  }
+    console.error(e)
 
-  return await client.getBalance()
+    return Promise.reject(String(e.message))
+  }
 }
 
 export const getShieldedBalances = async (): Promise<[string, string, string]> => {
   try {
     apiCheck()
+
+    return zpClient.getBalances(TOKEN_ADDRESS)
   } catch (e: any) {
-    return Promise.reject(e.message)
+    console.error(e)
+
+    return Promise.reject(String(e.message))
   }
-
-  const balances = zpClient.getBalances(TOKEN_ADDRESS)
-
-  return balances
 }
 
 export const depositShielded = async (amount: string): Promise<string> => {
@@ -214,48 +222,56 @@ export const depositShielded = async (amount: string): Promise<string> => {
 
     return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
   } catch (e: any) {
-    console.error(e);
-    return Promise.reject(`Can't init ZeropoolClient: ${e.message}`)
+    return Promise.reject(String(e.message))
+
   }
 }
 
 export const withdrawShielded = async (amount: string): Promise<string> => {
-  apiCheck()
+  try {
+    apiCheck()
 
-  let address = null
+    let address = null
 
-  if (isEvmBased(NETWORK)) address = await client.getAddress()
-  else if (isSubstrateBased(NETWORK)) address = await client.getPublicKey()
+    if (isEvmBased(NETWORK)) address = await client.getAddress()
+    else if (isSubstrateBased(NETWORK)) address = await client.getPublicKey()
 
-  if (!address) throw new Error('No address found for withdrawal')
+    if (!address) throw new Error('No address found for withdrawal')
 
-  console.log('Making withdraw...')
+    console.log('Making withdraw...')
 
-  const jobId = await zpClient.withdraw(TOKEN_ADDRESS, address, amount)
+    const jobId = await zpClient.withdraw(TOKEN_ADDRESS, address, amount)
 
-  console.log('Please wait relayer complete the job %s...', jobId)
+    console.log('Please wait relayer complete the job %s...', jobId)
 
-  return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
+    return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
+  } catch (e: any) {
+    return Promise.reject(String(e.message))
+  }
 }
 
 export const transfer = async (to: string, amount: string | number): Promise<void> => {
-  apiCheck()
+  try {
+    apiCheck()
 
-  console.log('Making private transfer...')
-
-  await client.transfer(to, String(amount))
+    return await client.transfer(to, String(amount))
+  } catch (e: any) {
+    return Promise.reject(String(e.message))
+  }
 }
 
 export const transferShielded = async (to: string, amount: string): Promise<string> => {
-  apiCheck()
+  try {
+    apiCheck()
 
-  console.log('Making private transfer...')
+    const jobId = await zpClient.transfer(TOKEN_ADDRESS, [{ to, amount }])
 
-  const jobId = await zpClient.transfer(TOKEN_ADDRESS, [{ to, amount }])
+    console.log('Please wait relayer complete the job %s...', jobId)
 
-  console.log('Please wait relayer complete the job %s...', jobId)
-
-  return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
+    return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
+  } catch (e: any) {
+    return Promise.reject(String(e.message))
+  }
 }
 
 export const addressShielded = (address: string, token: string): boolean => {

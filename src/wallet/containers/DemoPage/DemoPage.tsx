@@ -28,7 +28,7 @@ export const DemoPage: React.FC<{}> = () => {
 
   const backdrop = useSelector(selectBackdrop)
   const minting = useSelector(selectMinting)
-  const privateAmount = useSelector(selectPrivateAmount)
+  const privateBalance = useSelector(selectPrivateAmount)
   const seed = useSelector(selectSeed)
   const tokenAmount = useSelector(selectTokenAmount)
   const walletAddress = useSelector(selectWalletAddress)
@@ -74,7 +74,7 @@ export const DemoPage: React.FC<{}> = () => {
           <div className={css('ToolbarBody')}>
             <DemoHeader
               tokenAmount={tokenAmount}
-              privateAmount={privateAmount}
+              privateBalance={privateBalance}
               walletAddress={walletAddress}
             />
           </div>
@@ -110,10 +110,7 @@ export const DemoPage: React.FC<{}> = () => {
         <img src={logo} alt="ZeroPool" style={{ margin: 'auto' }} />
       </div>
 
-      <Backdrop
-        sx={{ color: '#fff', zIndex: 1000 }}
-        open={backdrop}
-      >
+      <Backdrop sx={{ color: '#fff', zIndex: 1000 }} open={backdrop}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </div>

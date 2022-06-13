@@ -20,11 +20,16 @@ module.exports = function override(config, env) {
     'stream': require.resolve('stream-browserify'),
   }
 
+  config.mode = 'development'
+  config.optimization.minimize = false
+  config.optimization.minimizer = []
+
+
   config.resolve.alias = {
     ...config.resolve.alias,
     process: 'process/browser.js',
   }
-
+  
   config.module.rules = [
     ...config.module.rules,
   {
@@ -50,6 +55,5 @@ module.exports = function override(config, env) {
   ]) 
 
   config.ignoreWarnings = [/Failed to parse source map/]
-
   return config
 }

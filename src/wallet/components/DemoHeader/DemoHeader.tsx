@@ -13,13 +13,13 @@ const test = testIdBuilder(componentId)
 
 export type DemoHeaderProps = {
   tokenAmount?: number
-  privateAmount?: number
+  privateBalance?: number
   walletAddress?: string
 }
 
 export const DemoHeader: React.FC<DemoHeaderProps> = ({
   tokenAmount,
-  privateAmount,
+  privateBalance,
   walletAddress,
 }) => {
   return (
@@ -47,7 +47,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
           <NumberFormat
             className={css('Amount')}
             data-testid={test('PrivateAmount')}
-            value={privateAmount}
+            value={privateBalance}
             displayType={'text'}
             thousandSeparator={true}
             suffix={' tokens'}

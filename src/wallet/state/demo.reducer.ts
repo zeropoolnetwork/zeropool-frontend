@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export type DemoState = {
   tokenAmount: number | undefined
-  privateAmount: number | undefined
+  privateBalance: number | undefined
   minting: boolean
   walletAddress: string | undefined
   backdrop: boolean
@@ -10,7 +10,7 @@ export type DemoState = {
 
 export const initialDemoState: DemoState = {
   tokenAmount: undefined,
-  privateAmount: undefined,
+  privateBalance: undefined,
   minting: false,
   walletAddress: undefined,
   backdrop: false,
@@ -37,8 +37,8 @@ export const demoSlice = createSlice({
     tokenAmount: (state, action) => {
       state.tokenAmount = action.payload
     },
-    privateAmount: (state, action) => {
-      state.privateAmount = action.payload
+    privateBalance: (state, action) => {
+      state.privateBalance = action.payload
     },
 
     mint: (state, action) => {
