@@ -10,7 +10,7 @@ import { demoActions } from 'wallet/state/demo.reducer'
 import { RootState } from 'state'
 
 import toast from 'shared/helpers/toast.helper'
-import { debug } from 'shared/operators/debug.operator'
+//import { debug } from 'shared/operators/debug.operator'
 import { isString } from 'shared/util/is'
 // tslint:enable: prettier max-line-length
 
@@ -34,6 +34,36 @@ const mint: Epic = (action$, state$) =>
           toast.error(errMsg)
 
           return of(demoActions.mintFalure(errMsg))
+        }),
+      ),
+    ),
+  )
+
+const deposit: Epic = (action$, state$) =>
+  action$.pipe(
+    filter(demoActions.deposit.match),
+    switchMap(({ payload }) =>
+      from(api.depositShielded(payload)).pipe(
+        map((res) => demoActions.depositSuccess(payload)),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
+
+          return of(demoActions.depositFalure(errMsg))
+        }),
+      ),
+    ),
+  )
+
+const withdraw: Epic = (action$, state$) =>
+  action$.pipe(
+    filter(demoActions.withdraw.match),
+    switchMap(({ payload }) =>
+      from(api.withdrawShielded(payload)).pipe(
+        map((res) => demoActions.withdrawSuccess(payload)),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
+
+          return of(demoActions.withdrawFalure(errMsg))
         }),
       ),
     ),
@@ -71,7 +101,7 @@ const getPublicBalance = (action$: Action$, state$: State$) =>
     filter(demoActions.updateBalances.match),
     mergeMap(() =>
       from(api.getRegularBalance()).pipe(
-        map((balance) => demoActions.tokenAmount(balance)),
+        map((balance) => demoActions.tokenAmount(+balance)),
         catchError((errMsg: string) => {
           toast.error(errMsg)
 
@@ -86,7 +116,7 @@ const getPrivateBalance = (action$: Action$, state$: State$) =>
     filter(demoActions.updateBalances.match),
     mergeMap(() =>
       from(api.getShieldedBalances()).pipe(
-        map((balances) => demoActions.privateBalance(balances[0])),
+        map((balances) => demoActions.privateBalance(+balances[0])),
         catchError((errMsg: string) => {
           toast.error(errMsg)
 
@@ -120,12 +150,35 @@ const updateDataAfterInitialization = (action$: Action$, state$: State$) =>
     )),
   )
 
+const updateBalancesAfterMint = (action$: Action$, state$: State$) =>
+  action$.pipe(
+    filter(demoActions.mintSuccess.match),
+    map(() => demoActions.updateBalances(null)),
+  )
+
+const updateBalancesAfterDeposit = (action$: Action$, state$: State$) =>
+  action$.pipe(
+    filter(demoActions.depositSuccess.match),
+    map(() => demoActions.updateBalances(null)),
+  )
+
+const updateBalancesAfterWithdraw = (action$: Action$, state$: State$) =>
+  action$.pipe(
+    filter(demoActions.withdrawSuccess.match),
+    map(() => demoActions.updateBalances(null)),
+  )
+
 export const demoEpics: Epic = combineEpics(
   initApi,
   mint,
+  deposit,
+  withdraw,
   getPublicBalance,
   getPrivateBalance,
   resetAccount,
   getWalletAddress,
   updateDataAfterInitialization,
+  updateBalancesAfterDeposit,
+  updateBalancesAfterMint,
+  updateBalancesAfterWithdraw,
 )

@@ -11,7 +11,7 @@ import { cn } from '@bem-react/classname'
 import './DemoPage.scss'
 import logo from 'assets/images/logo1.svg'
 
-import { selectBackdrop, selectMinting, selectPrivateAmount, selectTokenAmount, selectWalletAddress } from 'wallet/state/demo.selectors'
+import { selectBackdrop, selectDeposit, selectMinting, selectPrivateAmount, selectTokenAmount, selectWalletAddress, selectWithdraw } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
 import { selectSeed } from 'wallet/state/wallet.selectors'
@@ -32,8 +32,12 @@ export const DemoPage: React.FC<{}> = () => {
   const seed = useSelector(selectSeed)
   const tokenAmount = useSelector(selectTokenAmount)
   const walletAddress = useSelector(selectWalletAddress)
+  const deposit = useSelector(selectDeposit)
+  const withdraw = useSelector(selectWithdraw)
 
   const [mintAmount, setMintAmount] = useState('0')
+  const [depositAmount, setDepositAmount] = useState('0')
+  const [withdrawAmount, setWithdrawAmount] = useState('0')
 
   useEffect(() => {
     if (!seed) {
@@ -85,7 +89,7 @@ export const DemoPage: React.FC<{}> = () => {
         <div>
           <Input
             id="mint-amount"
-            className={css('Password')}
+            className={css('Mint')}
             sx={{ color: 'black' }}
             color="primary"
             classes={{ input: css('PasswordInput') }}
@@ -98,12 +102,59 @@ export const DemoPage: React.FC<{}> = () => {
             variant="contained"
             className={css('Button')}
             data-testid={test('Import')}
-            disabled={minting === true || mintAmount === '0' || isNaN(+mintAmount)}
+            disabled={minting || mintAmount === '0' || isNaN(+mintAmount)}
             onClick={() => dispatch(demoActions.mint(mintAmount))}
           >
             Mint
           </Button>
         </div>
+
+        <div>
+          <Input
+            id="deposit-amount"
+            className={css('Deposit')}
+            sx={{ color: 'black' }}
+            color="primary"
+            classes={{ input: css('PasswordInput') }}
+            inputProps={{ 'data-testid': test('Password'), maxLength: 20 }}
+            onChange={(event) => setDepositAmount(event.target.value)}
+          />
+
+          <Button
+            color="primary"
+            variant="contained"
+            className={css('Button')}
+            data-testid={test('Import')}
+            disabled={deposit || depositAmount === '0' || !tokenAmount || isNaN(+depositAmount) || +depositAmount > tokenAmount}
+            onClick={() => dispatch(demoActions.deposit(depositAmount))}
+          >
+            Deposit
+          </Button>
+        </div>
+
+        <div>
+          <Input
+            id="withdraw-amount"
+            className={css('Withdraw')}
+            sx={{ color: 'black' }}
+            color="primary"
+            classes={{ input: css('Withdraw') }}
+            inputProps={{ 'data-testid': test('Withdraw'), maxLength: 20 }}
+            onChange={(event) => setWithdrawAmount(event.target.value)}
+          />
+
+          <Button
+            color="primary"
+            variant="contained"
+            className={css('Button')}
+            data-testid={test('Import')}
+            disabled={withdraw || withdrawAmount === '0' || !privateBalance || isNaN(+withdrawAmount) || +withdrawAmount > privateBalance}
+            onClick={() => dispatch(demoActions.deposit(withdrawAmount))}
+          >
+            Withdraw
+          </Button>
+        </div>
+
       </div>
 
       <div className={css('Footer')}>

@@ -6,6 +6,8 @@ export type DemoState = {
   minting: boolean
   walletAddress: string | undefined
   backdrop: boolean
+  deposit: boolean
+  withdraw: boolean
 }
 
 export const initialDemoState: DemoState = {
@@ -14,6 +16,8 @@ export const initialDemoState: DemoState = {
   minting: false,
   walletAddress: undefined,
   backdrop: false,
+  deposit: false,
+  withdraw: false,
 }
 
 // tslint:disable: no-empty
@@ -31,13 +35,13 @@ export const demoSlice = createSlice({
       state.backdrop = false
     },
 
-    updateBalances: (state, action: PayloadAction<null>) => {},
-    updateBalancesFailure: (state, action: PayloadAction<string>) => {},
+    updateBalances: (state, action: PayloadAction<null>) => { },
+    updateBalancesFailure: (state, action: PayloadAction<string>) => { },
 
-    tokenAmount: (state, action) => {
+    tokenAmount: (state, action: PayloadAction<number>) => {
       state.tokenAmount = action.payload
     },
-    privateBalance: (state, action) => {
+    privateBalance: (state, action: PayloadAction<number>) => {
       state.privateBalance = action.payload
     },
 
@@ -46,15 +50,34 @@ export const demoSlice = createSlice({
     },
     mintSuccess: (state, action: PayloadAction<number>) => {
       state.minting = false
-      state.tokenAmount = action.payload + (state.tokenAmount || 0)
     },
     mintFalure: (state, action: PayloadAction<string>) => {
       state.minting = false
     },
 
-    resetAccount: (state, action: PayloadAction<null>) => {},
+    deposit: (state, action) => {
+      state.deposit = true
+    },
+    depositSuccess: (state, action: PayloadAction<number>) => {
+      state.deposit = false
+    },
+    depositFalure: (state, action: PayloadAction<string>) => {
+      state.deposit = false
+    },
 
-    getWalletAddress: (state, action: PayloadAction<null>) => {},
+    withdraw: (state, action) => {
+      state.withdraw = true
+    },
+    withdrawSuccess: (state, action: PayloadAction<number>) => {
+      state.withdraw = false
+    },
+    withdrawFalure: (state, action: PayloadAction<string>) => {
+      state.withdraw = false
+    },
+
+    resetAccount: (state, action: PayloadAction<null>) => { },
+
+    getWalletAddress: (state, action: PayloadAction<null>) => { },
     getWalletAddressSuccess: (state, action: PayloadAction<string>) => {
       state.walletAddress = action.payload
     },

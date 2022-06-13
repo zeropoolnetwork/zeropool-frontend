@@ -51,12 +51,12 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
   let worker
   let snarkParams
   const snarkParamsConfig = {
-      transferParamsUrl,
-      treeParamsUrl,
-      transferVkUrl,
-      treeVkUrl,
+    transferParamsUrl,
+    treeParamsUrl,
+    transferVkUrl,
+    treeVkUrl,
   }
-  
+
   try {
     const initialized =
       await initZPClient(snarkParamsConfig as any)
@@ -72,8 +72,8 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
   try {
     if (isEvmBased(NETWORK)) {
       const provider = new HDWalletProvider({
-          mnemonic,
-          providerOrUrl: RPC_URL,
+        mnemonic,
+        providerOrUrl: RPC_URL,
       })
 
       client = new EthereumClient(provider, { transactionUrl: TRANSACTION_URL })
@@ -81,7 +81,7 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
     } else if (isSubstrateBased(NETWORK)) {
       network = new PolkadotNetwork();
       client = await PolkadotClient.create(
-        mnemonic, 
+        mnemonic,
         { rpcUrl: RPC_URL, transactionUrl: TRANSACTION_URL },
       )
     } else {
@@ -93,16 +93,16 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
 
   const networkType = NETWORK as NetworkType
   const sk = deriveSpendingKey(mnemonic, networkType)
-  
+
   zpClient = await ZeropoolClient.create({
     sk,
     worker,
     snarkParams,
     tokens: {
-        [TOKEN_ADDRESS]: {
-            poolAddress: CONTRACT_ADDRESS,
-            relayerUrl: RELAYER_URL,
-        }
+      [TOKEN_ADDRESS]: {
+        poolAddress: CONTRACT_ADDRESS,
+        relayerUrl: RELAYER_URL,
+      }
     },
     networkName: NETWORK,
     network,
@@ -135,7 +135,7 @@ export const getSeed = (password: string): string => {
   try {
     seed = AES.decrypt(cipherText, password).toString(Utf8)
     if (!bip39.validateMnemonic(seed)) throw new Error('invalid mnemonic')
-    
+
     return seed
   } catch (_) {
     throw new Error('Incorrect password')
@@ -178,7 +178,7 @@ export const getTokenBalance = async (): Promise<string> => {
 export const getRegularBalance = async (): Promise<string> => {
   try {
     apiCheck()
-    debugger
+
     return await client.getBalance()
   } catch (e: any) {
     console.error(e)
@@ -202,7 +202,7 @@ export const getShieldedBalances = async (): Promise<[string, string, string]> =
 export const depositShielded = async (amount: string): Promise<string> => {
   try {
     apiCheck()
-    
+
     let fromAddress = null
     let jobId = null
 
