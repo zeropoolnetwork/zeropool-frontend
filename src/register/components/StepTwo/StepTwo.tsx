@@ -8,8 +8,8 @@ import './StepTwo.scss'
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
 import { SeedPanel } from 'register/components/SeedPanel/SeedPanel'
-import { strFromArray } from 'shared/util/str-from-array'
-import { copyToClipboard } from 'shared/util/copy-to-clipboard'
+import { strFromArray } from 'shared/utils/str-from-array'
+import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
 
 export const componentId = 'StepTwo'
 

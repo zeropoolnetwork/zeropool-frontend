@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from '@testing-library/react'
 
 import { SeedPanel, componentId, SeedPanelProps } from './SeedPanel'
-import { deepFreeze } from 'shared/util/deep-freeze'
+import { deepFreeze } from 'shared/utils/deep-freeze'
 
 describe('SeedPanel', () => {
   let outputSpy: jest.Mock

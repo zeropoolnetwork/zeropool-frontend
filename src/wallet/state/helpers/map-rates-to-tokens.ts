@@ -1,6 +1,6 @@
 import { Rate } from 'shared/models/rate'
 import { Token, TokenSymbol } from 'shared/models/token'
-import { recordFromArray } from 'shared/util/from'
+import { recordFromArray } from 'shared/utils/from'
 
 export const mapRatesToTokens = (
   rates: Rate<Token>[],

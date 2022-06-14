@@ -2,7 +2,7 @@ import { map } from 'rxjs/operators'
 import { Observable, of } from 'rxjs'
 
 import { http, RequestConfig } from 'shared/http/http'
-import { isObjectWithData } from 'shared/util/is-object-with-data'
+import { isObjectWithData } from 'shared/utils/is-object-with-data'
 import { getHTTPData } from 'shared/operators/get-http-data.operator'
 import { Rate, Token } from 'shared/models'
 import { Provider } from 'shared/models/provider'

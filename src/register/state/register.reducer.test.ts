@@ -1,4 +1,4 @@
-import { deepFreeze } from 'shared/util/deep-freeze'
+import { deepFreeze } from 'shared/utils/deep-freeze'
 
 import { generateSeed } from 'register/state/helpers/seed.helper'
 

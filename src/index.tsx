@@ -9,7 +9,7 @@ import { HashRouter, BrowserRouter, Route, Navigate, Routes } from 'react-router
 import * as serviceWorker from './serviceWorker'
 import './index.css'
 
-import { timeout } from 'shared/util/timeout'
+import { timeout } from 'shared/utils/timeout'
 import { AboutPage } from 'shared/components/AboutPage/AboutPage'
 import { LoadingBar } from 'shared/loading-bar/containers/loading-bar/loading-bar.component'
 import { http, setupInterceptors } from 'shared/http/http'

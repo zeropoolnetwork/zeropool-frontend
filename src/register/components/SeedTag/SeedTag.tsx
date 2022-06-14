@@ -4,7 +4,7 @@ import { cn } from '@bem-react/classname'
 import './SeedTag.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-import { shuffleString } from 'shared/util/shuffle'
+import { shuffleString } from 'shared/utils/shuffle'
 
 export const componentId = 'SeedTag'
 

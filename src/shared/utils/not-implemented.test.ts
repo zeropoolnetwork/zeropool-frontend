@@ -1,4 +1,4 @@
-import { notImplemented } from 'shared/util/not-implemented'
+import { notImplemented } from 'shared/utils/not-implemented'
 
 describe('notImplemented helper', () => {
   it('returns True if passed error object contain message with corresponding text', () => {

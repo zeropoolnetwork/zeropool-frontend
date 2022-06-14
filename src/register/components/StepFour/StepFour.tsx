@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 import { Close, Visibility, VisibilityOff } from '@mui/icons-material'
 import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
 
-import { confirmValidator, passwordValidator } from 'shared/util/form-validators'
+import { confirmValidator, passwordValidator } from 'shared/utils/form-validators'
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
 import './StepFour.scss'

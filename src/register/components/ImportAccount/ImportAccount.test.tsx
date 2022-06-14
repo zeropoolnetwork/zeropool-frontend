@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react'
 
 import { componentId, ImportAccount, ImportAccountProps } from './ImportAccount'
 
-import { createClientRender, queryByAttribute } from 'shared/util/render.js'
+import { createClientRender, queryByAttribute } from 'shared/utils/render.js'
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
 const test = testIdBuilder(componentId)

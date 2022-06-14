@@ -1,5 +1,5 @@
 import { Token, TokenSymbol } from 'shared/models/token'
-import { round } from 'shared/util/round-number'
+import { round } from 'shared/utils/round-number'
 
 import { Wallet } from 'wallet/state/models/wallet'
 import { WalletView } from 'wallet/state/models'

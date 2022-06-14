@@ -5,7 +5,7 @@ import './RoundButton.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { IconButton } from '@mui/material'
-import { cssMod } from 'shared/util/css-mod'
+import { cssMod } from 'shared/utils/css-mod'
 
 export const componentId = 'RoundButton'
 

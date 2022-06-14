@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import './SeedPanel.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-import { shuffleArray } from 'shared/util/shuffle'
+import { shuffleArray } from 'shared/utils/shuffle'
 
 import { SeedTag } from 'register/components/SeedTag/SeedTag'
 

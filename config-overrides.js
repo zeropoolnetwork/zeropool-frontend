@@ -1,35 +1,39 @@
 const webpack = require('webpack');
 
 module.exports = function override(config, env) {
-  // config.devServer.headers = {
-  //   ...config.devServer.headers,
-  //   'Access-Control-Allow-Origin': '*',
-  //   'Access-Control-Allow-Headers': '*',
-  //   'Access-Control-Allow-Methods': '*',
-  // }
+  config.output.environment = {
+    arrowFunction: true,
+    bigIntLiteral: false,
+    const: true,
+    destructuring: true,
+    dynamicImport: false,
+    forOf: true,
+    module: false,
+    optionalChaining: true,
+    templateLiteral: true,
+  },
 
   config.resolve.fallback = {
+    'fs': false,
+    'net': false,
+    'tls': false,
+    'tty': false,
     'assert': require.resolve('assert'),
     'constants': require.resolve('constants-browserify'),
     'crypto': require.resolve('crypto-browserify'),
-    'fs': false,
     'http': require.resolve('stream-http'),
     'https': require.resolve('https-browserify'),
     'os': require.resolve('os-browserify/browser'),
     'path': require.resolve('path-browserify'),
     'stream': require.resolve('stream-browserify'),
+    'zlib': require.resolve('browserify-zlib'),
   }
-
-  config.mode = 'development'
-  config.optimization.minimize = false
-  config.optimization.minimizer = []
-
 
   config.resolve.alias = {
     ...config.resolve.alias,
     process: 'process/browser.js',
   }
-  
+
   config.module.rules = [
     ...config.module.rules,
   {
@@ -54,6 +58,22 @@ module.exports = function override(config, env) {
     }),
   ]) 
 
-  config.ignoreWarnings = [/Failed to parse source map/]
+  config.ignoreWarnings = [
+    {
+      message: /Failed to parse source map/,
+    },
+  ]
+  
+  config.devServer = {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Allow-Methods': '*',
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+    },
+  }
+
+  // console.log(JSON.stringify(config))
   return config
 }

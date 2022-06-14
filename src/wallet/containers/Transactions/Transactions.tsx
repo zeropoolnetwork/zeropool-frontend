@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 import './Transactions.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-import { isErrorWithMessage } from 'shared/util/is-error-with-message'
+import { isErrorWithMessage } from 'shared/utils/is-error-with-message'
 
 import { SortedTransactions } from 'wallet/state/models/sorted-transactions'
 import { getTransactions } from 'wallet/state/wallet.selectors'

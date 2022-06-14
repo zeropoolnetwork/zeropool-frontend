@@ -1,6 +1,6 @@
 import supportedTokens from 'assets/settings/supported-tokens.json'
 
-import { recordFromArray } from 'shared/util/from'
+import { recordFromArray } from 'shared/utils/from'
 import { Token, TokenSymbol } from 'shared/models/token'
 
 import { PollSettings, SendData, Wallet } from 'wallet/state/models'

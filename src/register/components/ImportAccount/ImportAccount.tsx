@@ -6,9 +6,9 @@ import React, { useState } from 'react'
 import { Close, Visibility, VisibilityOff } from '@mui/icons-material'
 import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
 
-import { confirmValidator, passwordValidator, seedValidator } from 'shared/util/form-validators'
+import { confirmValidator, passwordValidator, seedValidator } from 'shared/utils/form-validators'
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-import { strToArray } from 'shared/util/str-to-array'
+import { strToArray } from 'shared/utils/str-to-array'
 import { SeedPanel } from 'register/components/SeedPanel/SeedPanel'
 
 import './ImportAccount.scss'

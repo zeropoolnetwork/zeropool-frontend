@@ -1,10 +1,10 @@
 import { from, Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
-import { nearBug } from 'shared/util/near-bug'
-import { notImplemented } from 'shared/util/not-implemented'
+import { nearBug } from 'shared/utils/near-bug'
+import { notImplemented } from 'shared/utils/not-implemented'
 import { Token, TokenSymbol } from 'shared/models/token'
-import { isErrorWithMessage } from 'shared/util/is-error-with-message'
+import { isErrorWithMessage } from 'shared/utils/is-error-with-message'
 
 import { Wallet } from 'wallet/state/models'
 import { isPrivateTxsInplemented } from 'wallet/state/helpers/is-private-txs-implemented.helper'

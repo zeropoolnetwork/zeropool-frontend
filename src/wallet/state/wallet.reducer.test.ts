@@ -3,7 +3,7 @@ import {
   _testWalletsEth,
   _testWalletsNear,
 } from 'shared/helpers/test/app-state.helper'
-import { deepFreeze } from 'shared/util/deep-freeze'
+import { deepFreeze } from 'shared/utils/deep-freeze'
 import { WalletView } from 'wallet/state/models'
 
 import { walletActions as actions } from 'wallet/state/wallet.actions'

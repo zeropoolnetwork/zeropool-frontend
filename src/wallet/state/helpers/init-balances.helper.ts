@@ -1,6 +1,6 @@
 import { Token, TokenSymbol } from 'shared/models'
-import { isErrorWithMessage } from 'shared/util/is-error-with-message'
-import { notImplemented } from 'shared/util/not-implemented'
+import { isErrorWithMessage } from 'shared/utils/is-error-with-message'
+import { notImplemented } from 'shared/utils/not-implemented'
 
 import { Wallet } from 'wallet/state/models'
 import { walletsHelper } from 'wallet/state/helpers/wallets.helper'

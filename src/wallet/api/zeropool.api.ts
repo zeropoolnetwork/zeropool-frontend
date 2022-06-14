@@ -182,7 +182,7 @@ export const getRegularBalance = async (): Promise<string> => {
     return client.fromBaseUnit(await client.getBalance())
   } catch (e: any) {
     console.error(e)
-
+    
     return Promise.reject(String(e.message))
   }
 }
