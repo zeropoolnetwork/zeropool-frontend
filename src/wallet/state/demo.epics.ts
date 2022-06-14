@@ -11,7 +11,7 @@ import { RootState } from 'state'
 
 import toast from 'shared/helpers/toast.helper'
 //import { debug } from 'shared/operators/debug.operator'
-import { isString } from 'shared/util/is'
+import { isString } from 'shared/utils/is'
 // tslint:enable: prettier max-line-length
 
 type Action$ = Observable<PayloadAction>
