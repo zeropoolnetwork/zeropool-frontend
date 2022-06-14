@@ -1,13 +1,12 @@
 {
   "files": {
-    "main.css": "/zeropool-frontend/static/css/main.93c84801.css",
-    "main.js": "/zeropool-frontend/static/js/main.5505c6d1.js",
-    "static/js/vendors-node_modules_libzeropool-rs-wasm-web-mt_snippets_wasm-bindgen-rayon-_-dbad31.40fa3cf7.chunk.js": "/zeropool-frontend/static/js/vendors-node_modules_libzeropool-rs-wasm-web-mt_snippets_wasm-bindgen-rayon-7afa899f36665473_-dbad31.40fa3cf7.chunk.js",
-    "static/js/vendors-node_modules_zeropool-client-js_lib_workerSt_js.5e6971fd.chunk.js": "/zeropool-frontend/static/js/vendors-node_modules_zeropool-client-js_lib_workerSt_js.5e6971fd.chunk.js",
-    "static/js/vendors-node_modules_libzeropool-rs-wasm-web-mt_libzeropool_rs_wasm_js.b5605807.chunk.js": "/zeropool-frontend/static/js/vendors-node_modules_libzeropool-rs-wasm-web-mt_libzeropool_rs_wasm_js.b5605807.chunk.js",
-    "static/js/node_modules_libzeropool-rs-wasm-web-mt_snippets_wasm-bindgen-rayon-_src_work-f568d2.114078ac.chunk.js": "/zeropool-frontend/static/js/node_modules_libzeropool-rs-wasm-web-mt_snippets_wasm-bindgen-rayon-7afa899f36665473_src_work-f568d2.114078ac.chunk.js",
-    "static/js/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-4d9513.63caf458.chunk.js": "/zeropool-frontend/static/js/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-4d9513.63caf458.chunk.js",
-    "static/js/vendors-node_modules_zeropool-client-js_lib_file-cache_js-node_modules_comlink_dist_esm_comlink_mjs.1429b8ae.chunk.js": "/zeropool-frontend/static/js/vendors-node_modules_zeropool-client-js_lib_file-cache_js-node_modules_comlink_dist_esm_comlink_mjs.1429b8ae.chunk.js",
+    "main.css": "/zeropool-frontend/static/css/main.1656fd89.css",
+    "main.js": "/zeropool-frontend/static/js/main.3f015d85.js",
+    "static/js/415.241915a9.chunk.js": "/zeropool-frontend/static/js/415.241915a9.chunk.js",
+    "static/js/404.11581e31.chunk.js": "/zeropool-frontend/static/js/404.11581e31.chunk.js",
+    "static/js/417.dd8d642a.chunk.js": "/zeropool-frontend/static/js/417.dd8d642a.chunk.js",
+    "static/js/0.ca539f62.chunk.js": "/zeropool-frontend/static/js/0.ca539f62.chunk.js",
+    "static/js/178.476c335f.chunk.js": "/zeropool-frontend/static/js/178.476c335f.chunk.js",
     "static/media/transfer_params.bin": "/zeropool-frontend/static/media/transfer_params.f90dfa42f9f901038aba.bin",
     "static/media/tree_params.bin": "/zeropool-frontend/static/media/tree_params.6ab2927b9041f1c39fb8.bin",
     "static/media/libzeropool_rs_wasm_bg.wasm": "/zeropool-frontend/static/media/libzeropool_rs_wasm_bg.adfb08cfec4bcffccb95.wasm",
@@ -29,10 +28,10 @@
     "static/media/transfer_verification_key.json?asset": "/zeropool-frontend/static/media/transfer_verification_key.5bf1fd69495049d1255a.json",
     "static/media/tree_verification_key.json?asset": "/zeropool-frontend/static/media/tree_verification_key.2dbab857096db83ff2d2.json",
     "index.html": "/zeropool-frontend/index.html",
-    "static/media/index.cjs": "/zeropool-frontend/static/media/index.30835dfb80b6384eef06.cjs"
+    "static/media/index.cjs": "/zeropool-frontend/static/media/index.f7ef8233860ab8851989.cjs"
   },
   "entrypoints": [
-    "static/css/main.93c84801.css",
-    "static/js/main.5505c6d1.js"
+    "static/css/main.1656fd89.css",
+    "static/js/main.3f015d85.js"
   ]
 }
