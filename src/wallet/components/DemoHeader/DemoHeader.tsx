@@ -12,18 +12,21 @@ const css = cn(componentId)
 const test = testIdBuilder(componentId)
 
 export type DemoHeaderProps = {
-  tokenAmount?: number
+  publicBalance?: number
   privateBalance?: number
+  tokenBalance?: number
   walletAddress?: string
 }
 
 export const DemoHeader: React.FC<DemoHeaderProps> = ({
-  tokenAmount,
+  publicBalance,
   privateBalance,
+  tokenBalance,
   walletAddress,
 }) => {
   return (
     <div className={css()} data-testid={test()}>
+
       <div className={css('Title')}>
         <span>Address: {walletAddress}</span>
       </div>
@@ -31,32 +34,50 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
       <div className={css('Amounts')}>
         <div>
           Public balance:
+
           <NumberFormat
             className={css('Amount')}
-            data-testid={test('TokenAmount')}
-            value={tokenAmount}
+            data-testid={test('PublicAmount')}
+            value={publicBalance}
             displayType={'text'}
             thousandSeparator={true}
             suffix={' tokens'}
-            decimalScale={2}
+            decimalScale={10}
           />
         </div>
 
-        <div>
-          Private balance:
-          <NumberFormat
-            className={css('Amount')}
-            data-testid={test('PrivateAmount')}
-            value={privateBalance}
-            displayType={'text'}
-            thousandSeparator={true}
-            suffix={' tokens'}
-            decimalScale={2}
-          />
+        <div className={css('Amounts')}>
+          <div>
+            Token balance:
+
+            <NumberFormat
+              className={css('Amount')}
+              data-testid={test('')}
+              value={tokenBalance}
+              displayType={'text'}
+              thousandSeparator={true}
+              suffix={' tokens'}
+              decimalScale={10}
+            />
+          </div>
+
+          <div>
+            Private balance:
+
+            <NumberFormat
+              className={css('Amount')}
+              data-testid={test('PrivateAmount')}
+              value={privateBalance}
+              displayType={'text'}
+              thousandSeparator={true}
+              suffix={' tokens'}
+              decimalScale={10}
+            />
+          </div>
         </div>
+
+        <div className={css('Tokens')}></div>
       </div>
-
-      <div className={css('Tokens')}></div>
     </div>
   )
 }

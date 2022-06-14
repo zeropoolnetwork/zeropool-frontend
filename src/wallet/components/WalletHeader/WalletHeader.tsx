@@ -22,7 +22,7 @@ export type WalletHeaderProps = {
   label: string
   mode: WalletHeaderMode
   priv?: boolean
-  tokenAmount?: number
+  publicBalance?: number
   tokenName?: string
   tokenSymbol?: string
   tokenRate?: number
@@ -32,7 +32,7 @@ export type WalletHeaderProps = {
 
 export const WalletHeader: React.FC<WalletHeaderProps> = ({
   mode,
-  tokenAmount,
+  publicBalance,
   tokenSymbol,
   label,
   fiatValue,
@@ -52,7 +52,7 @@ export const WalletHeader: React.FC<WalletHeaderProps> = ({
             data-testid={test('BackButton')}
             onClick={onBackClick}
             disableRipple={true}
-            sx={{padding: 0}}
+            sx={{ padding: 0 }}
           >
             <ArrowBack className={css('Icon')} />
           </Button>
@@ -78,7 +78,7 @@ export const WalletHeader: React.FC<WalletHeaderProps> = ({
       </div>
 
       <div className={css('Tokens')}>
-        {tokenAmount && tokenName ? `${tokenAmount} ${tokenSymbol}` : null}
+        {publicBalance && tokenName ? `${publicBalance} ${tokenSymbol}` : null}
       </div>
     </div>
   )

@@ -169,7 +169,7 @@ export const getShieldedAddress = (): Promise<string> => {
 export const getTokenBalance = async (): Promise<string> => {
   try {
     apiCheck()
-    return await client.getTokenBalance(TOKEN_ADDRESS)
+    return client.fromBaseUnit(await client.getTokenBalance(TOKEN_ADDRESS))
   } catch (e: any) {
     return Promise.reject(String(e.message))
   }
@@ -179,7 +179,7 @@ export const getRegularBalance = async (): Promise<string> => {
   try {
     apiCheck()
 
-    return await client.getBalance()
+    return client.fromBaseUnit(await client.getBalance())
   } catch (e: any) {
     console.error(e)
 
@@ -187,11 +187,11 @@ export const getRegularBalance = async (): Promise<string> => {
   }
 }
 
-export const getShieldedBalances = async (): Promise<[string, string, string]> => {
+export const getShieldedBalances = async (): Promise<string> => {
   try {
     apiCheck()
 
-    return zpClient.getBalances(TOKEN_ADDRESS)
+    return client.fromBaseUnit((await zpClient.getBalances(TOKEN_ADDRESS))[0])
   } catch (e: any) {
     console.error(e)
 
@@ -199,10 +199,11 @@ export const getShieldedBalances = async (): Promise<[string, string, string]> =
   }
 }
 
-export const depositShielded = async (amount: string): Promise<string> => {
+export const depositShielded = async (tokens: string): Promise<string> => {
   try {
     apiCheck()
 
+    const amount = client.toBaseUnit(tokens)
     let fromAddress = null
     let jobId = null
 
@@ -227,10 +228,11 @@ export const depositShielded = async (amount: string): Promise<string> => {
   }
 }
 
-export const withdrawShielded = async (amount: string): Promise<string> => {
+export const withdrawShielded = async (tokens: string): Promise<string> => {
   try {
     apiCheck()
 
+    const amount = client.toBaseUnit(tokens)
     let address = null
 
     if (isEvmBased(NETWORK)) address = await client.getAddress()
@@ -260,10 +262,11 @@ export const transfer = async (to: string, amount: string | number): Promise<voi
   }
 }
 
-export const transferShielded = async (to: string, amount: string): Promise<string> => {
+export const transferShielded = async (to: string, tokens: string): Promise<string> => {
   try {
     apiCheck()
 
+    const amount = client.toBaseUnit(tokens)
     const jobId = await zpClient.transfer(TOKEN_ADDRESS, [{ to, amount }])
 
     console.log('Please wait relayer complete the job %s...', jobId)

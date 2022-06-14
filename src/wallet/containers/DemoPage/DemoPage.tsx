@@ -11,7 +11,7 @@ import { cn } from '@bem-react/classname'
 import './DemoPage.scss'
 import logo from 'assets/images/logo1.svg'
 
-import { selectBackdrop, selectDeposit, selectMinting, selectPrivateAmount, selectTokenAmount, selectWalletAddress, selectWithdraw } from 'wallet/state/demo.selectors'
+import { selectBackdrop, selectDeposit, selectMinting, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectWalletAddress, selectWithdraw } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
 import { selectSeed } from 'wallet/state/wallet.selectors'
@@ -28,9 +28,10 @@ export const DemoPage: React.FC<{}> = () => {
 
   const backdrop = useSelector(selectBackdrop)
   const minting = useSelector(selectMinting)
-  const privateBalance = useSelector(selectPrivateAmount)
   const seed = useSelector(selectSeed)
-  const tokenAmount = useSelector(selectTokenAmount)
+  const publicBalance = useSelector(selectPublicBalance)
+  const privateBalance = useSelector(selectPrivateBalance)
+  const tokenBalance = useSelector(selectTokenBalance)
   const walletAddress = useSelector(selectWalletAddress)
   const deposit = useSelector(selectDeposit)
   const withdraw = useSelector(selectWithdraw)
@@ -77,8 +78,9 @@ export const DemoPage: React.FC<{}> = () => {
 
           <div className={css('ToolbarBody')}>
             <DemoHeader
-              tokenAmount={tokenAmount}
+              publicBalance={publicBalance}
               privateBalance={privateBalance}
+              tokenBalance={tokenBalance}
               walletAddress={walletAddress}
             />
           </div>
@@ -102,7 +104,7 @@ export const DemoPage: React.FC<{}> = () => {
             variant="contained"
             className={css('Button')}
             data-testid={test('Import')}
-            disabled={minting || mintAmount === '0' || isNaN(+mintAmount)}
+            disabled={minting || !mintAmount || mintAmount === '0' || isNaN(+mintAmount)}
             onClick={() => dispatch(demoActions.mint(mintAmount))}
           >
             Mint
@@ -125,7 +127,7 @@ export const DemoPage: React.FC<{}> = () => {
             variant="contained"
             className={css('Button')}
             data-testid={test('Import')}
-            disabled={deposit || depositAmount === '0' || !tokenAmount || isNaN(+depositAmount) || +depositAmount > tokenAmount}
+            disabled={deposit || !depositAmount || depositAmount === '0' || !tokenBalance || isNaN(+depositAmount) || +depositAmount > tokenBalance}
             onClick={() => dispatch(demoActions.deposit(depositAmount))}
           >
             Deposit
@@ -148,7 +150,7 @@ export const DemoPage: React.FC<{}> = () => {
             variant="contained"
             className={css('Button')}
             data-testid={test('Import')}
-            disabled={withdraw || withdrawAmount === '0' || !privateBalance || isNaN(+withdrawAmount) || +withdrawAmount > privateBalance}
+            disabled={withdraw || !withdrawAmount || withdrawAmount === '0' || !privateBalance || isNaN(+withdrawAmount) || +withdrawAmount > privateBalance}
             onClick={() => dispatch(demoActions.deposit(withdrawAmount))}
           >
             Withdraw

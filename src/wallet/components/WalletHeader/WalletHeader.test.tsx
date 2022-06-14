@@ -15,7 +15,7 @@ describe('WalletHeader', () => {
       <WalletHeader
         label={'test label'}
         mode={WalletHeaderMode.Info}
-        tokenAmount={5}
+        publicBalance={5}
         tokenRate={750}
         tokenSymbol={'ETH'}
         fiatValue={3250.43}

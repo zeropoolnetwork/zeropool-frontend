@@ -131,7 +131,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
             <ListItemIcon className={css('DrowerItemIcon')}>
               {
                 [<AttachMoneyOutlined key={index} />, <BuildOutlined key={index} />][
-                  index
+                index
                 ]
               }
             </ListItemIcon>
@@ -328,7 +328,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
                   ? undefined
                   : total(amounts, rates, token?.symbol)
               }
-              tokenAmount={token ? amounts[token.symbol] : undefined}
+              publicBalance={token ? amounts[token.symbol] : undefined}
               tokenSymbol={token?.symbol}
               tokenName={token?.name}
               onBackClick={() => dispatch(walletActions.headerBack())}
