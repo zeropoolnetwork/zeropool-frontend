@@ -3,7 +3,7 @@ import { Button } from '@mui/material'
 import { cn } from '@bem-react/classname'
 
 import './Welcome.scss'
-import guy from 'assets/images/guy_welcomes@2x.png'
+import guy from 'assets/images/logo_white.png'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
@@ -36,13 +36,13 @@ export const Welcome: React.FC<WelcomeProps> = ({
           onClick={onMockedLogin}
         />
 
-        <h1 className={css('Greeting')} data-testid={test('Greeting')}>
+        {/* <h1 className={css('Greeting')} data-testid={test('Greeting')}>
           Welcome to ZeroPool
-        </h1>
+        </h1> */}
 
-        <p className={css('Description')} data-testid={test('Description')}>
+        {/* <p className={css('Description')} data-testid={test('Description')}>
           Please create a new wallet or import an existing one using a secret phrase
-        </p>
+        </p> */}
       </section>
 
       <Button

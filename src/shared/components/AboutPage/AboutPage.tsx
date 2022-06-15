@@ -4,7 +4,7 @@ import { Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 import './AboutPage.scss'
-import logo from 'assets/logo.svg'
+// import logo from 'assets/logo.svg'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
@@ -22,7 +22,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ showBackButton = true }) =
 
   return (
     <div className={css()} data-testid="AboutPage">
-      <img src={logo} className={css('Logo')} data-testid={test('Logo')} alt="logo" />
+      {/* <img src={logo} className={css('Logo')} data-testid={test('Logo')} alt="logo" /> */}
 
       <h1 className={css('Header')}> WHAT IS ZEROPOOL </h1>
 
