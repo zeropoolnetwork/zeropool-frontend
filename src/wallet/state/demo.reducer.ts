@@ -37,7 +37,11 @@ export const demoSlice = createSlice({
       state.backdrop = false
     },
 
-    updateBalances: (state, action: PayloadAction<null>) => { },
+    updateBalances: (state, action: PayloadAction<null>) => {
+      state.privateBalance = undefined
+      state.publicBalance = undefined
+      state.tokenBalance = undefined
+    },
     updateBalancesFailure: (state, action: PayloadAction<string>) => { },
 
     publicBalance: (state, action: PayloadAction<number>) => {

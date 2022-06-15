@@ -5,6 +5,9 @@ import NumberFormat from 'react-number-format'
 import './DemoHeader.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
+import { beautifyAmount } from 'shared/helpers/addres.helper'
+import { CircularProgress, Tooltip } from '@mui/material'
+import { useSnackbar } from 'notistack'
 
 export const componentId = 'DemoHeader'
 
@@ -24,59 +27,59 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
   tokenBalance,
   walletAddress,
 }) => {
+  const { enqueueSnackbar } = useSnackbar()
+  const handleAddressClick = (): void => {
+    navigator.clipboard.writeText(walletAddress as string).then(
+      () => {
+        enqueueSnackbar('Address copied to the clipboard', {
+          variant: 'success',
+        })
+      },
+      (err) => {
+        enqueueSnackbar(`Can't access clipboard`, { variant: 'error' })
+      },
+    )
+  }
   return (
     <div className={css()} data-testid={test()}>
-
-      <div className={css('Title')}>
-        <span>Address: {walletAddress}</span>
-      </div>
-
       <div className={css('Amounts')}>
         <div>
-          Public balance:
+          Address:&nbsp;
 
-          <NumberFormat
-            className={css('Amount')}
-            data-testid={test('PublicAmount')}
-            value={publicBalance}
-            displayType={'text'}
-            thousandSeparator={true}
-            suffix={' tokens'}
-            decimalScale={10}
-          />
+          <span onClick={handleAddressClick} style={{ cursor: 'pointer' }}>
+            {walletAddress}
+          </span>
         </div>
 
-        <div className={css('Amounts')}>
-          <div>
-            Token balance:
+        <div>
+          Public balance:&nbsp;
 
-            <NumberFormat
-              className={css('Amount')}
-              data-testid={test('')}
-              value={tokenBalance}
-              displayType={'text'}
-              thousandSeparator={true}
-              suffix={' tokens'}
-              decimalScale={10}
-            />
-          </div>
-
-          <div>
-            Private balance:
-
-            <NumberFormat
-              className={css('Amount')}
-              data-testid={test('PrivateAmount')}
-              value={privateBalance}
-              displayType={'text'}
-              thousandSeparator={true}
-              suffix={' tokens'}
-              decimalScale={10}
-            />
-          </div>
+          <Tooltip title={publicBalance || ''}>
+            {publicBalance === undefined
+              ? <CircularProgress className={css('Progress')} color="inherit" />
+              : <span>{beautifyAmount(publicBalance)}</span>}
+          </Tooltip>
         </div>
 
-        <div className={css('Tokens')}></div>
+        <div>
+          Token balance:&nbsp;
+
+          <Tooltip title={tokenBalance || ''}>
+            {tokenBalance === undefined
+              ? <CircularProgress className={css('Progress')} color="inherit" />
+              : <span>{beautifyAmount(tokenBalance)}</span>}
+          </Tooltip>
+        </div>
+
+        <div>
+          Private balance:&nbsp;
+
+          <Tooltip title={privateBalance || ''}>
+            {privateBalance === undefined
+              ? <CircularProgress className={css('Progress')} color="inherit" />
+              : <span>{beautifyAmount(privateBalance)}</span>}
+          </Tooltip>
+        </div>
       </div>
     </div>
   )
