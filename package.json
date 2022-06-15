@@ -25,6 +25,7 @@
     "@emotion/styled": "^11.8.1",
     "@hookform/devtools": "^4.1.0",
     "@mui/icons-material": "^5.8.0",
+    "@mui/lab": "^5.0.0-alpha.86",
     "@mui/material": "^5.8.1",
     "@mui/styles": "^5.8.0",
     "@reduxjs/toolkit": "^1.8.2",
