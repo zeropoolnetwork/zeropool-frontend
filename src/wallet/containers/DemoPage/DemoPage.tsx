@@ -6,7 +6,11 @@ import { Button, Input } from '@mui/material'
 import { Refresh, Menu } from '@mui/icons-material'
 import { testIdBuilder } from 'shared/helpers/test'
 import { useNavigate } from 'react-router-dom'
+import LoadingButton from '@mui/lab/LoadingButton'
 import { cn } from '@bem-react/classname'
+import KeyboardTabIcon from '@mui/icons-material/KeyboardTab';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 import './DemoPage.scss'
 import logo from 'assets/images/logo1.svg'
@@ -99,16 +103,19 @@ export const DemoPage: React.FC<{}> = () => {
             onChange={(event) => setMintAmount(event.target.value)}
           />
 
-          <Button
+          <LoadingButton
+            loading={minting}
+            loadingPosition="start"
             color="primary"
             variant="contained"
             className={css('Button')}
-            data-testid={test('Import')}
+            data-testid={test('Mint')}
+            startIcon={<KeyboardTabIcon />}
             disabled={minting || !mintAmount || mintAmount === '0' || isNaN(+mintAmount)}
             onClick={() => dispatch(demoActions.mint(mintAmount))}
           >
             Mint
-          </Button>
+          </LoadingButton>
         </div>
 
         <div>
@@ -122,16 +129,19 @@ export const DemoPage: React.FC<{}> = () => {
             onChange={(event) => setDepositAmount(event.target.value)}
           />
 
-          <Button
+          <LoadingButton
+            loading={deposit}
+            loadingPosition="start"
             color="primary"
             variant="contained"
             className={css('Button')}
             data-testid={test('Import')}
+            startIcon={<KeyboardArrowRightIcon />}
             disabled={deposit || !depositAmount || depositAmount === '0' || !tokenBalance || isNaN(+depositAmount) || +depositAmount > tokenBalance}
             onClick={() => dispatch(demoActions.deposit(depositAmount))}
           >
             Deposit
-          </Button>
+          </LoadingButton>
         </div>
 
         <div>
@@ -145,16 +155,19 @@ export const DemoPage: React.FC<{}> = () => {
             onChange={(event) => setWithdrawAmount(event.target.value)}
           />
 
-          <Button
+          <LoadingButton
+            loading={withdraw}
+            loadingPosition="start"
             color="primary"
             variant="contained"
             className={css('Button')}
-            data-testid={test('Import')}
+            data-testid={test('Withdraw')}
+            startIcon={<KeyboardDoubleArrowRightIcon />}
             disabled={withdraw || !withdrawAmount || withdrawAmount === '0' || !privateBalance || isNaN(+withdrawAmount) || +withdrawAmount > privateBalance}
             onClick={() => dispatch(demoActions.deposit(withdrawAmount))}
           >
             Withdraw
-          </Button>
+          </LoadingButton>
         </div>
 
       </div>

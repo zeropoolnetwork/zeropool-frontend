@@ -114,9 +114,10 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
   )
 }
 
-export const mint = async (amount: string): Promise<void> => {
+export const mint = async (tokens: string): Promise<void> => {
   try {
     apiCheck()
+    const amount = client.toBaseUnit(tokens)
 
     return await client.mint(TOKEN_ADDRESS, amount)
   } catch (e: any) {
@@ -182,7 +183,7 @@ export const getRegularBalance = async (): Promise<string> => {
     return client.fromBaseUnit(await client.getBalance())
   } catch (e: any) {
     console.error(e)
-    
+
     return Promise.reject(String(e.message))
   }
 }
