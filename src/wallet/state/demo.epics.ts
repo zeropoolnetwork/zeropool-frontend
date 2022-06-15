@@ -47,7 +47,7 @@ const deposit: Epic = (action$, state$) =>
     tap(() => toast.info('Depositing...')),
     switchMap(({ payload }) =>
       from(api.depositShielded(payload)).pipe(
-        tap(() => toast.success('Deposit success')),
+        tap(() => toast.success('Deposit success, pls update balances in a while')),
         map((res) => demoActions.depositSuccess(payload)),
         catchError((errMsg: string) => {
           toast.error(errMsg)
@@ -66,7 +66,7 @@ const withdraw: Epic = (action$, state$) =>
     tap(() => toast.info('Withdrawing...')),
     switchMap(({ payload }) =>
       from(api.withdrawShielded(payload)).pipe(
-        tap(() => toast.success('Withdraw success')),
+        tap(() => toast.success('Withdraw success, pls update balances in a while')),
         map((res) => demoActions.withdrawSuccess(payload)),
         catchError((errMsg: string) => {
           toast.error(errMsg)

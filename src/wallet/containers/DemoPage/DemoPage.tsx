@@ -97,8 +97,9 @@ export const DemoPage: React.FC<{}> = () => {
             className={css('Mint')}
             sx={{ color: 'black' }}
             color="primary"
-            classes={{ input: css('PasswordInput') }}
-            inputProps={{ 'data-testid': test('Password'), maxLength: 20 }}
+            value={mintAmount === '0' ? '' : mintAmount}
+            classes={{ input: css('MintInput') }}
+            inputProps={{ 'data-testid': test('Mint'), maxLength: 20 }}
             onChange={(event) => setMintAmount(event.target.value)}
           />
 
@@ -123,8 +124,9 @@ export const DemoPage: React.FC<{}> = () => {
             className={css('Deposit')}
             sx={{ color: 'black' }}
             color="primary"
-            classes={{ input: css('PasswordInput') }}
-            inputProps={{ 'data-testid': test('Password'), maxLength: 20 }}
+            value={depositAmount === '0' ? '' : depositAmount}
+            classes={{ input: css('DepositInput') }}
+            inputProps={{ 'data-testid': test('Deposit'), maxLength: 20 }}
             onChange={(event) => setDepositAmount(event.target.value)}
           />
 
@@ -149,6 +151,7 @@ export const DemoPage: React.FC<{}> = () => {
             className={css('Withdraw')}
             sx={{ color: 'black' }}
             color="primary"
+            value={withdrawAmount === '0' ? '' : withdrawAmount}
             classes={{ input: css('Withdraw') }}
             inputProps={{ 'data-testid': test('Withdraw'), maxLength: 20 }}
             onChange={(event) => setWithdrawAmount(event.target.value)}
