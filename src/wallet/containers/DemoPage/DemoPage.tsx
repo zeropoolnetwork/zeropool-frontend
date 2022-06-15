@@ -171,7 +171,12 @@ export const DemoPage: React.FC<{}> = () => {
             Withdraw
           </LoadingButton>
         </div>
+      </div>
 
+      <div className={css('Info')}>
+        <span>To perform any actions you need to have anough funds on your public balance.</span> 
+        <span>Click on your publick address and use it on the facet page to get free funds.</span>
+        <span>You can use this <a href='https://gitter.im/kovan-testnet/faucet#' target={'_blank'}>Kovan Testnet Faset</a>.</span>
       </div>
 
       <div className={css('Footer')}>

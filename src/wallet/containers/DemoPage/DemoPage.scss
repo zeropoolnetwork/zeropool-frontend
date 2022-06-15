@@ -50,6 +50,17 @@
     flex-direction: column;
   }
 
+  &-Info{
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 20px;
+
+    > span {
+      margin-bottom: 5px;
+    }
+  }
+
   &-Footer{
     background-color: #020941;
     bottom: 0;
