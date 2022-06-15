@@ -1,8 +1,7 @@
 // tslint:disable: prettier max-line-length
-import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip } from '@mui/material'
+import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
-import { Button, Input } from '@mui/material'
 import { Refresh, Menu } from '@mui/icons-material'
 import { testIdBuilder } from 'shared/helpers/test'
 import { useNavigate } from 'react-router-dom'
@@ -112,7 +111,7 @@ export const DemoPage: React.FC<{}> = () => {
             data-testid={test('Mint')}
             startIcon={<KeyboardTabIcon />}
             disabled={minting || !mintAmount || mintAmount === '0' || isNaN(+mintAmount)}
-            onClick={() => dispatch(demoActions.mint(mintAmount))}
+            onClick={() => { dispatch(demoActions.mint(mintAmount)); setMintAmount('0') }}
           >
             Mint
           </LoadingButton>
@@ -138,7 +137,7 @@ export const DemoPage: React.FC<{}> = () => {
             data-testid={test('Import')}
             startIcon={<KeyboardArrowRightIcon />}
             disabled={deposit || !depositAmount || depositAmount === '0' || !tokenBalance || isNaN(+depositAmount) || +depositAmount > tokenBalance}
-            onClick={() => dispatch(demoActions.deposit(depositAmount))}
+            onClick={() => { dispatch(demoActions.deposit(depositAmount)); setDepositAmount('0') }}
           >
             Deposit
           </LoadingButton>
@@ -164,7 +163,7 @@ export const DemoPage: React.FC<{}> = () => {
             data-testid={test('Withdraw')}
             startIcon={<KeyboardDoubleArrowRightIcon />}
             disabled={withdraw || !withdrawAmount || withdrawAmount === '0' || !privateBalance || isNaN(+withdrawAmount) || +withdrawAmount > privateBalance}
-            onClick={() => dispatch(demoActions.deposit(withdrawAmount))}
+            onClick={() => { dispatch(demoActions.withdraw(withdrawAmount)); setWithdrawAmount('0') }}
           >
             Withdraw
           </LoadingButton>
