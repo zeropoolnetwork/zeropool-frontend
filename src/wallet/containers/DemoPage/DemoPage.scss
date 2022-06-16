@@ -39,6 +39,16 @@
     width: 100%;
   }
 
+  &-Withdraw, &-Deposit, &-Mint{
+    width: 200px;
+    margin-right: 10px;
+  }
+
+  &-TransferAmount, &-TransferTo{
+    width: 90%;
+    height: 36px;
+  }
+
   &-Title{
     flex-grow: 1;
     align-self: flex-end;
@@ -66,7 +76,7 @@
     bottom: 0;
     display: flex;
     position: fixed;
-    height: 70px;
+    height: 120px;
     width: 100%;
   }
 
@@ -76,5 +86,17 @@
 
   &-ZeroPaddingRight{
     padding-right: 0;
+  }
+
+  &-Transfer{
+    padding: 24px 20px 27px 20px;
+    border: 1px solid #d8dbf1;
+    width: 400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 50px;
+    margin-top: -20px;
   }
 }

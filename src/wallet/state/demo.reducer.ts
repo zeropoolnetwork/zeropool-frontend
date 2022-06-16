@@ -10,6 +10,7 @@ export type DemoState = {
   backdrop: boolean
   deposit: boolean
   withdraw: boolean
+  transfer: boolean
 }
 
 export const initialDemoState: DemoState = {
@@ -22,6 +23,7 @@ export const initialDemoState: DemoState = {
   backdrop: false,
   deposit: false,
   withdraw: false,
+  transfer: false,
 }
 
 // tslint:disable: no-empty
@@ -84,6 +86,16 @@ export const demoSlice = createSlice({
     },
     withdrawFalure: (state, action: PayloadAction<string>) => {
       state.withdraw = false
+    },
+    
+    transfer: (state, action: PayloadAction<{to: string, tokens: string}>) => {
+      state.transfer = true
+    },
+    transferSuccess: (state, action: PayloadAction<string>) => {
+      state.transfer = false
+    },
+    transferFalure: (state, action: PayloadAction<string>) => {
+      state.transfer = false
     },
 
     resetAccount: (state, action: PayloadAction<null>) => { },

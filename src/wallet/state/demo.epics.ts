@@ -54,9 +54,7 @@ const deposit: Epic = (action$, state$) =>
 
           return of(demoActions.depositFalure(errMsg))
         }),
-
       ),
-
     ),
   )
 
@@ -72,6 +70,23 @@ const withdraw: Epic = (action$, state$) =>
           toast.error(errMsg)
 
           return of(demoActions.withdrawFalure(errMsg))
+        }),
+      ),
+    ),
+  )
+
+const transfer: Epic = (action$, state$) =>
+  action$.pipe(
+    filter(demoActions.transfer.match),
+    tap(() => toast.info('Processing private transfer...')),
+    switchMap(({ payload }) =>
+      from(api.transferShielded(payload.to, payload.tokens)).pipe(
+        tap(() => toast.success('Private transfer success, pls update balances in a while')),
+        map((res) => demoActions.transferSuccess(res)),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
+
+          return of(demoActions.transferFalure(errMsg))
         }),
       ),
     ),
@@ -212,6 +227,7 @@ export const demoEpics: Epic = combineEpics(
   mint,
   deposit,
   withdraw,
+  transfer,
   getPublicBalance,
   getPrivateBalance,
   getTokenBalance,
