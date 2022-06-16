@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/zeropool-frontend/static/css/main.3c30a0d4.css",
-    "main.js": "/zeropool-frontend/static/js/main.9be7bb01.js",
+    "main.css": "/zeropool-frontend/static/css/main.4f760f2f.css",
+    "main.js": "/zeropool-frontend/static/js/main.c27b6b48.js",
     "static/js/415.634d063d.chunk.js": "/zeropool-frontend/static/js/415.634d063d.chunk.js",
     "static/js/404.3f8ffe39.chunk.js": "/zeropool-frontend/static/js/404.3f8ffe39.chunk.js",
     "static/js/417.dd8d642a.chunk.js": "/zeropool-frontend/static/js/417.dd8d642a.chunk.js",
@@ -30,7 +30,7 @@
     "static/media/index.cjs": "/zeropool-frontend/static/media/index.f7ef8233860ab8851989.cjs"
   },
   "entrypoints": [
-    "static/css/main.3c30a0d4.css",
-    "static/js/main.9be7bb01.js"
+    "static/css/main.4f760f2f.css",
+    "static/js/main.c27b6b48.js"
   ]
 }
