@@ -99,7 +99,7 @@ const initApi = (action$: Action$, state$: State$) =>
     filter(([, seed]) => seed !== null),
     map(([, seed]) => seed),
     filter(isString),
-    tap(() => toast.info('Initializing wallet...')),
+    tap(() => toast.info('Initializing, it can take up to few minutes...')),
     switchMap((seed) =>
       from(
         api.init(

@@ -14,6 +14,7 @@ import { cn } from '@bem-react/classname'
 
 import './DemoPage.scss'
 import logo from 'assets/images/logo1.svg'
+import { badAmount } from 'shared/utils/bad-amount'
 
 import { selectBackdrop, selectDeposit, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectTransfer, selectWalletAddress, selectWithdraw } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
@@ -42,10 +43,10 @@ export const DemoPage: React.FC<{}> = () => {
   const withdraw = useSelector(selectWithdraw)
   const transfer = useSelector(selectTransfer)
 
-  const [mintAmount, setMintAmount] = useState('0')
-  const [depositAmount, setDepositAmount] = useState('0')
-  const [withdrawAmount, setWithdrawAmount] = useState('0')
-  const [transferAmount, setTransferAmount] = useState('0')
+  const [mintAmount, setMintAmount] = useState('')
+  const [depositAmount, setDepositAmount] = useState('')
+  const [withdrawAmount, setWithdrawAmount] = useState('')
+  const [transferAmount, setTransferAmount] = useState('')
   const [transferTo, setTransferTo] = useState('')
 
   useEffect(() => {
@@ -86,11 +87,11 @@ export const DemoPage: React.FC<{}> = () => {
 
           <div className={css('ToolbarBody')}>
             <DemoHeader
-              publicBalance={publicBalance}
-              privateBalance={privateBalance}
-              tokenBalance={tokenBalance}
-              walletAddress={walletAddress}
-              privateAddress={privateAddress}
+              walletAddress={backdrop ? '-' : walletAddress}
+              privateAddress={backdrop ? '-' : privateAddress}
+              publicBalance={backdrop ? 0 : publicBalance}
+              privateBalance={backdrop ? 0 : privateBalance}
+              tokenBalance={backdrop ? 0 : tokenBalance}
             />
           </div>
         </Toolbar>
@@ -103,7 +104,7 @@ export const DemoPage: React.FC<{}> = () => {
             className={css('Mint')}
             sx={{ color: 'black' }}
             color="primary"
-            value={mintAmount === '0' ? '' : mintAmount}
+            value={mintAmount}
             classes={{ input: css('MintInput') }}
             placeholder="Mint amount"
             inputProps={{ 'data-testid': test('Mint'), maxLength: 20 }}
@@ -118,8 +119,8 @@ export const DemoPage: React.FC<{}> = () => {
             className={css('Button')}
             data-testid={test('Mint')}
             startIcon={<SoupKitchenIcon />}
-            disabled={minting || !mintAmount || mintAmount === '0' || isNaN(+mintAmount)}
-            onClick={() => { dispatch(demoActions.mint(mintAmount)); setMintAmount('0') }}
+            disabled={minting || badAmount(mintAmount)}
+            onClick={() => { dispatch(demoActions.mint(mintAmount)); setMintAmount('') }}
           >
             Mint
           </LoadingButton>
@@ -131,7 +132,7 @@ export const DemoPage: React.FC<{}> = () => {
             className={css('Deposit')}
             sx={{ color: 'black' }}
             color="primary"
-            value={depositAmount === '0' ? '' : depositAmount}
+            value={depositAmount}
             classes={{ input: css('DepositInput') }}
             placeholder="Deposit amount"
             inputProps={{ 'data-testid': test('Deposit'), maxLength: 20 }}
@@ -146,8 +147,8 @@ export const DemoPage: React.FC<{}> = () => {
             className={css('Button')}
             data-testid={test('Import')}
             startIcon={<KeyboardArrowRightIcon />}
-            disabled={deposit || !depositAmount || depositAmount === '0' || !tokenBalance || isNaN(+depositAmount) || +depositAmount > tokenBalance}
-            onClick={() => { dispatch(demoActions.deposit(depositAmount)); setDepositAmount('0') }}
+            disabled={deposit || badAmount(depositAmount) || +depositAmount > (tokenBalance || 0)}
+            onClick={() => { dispatch(demoActions.deposit(depositAmount)); setDepositAmount('') }}
           >
             Deposit
           </LoadingButton>
@@ -159,9 +160,9 @@ export const DemoPage: React.FC<{}> = () => {
             id="withdraw-amount"
             className={css('Withdraw')}
             sx={{ color: 'black' }}
-            placeholder="Withdrow amount"
+            placeholder="Withdraw amount in tokens"
             classes={{ input: css('Withdraw') }}
-            value={withdrawAmount === '0' ? '' : withdrawAmount}
+            value={withdrawAmount}
             inputProps={{ 'data-testid': test('Withdraw'), maxLength: 20 }}
             onChange={(event) => setWithdrawAmount(event.target.value)}
           />
@@ -174,8 +175,8 @@ export const DemoPage: React.FC<{}> = () => {
             className={css('Button')}
             data-testid={test('Withdraw')}
             startIcon={<KeyboardArrowLeft />}
-            disabled={withdraw || !withdrawAmount || withdrawAmount === '0' || !privateBalance || isNaN(+withdrawAmount) || +withdrawAmount > privateBalance}
-            onClick={() => { dispatch(demoActions.withdraw(withdrawAmount)); setWithdrawAmount('0') }}
+            disabled={withdraw || badAmount(withdrawAmount) || +withdrawAmount > (privateBalance || 0)}
+            onClick={() => { dispatch(demoActions.withdraw(withdrawAmount)); setWithdrawAmount('') }}
           >
             Withdraw
           </LoadingButton>
@@ -189,7 +190,7 @@ export const DemoPage: React.FC<{}> = () => {
           sx={{ color: 'black' }}
           color="primary"
           value={transferAmount === '0' ? '' : transferAmount}
-          placeholder="Transfer amount"
+          placeholder="Transfer amount in tokens"
           classes={{ input: css('TransferAmount') }}
           inputProps={{ 'data-testid': test('TransferAmount'), maxLength: 20 }}
           onChange={(event) => setTransferAmount(event.target.value)}
@@ -200,8 +201,8 @@ export const DemoPage: React.FC<{}> = () => {
           className={css('TransferTo')}
           sx={{ color: 'black' }}
           color="primary"
-          value={transferTo === '0' ? '' : transferTo}
-          placeholder="Private address of recipient"
+          value={transferTo}
+          placeholder="Recipient private address"
           classes={{ input: css('TransferTo') }}
           inputProps={{ 'data-testid': test('TransferTo'), maxLength: 120 }}
           onChange={(event) => setTransferTo(event.target.value)}
@@ -216,10 +217,10 @@ export const DemoPage: React.FC<{}> = () => {
           data-testid={test('Withdraw')}
           startIcon={<KeyboardDoubleArrowRight />}
           sx={{ marginTop: '24px' }}
-          disabled={transfer || !transferTo || !transferAmount || transferAmount === '0' || !privateBalance || isNaN(+transferAmount) || +transferAmount > privateBalance}
+          disabled={transfer || badAmount(transferAmount) || +transferAmount > (privateBalance || 0)}
           onClick={() => {
             dispatch(demoActions.transfer({to: transferTo, tokens: transferAmount}))
-            setTransferAmount('0')
+            setTransferAmount('')
           }}
         >
           Transfer
@@ -228,7 +229,7 @@ export const DemoPage: React.FC<{}> = () => {
 
 
       <div className={css('Info')}>
-        <span>To perform any actions you need to have anough funds on your public balance.</span> 
+        <span>To perform any action you need to have enough funds on your public balance.</span> 
         <span>Click on your public address and use it on the <a href='https://gitter.im/kovan-testnet/faucet#' target={'_blank'}>Kovan Faset</a> page to get free funds.</span>
       </div>
 
