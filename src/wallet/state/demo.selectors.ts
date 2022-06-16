@@ -11,3 +11,4 @@ export const selectPrivateAddress = (state: RS) => selectDemoState(state).privat
 export const selectBackdrop = (state: RS) => selectDemoState(state).backdrop
 export const selectDeposit = (state: RS) => selectDemoState(state).deposit
 export const selectWithdraw = (state: RS) => selectDemoState(state).withdraw
+export const selectTransfer = (state: RS) => selectDemoState(state).transfer
