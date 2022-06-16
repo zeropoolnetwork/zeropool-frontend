@@ -1,13 +1,12 @@
-import React from 'react'
+import { CircularProgress, Tooltip, Divider } from '@mui/material'
+import React, { MouseEvent } from 'react'
+import { useSnackbar } from 'notistack'
 import { cn } from '@bem-react/classname'
-import NumberFormat from 'react-number-format'
 
 import './DemoHeader.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { beautifyAmount } from 'shared/helpers/addres.helper'
-import { CircularProgress, Tooltip } from '@mui/material'
-import { useSnackbar } from 'notistack'
 
 export const componentId = 'DemoHeader'
 
@@ -19,6 +18,7 @@ export type DemoHeaderProps = {
   privateBalance?: number
   tokenBalance?: number
   walletAddress?: string
+  privateAddress?: string
 }
 
 export const DemoHeader: React.FC<DemoHeaderProps> = ({
@@ -26,10 +26,12 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
   privateBalance,
   tokenBalance,
   walletAddress,
+  privateAddress,
 }) => {
   const { enqueueSnackbar } = useSnackbar()
-  const handleAddressClick = (): void => {
-    navigator.clipboard.writeText(walletAddress as string).then(
+  const handleAddressClick = (event: MouseEvent<HTMLSpanElement>): void => {
+    const address = (event.target as HTMLElement).id === 'Public' ? walletAddress : privateAddress
+    navigator.clipboard.writeText(address as string).then(
       () => {
         enqueueSnackbar('Address copied to the clipboard', {
           variant: 'success',
@@ -44,12 +46,22 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
     <div className={css()} data-testid={test()}>
       <div className={css('Amounts')}>
         <div>
-          Address:&nbsp;
+          Public address:&nbsp;
 
-          <span onClick={handleAddressClick} style={{ cursor: 'pointer' }}>
+          <span id="Public" onClick={handleAddressClick} style={{ cursor: 'pointer' }}>
             {walletAddress}
           </span>
         </div>
+
+        <div>
+          Private address:&nbsp;
+
+          <span id="Private" onClick={handleAddressClick} style={{ cursor: 'pointer' }}>
+            {privateAddress}
+          </span>
+        </div>
+
+        {/* <Divider className={css('Divider')} variant="middle" /> */}
 
         <div>
           Public balance:&nbsp;

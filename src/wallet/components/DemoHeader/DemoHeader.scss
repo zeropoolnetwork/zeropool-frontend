@@ -6,8 +6,10 @@
   flex-direction: column;
   padding: 26px 0px;
 
-  &-Title {
-    margin: auto;
+  &-Divider {
+    border: none;
+    background-color: grey;
+    width: 30%;
   }
 
   &-Amounts {

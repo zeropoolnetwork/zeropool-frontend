@@ -1,20 +1,20 @@
 // tslint:disable: prettier max-line-length
 import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight'
 import { useEffect, useState } from 'react'
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import { Refresh, Menu } from '@mui/icons-material'
 import { testIdBuilder } from 'shared/helpers/test'
+import KeyboardTabIcon from '@mui/icons-material/KeyboardTab'
 import { useNavigate } from 'react-router-dom'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { cn } from '@bem-react/classname'
-import KeyboardTabIcon from '@mui/icons-material/KeyboardTab';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 import './DemoPage.scss'
 import logo from 'assets/images/logo1.svg'
 
-import { selectBackdrop, selectDeposit, selectMinting, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectWalletAddress, selectWithdraw } from 'wallet/state/demo.selectors'
+import { selectBackdrop, selectDeposit, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectWalletAddress, selectWithdraw } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
 import { selectSeed } from 'wallet/state/wallet.selectors'
@@ -36,6 +36,7 @@ export const DemoPage: React.FC<{}> = () => {
   const privateBalance = useSelector(selectPrivateBalance)
   const tokenBalance = useSelector(selectTokenBalance)
   const walletAddress = useSelector(selectWalletAddress)
+  const privateAddress = useSelector(selectPrivateAddress)
   const deposit = useSelector(selectDeposit)
   const withdraw = useSelector(selectWithdraw)
 
@@ -85,6 +86,7 @@ export const DemoPage: React.FC<{}> = () => {
               privateBalance={privateBalance}
               tokenBalance={tokenBalance}
               walletAddress={walletAddress}
+              privateAddress={privateAddress}
             />
           </div>
         </Toolbar>
@@ -175,7 +177,7 @@ export const DemoPage: React.FC<{}> = () => {
 
       <div className={css('Info')}>
         <span>To perform any actions you need to have anough funds on your public balance.</span> 
-        <span>Click on your publick address and use it on the facet page to get free funds.</span>
+        <span>Click on your public address and use it on the facet page to get free funds.</span>
         <span>You can use this <a href='https://gitter.im/kovan-testnet/faucet#' target={'_blank'}>Kovan Testnet Faset</a>.</span>
       </div>
 

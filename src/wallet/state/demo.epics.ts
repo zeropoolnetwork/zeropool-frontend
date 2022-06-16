@@ -164,11 +164,27 @@ const getWalletAddress = (action$: Action$, state$: State$) =>
     ),
   )
 
+const getPrivateAddress = (action$: Action$, state$: State$) =>
+  action$.pipe(
+    filter(demoActions.getPrivateAddress.match),
+    mergeMap(() =>
+      from(api.getShieldedAddress()).pipe(
+        map((address) => demoActions.getPrivateAddressSuccess(address)),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
+
+          return of(demoActions.getPrivateAddressFailure(errMsg))
+        }),
+      ),
+    ),
+  )
+
 const updateDataAfterInitialization = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.initApiSuccess.match),
     mergeMap(() => of(
       demoActions.getWalletAddress(null),
+      demoActions.getPrivateAddress(null),
       demoActions.updateBalances(null),
     )),
   )
@@ -201,6 +217,7 @@ export const demoEpics: Epic = combineEpics(
   getTokenBalance,
   resetAccount,
   getWalletAddress,
+  getPrivateAddress,
   updateDataAfterInitialization,
   updateBalancesAfterDeposit,
   updateBalancesAfterMint,
