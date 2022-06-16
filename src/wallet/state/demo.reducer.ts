@@ -6,6 +6,7 @@ export type DemoState = {
   tokenBalance: number | undefined
   minting: boolean
   walletAddress: string | undefined
+  privateAddress: string | undefined
   backdrop: boolean
   deposit: boolean
   withdraw: boolean
@@ -17,6 +18,7 @@ export const initialDemoState: DemoState = {
   tokenBalance: undefined,
   minting: false,
   walletAddress: undefined,
+  privateAddress: undefined,
   backdrop: false,
   deposit: false,
   withdraw: false,
@@ -92,6 +94,14 @@ export const demoSlice = createSlice({
     },
     getWalletAddressFailure: (state, action: PayloadAction<string>) => {
       state.walletAddress = 'Cant get wallet address'
+    },
+
+    getPrivateAddress: (state, action: PayloadAction<null>) => { },
+    getPrivateAddressSuccess: (state, action: PayloadAction<string>) => {
+      state.privateAddress = action.payload
+    },
+    getPrivateAddressFailure: (state, action: PayloadAction<string>) => {
+      state.privateAddress = 'Cant get private address'
     },
   },
 })
