@@ -39,14 +39,14 @@
     width: 100%;
   }
 
-  &-Withdraw, &-Deposit, &-Mint{
+  &-Withdraw, &-Deposit, &-Mint, &-TransferAmount{
     width: 200px;
     margin-right: 10px;
   }
 
-  &-TransferAmount, &-TransferTo{
-    width: 90%;
-    height: 36px;
+  &-TransferTo{
+    width: 355px;
+    margin-bottom: 8px;
   }
 
   &-Title{
@@ -63,7 +63,7 @@
   &-Info{
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
+    margin: auto auto 120px;
     padding: 20px;
 
     > span {
@@ -89,14 +89,12 @@
   }
 
   &-Transfer{
-    padding: 24px 20px 27px 20px;
+    padding: 22px 28px 28px 14px;
     border: 1px solid #d8dbf1;
-    width: 400px;
-    margin: 0 auto;
+    margin: 12px -40px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 50px;
-    margin-top: -20px;
+    background-color: #f8fafb;
   }
 }

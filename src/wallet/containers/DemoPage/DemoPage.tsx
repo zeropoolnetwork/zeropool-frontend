@@ -181,52 +181,54 @@ export const DemoPage: React.FC<{}> = () => {
             Withdraw
           </LoadingButton>
         </div>
+
+        <Box className={css('Transfer')}>
+          <div>
+            <Input
+              id="transfer-amount"
+              className={css('TransferTo')}
+              sx={{ color: 'black' }}
+              color="primary"
+              value={transferTo}
+              placeholder="Recipient private address"
+              classes={{ input: css('TransferTo') }}
+              inputProps={{ 'data-testid': test('TransferTo'), maxLength: 120 }}
+              onChange={(event) => setTransferTo(event.target.value)}
+            />
+          </div>
+
+          <div>
+            <Input
+              id="transfer-amount"
+              className={css('TransferAmount')}
+              sx={{ color: 'black' }}
+              color="primary"
+              value={transferAmount === '0' ? '' : transferAmount}
+              placeholder="Transfer amount in tokens"
+              classes={{ input: css('TransferAmount') }}
+              inputProps={{ 'data-testid': test('TransferAmount'), maxLength: 20 }}
+              onChange={(event) => setTransferAmount(event.target.value)}
+            />
+
+            <LoadingButton
+              loading={transfer}
+              loadingPosition="start"
+              color="primary"
+              variant="contained"
+              className={css('Button')}
+              data-testid={test('Withdraw')}
+              startIcon={<KeyboardDoubleArrowRight />}
+              disabled={transfer || badAmount(transferAmount) || +transferAmount > (privateBalance || 0)}
+              onClick={() => {
+                dispatch(demoActions.transfer({to: transferTo, tokens: transferAmount}))
+                setTransferAmount('')
+              }}
+            >
+              Transfer
+            </LoadingButton>
+          </div>  
+        </Box>
       </div>
-
-      <Box className={css('Transfer')} component="span">
-        <Input
-          id="transfer-amount"
-          className={css('TransferAmount')}
-          sx={{ color: 'black' }}
-          color="primary"
-          value={transferAmount === '0' ? '' : transferAmount}
-          placeholder="Transfer amount in tokens"
-          classes={{ input: css('TransferAmount') }}
-          inputProps={{ 'data-testid': test('TransferAmount'), maxLength: 20 }}
-          onChange={(event) => setTransferAmount(event.target.value)}
-        />
-
-        <Input
-          id="transfer-amount"
-          className={css('TransferTo')}
-          sx={{ color: 'black' }}
-          color="primary"
-          value={transferTo}
-          placeholder="Recipient private address"
-          classes={{ input: css('TransferTo') }}
-          inputProps={{ 'data-testid': test('TransferTo'), maxLength: 120 }}
-          onChange={(event) => setTransferTo(event.target.value)}
-        />
-
-        <LoadingButton
-          loading={transfer}
-          loadingPosition="start"
-          color="primary"
-          variant="contained"
-          className={css('Button')}
-          data-testid={test('Withdraw')}
-          startIcon={<KeyboardDoubleArrowRight />}
-          sx={{ marginTop: '24px' }}
-          disabled={transfer || badAmount(transferAmount) || +transferAmount > (privateBalance || 0)}
-          onClick={() => {
-            dispatch(demoActions.transfer({to: transferTo, tokens: transferAmount}))
-            setTransferAmount('')
-          }}
-        >
-          Transfer
-        </LoadingButton>
-      </Box>
-
 
       <div className={css('Info')}>
         <span>To perform any action you need to have enough funds on your public balance.</span> 
