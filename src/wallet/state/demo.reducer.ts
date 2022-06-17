@@ -98,7 +98,7 @@ export const demoSlice = createSlice({
       state.transfer = false
     },
 
-    resetAccount: (state, action: PayloadAction<null>) => { },
+    resetAccount: (state, action: PayloadAction<null>) => initialDemoState,
 
     getWalletAddress: (state, action: PayloadAction<null>) => { },
     getWalletAddressSuccess: (state, action: PayloadAction<string>) => {

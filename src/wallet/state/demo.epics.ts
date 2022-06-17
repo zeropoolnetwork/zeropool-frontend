@@ -1,5 +1,5 @@
 // tslint:disable: prettier max-line-length
-import { catchError, filter, from, map, mergeMap, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs'
+import { catchError, filter, from, ignoreElements, map, mergeMap, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs'
 import { combineEpics, Epic, ofType } from 'redux-observable'
 import { PayloadAction } from '@reduxjs/toolkit'
 
@@ -21,7 +21,7 @@ const resetAccount: Epic = (action$: Action$) =>
   action$.pipe(
     filter(demoActions.resetAccount.match),
     tap((a) => toast.success('Wallet reseted and data cleared')),
-    map(() => demoActions.resetAccount(null)),
+    ignoreElements(),
   )
 
 const mint: Epic = (action$, state$) =>
@@ -220,6 +220,13 @@ const updateBalancesAfterWithdraw = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.withdrawSuccess.match),
     map(() => demoActions.updateBalances(null)),
+  )
+
+const resetAccount$: Epic = (action$: Observable<PayloadAction>) =>
+  action$.pipe(
+    filter(demoActions.resetAccount.match),
+    tap((a) => toast.success('Wallet reseted and data cleared')),
+    ignoreElements(),
   )
 
 export const demoEpics: Epic = combineEpics(

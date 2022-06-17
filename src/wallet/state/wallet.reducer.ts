@@ -11,6 +11,7 @@ import { walletsHelper } from 'wallet/state/helpers/wallets.helper'
 import { Transaction } from 'wallet/state/models/transaction'
 import { WalletView } from 'wallet/state/models/wallet-view'
 import { createReducer } from '@reduxjs/toolkit'
+import { demoActions } from 'wallet/state/demo.reducer'
 
 export const initialWalletName = 'Main wallet'
 
@@ -130,6 +131,7 @@ export const walletReducer = createReducer(initialWalletState, (builder) =>
       amounts: amountsHelper.getAmounts(state),
     }))
     .addCase(actions.resetAccount, () => initialWalletState)
+    .addCase(demoActions.resetAccount, () => initialWalletState)
     .addCase(actions.edit, (state, { payload }) => ({
       ...state,
       wallets:
