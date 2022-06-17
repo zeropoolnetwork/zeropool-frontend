@@ -1,11 +1,12 @@
 // tslint:disable: prettier max-line-length
-import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, Box } from '@mui/material'
+import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, Box, SwipeableDrawer, Divider, List, ListItem, ListItemIcon, ListItemText } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import KeyboardDoubleArrowRight  from '@mui/icons-material/KeyboardDoubleArrowRight'
 import { useEffect, useState } from 'react'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
-import { Refresh, Menu } from '@mui/icons-material'
+import { Refresh, Menu, FileCopy } from '@mui/icons-material'
+import LogoutIcon from '@mui/icons-material/Logout';
 import { testIdBuilder } from 'shared/helpers/test'
 import SoupKitchenIcon from '@mui/icons-material/SoupKitchen'
 import { useNavigate } from 'react-router-dom'
@@ -20,6 +21,9 @@ import { selectBackdrop, selectDeposit, selectMinting, selectPrivateAddress, sel
 import { demoActions } from 'wallet/state/demo.reducer'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
 import { selectSeed } from 'wallet/state/wallet.selectors'
+import { WalletView } from 'wallet/state/models'
+import { walletActions } from 'wallet/state/wallet.actions'
+import { useSnackbar } from 'notistack'
 // tslint:enable: prettier max-line-length
 
 export const componentId = 'DemoPage'
@@ -30,6 +34,7 @@ const test = testIdBuilder(componentId)
 export const DemoPage: React.FC<{}> = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { enqueueSnackbar } = useSnackbar()
 
   const backdrop = useSelector(selectBackdrop)
   const minting = useSelector(selectMinting)
@@ -48,6 +53,7 @@ export const DemoPage: React.FC<{}> = () => {
   const [withdrawAmount, setWithdrawAmount] = useState('')
   const [transferAmount, setTransferAmount] = useState('')
   const [transferTo, setTransferTo] = useState('')
+  const [drowler, setDrowler] = useState(false)
 
   useEffect(() => {
     if (!seed) {
@@ -58,12 +64,71 @@ export const DemoPage: React.FC<{}> = () => {
     }
   }, [dispatch, seed])
 
+  const exportSeed = () => {
+    navigator.clipboard.writeText(seed || 'No seed set').then(
+      () => {
+        enqueueSnackbar('Seed copied to the clipboard', { variant: 'success' })
+      },
+      (err) => {
+        enqueueSnackbar(`Can't access clipboard`, { variant: 'error' })
+      },
+    )
+  }
+
+  const toggleDrawer = (open?: boolean) => (
+    event: React.KeyboardEvent | React.MouseEvent,
+  ) => {
+    if (
+      event &&
+      event.type === 'keydown' &&
+      ((event as React.KeyboardEvent).key === 'Tab' ||
+        (event as React.KeyboardEvent).key === 'Shift')
+    ) {
+      return
+    }
+
+    setDrowler(open === undefined ? !drowler : open)
+  }
+
+  const drowerMenu = () => (
+    <div
+      className={css('Drower')}
+      role="presentation"
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+    >
+      <List>
+        <ListItem
+          className={css('DrowerItem')}
+          button={true}
+          onClick={() => {
+            dispatch(demoActions.resetAccount(null))
+            navigate('/register')
+          }}
+        >
+          <ListItemIcon className={css('DrowerItemIcon')}>
+            <LogoutIcon />
+          </ListItemIcon>
+          <ListItemText className={css('DrowerItemText')} primary="Reset all data" />
+        </ListItem>
+
+        <ListItem className={css('DrowerItem')} button={true} onClick={exportSeed}>
+          <ListItemIcon className={css('DrowerItemIcon')}>
+            <FileCopy />
+          </ListItemIcon>
+          <ListItemText className={css('DrowerItemText')} primary="Export Seed" />
+        </ListItem>
+      </List>
+    </div>
+  )
+
   return (
     <div className={css('')} data-testid={test()} id={componentId}>
       <AppBar position="static" className={css('AppBar')}>
         <Toolbar className={css('Toolbar')}>
           <div className={css('ToolbarHeader')}>
             <IconButton
+              onClick={toggleDrawer()}
               color="inherit"
               aria-label="menu"
               edge="start"
@@ -238,6 +303,14 @@ export const DemoPage: React.FC<{}> = () => {
       <div className={css('Footer')}>
         <img src={logo} alt="ZeroPool" style={{ margin: 'auto', height: '60px' }} />
       </div>
+
+      <SwipeableDrawer
+        open={drowler}
+        onClose={toggleDrawer(false)}
+        onOpen={toggleDrawer(true)}
+      >
+        {drowerMenu()}
+      </SwipeableDrawer>
 
       <Backdrop sx={{ color: '#fff', zIndex: 1000 }} open={backdrop}>
         <CircularProgress color="inherit" />
