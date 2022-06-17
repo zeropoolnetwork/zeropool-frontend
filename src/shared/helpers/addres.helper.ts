@@ -50,13 +50,13 @@ export const beautifyAmount = (amount: string | number): string => {
 
   const amountNum = Number(amount)
 
-  if (amountNum < 0.0001) {
+  if (amountNum < 0.000000001) {
     const lastDigit = amount[amount.length - 1]
 
     return `0.0...${lastDigit}`
   } else if (amount.length > 7) {
     const lastDigit = amount[amount.length - 1]
-    const prefixLength = amountNum > 1 && amountNum < 1000 ? 5 : 3
+    const prefixLength = 10
     const prefix = amount.slice(0, prefixLength)
 
     return `${prefix}...${lastDigit}`

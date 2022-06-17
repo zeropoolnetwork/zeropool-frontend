@@ -21,8 +21,6 @@ import { selectBackdrop, selectDeposit, selectMinting, selectPrivateAddress, sel
 import { demoActions } from 'wallet/state/demo.reducer'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
 import { selectSeed } from 'wallet/state/wallet.selectors'
-import { WalletView } from 'wallet/state/models'
-import { walletActions } from 'wallet/state/wallet.actions'
 import { useSnackbar } from 'notistack'
 // tslint:enable: prettier max-line-length
 
@@ -171,7 +169,7 @@ export const DemoPage: React.FC<{}> = () => {
             color="primary"
             value={mintAmount}
             classes={{ input: css('MintInput') }}
-            placeholder="Mint amount"
+            placeholder="Mint amount in tokens"
             inputProps={{ 'data-testid': test('Mint'), maxLength: 20 }}
             onChange={(event) => setMintAmount(event.target.value)}
           />
@@ -199,7 +197,7 @@ export const DemoPage: React.FC<{}> = () => {
             color="primary"
             value={depositAmount}
             classes={{ input: css('DepositInput') }}
-            placeholder="Deposit amount"
+            placeholder="Deposit amount in tokens"
             inputProps={{ 'data-testid': test('Deposit'), maxLength: 20 }}
             onChange={(event) => setDepositAmount(event.target.value)}
           />
@@ -212,7 +210,7 @@ export const DemoPage: React.FC<{}> = () => {
             className={css('Button')}
             data-testid={test('Import')}
             startIcon={<KeyboardArrowRightIcon />}
-            disabled={deposit || badAmount(depositAmount) || +depositAmount > (tokenBalance || 0)}
+            disabled={deposit || withdraw || transfer || badAmount(depositAmount) || +depositAmount > (tokenBalance || 0)}
             onClick={() => { dispatch(demoActions.deposit(depositAmount)); setDepositAmount('') }}
           >
             Deposit
@@ -240,7 +238,7 @@ export const DemoPage: React.FC<{}> = () => {
             className={css('Button')}
             data-testid={test('Withdraw')}
             startIcon={<KeyboardArrowLeft />}
-            disabled={withdraw || badAmount(withdrawAmount) || +withdrawAmount > (privateBalance || 0)}
+            disabled={deposit || withdraw || transfer || badAmount(withdrawAmount) || +withdrawAmount > (privateBalance || 0)}
             onClick={() => { dispatch(demoActions.withdraw(withdrawAmount)); setWithdrawAmount('') }}
           >
             Withdraw
@@ -283,7 +281,7 @@ export const DemoPage: React.FC<{}> = () => {
               className={css('Button')}
               data-testid={test('Withdraw')}
               startIcon={<KeyboardDoubleArrowRight />}
-              disabled={transfer || badAmount(transferAmount) || +transferAmount > (privateBalance || 0)}
+              disabled={deposit || withdraw || transfer || badAmount(transferAmount) || +transferAmount > (privateBalance || 0)}
               onClick={() => {
                 dispatch(demoActions.transfer({to: transferTo, tokens: transferAmount}))
                 setTransferAmount('')
