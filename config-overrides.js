@@ -1,4 +1,6 @@
 const webpack = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
   webpack: function override(config, env) {
@@ -57,6 +59,12 @@ module.exports = {
           Buffer: ['buffer', 'Buffer'],
           process: 'process',
       }),
+      new CopyPlugin({
+        patterns: [
+          { from: 'src/env.js' },
+        ],
+      }),
+      new CompressionPlugin({ exclude: 'env.js' }),
     ]) 
 
     config.ignoreWarnings = [

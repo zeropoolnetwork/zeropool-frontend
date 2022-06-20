@@ -2,13 +2,6 @@ import AES from 'crypto-js/aes'
 import Utf8 from 'crypto-js/enc-utf8'
 import bip39 from 'bip39-light'
 import HDWalletProvider from '@truffle/hdwallet-provider'
-// @ts-ignore
-import transferVkUrl from 'assets/transfer_verification_key.json?asset'
-// @ts-ignore
-import treeVkUrl from 'assets/tree_verification_key.json?asset'
-import transferParamsUrl from 'assets/transfer_params.bin'
-import treeParamsUrl from 'assets/tree_params.bin'
-
 import { EthereumClient, PolkadotClient, Client as NetworkClient } from 'zeropool-support-js'
 import { init as initZPClient, ZeropoolClient } from 'zeropool-client-js'
 import { deriveSpendingKey } from 'zeropool-client-js/lib/utils'
@@ -22,12 +15,29 @@ export let client: NetworkClient
 export let zpClient: ZeropoolClient
 export let account: string
 
-export const NETWORK = process.env.REACT_APP_NETWORK as string
-export const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS as string
-export const TOKEN_ADDRESS = process.env.REACT_APP_TOKEN_ADDRESS as string
-export const RELAYER_URL = process.env.REACT_APP_RELAYER_URL as string
-export const RPC_URL = process.env.REACT_APP_RPC_URL as string
-export const TRANSACTION_URL = process.env.REACT_APP_TRANSACTION_URL as string
+export let NETWORK: string
+export let CONTRACT_ADDRESS: string
+export let TOKEN_ADDRESS: string
+export let RELAYER_URL: string
+export let RPC_URL: string
+export let TRANSACTION_URL: string
+
+if (process.env.NODE_ENV == 'development') {
+  NETWORK = process.env.REACT_APP_NETWORK as string
+  CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS as string
+  TOKEN_ADDRESS = process.env.REACT_APP_TOKEN_ADDRESS as string
+  RELAYER_URL = process.env.REACT_APP_RELAYER_URL as string
+  RPC_URL = process.env.REACT_APP_RPC_URL as string
+  TRANSACTION_URL = process.env.REACT_APP_TRANSACTION_URL as string
+} else if (process.env.NODE_ENV == 'production') {
+  NETWORK = REACT_APP_NETWORK
+  CONTRACT_ADDRESS = REACT_APP_CONTRACT_ADDRESS
+  TOKEN_ADDRESS = REACT_APP_TOKEN_ADDRESS
+  RELAYER_URL = REACT_APP_RELAYER_URL
+  RPC_URL = REACT_APP_RPC_URL
+  TRANSACTION_URL = REACT_APP_TRANSACTION_URL
+}
+
 // tslint:disable: prettier
 
 export const accountPresent = (): boolean => {
@@ -36,10 +46,6 @@ export const accountPresent = (): boolean => {
 
 export const init = async (mnemonic: string, password: string): Promise<void> => {
   console.log('------------------------------------------------------')
-  console.log('transferParamsUrl: ', transferParamsUrl)
-  console.log('treeParamsUrl: ', treeParamsUrl)
-  console.log('transferVkUrl: ', transferVkUrl)
-  console.log('treeVkUrl: ', treeVkUrl)
   console.log('NETWORK: ', NETWORK)
   console.log('CONTRACT_ADDRESS: ', CONTRACT_ADDRESS)
   console.log('TOKEN_ADDRESS: ', TOKEN_ADDRESS)
@@ -51,10 +57,10 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
   let worker
   let snarkParams
   const snarkParamsConfig = {
-    transferParamsUrl,
-    treeParamsUrl,
-    transferVkUrl,
-    treeVkUrl,
+    transferParamsUrl: './assets/transfer_params.bin',
+    treeParamsUrl: './assets/tree_params.bin',
+    transferVkUrl: './assets/transfer_verification_key.json',
+    treeVkUrl: './assets/tree_verification_key.json',
   }
 
   try {
