@@ -57,10 +57,10 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
   let worker
   let snarkParams
   const snarkParamsConfig = {
-    transferParamsUrl: './assets/transfer_params.bin',
-    treeParamsUrl: './assets/tree_params.bin',
-    transferVkUrl: './assets/transfer_verification_key.json',
-    treeVkUrl: './assets/tree_verification_key.json',
+    transferParamsUrl: '/assets/transfer_params.bin',
+    treeParamsUrl: '/assets/tree_params.bin',
+    transferVkUrl: '/assets/transfer_verification_key.json',
+    treeVkUrl: '/assets/tree_verification_key.json',
   }
 
   try {

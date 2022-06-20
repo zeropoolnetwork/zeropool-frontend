@@ -6,7 +6,7 @@
   "scripts": {
     "bdd": "cucumber-js --publish",
     "start": "set \"GENERATE_SOURCEMAP=false\" && react-app-rewired start",
-    "build": "set \"GENERATE_SOURCEMAP=false\" && react-app-rewired build",
+    "build": "set \"GENERATE_SOURCEMAP=false\" && PUBLIC_URL=\\/ react-app-rewired build",
     "build:local": "set \"PUBLIC_URL=/build\" && set \"GENERATE_SOURCEMAP=false\" && env-cmd -f ./.env.build.local react-app-rewired build",
     "publish-docker": "VERSION=$npm_package_version ./scripts/publish-docker",
     "test:debug": "react-app-rewired test --env=jest-environment-jsdom-sixteen --watch",
