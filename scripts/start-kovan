@@ -1,4 +1,4 @@
-jh#!/usr/bin/env bash
+#!/usr/bin/env bash
 # chainID: 1313161555
 # symbol: ETH
 # faucet https://testnet.aurora.dev/faucet

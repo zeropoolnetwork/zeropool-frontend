@@ -1,0 +1,18 @@
+services:
+  frontend_kovan:
+    image: antonpegov/zeropool-frontend
+    container_name: frontend_kovan
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      - REACT_APP_NETWORK=ethereum
+      - REACT_APP_RPC_URL=https://kovan.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161
+      - REACT_APP_RELAYER_URL=https://kovan.testnet.relayer.v2.zeropool.network/
+      - REACT_APP_TOKEN_ADDRESS=0xcda2B3489aCDB31A428bd33fcAEE5c7c50919b35
+      - REACT_APP_CONTRACT_ADDRESS=0xC40Dd5B1250F4A7E70E1823d1D8eAbEA247cB1B3
+      - REACT_APP_PUBLIC_URL='/'
+      - PUBLIC_URL='/'
+      - REACT_APP_TRANSACTION_URL='https://kovan.etherscan.io/tx/{{hash}}'
+    volumes:
+      - ./assets:/usr/share/nginx/html/assetsdocer
