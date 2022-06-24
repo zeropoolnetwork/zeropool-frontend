@@ -3,7 +3,6 @@ declare module '*.bin' {
     export default url;
 }
 
-declare var REACT_APP_ENV: string;
 declare var REACT_APP_NETWORK: string;
 declare var REACT_APP_RPC_URL: string;
 declare var REACT_APP_RELAYER_URL: string;

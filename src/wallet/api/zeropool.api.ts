@@ -22,14 +22,14 @@ export let RELAYER_URL: string
 export let RPC_URL: string
 export let TRANSACTION_URL: string
 
-if (process.env.NODE_ENV == 'development') {
+if (process.env.NODE_ENV === 'development') {
   NETWORK = process.env.REACT_APP_NETWORK as string
   CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS as string
   TOKEN_ADDRESS = process.env.REACT_APP_TOKEN_ADDRESS as string
   RELAYER_URL = process.env.REACT_APP_RELAYER_URL as string
   RPC_URL = process.env.REACT_APP_RPC_URL as string
   TRANSACTION_URL = process.env.REACT_APP_TRANSACTION_URL as string
-} else if (process.env.NODE_ENV == 'production') {
+} else if (process.env.NODE_ENV === 'production') {
   NETWORK = REACT_APP_NETWORK
   CONTRACT_ADDRESS = REACT_APP_CONTRACT_ADDRESS
   TOKEN_ADDRESS = REACT_APP_TOKEN_ADDRESS

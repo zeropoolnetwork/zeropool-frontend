@@ -4,6 +4,8 @@ const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
   webpack: function override(config, env) {
+    console.log(`Modifying webpack config in ${process.env.NODE_ENV} mode`);
+
     config.output.environment = {
       arrowFunction: true,
       bigIntLiteral: false,
@@ -33,8 +35,8 @@ module.exports = {
       }
 
     config.resolve.alias = {
-      ...config.resolve.alias,
-      process: 'process/browser.js',
+      process: 'process/browser',
+      stream: 'stream-browserify',
     }
 
     config.module.rules = [

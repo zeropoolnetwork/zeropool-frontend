@@ -1,14 +1,15 @@
 {
   "name": "zeropool-frontend",
   "version": "0.3.3",
+  "license": "MIT",
   "private": false,
   "homepage": "http://zeropoolnetwork.github.io/zeropool-frontend/",
   "scripts": {
     "bdd": "cucumber-js --publish",
     "start": "set \"GENERATE_SOURCEMAP=false\" && react-app-rewired start",
-    "build": "set \"GENERATE_SOURCEMAP=false\" && PUBLIC_URL=\\/ react-app-rewired build",
+    "build": "set \"GENERATE_SOURCEMAP=false\" && set \"PUBLIC_URL=/\" && env-cmd -f ./.env.build.docker react-app-rewired build",
     "build:local": "set \"PUBLIC_URL=/build\" && set \"GENERATE_SOURCEMAP=false\" && env-cmd -f ./.env.build.local react-app-rewired build",
-    "publish-docker": "set VERSION=0.3.3 && env-cmd ./scripts/publish-docker",
+    "republish": "set VERSION=0.3.3 && env-cmd ./scripts/publish-docker",
     "test:debug": "react-app-rewired test --env=jest-environment-jsdom-sixteen --watch",
     "test": "react-app-rewired test --env=jest-environment-jsdom-sixteen --coverage --watchAll=false",
     "test:file": "react-app-rewired test --env=jest-environment-jsdom",
@@ -124,9 +125,6 @@
       "src/wallet/**/*.{ts,tsx}",
       "!src/**/*.stories.tsx",
       "!src/**/*.api.ts"
-    ],
-    "transformIgnorePatterns": [
-      "node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)"
     ]
   },
   "browser": {
