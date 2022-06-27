@@ -1,7 +1,7 @@
 services:
   kovan:
     image: antonpegov/zeropool-frontend
-    container_name: frontend_kovan
+    container_name: kovan
     restart: always
     ports:
       - "80:80"
@@ -15,4 +15,4 @@ services:
       - PUBLIC_URL='/'
       - REACT_APP_TRANSACTION_URL='https://kovan.etherscan.io/tx/{{hash}}'
     volumes:
-      - ./src/assets:/usr/share/nginx/html/assetsdocer
+      - ./static/assets:/usr/share/nginx/html/assets

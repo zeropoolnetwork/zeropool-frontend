@@ -3,7 +3,6 @@
   "version": "0.3.3",
   "license": "MIT",
   "private": false,
-  "homepage": "http://zeropoolnetwork.github.io/zeropool-frontend/",
   "scripts": {
     "bdd": "cucumber-js --publish",
     "start": "set \"GENERATE_SOURCEMAP=false\" && react-app-rewired start",

@@ -1,10 +1,11 @@
-const webpack = require('webpack');
-const CopyPlugin = require('copy-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
+const webpack = require('webpack')
+const CopyPlugin = require('copy-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
+const path = require('path')
 
 module.exports = {
   webpack: function override(config, env) {
-    console.log(`Modifying webpack config in ${process.env.NODE_ENV} mode`);
+    console.log(`Modifying webpack config in ${process.env.NODE_ENV} mode`)
 
     config.output.environment = {
       arrowFunction: true,
@@ -103,6 +104,12 @@ module.exports = {
         'Cross-Origin-Opener-Policy': 'same-origin',
         'Cross-Origin-Embedder-Policy': 'require-corp',
       }
+
+      config.static = './static'
+      // config.compress = true
+      // config.port = 3000
+      // config.hot = true
+      // config.writeToDisk = true
 
       // Return your customised Webpack Development Server config.
       return config;
