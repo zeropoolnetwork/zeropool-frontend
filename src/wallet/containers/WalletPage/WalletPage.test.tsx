@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { componentId, WalletPage } from './WalletPage'
 
 import { mockAppState } from 'shared/helpers/test/app-state.helper'
+import { BrowserRouter } from 'react-router-dom'
 //#region Mocks
 const useSnackbarMock = useSnackbar as jest.Mock
 const useSelectorMock = useSelector as jest.Mock
@@ -44,7 +45,7 @@ describe('WalletPage', () => {
   })
 
   it('WalletPage', () => {
-    const { getByTestId } = render(<WalletPage />)
+    const { getByTestId } = render(<BrowserRouter><WalletPage /></BrowserRouter>)
 
     expect(getByTestId(componentId)).toBeInTheDocument()
   })

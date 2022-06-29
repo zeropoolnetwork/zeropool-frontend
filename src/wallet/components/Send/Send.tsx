@@ -8,7 +8,7 @@ import './Send.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { validateAddress } from 'shared/helpers/addres.helper'
-import logo from 'assets/zeropool-logo.jpeg'
+import logo from 'assets/images/logo_black.png'
 
 import * as api from 'wallet/api/zeropool.api'
 import { Wallet } from 'wallet/state/models/wallet'

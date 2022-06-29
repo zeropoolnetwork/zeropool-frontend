@@ -271,7 +271,6 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
   useEffect(() => {
     if (!seed) {
       navigate('/register')
-      // navigate(0)
     } else {
       dispatch(walletActions.initWallets())
     }

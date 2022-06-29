@@ -4,7 +4,6 @@ import { Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 import './AboutPage.scss'
-// import logo from 'assets/logo.svg'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
@@ -43,7 +42,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ showBackButton = true }) =
           <Button
             color="primary"
             data-testid={test('BackButton')}
-            onClick={() => { navigate('/register'); navigate(0) }}
+            onClick={() => { navigate('/register') }}
             variant="contained"
           >
             Back

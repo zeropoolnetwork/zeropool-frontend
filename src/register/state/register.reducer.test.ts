@@ -199,12 +199,12 @@ describe('Register reducer', () => {
     it('sets seedConfirmed to false', () => {
       const oldState: RegisterState = {
         ...initialRegisterState,
-        seedConfirmed: true,
+        seedConfirmed: false,
       }
 
       const newState = registerSlice.reducer(oldState, rsa.submitSeed())
 
-      expect(newState.seedConfirmed).toBe(false)
+      expect(newState.seedConfirmed).toBe(true)
     })
   })
 

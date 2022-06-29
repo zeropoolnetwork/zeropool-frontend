@@ -6,13 +6,13 @@ import { Send, componentId, SendProps } from './Send'
 
 import { _testWalletsEth, testIdBuilder } from 'shared/helpers/test'
 import { validateAddress } from 'shared/helpers/addres.helper'
-import * as api from 'wallet/api/zeropool.api'
+import { addressShielded } from 'wallet/api/zeropool.api'
 
 let addressValid: boolean
 let addressPrivate: boolean
 
 const test = testIdBuilder(componentId)
-const isPrivateAddressMock = api.addressShielded as jest.Mock
+const isPrivateAddressMock = addressShielded as jest.Mock
 const useSnackbarMock = useSnackbar as jest.Mock
 const validateAddressMock = validateAddress as jest.Mock
 const outputSpy = jest.fn()
@@ -23,7 +23,7 @@ jest.mock('notistack', () => ({
 }))
 
 jest.mock('wallet/api/zeropool.api', () => ({
-  isPrivateAddress: jest.fn(),
+  addressShielded: jest.fn(),
 }))
 
 jest.mock('shared/helpers/addres.helper', () => ({
