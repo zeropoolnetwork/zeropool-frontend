@@ -16,6 +16,9 @@
 # production
 /build
 
+#static
+/static
+
 # misc
 .DS_Store
 
@@ -25,5 +28,3 @@ yarn-error.log*
 
 # zp assets
 *.bin
-*_vk.json
-addresses.json
