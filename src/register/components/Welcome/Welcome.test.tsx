@@ -25,18 +25,6 @@ describe('Welcome Page', () => {
     expect(getByTestId(componentId)).toBeInTheDocument()
   })
 
-  it('should render greeteng', () => {
-    const { getByTestId } = render(component)
-
-    expect(getByTestId(`${componentId}-Greeting`)).toBeInTheDocument()
-  })
-
-  it('should render description', () => {
-    const { getByTestId } = render(component)
-
-    expect(getByTestId(`${componentId}-Description`)).toBeInTheDocument()
-  })
-
   describe('Create button', () => {
     it('should render', () => {
       const { getByTestId } = render(component)

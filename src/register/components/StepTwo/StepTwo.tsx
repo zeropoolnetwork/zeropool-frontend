@@ -16,6 +16,7 @@ export const componentId = 'StepTwo'
 const css = cn(componentId)
 const test = testIdBuilder(componentId)
 
+
 interface StepTwoProps {
   seed: string[]
   onSubmit: () => void
