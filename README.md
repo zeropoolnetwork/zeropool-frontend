@@ -14,7 +14,9 @@ If blockchain node process halted remove it (from powershell if needed):
 
 # Developement 
 
-In the project directory, you can run the following commands:
+First of all, in the project directory create static/assets/ folder and put there respective static files from [this repo](https://github.com/zeropoolnetwork/zeropool-frontend-static.git)
+
+Then, in the project directory, you can run the following commands:
 
 ## `yarn start`
 
@@ -26,8 +28,10 @@ You will also see any lint errors in the console.
 
 ## `yarn test:debug`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.<br />
+Launches the test runner in the interactive watch mode.
+## `yarn test:debug [part_of_the_file_name]`
+
+Launches the test runner in the interactive watch mode for the specified file(-s).
 
 ## `yarn test`
 
@@ -44,16 +48,3 @@ Then you can run the app (in VSCode):
 - install LiveServer plugin
 - open build/index.html in the VS Code editor
 - click on Live Server icon in the lower right corner
-
-## `yarn deploy`
-
-We use this command to deploy the app to our Github Pages.
-
-<!-- ## `remixd -s ./deps/pool-evm-single-l1 --remix-ide https://remix.ethereum.org`
-
-Connect to Remix IDE.
-
-### Installing Remix and starting Remix IDE:
-
-1) npm i -g remixd
-2) Open https://remix.ethereum.org/ in the browser -->
