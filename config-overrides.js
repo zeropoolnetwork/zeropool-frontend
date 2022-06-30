@@ -105,6 +105,11 @@ module.exports = {
         'Cross-Origin-Embedder-Policy': 'require-corp',
       }
 
+      config.devMiddleware.mimeTypes = {
+        ...config.devMiddleware.mimeTypes,
+        svg: 'image/svg+xml',
+      },
+
       config.static = './static'
       // config.compress = true
       // config.port = 3000
