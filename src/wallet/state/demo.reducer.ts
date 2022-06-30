@@ -58,7 +58,7 @@ export const demoSlice = createSlice({
       state.tokenBalance = action.payload
     },
 
-    mint: (state, action) => {
+    mint: (state, action: PayloadAction<string>) => {
       state.minting = true
     },
     mintSuccess: (state, action: PayloadAction<number>) => {
@@ -87,8 +87,8 @@ export const demoSlice = createSlice({
     withdrawFalure: (state, action: PayloadAction<string>) => {
       state.withdraw = false
     },
-    
-    transfer: (state, action: PayloadAction<{to: string, tokens: string}>) => {
+
+    transfer: (state, action: PayloadAction<{ to: string, tokens: string }>) => {
       state.transfer = true
     },
     transferSuccess: (state, action: PayloadAction<string>) => {

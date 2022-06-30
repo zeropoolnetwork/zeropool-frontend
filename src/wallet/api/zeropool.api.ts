@@ -71,6 +71,9 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
     snarkParams = initialized.snarkParams
   } catch (e: any) {
     console.error(e);
+    if (e.message === 'Unexpected length of input') {
+      e.message = `probably you didn't copy static files. Pls copy them and clear all applicaton data using browser DevTools.`
+    }
 
     return Promise.reject(`Can't init ZeropoolClient: ${e.message}`)
   }

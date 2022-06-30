@@ -1,12 +1,14 @@
 import React from 'react'
-import { useSnackbar, WithSnackbarProps } from 'notistack'
+import { useSnackbar, VariantType, WithSnackbarProps } from 'notistack'
 
 interface IProps {
   setUseSnackbarRef: (showSnackbar: WithSnackbarProps) => void
 }
 
 type OptionsObject = {
-  [key: string]: string
+  key?: string
+  persist?: boolean
+  variant?: VariantType
 }
 
 const InnerSnackbarUtilsConfigurator: React.FC<IProps> = (props: IProps) => {
@@ -35,6 +37,9 @@ const toast = {
   toast(msg: string, options: OptionsObject = {}) {
     useSnackbarRef.enqueueSnackbar(msg, options)
   },
+  close(key: string) {
+    useSnackbarRef.closeSnackbar(key)
+  }
 }
 
 export const SnackbarUtilsConfigurator = () => {

@@ -27,12 +27,14 @@ const resetAccount: Epic = (action$: Action$) =>
 const mint: Epic = (action$, state$) =>
   action$.pipe(
     filter(demoActions.mint.match),
-    tap(() => toast.info('Minting...')),
+    tap(({ payload }) => toast.info(`Minting ${payload} tokens...`, { key: 'mint', persist: true })),
     switchMap(({ payload }) =>
       from(api.mint(payload)).pipe(
+        tap(() => toast.close('mint')),
         tap(() => toast.success('Mint success')),
-        map((res) => demoActions.mintSuccess(payload)),
+        map((res) => demoActions.mintSuccess(+payload)),
         catchError((errMsg: string) => {
+          toast.close('mint')
           toast.error(errMsg)
 
           return of(demoActions.mintFalure(errMsg))
@@ -44,12 +46,14 @@ const mint: Epic = (action$, state$) =>
 const deposit: Epic = (action$, state$) =>
   action$.pipe(
     filter(demoActions.deposit.match),
-    tap(() => toast.info('Depositing...')),
+    tap(({ payload }) => toast.info(`Depositing ${payload} tokens...`, { key: 'deposit', persist: true })),
     switchMap(({ payload }) =>
       from(api.depositShielded(payload)).pipe(
+        tap(() => toast.close('deposit')),
         tap(() => toast.success('Deposit success, pls update balances in a while')),
         map((res) => demoActions.depositSuccess(payload)),
         catchError((errMsg: string) => {
+          toast.close('deposit')
           toast.error(errMsg)
 
           return of(demoActions.depositFalure(errMsg))
@@ -61,12 +65,14 @@ const deposit: Epic = (action$, state$) =>
 const withdraw: Epic = (action$, state$) =>
   action$.pipe(
     filter(demoActions.withdraw.match),
-    tap(() => toast.info('Withdrawing...')),
+    tap((payload) => toast.info(`Withdrawing ${payload} tokens...`, { key: 'withdraw', persist: true })),
     switchMap(({ payload }) =>
       from(api.withdrawShielded(payload)).pipe(
+        tap(() => toast.close('withdraw')),
         tap(() => toast.success('Withdraw success, pls update balances in a while')),
         map((res) => demoActions.withdrawSuccess(payload)),
         catchError((errMsg: string) => {
+          toast.close('withdraw')
           toast.error(errMsg)
 
           return of(demoActions.withdrawFalure(errMsg))
@@ -78,12 +84,14 @@ const withdraw: Epic = (action$, state$) =>
 const transfer: Epic = (action$, state$) =>
   action$.pipe(
     filter(demoActions.transfer.match),
-    tap(() => toast.info('Processing private transfer...')),
+    tap((payload) => toast.info(`Processing private transfer of ${payload} tokens...`, { key: 'tranfer', persist: true })),
     switchMap(({ payload }) =>
       from(api.transferShielded(payload.to, payload.tokens)).pipe(
+        tap(() => toast.close('tranfer')),
         tap(() => toast.success('Private transfer success, pls update balances in a while')),
         map((res) => demoActions.transferSuccess(res)),
         catchError((errMsg: string) => {
+          toast.close('tranfer')
           toast.error(errMsg)
 
           return of(demoActions.transferFalure(errMsg))
@@ -99,7 +107,7 @@ const initApi = (action$: Action$, state$: State$) =>
     filter(([, seed]) => seed !== null),
     map(([, seed]) => seed),
     filter(isString),
-    tap(() => toast.info('Initializing, it can take up to few minutes...')),
+    tap(() => toast.info('Initializing, it can take up to few minutes...', { key: 'initApi', persist: true })),
     switchMap((seed) =>
       from(
         api.init(
@@ -109,8 +117,10 @@ const initApi = (action$: Action$, state$: State$) =>
         ),
       ).pipe(
         map(() => demoActions.initApiSuccess(null)),
+        tap(() => toast.close('initApi')),
         tap(() => toast.success('Wallet initialized')),
         catchError((errMsg: string) => {
+          toast.close('initApi')
           toast.error(errMsg)
 
           return of(demoActions.initApiFailure(errMsg))
