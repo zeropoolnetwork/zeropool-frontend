@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export type DemoState = {
+  initials: { seed: string, password: string } | null | undefined
   publicBalance: number | undefined
   privateBalance: number | undefined
   tokenBalance: number | undefined
@@ -11,9 +12,11 @@ export type DemoState = {
   deposit: boolean
   withdraw: boolean
   transfer: boolean
+  readiness: boolean
 }
 
 export const initialDemoState: DemoState = {
+  initials: undefined,
   publicBalance: undefined,
   privateBalance: undefined,
   tokenBalance: undefined,
@@ -24,6 +27,7 @@ export const initialDemoState: DemoState = {
   deposit: false,
   withdraw: false,
   transfer: false,
+  readiness: false,
 }
 
 // tslint:disable: no-empty
@@ -31,14 +35,20 @@ export const demoSlice = createSlice({
   name: 'demo',
   initialState: initialDemoState,
   reducers: {
+    setSeedAndPasword: (state, action: PayloadAction<{ seed: string; password: string }>) => {
+      state.initials = { seed: action.payload.seed, password: action.payload.password }
+    },
     initApi: (state, action: PayloadAction<null>) => {
       state.backdrop = true
     },
     initApiSuccess: (state, action: PayloadAction<null>) => {
       state.backdrop = false
+      state.initials = null
+      state.readiness = true
     },
     initApiFailure: (state, action: PayloadAction<string>) => {
       state.backdrop = false
+      state.initials = null
     },
 
     updateBalances: (state, action: PayloadAction<null>) => {

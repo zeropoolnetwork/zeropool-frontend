@@ -7,6 +7,8 @@ export const selectStage = createSelector(selectRegisterSlice, (state) => state.
 
 export const selectSeed = createSelector(selectRegisterSlice, (state) => state.seed)
 
+export const selectPassword = createSelector(selectRegisterSlice, (state) => state.password)
+
 export const selectIsSeedConfirmed = createSelector(
   selectRegisterSlice,
   (state) => state.seedConfirmed,

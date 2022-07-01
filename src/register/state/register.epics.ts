@@ -1,32 +1,32 @@
 // tslint:disable: prettier
 import { AnyAction } from 'redux'
 import { Observable, of } from 'rxjs'
-import { Epic, combineEpics, ofType } from 'redux-observable'
-import { withLatestFrom, map, switchMap } from 'rxjs/operators'
+import { Epic, combineEpics } from 'redux-observable'
+import { withLatestFrom, map, switchMap, filter } from 'rxjs/operators'
 
-import { walletActions } from 'wallet/state/wallet.actions'
 import { selectSeed } from 'register/state/register.selectors'
 
 import { RootState } from 'state'
 import { registerActions as actions } from 'register/state/register.reducer'
+import { demoActions } from 'wallet/state/demo.reducer'
 // tslint:enable: prettier
 
 const importAccount = (action$: Observable<AnyAction>, state$: Observable<RootState>) =>
   action$.pipe(
-    ofType(actions.import.type),
-    switchMap((action) => {
-      const seed = action.payload.seed.join(' ')
+    filter(actions.import.match),
+    switchMap(({ payload }) => {
+      const seed = payload.seed.join(' ')
 
-      return of(actions.reset(), walletActions.setSeed(seed))
+      return of(actions.reset(), demoActions.setSeedAndPasword({ seed, password: payload.password }))
     }),
   )
 
 const register: Epic = (action$: Observable<AnyAction>, state$: Observable<RootState>) =>
   action$.pipe(
-    ofType(actions.register.type),
+    filter(actions.register.match),
     withLatestFrom(state$.pipe(map(selectSeed))),
-    switchMap(([, seed]) => {
-      return of(actions.reset(), walletActions.setSeed(seed.join(' ')))
+    switchMap(([{ payload }, seed]) => {
+      return of(actions.reset(), demoActions.setSeedAndPasword({ seed: seed.join(' '), password: payload }))
     }),
   )
 

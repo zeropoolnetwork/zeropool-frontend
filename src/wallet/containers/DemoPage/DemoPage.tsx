@@ -1,7 +1,7 @@
 // tslint:disable: prettier max-line-length
 import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, Box, SwipeableDrawer, Divider, List, ListItem, ListItemIcon, ListItemText } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import KeyboardDoubleArrowRight  from '@mui/icons-material/KeyboardDoubleArrowRight'
+import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight'
 import { useEffect, useState } from 'react'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
@@ -17,10 +17,9 @@ import './DemoPage.scss'
 import logo from 'assets/images/logo1.svg'
 import { badAmount } from 'shared/utils/bad-amount'
 
-import { selectBackdrop, selectDeposit, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectTransfer, selectWalletAddress, selectWithdraw } from 'wallet/state/demo.selectors'
+import { selectBackdrop, selectDeposit, selectReadiness, selectInitials, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectTransfer, selectWalletAddress, selectWithdraw } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
-import { selectSeed } from 'wallet/state/wallet.selectors'
 import { useSnackbar } from 'notistack'
 // tslint:enable: prettier max-line-length
 
@@ -36,7 +35,7 @@ export const DemoPage: React.FC<{}> = () => {
 
   const backdrop = useSelector(selectBackdrop)
   const minting = useSelector(selectMinting)
-  const seed = useSelector(selectSeed)
+  const initials = useSelector(selectInitials)
   const publicBalance = useSelector(selectPublicBalance)
   const privateBalance = useSelector(selectPrivateBalance)
   const tokenBalance = useSelector(selectTokenBalance)
@@ -45,6 +44,7 @@ export const DemoPage: React.FC<{}> = () => {
   const deposit = useSelector(selectDeposit)
   const withdraw = useSelector(selectWithdraw)
   const transfer = useSelector(selectTransfer)
+  const readiness = useSelector(selectReadiness)
 
   const [mintAmount, setMintAmount] = useState('')
   const [depositAmount, setDepositAmount] = useState('')
@@ -54,16 +54,15 @@ export const DemoPage: React.FC<{}> = () => {
   const [drowler, setDrowler] = useState(false)
 
   useEffect(() => {
-    if (!seed) {
+    if (!readiness && !initials) {
       navigate('/register')
-      // navigate(0)
     } else {
       dispatch(demoActions.initApi(null))
     }
-  }, [dispatch, seed])
+  }, [])
 
   const exportSeed = () => {
-    navigator.clipboard.writeText(seed || 'No seed set').then(
+    navigator.clipboard.writeText('Not implimented' || 'No seed set').then(
       () => {
         enqueueSnackbar('Seed copied to the clipboard', { variant: 'success' })
       },
@@ -283,18 +282,18 @@ export const DemoPage: React.FC<{}> = () => {
               startIcon={<KeyboardDoubleArrowRight />}
               disabled={deposit || withdraw || transfer || badAmount(transferAmount) || +transferAmount > (privateBalance || 0)}
               onClick={() => {
-                dispatch(demoActions.transfer({to: transferTo, tokens: transferAmount}))
+                dispatch(demoActions.transfer({ to: transferTo, tokens: transferAmount }))
                 setTransferAmount('')
               }}
             >
               Transfer
             </LoadingButton>
-          </div>  
+          </div>
         </Box>
       </div>
 
       <div className={css('Info')}>
-        <span>To perform any action you need to have enough funds on your public balance.</span> 
+        <span>To perform any action you need to have enough funds on your public balance.</span>
         <span>Click on your public address and use it on the <a href='https://gitter.im/kovan-testnet/faucet#' target={'_blank'}>Kovan Faset</a> page to get free funds.</span>
       </div>
 

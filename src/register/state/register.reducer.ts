@@ -7,6 +7,7 @@ import { generateSeed } from 'register/state/helpers/seed.helper'
 export type RegisterState = {
   stage: RegisterStage | undefined
   seed: string[]
+  password: string | undefined
   seedConfirmed: boolean
   showSteps: boolean
 }
@@ -14,6 +15,7 @@ export type RegisterState = {
 export const initialRegisterState: RegisterState = {
   stage: undefined,
   seed: [],
+  password: undefined,
   seedConfirmed: false,
   showSteps: false,
 }
@@ -46,6 +48,7 @@ export const registerSlice = createSlice({
     register: (state, action: PayloadAction<string>) => {
       state.stage = undefined
       state.showSteps = false
+      state.password = action.payload
     },
     // IMPORT ACCOUNT
     startImport: (state) => {

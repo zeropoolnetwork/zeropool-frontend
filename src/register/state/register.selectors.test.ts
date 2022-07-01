@@ -7,12 +7,13 @@ describe('Register selectors', () => {
   const registerState: RegisterState = {
     stage: RegisterStage.IMPORT,
     seed: ['test'],
+    password: 'test',
     seedConfirmed: false,
     showSteps: true,
   }
 
   const rootState: Partial<RootState> = {
-    register: {...registerState},
+    register: { ...registerState },
   }
 
   it('selects register state', () => {

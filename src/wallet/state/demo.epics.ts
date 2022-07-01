@@ -4,14 +4,13 @@ import { combineEpics, Epic, ofType } from 'redux-observable'
 import { PayloadAction } from '@reduxjs/toolkit'
 
 import * as api from 'wallet/api/zeropool.api'
-import { selectSeed } from 'wallet/state/wallet.selectors'
+import { selectInitials } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
 
 import { RootState } from 'state'
 
 import toast from 'shared/helpers/toast.helper'
 //import { debug } from 'shared/operators/debug.operator'
-import { isString } from 'shared/utils/is'
 // tslint:enable: prettier max-line-length
 
 type Action$ = Observable<PayloadAction>
@@ -102,18 +101,16 @@ const transfer: Epic = (action$, state$) =>
 
 const initApi = (action$: Action$, state$: State$) =>
   action$.pipe(
-    ofType(demoActions.initApi.type),
-    withLatestFrom(state$.pipe(map(selectSeed))),
-    filter(([, seed]) => seed !== null),
-    map(([, seed]) => seed),
-    filter(isString),
+    filter(demoActions.initApi.match),
+    withLatestFrom(state$.pipe(map(selectInitials))),
+    map(([, initials]) => initials),
+    filter((initials) => !!initials),
     tap(() => toast.info('Initializing, it can take up to few minutes...', { key: 'initApi', persist: true })),
-    switchMap((seed) =>
+    switchMap((initials) =>
       from(
         api.init(
-          seed,
-          '123455678',
-          // tokens.map((item) => item.name as CoinType),
+          (initials as any).seed,
+          (initials as any).password,
         ),
       ).pipe(
         map(() => demoActions.initApiSuccess(null)),
