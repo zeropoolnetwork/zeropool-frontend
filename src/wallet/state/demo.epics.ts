@@ -19,8 +19,68 @@ type State$ = Observable<RootState>
 const resetAccount: Epic = (action$: Action$) =>
   action$.pipe(
     filter(demoActions.resetAccount.match),
+    tap(() => {
+      sessionStorage.clear()
+      localStorage.clear()
+      caches.keys().then(keys => {
+        keys.forEach(key => caches.delete(key))
+      })
+      indexedDB.databases().then(dbs => {
+        dbs.forEach(db => indexedDB.deleteDatabase((db as any).name))
+      })
+    }),
     tap((a) => toast.success('Wallet reseted and data cleared')),
     ignoreElements(),
+  )
+
+const restoreSession = (action$: Action$, state$: State$) =>
+  action$.pipe(
+    filter(demoActions.initApi.match),
+    withLatestFrom(state$.pipe(map(selectInitials))),
+    filter(([, initials]) => !initials),
+    mergeMap(() => {
+      let seed, password
+      // first we try to restore session from SessionStorage (for development)
+      seed = api.getDevSeed()
+      password = api.getDevPassword()
+
+      if (!seed || !password) {
+        // if not found, we run recovery proccess
+        return of(demoActions.recoverWallet(null))
+      } else {
+        return of(
+          demoActions.setSeedAndPasword({seed, password}),
+          demoActions.initApi(null),
+        )
+      }
+    }),
+  )
+
+const initApi = (action$: Action$, state$: State$) =>
+  action$.pipe(
+    filter(demoActions.initApi.match),
+    withLatestFrom(state$.pipe(map(selectInitials))),
+    map(([, initials]) => initials),
+    filter((initials) => !!initials),
+    tap(() => toast.info('Initializing, it can take up to few minutes...', { key: 'initApi', persist: true })),
+    switchMap((initials) =>
+      from(
+        api.init(
+          (initials as any).seed,
+          (initials as any).password,
+        ),
+      ).pipe(
+        map(() => demoActions.initApiSuccess(null)),
+        tap(() => toast.close('initApi')),
+        tap(() => toast.success('Wallet initialized')),
+        catchError((errMsg: string) => {
+          toast.close('initApi')
+          toast.error(errMsg)
+
+          return of(demoActions.initApiFailure(errMsg))
+        }),
+      ),
+    ),
   )
 
 const mint: Epic = (action$, state$) =>
@@ -94,33 +154,6 @@ const transfer: Epic = (action$, state$) =>
           toast.error(errMsg)
 
           return of(demoActions.transferFalure(errMsg))
-        }),
-      ),
-    ),
-  )
-
-const initApi = (action$: Action$, state$: State$) =>
-  action$.pipe(
-    filter(demoActions.initApi.match),
-    withLatestFrom(state$.pipe(map(selectInitials))),
-    map(([, initials]) => initials),
-    filter((initials) => !!initials),
-    tap(() => toast.info('Initializing, it can take up to few minutes...', { key: 'initApi', persist: true })),
-    switchMap((initials) =>
-      from(
-        api.init(
-          (initials as any).seed,
-          (initials as any).password,
-        ),
-      ).pipe(
-        map(() => demoActions.initApiSuccess(null)),
-        tap(() => toast.close('initApi')),
-        tap(() => toast.success('Wallet initialized')),
-        catchError((errMsg: string) => {
-          toast.close('initApi')
-          toast.error(errMsg)
-
-          return of(demoActions.initApiFailure(errMsg))
         }),
       ),
     ),
@@ -246,6 +279,7 @@ export const demoEpics: Epic = combineEpics(
   getPrivateBalance,
   getTokenBalance,
   resetAccount,
+  restoreSession,
   getWalletAddress,
   getPrivateAddress,
   updateDataAfterInitialization,

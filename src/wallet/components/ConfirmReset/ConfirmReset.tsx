@@ -38,14 +38,13 @@ export const ConfirmReset: React.FC<EditWalletProps> = ({
       />
 
       <Button
-        disabled={password.length < minLength}
-        className={css('Export')}
-        data-testid={test('Export')}
+        className={css('Reset')}
+        data-testid={test('Reset')}
         onClick={onReset}
         color="primary"
         variant="contained"
       >
-        Delete
+        Reset All Data
       </Button>
 
       <Button

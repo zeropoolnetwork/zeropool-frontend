@@ -43,7 +43,7 @@ const persistConfig: PersistConfig<RootState> = {
   version: 0,
   storage,
   migrate: createMigrate(stateMigrations, { debug: false }),
-  whitelist: ['register', 'wallet'],
+  whitelist: ['register', 'demo'],
 }
 
 const persistedReducer = persistReducer<any, any>(persistConfig, createRootReducer())
@@ -75,4 +75,3 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 //#endregion
 
 epicMiddleware.run(epics)
-// tslint:enable: prettier

@@ -118,9 +118,14 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
   })
 
   localStorage.setItem(
-    `zp.${'demo_account'}.seed`,
+    `zp.production.seed`,
     await AES.encrypt(mnemonic, password).toString()
   )
+
+  if (process.env.NODE_ENV === 'development') {
+    sessionStorage.setItem('zp.development.seed', mnemonic)
+    sessionStorage.setItem('zp.development.password', password)
+  }
 }
 
 export const mint = async (tokens: string): Promise<void> => {
@@ -134,6 +139,14 @@ export const mint = async (tokens: string): Promise<void> => {
 
     return Promise.reject(e.message)
   }
+}
+
+export const getDevSeed = (): string => {
+  return sessionStorage.getItem('zp.development.seed') as string
+}
+
+export const getDevPassword = (): string => {
+  return sessionStorage.getItem('zp.development.password') as string
 }
 
 export const getSeed = (password: string): string => {

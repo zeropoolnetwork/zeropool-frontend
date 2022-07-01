@@ -109,6 +109,7 @@ export const demoSlice = createSlice({
     },
 
     resetAccount: (state, action: PayloadAction<null>) => initialDemoState,
+    recoverWallet: (state, action: PayloadAction<null>) => { },
 
     getWalletAddress: (state, action: PayloadAction<null>) => { },
     getWalletAddressSuccess: (state, action: PayloadAction<string>) => {
