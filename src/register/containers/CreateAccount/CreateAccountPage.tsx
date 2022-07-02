@@ -103,7 +103,7 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
 
       {stage && showSteps ? (
         <div className={css('Footer')}>
-          <img src={logo} alt="ZeroPool" style={{ margin: 'auto' }} />
+          <img src={logo} alt="ZeroPool" style={{ margin: 'auto', height: '50px' }} />
         </div>
       ) : null}
     </div>
