@@ -161,7 +161,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
         </FormControl>
 
         <p className={css('Description')}>
-          Finally, please choose a password to be used to export your secret phrase in the future.
+          Finally, please choose a password to access your secret phrase later
         </p>
 
         <Button

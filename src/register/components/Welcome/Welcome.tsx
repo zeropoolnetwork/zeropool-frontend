@@ -52,7 +52,7 @@ export const Welcome: React.FC<WelcomeProps> = ({
         data-testid={test('CreateButton')}
         onClick={onCreate}
       >
-        Create new wallet
+        Create wallet
       </Button>
 
       <Button
@@ -62,7 +62,7 @@ export const Welcome: React.FC<WelcomeProps> = ({
         data-testid={test('ImportButton')}
         onClick={onImport}
       >
-        Import existing
+        Import wallet
       </Button>
 
       <Button

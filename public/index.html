@@ -5,7 +5,6 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Web site created using create-react-app" />
     <script src="%PUBLIC_URL%/env.js"></script>
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <title>ZeroPool</title>
@@ -25,40 +24,33 @@
         height: 100vh;
       }
       .loader-spinner {
-        background: url("%PUBLIC_URL%/spinner.svg") no-repeat;
-        position: absolute;
-        top: calc(50% - 10.4em);
-        left: calc(50% - 6em);
-        width: 13em;
-        height: 13em;
-        animation: load 10s infinite linear;
-      }
-      .loader-face {
-        background: url("%PUBLIC_URL%/logo4.svg") no-repeat;
-        background-size: cover;
-        width: 9em;
-        height: 10em;
+        background: url("%PUBLIC_URL%/logo.png") no-repeat;
         position: absolute;
         top: calc(50% - 9em);
-        left: calc(50% - 4em);
+        left: calc(50% - 3em);
+        width: 6em;
+        height: 6em;
+        animation: load 5s infinite linear;
+        background-size: calc(100%);
       }
-
-      .loader-logo {
-        background: url("%PUBLIC_URL%/logo.svg") no-repeat;
-        background-size: cover;
-        width: 350px;
-        height: 60px;
+      .loader-text {
+        color: #fff;
+        font-size: 2em;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
         position: absolute;
-        top: calc(50% + 8em);
-        left: calc(50% - 9em);
+        top: calc(50%);
+        left: calc(50% - 2em);
+        text-align: center;
+        width: 4em;
+        height: 2em;
       }
 
       @keyframes load {
         0% {
-          transform: rotate(0deg);
+          transform: rotate(360deg);
         }
         100% {
-          transform: rotate(360deg);
+          transform: rotate(0deg);
         }
       }
     </style>
@@ -70,8 +62,7 @@
     <div id="root">
       <div class="loader">
         <div class="loader-spinner"></div>
-        <div class="loader-face"></div>
-        <div class="loader-logo"></div>
+        <div class="loader-text">Loading...</div>
       </div>
     </div>
   </body>

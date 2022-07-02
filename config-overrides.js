@@ -52,10 +52,8 @@ module.exports = {
       }, {
         test: /\.bin$/,
         type: 'asset/resource',
-      }, {
-        resourceQuery: /asset/,
-        type: 'asset/resource',
-      }]
+      }
+    ]
 
     config.plugins = (config.plugins || []).concat([
       new webpack.ProvidePlugin({
@@ -104,11 +102,6 @@ module.exports = {
         'Cross-Origin-Opener-Policy': 'same-origin',
         'Cross-Origin-Embedder-Policy': 'require-corp',
       }
-
-      config.devMiddleware.mimeTypes = {
-        ...config.devMiddleware.mimeTypes,
-        svg: 'image/svg+xml',
-      },
 
       config.static = './static'
       // config.compress = true

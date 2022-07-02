@@ -31,7 +31,7 @@ export const StepThree: React.FC<StepThreeProps> = ({ seed, onConfirm }) => {
         />
 
         <p className={css('Description')}>
-          Please confirm your secret phrase. We want to be sure that you saved it correctly.
+          Please confirm your secret phrase, we want to be sure you saved it correctly
         </p>
       </section>
 
