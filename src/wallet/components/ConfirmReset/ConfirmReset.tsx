@@ -1,15 +1,12 @@
-import React, { useState } from 'react'
 import { cn } from '@bem-react/classname'
-import { Button, TextField } from '@mui/material'
+import { Button } from '@mui/material'
+import React, { useState } from 'react'
 
 import './ConfirmReset.scss'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-
 export const componentId = 'ConfirmReset'
 
-const css = cn(componentId)
-const test = testIdBuilder(componentId)
+const bem = cn(componentId)
 
 export type EditWalletProps = {
   onReset: () => void
@@ -20,26 +17,18 @@ export const ConfirmReset: React.FC<EditWalletProps> = ({
   onReset,
   onCancel,
 }) => {
-  const [password, setPassword] = useState('')
-  const minLength = 4
-
   return (
-    <div className={css()} data-testid={test()}>
-      <p className={css('Name')}>Confirm Reset</p>
+    <div className={bem()} data-testid={bem()}>
+      <p className={bem('Name')}>Confirm Reset</p>
 
-      <TextField
-        className={css('Password')}
-        label={`Enter password`}
-        value={password}
-        type="password"
-        onChange={(event) => {
-          setPassword(event.target.value)
-        }}
-      />
+      <div className={bem('Text')} data-testid={bem('Text')}>
+        You are about to reset all your data.
+        If you did not save your seed, you will lose all your funds.
+      </div>
 
       <Button
-        className={css('Reset')}
-        data-testid={test('Reset')}
+        className={bem('Reset')}
+        data-testid={bem('Reset')}
         onClick={onReset}
         color="primary"
         variant="contained"
@@ -48,8 +37,8 @@ export const ConfirmReset: React.FC<EditWalletProps> = ({
       </Button>
 
       <Button
-        className={css('Cancel')}
-        data-testid={test('Cancel')}
+        className={bem('Cancel')}
+        data-testid={bem('Cancel')}
         onClick={onCancel}
         color="primary"
         variant="contained"

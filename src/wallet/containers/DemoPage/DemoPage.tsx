@@ -1,13 +1,11 @@
 // tslint:disable: prettier max-line-length
-import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, Box, SwipeableDrawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material'
+import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, Box, SwipeableDrawer } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight'
 import { useEffect, useState } from 'react'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
-import { Refresh, Menu, FileCopy } from '@mui/icons-material'
-import LogoutIcon from '@mui/icons-material/Logout';
-import { testIdBuilder } from 'shared/helpers/test'
+import { Refresh, Menu } from '@mui/icons-material'
 import SoupKitchenIcon from '@mui/icons-material/SoupKitchen'
 import { useNavigate } from 'react-router-dom'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -21,12 +19,13 @@ import { selectBackdrop, selectDeposit, selectReadiness, selectInitials, selectM
 import { demoActions } from 'wallet/state/demo.reducer'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
 import { useSnackbar } from 'notistack'
+import { DemoDrowler } from 'wallet/components/DemoDrowler/DemoDrowler'
+import { exportToClipboard } from 'shared/helpers/export.helper'
 // tslint:enable: prettier max-line-length
 
 export const componentId = 'DemoPage'
 
-const css = cn(componentId)
-const test = testIdBuilder(componentId)
+const bem = cn(componentId)
 
 export const DemoPage: React.FC<{}> = () => {
   const navigate = useNavigate()
@@ -61,23 +60,12 @@ export const DemoPage: React.FC<{}> = () => {
     }
   }, [])
 
-  const exportSeed = () => {
-    navigator.clipboard.writeText('Not implimented' || 'No seed set').then(
-      () => {
-        enqueueSnackbar('Seed copied to the clipboard', { variant: 'success' })
-      },
-      (err) => {
-        enqueueSnackbar(`Can't access clipboard`, { variant: 'error' })
-      },
-    )
-  }
-
   const toggleDrawer = (open?: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
   ) => {
     if (
-      event &&
-      event.type === 'keydown' &&
+      event?.type === 'keydown'
+      &&
       ((event as React.KeyboardEvent).key === 'Tab' ||
         (event as React.KeyboardEvent).key === 'Shift')
     ) {
@@ -87,43 +75,13 @@ export const DemoPage: React.FC<{}> = () => {
     setDrowler(open === undefined ? !drowler : open)
   }
 
-  const drowerMenu = () => (
-    <div
-      className={css('Drower')}
-      role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
-    >
-      <List>
-        <ListItem
-          className={css('DrowerItem')}
-          button={true}
-          onClick={() => {
-            dispatch(demoActions.resetAccount(null))
-            navigate('/register')
-          }}
-        >
-          <ListItemIcon className={css('DrowerItemIcon')}>
-            <LogoutIcon />
-          </ListItemIcon>
-          <ListItemText className={css('DrowerItemText')} primary="Reset all data" />
-        </ListItem>
-
-        <ListItem className={css('DrowerItem')} button={true} onClick={exportSeed}>
-          <ListItemIcon className={css('DrowerItemIcon')}>
-            <FileCopy />
-          </ListItemIcon>
-          <ListItemText className={css('DrowerItemText')} primary="Export Seed" />
-        </ListItem>
-      </List>
-    </div>
-  )
+  const closeDrawer = () => toggleDrawer(false)(false as any)
 
   return (
-    <div className={css('')} data-testid={test()} id={componentId}>
-      <AppBar position="static" className={css('AppBar')}>
-        <Toolbar className={css('Toolbar')}>
-          <div className={css('ToolbarHeader')}>
+    <div className={bem('')} data-testid={bem()} id={componentId}>
+      <AppBar position="static" className={bem('AppBar')}>
+        <Toolbar className={bem('Toolbar')}>
+          <div className={bem('ToolbarHeader')}>
             <IconButton
               onClick={toggleDrawer()}
               color="inherit"
@@ -134,7 +92,7 @@ export const DemoPage: React.FC<{}> = () => {
               <Menu />
             </IconButton>
 
-            <div className={css('ToolbarHeaderItems')}>
+            <div className={bem('ToolbarHeaderItems')}>
               <Tooltip title="Update balances" placement="bottom">
                 <IconButton
                   color="inherit"
@@ -147,7 +105,7 @@ export const DemoPage: React.FC<{}> = () => {
             </div>
           </div>
 
-          <div className={css('ToolbarBody')}>
+          <div className={bem('ToolbarBody')}>
             <DemoHeader
               walletAddress={backdrop ? '-' : walletAddress}
               privateAddress={backdrop ? '-' : privateAddress}
@@ -159,17 +117,17 @@ export const DemoPage: React.FC<{}> = () => {
         </Toolbar>
       </AppBar>
 
-      <div className={css('Wrapper')}>
+      <div className={bem('Wrapper')}>
         <div>
           <Input
             id="mint-amount"
-            className={css('Mint')}
+            className={bem('Mint')}
             sx={{ color: 'black' }}
             color="primary"
             value={mintAmount}
-            classes={{ input: css('MintInput') }}
+            classes={{ input: bem('MintInput') }}
             placeholder="Mint amount in tokens"
-            inputProps={{ 'data-testid': test('Mint'), maxLength: 20 }}
+            inputProps={{ 'data-testid': bem('Mint'), maxLength: 20 }}
             onChange={(event) => setMintAmount(event.target.value)}
           />
 
@@ -178,8 +136,8 @@ export const DemoPage: React.FC<{}> = () => {
             loadingPosition="start"
             color="primary"
             variant="contained"
-            className={css('Button')}
-            data-testid={test('Mint')}
+            className={bem('Button')}
+            data-testid={bem('Mint')}
             startIcon={<SoupKitchenIcon />}
             disabled={minting || badAmount(mintAmount)}
             onClick={() => { dispatch(demoActions.mint(mintAmount)); setMintAmount('') }}
@@ -191,13 +149,13 @@ export const DemoPage: React.FC<{}> = () => {
         <div>
           <Input
             id="deposit-amount"
-            className={css('Deposit')}
+            className={bem('Deposit')}
             sx={{ color: 'black' }}
             color="primary"
             value={depositAmount}
-            classes={{ input: css('DepositInput') }}
+            classes={{ input: bem('DepositInput') }}
             placeholder="Deposit amount in tokens"
-            inputProps={{ 'data-testid': test('Deposit'), maxLength: 20 }}
+            inputProps={{ 'data-testid': bem('Deposit'), maxLength: 20 }}
             onChange={(event) => setDepositAmount(event.target.value)}
           />
 
@@ -206,8 +164,8 @@ export const DemoPage: React.FC<{}> = () => {
             loadingPosition="start"
             color="primary"
             variant="contained"
-            className={css('Button')}
-            data-testid={test('Import')}
+            className={bem('Button')}
+            data-testid={bem('Import')}
             startIcon={<KeyboardArrowRightIcon />}
             disabled={deposit || withdraw || transfer || badAmount(depositAmount) || +depositAmount > (tokenBalance || 0)}
             onClick={() => { dispatch(demoActions.deposit(depositAmount)); setDepositAmount('') }}
@@ -220,12 +178,12 @@ export const DemoPage: React.FC<{}> = () => {
           <Input
             color="primary"
             id="withdraw-amount"
-            className={css('Withdraw')}
+            className={bem('Withdraw')}
             sx={{ color: 'black' }}
             placeholder="Withdraw amount in tokens"
-            classes={{ input: css('Withdraw') }}
+            classes={{ input: bem('Withdraw') }}
             value={withdrawAmount}
-            inputProps={{ 'data-testid': test('Withdraw'), maxLength: 20 }}
+            inputProps={{ 'data-testid': bem('Withdraw'), maxLength: 20 }}
             onChange={(event) => setWithdrawAmount(event.target.value)}
           />
 
@@ -234,8 +192,8 @@ export const DemoPage: React.FC<{}> = () => {
             loadingPosition="start"
             color="primary"
             variant="contained"
-            className={css('Button')}
-            data-testid={test('Withdraw')}
+            className={bem('Button')}
+            data-testid={bem('Withdraw')}
             startIcon={<KeyboardArrowLeft />}
             disabled={deposit || withdraw || transfer || badAmount(withdrawAmount) || +withdrawAmount > (privateBalance || 0)}
             onClick={() => { dispatch(demoActions.withdraw(withdrawAmount)); setWithdrawAmount('') }}
@@ -244,17 +202,17 @@ export const DemoPage: React.FC<{}> = () => {
           </LoadingButton>
         </div>
 
-        <Box className={css('Transfer')}>
+        <Box className={bem('Transfer')}>
           <div>
             <Input
               id="transfer-amount"
-              className={css('TransferTo')}
+              className={bem('TransferTo')}
               sx={{ color: 'black' }}
               color="primary"
               value={transferTo}
               placeholder="Recipient private address"
-              classes={{ input: css('TransferTo') }}
-              inputProps={{ 'data-testid': test('TransferTo'), maxLength: 120 }}
+              classes={{ input: bem('TransferTo') }}
+              inputProps={{ 'data-testid': bem('TransferTo'), maxLength: 120 }}
               onChange={(event) => setTransferTo(event.target.value)}
             />
           </div>
@@ -262,13 +220,13 @@ export const DemoPage: React.FC<{}> = () => {
           <div>
             <Input
               id="transfer-amount"
-              className={css('TransferAmount')}
+              className={bem('TransferAmount')}
               sx={{ color: 'black' }}
               color="primary"
               value={transferAmount === '0' ? '' : transferAmount}
               placeholder="Transfer amount in tokens"
-              classes={{ input: css('TransferAmount') }}
-              inputProps={{ 'data-testid': test('TransferAmount'), maxLength: 20 }}
+              classes={{ input: bem('TransferAmount') }}
+              inputProps={{ 'data-testid': bem('TransferAmount'), maxLength: 20 }}
               onChange={(event) => setTransferAmount(event.target.value)}
             />
 
@@ -277,8 +235,8 @@ export const DemoPage: React.FC<{}> = () => {
               loadingPosition="start"
               color="primary"
               variant="contained"
-              className={css('Button')}
-              data-testid={test('Withdraw')}
+              className={bem('Button')}
+              data-testid={bem('Withdraw')}
               startIcon={<KeyboardDoubleArrowRight />}
               disabled={deposit || withdraw || transfer || badAmount(transferAmount) || +transferAmount > (privateBalance || 0)}
               onClick={() => {
@@ -292,12 +250,12 @@ export const DemoPage: React.FC<{}> = () => {
         </Box>
       </div>
 
-      <div className={css('Info')}>
+      <div className={bem('Info')}>
         <span>To perform any action you need to have enough funds on your public balance.</span>
         <span>Click on your public address and use it on the <a href='https://gitter.im/kovan-testnet/faucet#' target={'_blank'}>Kovan Faset</a> page to get free funds.</span>
       </div>
 
-      <div className={css('Footer')}>
+      <div className={bem('Footer')}>
         <img src={logo} alt="ZeroPool" style={{ margin: 'auto', height: '60px' }} />
       </div>
 
@@ -306,7 +264,19 @@ export const DemoPage: React.FC<{}> = () => {
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
       >
-        {drowerMenu()}
+        <DemoDrowler
+          toggle={toggleDrawer()}
+          reset={() => {
+            dispatch(demoActions.resetAccount(null))
+            navigate('/register')
+            closeDrawer()
+          }}
+          cancelReset={closeDrawer}
+          exportSeed={(seed: string) => {
+            exportToClipboard('Seed', seed, enqueueSnackbar)
+            closeDrawer()
+          }}
+        ></DemoDrowler>
       </SwipeableDrawer>
 
       <Backdrop sx={{ color: '#fff', zIndex: 1000 }} open={backdrop}>
