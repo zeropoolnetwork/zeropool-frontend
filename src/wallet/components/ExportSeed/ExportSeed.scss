@@ -1,16 +1,29 @@
+@import "../../../styles/styles.scss";
+
 .ExportSeed {
+  align-items: center;
   display: flex;
   flex-direction: column;
   justify-items: center;
 
+  // &-FormControlLabel,
+  &-FormControlButton {
+    color: white !important;
+    background-color: $blue-secondary !important;
+  }
+
   &-Name {
+    color: $blue-ink;
     margin-top: 0;
     font-weight: bold;
     text-align: center;
   }
 
   &-Password {
-    margin: 0.1rem 1rem 1rem !important;
+    color: $text-color !important;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
   }
 
   &-Export,

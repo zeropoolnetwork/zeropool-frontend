@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
 import { cn } from '@bem-react/classname'
-import { Button, TextField } from '@mui/material'
+import { Button, FormControl, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
 
 import './ExportSeed.scss'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 
 export const componentId = 'ExportSeed'
 
-const css = cn(componentId)
-const test = testIdBuilder(componentId)
+const bem = cn(componentId)
 
 export type EditWalletProps = {
   onExport: (password: string) => void
@@ -20,27 +19,46 @@ export const ExportSeed: React.FC<EditWalletProps> = ({
   onExport,
   onCancel,
 }) => {
+  const [showPassword, setShowPassword] = useState(false)
   const [password, setPassword] = useState('')
   const minLength = 4
 
   return (
-    <div className={css()} data-testid={test()}>
-      <p className={css('Name')}>Export Seed</p>
+    <form className={bem()} data-testid={bem()}>
+      <p className={bem('Name')}>Export Seed</p>
 
-      <TextField
-        className={css('Password')}
-        label={`Enter password`}
-        value={password}
-        type="password"
-        onChange={(event) => {
-          setPassword(event.target.value)
-        }}
-      />
+      <FormControl className={bem('FormControl')}>
+        <InputLabel className={bem('FormControlLabel')} htmlFor="password">
+          Password
+        </InputLabel>
+
+        <Input
+          id="password"
+          className={bem('Password')}
+          value={password}
+          type={showPassword ? 'text' : 'password'}
+          onChange={(event) => {
+            setPassword(event.target.value)
+          }}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                className={bem('FormControlButton')}
+                aria-label="toggle visibility"
+                onClick={() => setShowPassword(!showPassword)}
+                // onMouseDown={(event) => event.preventDefault()}
+              >
+                {showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          }
+        />
+      </FormControl>
 
       <Button
         disabled={password.length < minLength}
-        className={css('Export')}
-        data-testid={test('Export')}
+        className={bem('Export')}
+        data-testid={bem('Export')}
         onClick={() => onExport(password)}
         color="primary"
         variant="contained"
@@ -49,14 +67,14 @@ export const ExportSeed: React.FC<EditWalletProps> = ({
       </Button>
 
       <Button
-        className={css('Cancel')}
-        data-testid={test('Cancel')}
+        className={bem('Cancel')}
+        data-testid={bem('Cancel')}
         onClick={onCancel}
         color="primary"
         variant="contained"
       >
         Cancel
       </Button>
-    </div>
+    </form>
   )
 }

@@ -1,16 +1,22 @@
+@import "../../../styles/styles.scss";
+
 .ConfirmReset {
+  align-items: center;
   display: flex;
   flex-direction: column;
   justify-items: center;
 
   &-Name {
+    color: $blue-ink;
     margin-top: 0;
     font-weight: bold;
     text-align: center;
   }
 
   &-Text {
-    padding-bottom: 15px;
+    color: $red;
+    padding-bottom: 20px;
+    font-weight: bold;
   }
 
   &-Reset,
