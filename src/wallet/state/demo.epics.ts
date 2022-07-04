@@ -10,7 +10,8 @@ import { demoActions } from 'wallet/state/demo.reducer'
 import { RootState } from 'state'
 
 import toast from 'shared/helpers/toast.helper'
-//import { debug } from 'shared/operators/debug.operator'
+import { debug } from 'shared/operators/debug.operator'
+import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
 // tslint:enable: prettier max-line-length
 
 type Action$ = Observable<PayloadAction>
@@ -262,10 +263,35 @@ const updateBalancesAfterWithdraw = (action$: Action$, state$: State$) =>
     map(() => demoActions.updateBalances(null)),
   )
 
-const resetAccount$: Epic = (action$: Observable<PayloadAction>) =>
+const exportSeed = (action$: Action$, state$: State$) =>
   action$.pipe(
-    filter(demoActions.resetAccount.match),
-    tap((a) => toast.success('Wallet reseted and data cleared')),
+    filter(demoActions.exportSeed.match),
+    mergeMap(({payload}) =>
+      from(api.getSeed(payload)).pipe(
+        //debug(),
+        map((seed) => demoActions.exportSeedSuccess(seed)),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
+
+          return of(demoActions.exportSeedFailure(errMsg))
+        }),
+      ),
+    ),
+  )
+
+const exportSeedSuccess = (action$: Action$, state$: State$) =>
+  action$.pipe(
+    filter(demoActions.exportSeedSuccess.match),
+    tap(({payload}) => {
+      navigator.clipboard.writeText(payload).then(
+        () => {
+          toast.success(`Seed copied to the clipboard`)
+        },
+        (err) => {
+          toast.error(`Can't access clipboard`)
+        },
+      )
+    }),
     ignoreElements(),
   )
 
@@ -286,4 +312,6 @@ export const demoEpics: Epic = combineEpics(
   updateBalancesAfterDeposit,
   updateBalancesAfterMint,
   updateBalancesAfterWithdraw,
+  exportSeed,
+  exportSeedSuccess,
 )

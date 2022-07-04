@@ -6,6 +6,7 @@ import { Dialog, DialogContent, List, ListItem, ListItemIcon, ListItemText } fro
 import './DemoDrowler.scss'
 
 import { ConfirmReset } from 'wallet/components/ConfirmReset/ConfirmReset'
+import { ExportSeed } from 'wallet/components/ExportSeed/ExportSeed'
 
 export const componentId = 'DemoDrowler'
 
@@ -15,11 +16,14 @@ export type DemoDrowlerProps = {
   toggle: (event: React.KeyboardEvent | React.MouseEvent) => void
   reset: () => void
   cancelReset: () => void
-  exportSeed: (seed: string) => void
+  exportSeed: (password: string) => void
+  cancelExport: () => void
 }
 
-export const DemoDrowler: React.FC<DemoDrowlerProps> = ({ toggle, reset, exportSeed, cancelReset }) => {
-  const [openResetDialog, setOpenResetDialog] = useState(false)
+export const DemoDrowler: React.FC<DemoDrowlerProps> = ({ toggle, reset, exportSeed, cancelReset, cancelExport }) => {
+  const [resetDialog, setResetDialog] = useState(false)
+  const [seedDialog, setSeedDialog] = useState(false)
+  
 
   return (
     <div
@@ -34,7 +38,7 @@ export const DemoDrowler: React.FC<DemoDrowlerProps> = ({ toggle, reset, exportS
           className={bem('DrowerItem')}
           data-testid={bem('DrowerItemForReset')}
           button={true}
-          onClick={() => setOpenResetDialog(true)}
+          onClick={() => setResetDialog(true)}
         >
           <ListItemIcon className={bem('DrowerItemIcon')}>
             <Logout />
@@ -47,7 +51,7 @@ export const DemoDrowler: React.FC<DemoDrowlerProps> = ({ toggle, reset, exportS
           data-testid={bem('DrowerItemForExport')}
           button={true}
           onClick={() => {
-            exportSeed('test seed')
+            setSeedDialog(true)
           }}
         >
           <ListItemIcon className={bem('DrowerItemIcon')}>
@@ -58,8 +62,8 @@ export const DemoDrowler: React.FC<DemoDrowlerProps> = ({ toggle, reset, exportS
       </List>
 
       <Dialog
-        onClose={() => setOpenResetDialog(false)}
-        open={openResetDialog}
+        onClose={() => setResetDialog(false)}
+        open={resetDialog}
         fullWidth={true}
         maxWidth={'xs'}
       >
@@ -68,12 +72,31 @@ export const DemoDrowler: React.FC<DemoDrowlerProps> = ({ toggle, reset, exportS
             data-testid={bem('ConfirmReset')}
             onReset={reset}
             onCancel={() => {
-              setOpenResetDialog(false)
+              setResetDialog(false)
               cancelReset()
             }}
           />
         </DialogContent>
       </Dialog>
+      
+      <Dialog
+        onClose={() => setSeedDialog(false)}
+        open={seedDialog}
+        fullWidth={true}
+        maxWidth={'xs'}
+      >
+        <DialogContent dividers={true}>
+          <ExportSeed
+            data-testid={bem('ConfirmSeed')}
+            onExport={(password) => exportSeed(password)}
+            onCancel={() => {
+              setSeedDialog(false)
+              cancelExport()
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+      
     </div>
   )
 }

@@ -1,9 +1,9 @@
 export const copyToClipboard = (
-  str: string,
+  value: string,
   name: string,
-  fn: (str: string, config: any) => void,
+  fn: (value: string, config: any) => void,
 ): void => {
-  navigator.clipboard.writeText(str).then(
+  navigator.clipboard.writeText(value).then(
     () => {
       fn(`${name} copied to the clipboard`, { variant: 'success' })
     },
