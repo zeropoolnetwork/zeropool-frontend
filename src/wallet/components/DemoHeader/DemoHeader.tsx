@@ -1,4 +1,4 @@
-import { CircularProgress, Tooltip, Divider } from '@mui/material'
+import { CircularProgress, Tooltip } from '@mui/material'
 import React, { MouseEvent } from 'react'
 import { useSnackbar } from 'notistack'
 import { cn } from '@bem-react/classname'
@@ -6,7 +6,7 @@ import { cn } from '@bem-react/classname'
 import './DemoHeader.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-import { beautifyAmount } from 'shared/helpers/addres.helper'
+import { beautifyAddress, beautifyAmount } from 'shared/helpers/addres.helper'
 
 export const componentId = 'DemoHeader'
 
@@ -49,7 +49,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
           Public address:&nbsp;
 
           <span id="Public" onClick={handleAddressClick} style={{ cursor: 'pointer' }}>
-            {walletAddress}
+            {beautifyAddress(walletAddress|| '')}
           </span>
         </div>
 
@@ -57,7 +57,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
           Private address:&nbsp;
 
           <span id="Private" onClick={handleAddressClick} style={{ cursor: 'pointer' }}>
-            {privateAddress}
+            {beautifyAddress(privateAddress || '')}
           </span>
         </div>
 
