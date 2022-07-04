@@ -149,19 +149,19 @@ export const getDevPassword = (): string => {
   return sessionStorage.getItem('zp.development.password') as string
 }
 
-export const getSeed = (password: string): string => {
+export const getSeed = (password: string): Promise<string> => {
   let seed
-  const cipherText = localStorage.getItem(`zp.${account}.seed`)
+  const cipherText = localStorage.getItem(`zp.production.seed`)
 
-  if (!cipherText) throw new Error('Can not find seed!')
+  if (!cipherText) return Promise.reject('Can not find seed!')
 
   try {
     seed = AES.decrypt(cipherText, password).toString(Utf8)
-    if (!bip39.validateMnemonic(seed)) throw new Error('invalid mnemonic')
+    if (!bip39.validateMnemonic(seed)) return Promise.reject('Incorect password!')
 
-    return seed
+    return Promise.resolve(seed)
   } catch (_) {
-    throw new Error('Incorrect password')
+    return Promise.reject('Incorrect password')
   }
 }
 

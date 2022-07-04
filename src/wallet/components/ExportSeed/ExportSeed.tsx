@@ -12,7 +12,7 @@ const css = cn(componentId)
 const test = testIdBuilder(componentId)
 
 export type EditWalletProps = {
-  onExport: (name: string) => void
+  onExport: (password: string) => void
   onCancel: () => void
 }
 
@@ -45,7 +45,7 @@ export const ExportSeed: React.FC<EditWalletProps> = ({
         color="primary"
         variant="contained"
       >
-        Delete
+        Export
       </Button>
 
       <Button

@@ -63,12 +63,11 @@ export const DemoPage: React.FC<{}> = () => {
   const toggleDrawer = (open?: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
   ) => {
-    if (
+    if (  
       event?.type === 'keydown'
       &&
-      ((event as React.KeyboardEvent).key === 'Tab' ||
-        (event as React.KeyboardEvent).key === 'Shift')
-    ) {
+      (event as React.KeyboardEvent).key !== 'Escape'
+    ){
       return
     }
 
@@ -205,7 +204,6 @@ export const DemoPage: React.FC<{}> = () => {
         <Box className={bem('Transfer')}>
           <div>
             <Input
-              id="transfer-amount"
               className={bem('TransferTo')}
               sx={{ color: 'black' }}
               color="primary"
@@ -219,7 +217,6 @@ export const DemoPage: React.FC<{}> = () => {
 
           <div>
             <Input
-              id="transfer-amount"
               className={bem('TransferAmount')}
               sx={{ color: 'black' }}
               color="primary"
@@ -272,10 +269,11 @@ export const DemoPage: React.FC<{}> = () => {
             closeDrawer()
           }}
           cancelReset={closeDrawer}
-          exportSeed={(seed: string) => {
-            exportToClipboard('Seed', seed, enqueueSnackbar)
+          exportSeed={(password: string) => {
+            dispatch(demoActions.exportSeed(password))
             closeDrawer()
           }}
+          cancelExport={closeDrawer}
         ></DemoDrowler>
       </SwipeableDrawer>
 

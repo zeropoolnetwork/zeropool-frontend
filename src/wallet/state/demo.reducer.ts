@@ -131,6 +131,10 @@ export const demoSlice = createSlice({
     getPrivateAddressFailure: (state, action: PayloadAction<string>) => {
       state.privateAddress = 'Cant get private address'
     },
+
+    exportSeed: (state, action: PayloadAction<string>) => {},
+    exportSeedSuccess: (state, action: PayloadAction<string>) => {},
+    exportSeedFailure: (state, action: PayloadAction<string>) => {},
   },
 })
 
