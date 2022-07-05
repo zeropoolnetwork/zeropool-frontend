@@ -14,9 +14,17 @@
   &-Description {
     text-align: justify;
 
-    @media screen and (max-width: 350px) {
+    @media screen and (max-width: 400px) {
       font-size: 14px;
-      margin: 0 $margin-normal;
+      margin: 0 !important;
     }
+  }
+
+  &-Button {
+    width: 250px !important;
+
+    @media screen and (max-width: 400px) {
+      margin: 2px !important;
+  }
   }
 }

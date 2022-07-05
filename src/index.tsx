@@ -17,7 +17,6 @@ import { SnackbarUtilsConfigurator } from 'shared/helpers/toast.helper'
 
 import { store, persistedStore } from 'state'
 import { CreateAccountPage } from 'register/containers/CreateAccount/CreateAccountPage'
-import { WalletPage } from 'wallet/containers/WalletPage/WalletPage'
 import { DemoPage } from 'wallet/containers/DemoPage/DemoPage'
 import { theme } from 'theme'
 

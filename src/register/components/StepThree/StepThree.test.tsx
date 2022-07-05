@@ -6,10 +6,12 @@ import { componentId, StepThree, StepThreeProps } from './StepThree'
 describe('StepThree', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<StepThreeProps>
+  let onBackSpy: jest.Mock
 
   beforeEach(() => {
     outputSpy = jest.fn()
-    component = <StepThree onConfirm={outputSpy} seed={['test']} />
+    onBackSpy = jest.fn()
+    component = <StepThree onConfirm={outputSpy} onBack={onBackSpy} seed={['test']} />
   })
 
   it('should render component', () => {
@@ -18,18 +20,34 @@ describe('StepThree', () => {
     expect(getByTestId(componentId)).toBeInTheDocument()
   })
 
-  describe('ConfirmButton', () => {
+  describe('Confirm button', () => {
     it('should render', () => {
       const { getByTestId } = render(component)
 
-      expect(getByTestId(`${componentId}-ConfirmButton`)).toBeInTheDocument()
+      expect(getByTestId(`${componentId}-Confirm`)).toBeInTheDocument()
     })
 
     xit('should call onConfirm prop callback when clicked', () => {
       const { getByTestId } = render(component)
-      fireEvent.click(getByTestId(`${componentId}-ConfirmButton`))
+      fireEvent.click(getByTestId(`${componentId}-Confirm`))
 
-      // expect(outputSpy).toHaveBeenCalledTimes(1); // need to enable button first
+
+      expect(outputSpy).toHaveBeenCalledTimes(1); // need to enable button first
+    })
+  })
+
+  describe('Back button', () => {
+    it('shows back button', () => {
+      const { getByTestId } = render(component)
+
+      expect(getByTestId(`${componentId}-Back`)).toBeInTheDocument()
+    })
+
+    it('should call onBack prop callback when clicked', () => {
+      const { getByTestId } = render(component)
+      fireEvent.click(getByTestId(`${componentId}-Back`))
+
+      expect(onBackSpy).toHaveBeenCalledTimes(1)
     })
   })
 })

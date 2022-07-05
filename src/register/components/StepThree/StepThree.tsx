@@ -4,41 +4,39 @@ import { Button } from '@mui/material'
 
 import './StepThree.scss'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-
 import { SeedPanel } from 'register/components/SeedPanel/SeedPanel'
 
 export const componentId = 'StepThree'
 
-const css = cn(componentId)
-const test = testIdBuilder(componentId)
+const bem = cn(componentId)
 
 export interface StepThreeProps {
   seed: string[]
   onConfirm: () => void
+  onBack: () => void
 }
-export const StepThree: React.FC<StepThreeProps> = ({ seed, onConfirm }) => {
+export const StepThree: React.FC<StepThreeProps> = ({ seed, onConfirm, onBack }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true)
 
   return (
-    <div className={css()} data-testid={test()}>
+    <div className={bem()} data-testid={bem()}>
       <section>
         <SeedPanel
-          classes={[css('SeedPanel')]}
+          classes={[bem('SeedPanel')]}
           seed={seed}
           check={true}
           onCheck={(success: boolean) => setButtonDisabled(!success)}
         />
 
-        <p className={css('Description')}>
+        <p className={bem('Description')}>
           Please confirm your secret phrase, we want to be sure you saved it correctly
         </p>
       </section>
 
       <Button
         color="primary"
-        className={css('Button', { Disabled: buttonDisabled })}
-        data-testid={test('ConfirmButton')}
+        className={bem('Button', { Disabled: buttonDisabled })}
+        data-testid={bem('Confirm')}
         disabled={buttonDisabled}
         onClick={onConfirm}
         variant="contained"
@@ -46,15 +44,29 @@ export const StepThree: React.FC<StepThreeProps> = ({ seed, onConfirm }) => {
         Confirm
       </Button>
 
-      {/* TODO: remove after testing */}
+      {
+        (process.env.NODE_ENV === 'development') ? (
+          <Button
+            color="primary"
+            className={bem('Button')}
+            disableElevation={true}
+            onClick={onConfirm}
+            variant="contained"
+          >
+            Testing: force confirm
+          </Button>
+        ) : null
+      }
+
       <Button
-        color="primary"
-        className={css('Button')}
-        disableElevation={true}
-        onClick={onConfirm}
-        variant="contained"
+        className={bem('Button')}
+        data-testid={bem('Back')}
+        onClick={onBack}
+        variant="outlined"
+        sx={{ width: 200 }}
+
       >
-        Testing: force confirm
+        Back
       </Button>
     </div>
   )

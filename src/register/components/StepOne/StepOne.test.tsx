@@ -4,12 +4,14 @@ import { fireEvent, render } from '@testing-library/react'
 import { componentId, StepOne, StepOneProps } from './StepOne'
 
 describe('StepOne', () => {
-  let outputSpy: jest.Mock
   let component: React.ReactElement<StepOneProps>
+  let onSubmitSpy: jest.Mock
+  let onBackSpy: jest.Mock
 
   beforeEach(() => {
-    outputSpy = jest.fn()
-    component = <StepOne onGenerate={outputSpy} />
+    onSubmitSpy = jest.fn()
+    onBackSpy = jest.fn()
+    component = <StepOne onGenerate={onSubmitSpy} onBack={onBackSpy} />
   })
 
   it('should render component', () => {
@@ -18,18 +20,33 @@ describe('StepOne', () => {
     expect(getByTestId(componentId)).toBeInTheDocument()
   })
 
-  describe('SubmitButton', () => {
-    it('should render', () => {
+  describe('Generate button', () => {
+    it('shows generate button', () => {
       const { getByTestId } = render(component)
 
-      expect(getByTestId(`${componentId}-GenerateButton`)).toBeInTheDocument()
+      expect(getByTestId(`${componentId}-Generate`)).toBeInTheDocument()
     })
 
     it('should call onGenerate prop callback when clicked', () => {
       const { getByTestId } = render(component)
-      fireEvent.click(getByTestId(`${componentId}-GenerateButton`))
+      fireEvent.click(getByTestId(`${componentId}-Generate`))
 
-      expect(outputSpy).toHaveBeenCalledTimes(1)
+      expect(onSubmitSpy).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('Back button', () => {
+    it('shows back button', () => {
+      const { getByTestId } = render(component)
+
+      expect(getByTestId(`${componentId}-Back`)).toBeInTheDocument()
+    })
+
+    it('should call onBack prop callback when clicked', () => {
+      const { getByTestId } = render(component)
+      fireEvent.click(getByTestId(`${componentId}-Back`))
+
+      expect(onBackSpy).toHaveBeenCalledTimes(1)
     })
   })
 })

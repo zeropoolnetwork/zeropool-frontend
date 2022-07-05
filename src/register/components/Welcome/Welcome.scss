@@ -19,7 +19,7 @@
     padding: 12px;
     width: 50vw;
 
-    @media screen and (max-width: 350px) {
+    @media screen and (max-width: 400px) {
       font-size: 12px;
       margin-bottom: 10px;
     }
@@ -46,7 +46,7 @@
   &-Logo {
     width: 40vw;
     max-width: 300px;
-    margin-bottom: 75px;
+    margin-bottom: 20px;
     min-width: 150px;
   }
 }

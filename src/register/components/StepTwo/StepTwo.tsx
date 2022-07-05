@@ -13,24 +13,25 @@ import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
 
 export const componentId = 'StepTwo'
 
-const css = cn(componentId)
+const bem = cn(componentId)
 const test = testIdBuilder(componentId)
 
 
-interface StepTwoProps {
+export interface StepTwoProps {
   seed: string[]
   onSubmit: () => void
+  onBack: () => void
 }
 
-export const StepTwo: React.FC<StepTwoProps> = ({ seed, onSubmit }) => {
+export const StepTwo: React.FC<StepTwoProps> = ({ seed, onSubmit, onBack }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   return (
-    <div className={css()} data-testid="StepTwo">
+    <div className={bem()} data-testid="StepTwo">
       <section>
-        <SeedPanel classes={[css('SeedPanel')]} seed={seed} />
+        <SeedPanel classes={[bem('SeedPanel')]} seed={seed} />
 
-        <p className={css('Description')}>
+        <p className={bem('Description')}>
           By submitting you confirm to have stored the secret phrase on paper or
           used another safe method
         </p>
@@ -38,8 +39,8 @@ export const StepTwo: React.FC<StepTwoProps> = ({ seed, onSubmit }) => {
 
       <Button
         color="primary"
-        className={css('Button')}
-        data-testid={test('SubmitButton')}
+        className={bem('Button')}
+        data-testid={test('Submit')}
         onClick={onSubmit}
         variant="contained"
       >
@@ -49,11 +50,20 @@ export const StepTwo: React.FC<StepTwoProps> = ({ seed, onSubmit }) => {
       <Button
         color="primary"
         variant="outlined"
-        className={css('Button')}
-        data-testid={test('SaveSeedButton')}
+        className={bem('Button')}
+        data-testid={test('SaveSeed')}
         onClick={() => copyToClipboard(strFromArray(seed), 'Seed', enqueueSnackbar)}
       >
         Export seed
+      </Button>
+
+      <Button
+        className={bem('Button')}
+        data-testid={bem('Back')}
+        onClick={onBack}
+        variant="outlined"
+      >
+        Back
       </Button>
     </div>
   )

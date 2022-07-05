@@ -9,7 +9,7 @@
   &-Description {
     text-align: justify;
 
-    @media screen and (max-width: 350px) {
+    @media screen and (max-width: 400px) {
       font-size: 14px;
       margin: $margin-normal;
     }
@@ -32,5 +32,9 @@
   &-Button.MuiButton-root {
     margin-right: auto;
     margin-left: auto;
+  }
+
+  &-Button {
+    width: 250px;
   }
 }

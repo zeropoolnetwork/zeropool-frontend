@@ -10,13 +10,15 @@ const test = testIdBuilder(componentId)
 const getById = queryByAttribute.bind(null, 'id')
 
 describe('StepFour', () => {
-  let outputSpy: jest.Mock
+  let onSubmitSpy: jest.Mock
+  let onBackSpy: jest.Mock
   let component: React.ReactElement<StepFourProps>
   const render = createClientRender({ strict: false })
 
   beforeEach(() => {
-    outputSpy = jest.fn()
-    component = <StepFour onRegister={outputSpy} />
+    onSubmitSpy = jest.fn()
+    onBackSpy = jest.fn()
+    component = <StepFour onRegister={onSubmitSpy} onBack={onBackSpy} />
   })
 
   const setup = (cmp: ReactElement) => {
@@ -43,9 +45,9 @@ describe('StepFour', () => {
       await fireEvent.click(submit)
     })
 
-    call = outputSpy.mock.calls[0] // "calls[0] is undefined" means no call was fired
+    call = onSubmitSpy.mock.calls[0] // "calls[0] is undefined" means no call was fired
 
-    expect(outputSpy).toHaveBeenCalledTimes(0)
+    expect(onSubmitSpy).toHaveBeenCalledTimes(0)
     expect(call).toBeUndefined()
   })
 
@@ -63,9 +65,19 @@ describe('StepFour', () => {
       await fireEvent.click(getByTestId(test('Submit')))
     })
 
-    call = outputSpy.mock.calls[0][0]
+    call = onSubmitSpy.mock.calls[0][0]
 
-    expect(outputSpy).toHaveBeenCalledTimes(1)
+    expect(onSubmitSpy).toHaveBeenCalledTimes(1)
     expect(call.password).toBe('1234qwer')
+  })
+
+  it('calls onBack when back button is clicked', async () => {
+    const { getByTestId } = render(component)
+
+    await act(async () => {
+      await fireEvent.click(getByTestId(test('Back')))
+    })
+
+    expect(onBackSpy).toHaveBeenCalledTimes(1)
   })
 })

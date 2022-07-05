@@ -14,7 +14,7 @@ import './StepFour.scss'
 export const componentId = 'StepFour'
 // tslint:enable: max-line-length prettier
 
-const css = cn(componentId)
+const bem = cn(componentId)
 const test = testIdBuilder(componentId)
 
 const PasswordValodator = {
@@ -40,9 +40,10 @@ interface FormData {
 
 export interface StepFourProps {
   onRegister: (data: { password: string }) => void
+  onBack: () => void
 }
 
-export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
+export const StepFour: React.FC<StepFourProps> = ({ onRegister, onBack }) => {
   // tslint:disable: max-line-length prettier
   const [showPassword, setShowPassword] = useState(false)
 
@@ -54,19 +55,19 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
   // tslint:enable: max-line-length prettier
 
   return (
-    <div className={css()} data-testid={test()}>
+    <div className={bem()} data-testid={test()}>
       {process.env.NODE_ENV !== 'production' && <DevTool control={control} />}
 
-      <form onSubmit={handleSubmit(onRegister)} className={css('Form')}>
-        <FormControl className={css('FormControl')} error={!!errors.password}>
-          <InputLabel className={css('FormControlLabel')} htmlFor="password">
+      <form onSubmit={handleSubmit(onRegister)} className={bem('Form')}>
+        <FormControl className={bem('FormControl')} error={!!errors.password}>
+          <InputLabel className={bem('FormControlLabel')} htmlFor="password">
             Password
           </InputLabel>
 
           <Input
             id="password"
             color="secondary"
-            className={css('Password')}
+            className={bem('Password')}
             inputProps={{ 'data-testid': test('Password') }}
             ref={refPassword}
             name={namePassword}
@@ -77,7 +78,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
               <InputAdornment position="end">
                 {watchPassword ? (
                   <IconButton
-                    className={css('FormControlButton')}
+                    className={bem('FormControlButton')}
                     aria-label="empty password"
                     onClick={() => {
                       setValue('password', '')
@@ -92,7 +93,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
                 ) : null}
 
                 <IconButton
-                  className={css('FormControlButton')}
+                  className={bem('FormControlButton')}
                   aria-label="toggle visibility"
                   onClick={() => setShowPassword(!showPassword)}
                   onMouseDown={(event) => event.preventDefault()}
@@ -110,15 +111,15 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
           ) : null}
         </FormControl>
 
-        <FormControl className={css('FormControl')} error={!!errors.confirm}>
-          <InputLabel className={css('FormControlLabel')} htmlFor="confirm">
+        <FormControl className={bem('FormControl')} error={!!errors.confirm}>
+          <InputLabel className={bem('FormControlLabel')} htmlFor="confirm">
             Confirm password
           </InputLabel>
 
           <Input
             id="confirm"
             color="secondary"
-            className={css('Password')}
+            className={bem('Password')}
             inputProps={{ 'data-testid': test('Confirm') }}
             ref={refConfirm}
             name={nameConfirm}
@@ -129,7 +130,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
               <InputAdornment position="end">
                 {watchConfirm ? (
                   <IconButton
-                    className={css('FormControlButton')}
+                    className={bem('FormControlButton')}
                     aria-label="empty confirmation"
                     onClick={() => {
                       errors.confirm = undefined
@@ -142,7 +143,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
                 ) : null}
 
                 <IconButton
-                  className={css('FormControlButton')}
+                  className={bem('FormControlButton')}
                   aria-label="toggle visibility"
                   onClick={() => setShowPassword(!showPassword)}
                   onMouseDown={(event) => event.preventDefault()}
@@ -160,32 +161,45 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister }) => {
           ) : null}
         </FormControl>
 
-        <p className={css('Description')}>
+        <p className={bem('Description')}>
           Finally, please choose a password to access your secret phrase later
         </p>
 
         <Button
           color="primary"
           variant="contained"
-          className={css('Button')}
+          className={bem('Button')}
           data-testid={test('Submit')}
           type="submit"
         >
           Register
         </Button>
 
-        {/* TODO: remove after testing */}
+        {
+          (process.env.NODE_ENV === 'development') ? (
+            <Button
+              color="primary"
+              variant="contained"
+              className={bem('Button')}
+              onClick={() => {
+                reset({ password: 'test1234', confirm: 'test1234' })
+                handleSubmit(onRegister)
+              }}
+              type="submit"
+            >
+              Testing: use 'test1234'
+            </Button>
+          ) : null
+        }
+
         <Button
           color="primary"
-          variant="contained"
-          className={css('Button')}
-          onClick={() => {
-            reset({ password: 'test1234', confirm: 'test1234' })
-            handleSubmit(onRegister)
-          }}
-          type="submit"
+          className={bem('Button')}
+          data-testid={bem('Back')}
+          onClick={onBack}
+          variant="outlined"
         >
-          Testing: use 'test1234'
+          Back
         </Button>
       </form>
     </div>

@@ -23,7 +23,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ showBackButton = true }) =
     <div className={css()} data-testid="AboutPage">
       {/* <img src={logo} className={css('Logo')} data-testid={test('Logo')} alt="logo" /> */}
 
-      <h1 className={css('Header')}> WHAT IS ZEROPOOL </h1>
+      <h2 className={css('Header')}> ABOUT ZEROPOOL </h2>
 
       <p className={css('Text')}>
         ZeroPool is fully private multi-blokchain solution. Low transaction fees, atomic swaps and
@@ -43,7 +43,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ showBackButton = true }) =
             color="primary"
             data-testid={test('BackButton')}
             onClick={() => { navigate('/register') }}
-            variant="contained"
+            variant="outlined"
           >
             Back
           </Button>

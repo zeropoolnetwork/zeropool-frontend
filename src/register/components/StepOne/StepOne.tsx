@@ -4,39 +4,48 @@ import { Button } from '@mui/material'
 
 import './StepOne.scss'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-
 import { SeedPanel } from 'register/components/SeedPanel/SeedPanel'
 
 export const componentId = 'StepOne'
 
-const css = cn(componentId)
-const test = testIdBuilder(componentId)
+const bem = cn(componentId)
 
 export interface StepOneProps {
   onGenerate: () => void
+  onBack: () => void
 }
 
-export const StepOne: React.FC<StepOneProps> = ({ onGenerate }) => {
-  return (
-    <div className={css()} data-testid={test()}>
-      <section>
-        <SeedPanel classes={[css('SeedPanel')]} seed={[]} />
+export const StepOne: React.FC<StepOneProps> = ({ onGenerate, onBack }) => {
 
-        <p className={css('Description')}>
+  return (
+    <div className={bem()} data-testid={bem()}>
+      <section>
+        <SeedPanel classes={[bem('SeedPanel')]} seed={[]} />
+
+        <p className={bem('Description')}>
           Your secret phrase consists of 12 words. Store it carefully. If you loose it, you will
-          loose access to all of your associated wallets!
+          loose access to all of your associated funds!
         </p>
       </section>
 
       <Button
         color="primary"
-        className={css('Button')}
-        data-testid={test('GenerateButton')}
+        className={bem('Button')}
+        data-testid={bem('Generate')}
         onClick={onGenerate}
         variant="contained"
       >
         Generate a secret phrase
+      </Button>
+
+      <Button
+        color="primary"
+        className={bem('Button')}
+        data-testid={bem('Back')}
+        onClick={onBack}
+        variant="outlined"
+      >
+        Back
       </Button>
     </div>
   )
