@@ -25,7 +25,7 @@ export const Recovery: React.FC<RecoveryProps> = ({
 
   return (
     <form className={bem()} data-testid={bem()}>
-      <p className={bem('Name')}>Export Seed</p>
+      <p className={bem('Name')}>Recover wallet</p>
 
       <FormControl className={bem('FormControl')}>
         <InputLabel className={bem('FormControlLabel')} htmlFor="password">
@@ -62,7 +62,7 @@ export const Recovery: React.FC<RecoveryProps> = ({
         color="primary"
         variant="contained"
       >
-        Export
+        Recover
       </Button>
 
       <Button
