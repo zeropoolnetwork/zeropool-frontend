@@ -1,5 +1,5 @@
 // tslint:disable: prettier max-line-length
-import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, Box, SwipeableDrawer } from '@mui/material'
+import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, Box, SwipeableDrawer, Dialog, DialogContent } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight'
 import { useEffect, useState } from 'react'
@@ -15,12 +15,11 @@ import './DemoPage.scss'
 import logo from 'assets/images/logo1.svg'
 import { badAmount } from 'shared/utils/bad-amount'
 
-import { selectBackdrop, selectDeposit, selectReadiness, selectInitials, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectTransfer, selectWalletAddress, selectWithdraw } from 'wallet/state/demo.selectors'
+import { selectBackdrop, selectDeposit, selectReadiness, selectInitials, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectTransfer, selectWalletAddress, selectWithdraw, selectRecovery } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
-import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
-import { useSnackbar } from 'notistack'
 import { DemoDrowler } from 'wallet/components/DemoDrowler/DemoDrowler'
-import { exportToClipboard } from 'shared/helpers/export.helper'
+import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
+import { Recovery } from 'wallet/components/Recovery/Recovery'
 // tslint:enable: prettier max-line-length
 
 export const componentId = 'DemoPage'
@@ -30,7 +29,6 @@ const bem = cn(componentId)
 export const DemoPage: React.FC<{}> = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { enqueueSnackbar } = useSnackbar()
 
   const backdrop = useSelector(selectBackdrop)
   const minting = useSelector(selectMinting)
@@ -44,6 +42,7 @@ export const DemoPage: React.FC<{}> = () => {
   const withdraw = useSelector(selectWithdraw)
   const transfer = useSelector(selectTransfer)
   const readiness = useSelector(selectReadiness)
+  const recorevery = useSelector(selectRecovery)
 
   const [mintAmount, setMintAmount] = useState('')
   const [depositAmount, setDepositAmount] = useState('')
@@ -51,6 +50,7 @@ export const DemoPage: React.FC<{}> = () => {
   const [transferAmount, setTransferAmount] = useState('')
   const [transferTo, setTransferTo] = useState('')
   const [drowler, setDrowler] = useState(false)
+
 
   useEffect(() => {
     if (!readiness && !initials) {
@@ -276,6 +276,21 @@ export const DemoPage: React.FC<{}> = () => {
           cancelExport={closeDrawer}
         ></DemoDrowler>
       </SwipeableDrawer>
+
+      <Dialog
+        // onClose={() => setRecoveryDialog(false)}
+        open={recorevery}
+        fullWidth={true}
+        maxWidth={'xs'}
+      >
+        <DialogContent dividers={true}>
+          <Recovery
+            data-testid={bem('Recovery')}
+            onReset={() => { dispatch(demoActions.resetAccount(null)); navigate('/register') }}
+            onRecover={(password: string) => dispatch(demoActions.recoverWallet(password))}
+          />
+        </DialogContent>
+      </Dialog>
 
       <Backdrop sx={{ color: '#fff', zIndex: 1000 }} open={backdrop}>
         <CircularProgress color="inherit" />

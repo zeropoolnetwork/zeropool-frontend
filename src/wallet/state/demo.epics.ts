@@ -1,61 +1,21 @@
 // tslint:disable: prettier max-line-length
 import { catchError, filter, from, ignoreElements, map, mergeMap, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs'
-import { combineEpics, Epic, ofType } from 'redux-observable'
+import { combineEpics, Epic } from 'redux-observable'
 import { PayloadAction } from '@reduxjs/toolkit'
 
 import * as api from 'wallet/api/zeropool.api'
-import { selectInitials } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
+import { selectInitials } from 'wallet/state/demo.selectors'
 
 import { RootState } from 'state'
 
 import toast from 'shared/helpers/toast.helper'
 import { debug } from 'shared/operators/debug.operator'
-import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
+import { isNonNull } from 'shared/operators/is-not-null'
 // tslint:enable: prettier max-line-length
 
 type Action$ = Observable<PayloadAction>
 type State$ = Observable<RootState>
-
-const resetAccount: Epic = (action$: Action$) =>
-  action$.pipe(
-    filter(demoActions.resetAccount.match),
-    tap(() => {
-      sessionStorage.clear()
-      localStorage.clear()
-      caches.keys().then(keys => {
-        keys.forEach(key => caches.delete(key))
-      })
-      indexedDB.databases().then(dbs => {
-        dbs.forEach(db => indexedDB.deleteDatabase((db as any).name))
-      })
-    }),
-    tap((a) => toast.success('Wallet reseted and data cleared')),
-    ignoreElements(),
-  )
-
-const restoreSession = (action$: Action$, state$: State$) =>
-  action$.pipe(
-    filter(demoActions.initApi.match),
-    withLatestFrom(state$.pipe(map(selectInitials))),
-    filter(([, initials]) => !initials),
-    mergeMap(() => {
-      let seed, password
-      // first we try to restore session from SessionStorage (for development)
-      seed = api.getDevSeed()
-      password = api.getDevPassword()
-
-      if (!seed || !password) {
-        // if not found, we run recovery proccess
-        return of(demoActions.recoverWallet(null))
-      } else {
-        return of(
-          demoActions.setSeedAndPasword({seed, password}),
-          demoActions.initApi(null),
-        )
-      }
-    }),
-  )
 
 const initApi = (action$: Action$, state$: State$) =>
   action$.pipe(
@@ -268,7 +228,6 @@ const exportSeed = (action$: Action$, state$: State$) =>
     filter(demoActions.exportSeed.match),
     mergeMap(({payload}) =>
       from(api.getSeed(payload)).pipe(
-        //debug(),
         map((seed) => demoActions.exportSeedSuccess(seed)),
         catchError((errMsg: string) => {
           toast.error(errMsg)
@@ -295,6 +254,72 @@ const exportSeedSuccess = (action$: Action$, state$: State$) =>
     ignoreElements(),
   )
 
+const resetAccount: Epic = (action$: Action$) =>
+  action$.pipe(
+    filter(demoActions.resetAccount.match),
+    tap(() => {
+      sessionStorage.clear()
+      localStorage.clear()
+      caches.keys().then(keys => {
+        keys.forEach(key => caches.delete(key))
+      })
+      indexedDB.databases().then(dbs => {
+        dbs.forEach(db => indexedDB.deleteDatabase((db as any).name))
+      })
+    }),
+    tap((a) => toast.success('Wallet reseted and data cleared')),
+    ignoreElements(),
+  )
+
+const restoreSession = (action$: Action$, state$: State$) =>
+  action$.pipe(
+    filter(demoActions.initApi.match),
+    withLatestFrom(state$.pipe(map(selectInitials))),
+    filter(([, initials]) => !initials),
+    mergeMap(() => {
+      let seed, password
+      // first we try to restore session from SessionStorage (for development)
+      seed = api.getDevSeed()
+      password = api.getDevPassword()
+
+      if (!seed || !password) {
+        // if not found, we run recovery proccess
+        return of(demoActions.recoverWallet(null))
+      } else {
+        return of(
+          demoActions.setSeedAndPasword({seed, password}),
+          demoActions.initApi(null),
+        )
+      }
+    }),
+  )
+
+const recowerWallet = (action$: Action$, state$: State$) =>
+  action$.pipe(
+    filter(demoActions.recoverWallet.match),
+    map(({payload}) => payload),
+    filter(isNonNull),
+    mergeMap((password) =>
+      from(api.getSeed(password)).pipe(
+        map((seed) => demoActions.recoverWalletSuccess({seed, password})),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
+
+          return of(demoActions.recoverWalletFailure(errMsg))
+        }),
+      ),
+    ),
+  )
+
+const recoverWalletSuccess = (action$: Action$, state$: State$) =>
+  action$.pipe(
+    filter(demoActions.recoverWalletSuccess.match),
+    mergeMap(({payload}) => of(
+      demoActions.setSeedAndPasword(payload),
+      demoActions.initApi(null),
+    )),
+  )
+
 export const demoEpics: Epic = combineEpics(
   initApi,
   mint,
@@ -314,4 +339,6 @@ export const demoEpics: Epic = combineEpics(
   updateBalancesAfterWithdraw,
   exportSeed,
   exportSeedSuccess,
+  recowerWallet,
+  recoverWalletSuccess,
 )
