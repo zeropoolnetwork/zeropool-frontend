@@ -1,5 +1,6 @@
 // tslint:disable: prettier
 import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { cn } from '@bem-react/classname'
 
 import logo from 'assets/images/logo1.svg'
@@ -18,22 +19,20 @@ import { ImportAccount } from 'register/components/ImportAccount/ImportAccount'
 import { RegisterStage } from 'register/state/models/register-stage'
 import { registerSlice } from 'register/state/register.reducer'
 import { selectSeed, selectStage, selectShowSteps } from 'register/state/register.selectors'
-import { selectSeed as selectSeedInWallet } from 'wallet/state/wallet.selectors'
 import { useAppSelector, useAppDispatch } from 'state'
-import { useNavigate } from 'react-router-dom'
+import { selectReadiness } from 'wallet/state/demo.selectors'
 // tslint:enable: prettier
 
 export const componentId = 'CreateAccountPage'
 
-const css = cn(componentId)
-const test = testIdBuilder(componentId)
+const bem = cn(componentId)
 const rsa = registerSlice.actions
 
 type CreateAccountProps = {}
 
 export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
   const navigate = useNavigate()
-  const seedInWallet = useAppSelector(selectSeedInWallet)
+  const seedInWallet = useAppSelector(selectReadiness)
   const seed = useAppSelector(selectSeed)
   const stage = useAppSelector(selectStage)
   const showSteps = useAppSelector(selectShowSteps)
@@ -42,7 +41,6 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
   useEffect(() => {
     if (seedInWallet) {
       navigate('/wallet')
-      // navigate(0)
     }
   })
 
@@ -94,7 +92,7 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
   }
 
   return (
-    <div className={css()} data-testid={test()}>
+    <div className={bem()} data-testid={bem()}>
       {stage && showSteps ? (
         <StepHeader step={stage} total={4} onBack={() => dispatch(rsa.stepBack())} />
       ) : null}
@@ -102,7 +100,7 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
       {components()}
 
       {stage && showSteps ? (
-        <div className={css('Footer')}>
+        <div className={bem('Footer')}>
           <img src={logo} alt="ZeroPool" style={{ margin: 'auto', height: '50px' }} />
         </div>
       ) : null}

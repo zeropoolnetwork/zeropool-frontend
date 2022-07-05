@@ -96,7 +96,6 @@ export const DemoDrowler: React.FC<DemoDrowlerProps> = ({ toggle, reset, exportS
           />
         </DialogContent>
       </Dialog>
-      
     </div>
   )
 }
