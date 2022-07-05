@@ -27,8 +27,7 @@ export const HelpPage: React.FC<HelpPageProps> = () => {
       <p>
         To try it out you can install Metamask, select Kovan network, get some free Eth from the
         <a href="https://gitter.im/kovan-testnet/faucet#" target="_blank" rel="noopener noreferrer">
-          {' '}
-          kovan faucet{' '}
+          {' '}kovan faucet{' '}
         </a>
         and send it to one of your Zero Pool <b>Eth</b> Wallet's address.
       </p>

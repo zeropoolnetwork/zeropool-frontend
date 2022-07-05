@@ -249,7 +249,11 @@ export const DemoPage: React.FC<{}> = () => {
 
       <div className={bem('Info')}>
         <span>To perform any action you need to have enough funds on your public balance.</span>
-        <span>Click on your public address and use it on the <a href='https://gitter.im/kovan-testnet/faucet#' target={'_blank'}>Kovan Faset</a> page to get free funds.</span>
+        <span>
+          Click on your public address and use it on the&nbsp; 
+          <a href='https://gitter.im/kovan-testnet/faucet#' target={'_blank'}>Kovan Faset</a> or&nbsp; 
+          <a href='https://ethdrop.dev/' target={'_blank'}>Ethdrop</a> page to get free funds.
+        </span>
       </div>
 
       <div className={bem('Footer')}>
