@@ -120,7 +120,8 @@ export const DemoPage: React.FC<{}> = () => {
         <div>
           <Input
             id="mint-amount"
-            className={bem('Mint')}
+            className={bem('Input')}
+            data-testid={bem('MintInput')}
             sx={{ color: 'black' }}
             color="primary"
             value={mintAmount}
@@ -136,7 +137,7 @@ export const DemoPage: React.FC<{}> = () => {
             color="primary"
             variant="contained"
             className={bem('Button')}
-            data-testid={bem('Mint')}
+            data-testid={bem('MintButton')}
             startIcon={<SoupKitchenIcon />}
             disabled={minting || badAmount(mintAmount)}
             onClick={() => { dispatch(demoActions.mint(mintAmount)); setMintAmount('') }}
@@ -148,7 +149,8 @@ export const DemoPage: React.FC<{}> = () => {
         <div>
           <Input
             id="deposit-amount"
-            className={bem('Deposit')}
+            className={bem('Input')}
+            data-testid={bem('DepositInput')}
             sx={{ color: 'black' }}
             color="primary"
             value={depositAmount}
@@ -160,11 +162,11 @@ export const DemoPage: React.FC<{}> = () => {
 
           <LoadingButton
             loading={deposit}
+            className={bem('Button')}
+            data-testid={bem('DepositButton')}
             loadingPosition="start"
             color="primary"
             variant="contained"
-            className={bem('Button')}
-            data-testid={bem('Import')}
             startIcon={<KeyboardArrowRightIcon />}
             disabled={deposit || withdraw || transfer || badAmount(depositAmount) || +depositAmount > (tokenBalance || 0)}
             onClick={() => { dispatch(demoActions.deposit(depositAmount)); setDepositAmount('') }}
@@ -176,8 +178,9 @@ export const DemoPage: React.FC<{}> = () => {
         <div>
           <Input
             color="primary"
+            className={bem('Input')}
+            data-testid={bem('WithdrawInput')}
             id="withdraw-amount"
-            className={bem('Withdraw')}
             sx={{ color: 'black' }}
             placeholder="Withdraw amount in tokens"
             classes={{ input: bem('Withdraw') }}
@@ -188,11 +191,11 @@ export const DemoPage: React.FC<{}> = () => {
 
           <LoadingButton
             loading={withdraw}
+            className={bem('Button')}
+            data-testid={bem('WithdrawButton')}
             loadingPosition="start"
             color="primary"
             variant="contained"
-            className={bem('Button')}
-            data-testid={bem('Withdraw')}
             startIcon={<KeyboardArrowLeft />}
             disabled={deposit || withdraw || transfer || badAmount(withdrawAmount) || +withdrawAmount > (privateBalance || 0)}
             onClick={() => { dispatch(demoActions.withdraw(withdrawAmount)); setWithdrawAmount('') }}
@@ -201,8 +204,7 @@ export const DemoPage: React.FC<{}> = () => {
           </LoadingButton>
         </div>
 
-        <Box className={bem('Transfer')}>
-          <div>
+          {/* <div>
             <Input
               className={bem('TransferTo')}
               sx={{ color: 'black' }}
@@ -213,9 +215,9 @@ export const DemoPage: React.FC<{}> = () => {
               inputProps={{ 'data-testid': bem('TransferTo'), maxLength: 120 }}
               onChange={(event) => setTransferTo(event.target.value)}
             />
-          </div>
+          </div> */}
 
-          <div>
+          {/* <div>
             <Input
               className={bem('TransferAmount')}
               sx={{ color: 'black' }}
@@ -225,26 +227,25 @@ export const DemoPage: React.FC<{}> = () => {
               classes={{ input: bem('TransferAmount') }}
               inputProps={{ 'data-testid': bem('TransferAmount'), maxLength: 20 }}
               onChange={(event) => setTransferAmount(event.target.value)}
-            />
+            /> */}
 
             <LoadingButton
               loading={transfer}
+              className={bem('Button', {Transfer: true})}
+              data-testid={bem('TransferButton')}
               loadingPosition="start"
               color="primary"
               variant="contained"
-              className={bem('Button')}
-              data-testid={bem('Withdraw')}
               startIcon={<KeyboardDoubleArrowRight />}
-              disabled={deposit || withdraw || transfer || badAmount(transferAmount) || +transferAmount > (privateBalance || 0)}
+              disabled={deposit || withdraw || transfer || badAmount(privateBalance || 0)}
               onClick={() => {
-                dispatch(demoActions.transfer({ to: transferTo, tokens: transferAmount }))
+                dispatch(demoActions.transferModal(true))
                 setTransferAmount('')
               }}
             >
               Transfer
             </LoadingButton>
-          </div>
-        </Box>
+          {/* </div> */}
       </div>
 
       <div className={bem('Info')}>
@@ -257,7 +258,7 @@ export const DemoPage: React.FC<{}> = () => {
       </div>
 
       <div className={bem('Footer')}>
-        <img src={logo} alt="ZeroPool" style={{ margin: 'auto', height: '60px' }} />
+        <img className={bem('Logo')} src={logo} alt="ZeroPool"/>
       </div>
 
       <SwipeableDrawer

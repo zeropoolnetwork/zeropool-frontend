@@ -6,6 +6,10 @@
   flex-direction: column;
   padding: 26px 0px;
 
+  @media screen and (max-width: $screen-xs-max) {
+    padding: 10px 0px 30px;
+  }
+
   &-Divider {
     border: none;
     background-color: grey;
@@ -19,6 +23,10 @@
     justify-content: space-between;
     height: 128px;
     margin: auto;
+
+    @media screen and (max-width: $screen-xs-max) {
+      height: 90px;
+    }
   }
 
   &-Amount {

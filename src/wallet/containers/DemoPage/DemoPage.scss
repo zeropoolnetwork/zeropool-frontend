@@ -39,14 +39,34 @@
     width: 100%;
   }
 
-  &-Withdraw, &-Deposit, &-Mint, &-TransferAmount{
-    width: 200px;
+  &-Input{
+    width: 220px;
     margin-right: 10px;
+
+    @media screen and (max-width: $screen-xs-max) {
+      font-size: $small-font-size !important;
+      margin: 0;
+      width: 180px;
+    }
+  }
+
+  &-Button{
+    @media screen and (max-width: $screen-xs-max) {
+      font-size: $small-font-size !important;
+      margin-left: 10px !important;
+    }
+
+    &_Transfer {
+      font-size: 20px !important;
+      font-weight: bold;
+      margin: 40px auto 0 !important;;
+      height: 60px;
+    }
   }
 
   &-TransferTo{
-    width: 355px;
     margin-bottom: 8px;
+    width: 355px;
   }
 
   &-Title{
@@ -58,6 +78,10 @@
     display: flex;
     margin: 50px auto;
     flex-direction: column;
+
+    @media screen and (max-width: $screen-xs-max) {
+      margin: 20px auto;
+    }
   }
 
   &-Info{
@@ -69,6 +93,11 @@
     > span {
       margin-bottom: 5px;
     }
+
+    @media screen and (max-width: $screen-xs-max) {
+      font-size: $small-font-size;
+      margin: 0;
+    }
   }
 
   &-Footer{
@@ -78,6 +107,19 @@
     position: fixed;
     height: 120px;
     width: 100%;
+
+    @media screen and (max-width: $screen-xs-max) {
+      height: 80px;
+    }
+  }
+
+  &-Logo {
+    margin: auto;
+    height: 60px; 
+
+    @media screen and (max-width: $screen-xs-max) {
+      height: 40px;
+    }
   }
 
   &-AboutPage{

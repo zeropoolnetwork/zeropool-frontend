@@ -10,5 +10,9 @@
     position: fixed;
     height: 120px;
     width: 100%;
+
+    @media screen and (max-width: $screen-xs-max) {
+      height: 0;
+    }
   }
 }
