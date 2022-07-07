@@ -104,12 +104,12 @@ const withdraw: Epic = (action$, state$) =>
 const transfer: Epic = (action$, state$) =>
   action$.pipe(
     filter(demoActions.transfer.match),
-    tap((payload) => toast.info(`Processing private transfer of ${payload} tokens...`, { key: 'tranfer', persist: true })),
+    tap(({payload}) => toast.info(`Processing transfer of ${payload.amount} tokens...`, { key: 'tranfer', persist: true })),
     switchMap(({ payload }) =>
-      from(api.transferShielded(payload.to, payload.tokens)).pipe(
+      from(api.transfer(payload)).pipe(
         tap(() => toast.close('tranfer')),
-        tap(() => toast.success('Private transfer success, pls update balances in a while')),
-        map((res) => demoActions.transferSuccess(res)),
+        tap(() => toast.success('Transfer success, pls update balances in a while')),
+        map((res) => demoActions.transferSuccess(res || 'Success')),
         catchError((errMsg: string) => {
           toast.close('tranfer')
           toast.error(errMsg)

@@ -12,6 +12,7 @@ export const selectBackdrop = (state: RS) => selectDemoState(state).backdrop
 export const selectDeposit = (state: RS) => selectDemoState(state).deposit
 export const selectWithdraw = (state: RS) => selectDemoState(state).withdraw
 export const selectTransfer = (state: RS) => selectDemoState(state).transfer
+export const selectTransferModal = (state: RS) => selectDemoState(state).transferModal
 export const selectInitials = (state: RS) => selectDemoState(state).initials
 export const selectReadiness = (state: RS) => selectDemoState(state).readiness
 export const selectRecovery = (state: RS) => selectDemoState(state).recovery
