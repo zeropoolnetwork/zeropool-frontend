@@ -121,6 +121,7 @@ export const demoSlice = createSlice({
     recoverWallet: (state, action: PayloadAction<string|null>) => {
       state.backdrop = false
       state.recovery = true
+      state.readiness = true
     },
     recoverWalletSuccess: (state, action: PayloadAction<{seed: string, password: string}>) => {
       state.recovery = false

@@ -58,7 +58,7 @@ export const Transfer: React.FC<TransferProps> = ({
           className={bem('Switch')}
           labelPlacement="top"
           disabled={funds}
-          control={<ZPSwitch sx={{ m: 1 }} defaultChecked={false} />}
+          control={<ZPSwitch sx={{ m: 1 }} defaultChecked={true} />}
           label={`from ${fromPrivate ? 'private' : 'public'}`}
           onChange={() => setFromPrivate(!fromPrivate)}
         />
@@ -67,7 +67,7 @@ export const Transfer: React.FC<TransferProps> = ({
           className={bem('Switch')}
           labelPlacement="top"
           disabled={funds}
-          control={<ZPSwitch sx={{ m: 1 }} defaultChecked={false} />}
+          control={<ZPSwitch sx={{ m: 1 }} defaultChecked={true} />}
           label={`to ${toPrivate ? 'private' : 'public'}`}
           onChange={() => setToPrivate(!toPrivate)}
         />
@@ -98,7 +98,7 @@ export const Transfer: React.FC<TransferProps> = ({
               <IconButton
                 className={bem('FormControlButton')}
                 aria-label="paste"
-                onClick={() => {alert('Not implemented')}}
+                onClick={() => navigator.clipboard.readText().then(text => setTo(text))}
               >
                 <CopyAll />
               </IconButton>
@@ -132,7 +132,7 @@ export const Transfer: React.FC<TransferProps> = ({
               <IconButton
                 className={bem('FormControlButton')}
                 aria-label="paste"
-                onClick={() => {alert('Not implemented')}}
+                onClick={() => navigator.clipboard.readText().then(text => setAmount(text))}
               >
                 <CopyAll />
               </IconButton>
