@@ -3,18 +3,15 @@ import { cn } from '@bem-react/classname'
 
 import './HelpPage.scss'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-
 export const componentId = 'HelpPage'
 
-const css = cn(componentId)
-const test = testIdBuilder(componentId)
+const bem = cn(componentId)
 
 export type HelpPageProps = {}
 
 export const HelpPage: React.FC<HelpPageProps> = () => {
   return (
-    <div className={css()} data-testid={test()}>
+    <div className={bem()} data-testid={bem()}>
       <h2> Wallet is in test mode. How to start:</h2>
 
       <p>

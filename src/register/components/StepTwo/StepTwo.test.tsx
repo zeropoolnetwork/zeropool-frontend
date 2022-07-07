@@ -1,6 +1,6 @@
 import React from 'react'
-import { fireEvent, render } from '@testing-library/react'
 import { useSnackbar } from 'notistack'
+import { fireEvent, render } from '@testing-library/react'
 
 import { componentId, StepTwo, StepTwoProps } from './StepTwo'
 

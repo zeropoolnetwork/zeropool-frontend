@@ -5,7 +5,6 @@ import { Button } from '@mui/material'
 import './StepOne.scss'
 
 import { SeedPanel } from 'register/components/SeedPanel/SeedPanel'
-
 export const componentId = 'StepOne'
 
 const bem = cn(componentId)

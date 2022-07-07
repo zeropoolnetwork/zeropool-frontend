@@ -7,7 +7,6 @@ import { Close, Visibility, VisibilityOff } from '@mui/icons-material'
 import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
 
 import { confirmValidator, passwordValidator } from 'shared/utils/form-validators'
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
 import './StepFour.scss'
 
@@ -15,7 +14,6 @@ export const componentId = 'StepFour'
 // tslint:enable: max-line-length prettier
 
 const bem = cn(componentId)
-const test = testIdBuilder(componentId)
 
 const PasswordValodator = {
   required: 'Required',
@@ -55,7 +53,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister, onBack }) => {
   // tslint:enable: max-line-length prettier
 
   return (
-    <div className={bem()} data-testid={test()}>
+    <div className={bem()} data-testid={bem()}>
       {process.env.NODE_ENV !== 'production' && <DevTool control={control} />}
 
       <form onSubmit={handleSubmit(onRegister)} className={bem('Form')}>
@@ -68,7 +66,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister, onBack }) => {
             id="password"
             color="secondary"
             className={bem('Password')}
-            inputProps={{ 'data-testid': test('Password') }}
+            inputProps={{ 'data-testid': bem('Password') }}
             ref={refPassword}
             name={namePassword}
             onChange={onChangePassword}
@@ -105,7 +103,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister, onBack }) => {
           />
 
           {errors.password ? (
-            <FormHelperText data-testid={test('PasswordError')}>
+            <FormHelperText data-testid={bem('PasswordError')}>
               {errors.password.message}
             </FormHelperText>
           ) : null}
@@ -120,7 +118,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister, onBack }) => {
             id="confirm"
             color="secondary"
             className={bem('Password')}
-            inputProps={{ 'data-testid': test('Confirm') }}
+            inputProps={{ 'data-testid': bem('Confirm') }}
             ref={refConfirm}
             name={nameConfirm}
             onChange={onChangeConfirm}
@@ -155,7 +153,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister, onBack }) => {
           />
 
           {errors.confirm ? (
-            <FormHelperText data-testid={test('PasswordConfirmError')}>
+            <FormHelperText data-testid={bem('PasswordConfirmError')}>
               Passwords do not match
             </FormHelperText>
           ) : null}
@@ -169,7 +167,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister, onBack }) => {
           color="primary"
           variant="contained"
           className={bem('Button')}
-          data-testid={test('Submit')}
+          data-testid={bem('Submit')}
           type="submit"
         >
           Register

@@ -5,17 +5,12 @@ import { useSnackbar } from 'notistack'
 
 import './StepTwo.scss'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-
 import { SeedPanel } from 'register/components/SeedPanel/SeedPanel'
 import { strFromArray } from 'shared/utils/str-from-array'
 import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
 
 export const componentId = 'StepTwo'
-
 const bem = cn(componentId)
-const test = testIdBuilder(componentId)
-
 
 export interface StepTwoProps {
   seed: string[]
@@ -27,7 +22,7 @@ export const StepTwo: React.FC<StepTwoProps> = ({ seed, onSubmit, onBack }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   return (
-    <div className={bem()} data-testid="StepTwo">
+    <div className={bem()} data-testid={bem()}>
       <section>
         <SeedPanel classes={[bem('SeedPanel')]} seed={seed} />
 
@@ -40,7 +35,7 @@ export const StepTwo: React.FC<StepTwoProps> = ({ seed, onSubmit, onBack }) => {
       <Button
         color="primary"
         className={bem('Button')}
-        data-testid={test('Submit')}
+        data-testid={bem('Submit')}
         onClick={onSubmit}
         variant="contained"
       >
@@ -51,7 +46,7 @@ export const StepTwo: React.FC<StepTwoProps> = ({ seed, onSubmit, onBack }) => {
         color="primary"
         variant="outlined"
         className={bem('Button')}
-        data-testid={test('SaveSeed')}
+        data-testid={bem('SaveSeed')}
         onClick={() => copyToClipboard(strFromArray(seed), 'Seed', enqueueSnackbar)}
       >
         Export seed

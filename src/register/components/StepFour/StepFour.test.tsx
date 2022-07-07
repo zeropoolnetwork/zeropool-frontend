@@ -1,12 +1,12 @@
+import { cn } from '@bem-react/classname'
 import React, { ReactElement } from 'react'
 import { queryByAttribute, act } from '@testing-library/react'
 
 import { StepFour, componentId, StepFourProps } from './StepFour'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { createClientRender, fireEvent } from 'shared/utils/render.js'
 
-const test = testIdBuilder(componentId)
+const bem = cn(componentId)
 const getById = queryByAttribute.bind(null, 'id')
 
 describe('StepFour', () => {
@@ -23,10 +23,10 @@ describe('StepFour', () => {
 
   const setup = (cmp: ReactElement) => {
     const utils = render(cmp)
-    const root = utils.getByTestId(test())
-    const password = getById(utils.container, test('Password'))
-    const confirm = getById(utils.container, test('Confirm'))
-    const submit = utils.getByTestId(test('Submit'))
+    const root = utils.getByTestId(bem())
+    const password = getById(utils.container, bem('Password'))
+    const confirm = getById(utils.container, bem('Confirm'))
+    const submit = utils.getByTestId(bem('Submit'))
 
     return { root, password, confirm, submit, ...utils, utils }
   }
@@ -34,7 +34,7 @@ describe('StepFour', () => {
   it('renders component', () => {
     const { getByTestId } = setup(component)
 
-    expect(getByTestId(test())).toBeInTheDocument()
+    expect(getByTestId(bem())).toBeInTheDocument()
   })
 
   it('not calls onRegister if input form is invalid', async () => {
@@ -56,13 +56,13 @@ describe('StepFour', () => {
     const { getByTestId } = render(component)
 
     await act(async () => {
-      await fireEvent.input(getByTestId(test('Password')), {
+      await fireEvent.input(getByTestId(bem('Password')), {
         target: { value: '1234qwer' },
       })
-      await fireEvent.input(getByTestId(test('Confirm')), {
+      await fireEvent.input(getByTestId(bem('Confirm')), {
         target: { value: '1234qwer' },
       })
-      await fireEvent.click(getByTestId(test('Submit')))
+      await fireEvent.click(getByTestId(bem('Submit')))
     })
 
     call = onSubmitSpy.mock.calls[0][0]
@@ -75,7 +75,7 @@ describe('StepFour', () => {
     const { getByTestId } = render(component)
 
     await act(async () => {
-      await fireEvent.click(getByTestId(test('Back')))
+      await fireEvent.click(getByTestId(bem('Back')))
     })
 
     expect(onBackSpy).toHaveBeenCalledTimes(1)

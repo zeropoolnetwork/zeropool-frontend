@@ -14,7 +14,6 @@ describe('Welcome Page', () => {
         onAbout={outputSpy}
         onCreate={outputSpy}
         onImport={outputSpy}
-        onMockedLogin={jest.fn()}
       />
     )
   })

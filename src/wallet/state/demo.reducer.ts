@@ -45,6 +45,8 @@ export const demoSlice = createSlice({
     },
     initApi: (state, action: PayloadAction<null>) => {
       state.backdrop = true
+      state.readiness = false
+      state.recovery = false
     },
     initApiSuccess: (state, action: PayloadAction<null>) => {
       state.backdrop = false

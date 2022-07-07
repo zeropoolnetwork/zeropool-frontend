@@ -1,11 +1,11 @@
+import { cn } from '@bem-react/classname'
 import React, { ReactElement } from 'react'
 
 import { componentId, ImportAccount, ImportAccountProps } from './ImportAccount'
 
 import { createClientRender, queryByAttribute } from 'shared/utils/render.js'
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
-const test = testIdBuilder(componentId)
+const bem = cn(componentId)
 const getById = queryByAttribute.bind(null, 'id')
 
 jest.mock('register/state/helpers/seed.helper', () => ({
@@ -24,11 +24,11 @@ describe('ImportAccount', () => {
 
   const setup = (cmp: ReactElement) => {
     const utils = render(cmp)
-    const root = utils.getByTestId(test())
-    const seed = getById(utils.container, test('Seed'))
-    const password = getById(utils.container, test('Password'))
-    const confirm = getById(utils.container, test('Confirm'))
-    const submit = utils.getByTestId(test('Import'))
+    const root = utils.getByTestId(bem())
+    const seed = getById(utils.container, bem('Seed'))
+    const password = getById(utils.container, bem('Password'))
+    const confirm = getById(utils.container, bem('Confirm'))
+    const submit = utils.getByTestId(bem('Import'))
 
     return { root, seed, password, confirm, submit, ...utils }
   }
@@ -36,6 +36,6 @@ describe('ImportAccount', () => {
   it('renders', () => {
     const { getByTestId } = setup(component)
 
-    expect(getByTestId(test())).toBeInTheDocument()
+    expect(getByTestId(bem())).toBeInTheDocument()
   })
 })

@@ -3,14 +3,11 @@ import { cn } from '@bem-react/classname'
 
 import './RoundButton.scss'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { IconButton } from '@mui/material'
 import { cssMod } from 'shared/utils/css-mod'
 
 export const componentId = 'RoundButton'
-
-const css = cn(componentId)
-const test = testIdBuilder(componentId)
+const bem = cn(componentId)
 
 export interface RoundButtonProps extends HTMLAttributes<HTMLElement> {
   label?: string
@@ -22,10 +19,10 @@ export const RoundButton: React.FC<RoundButtonProps> = ({
   labelPosition = 'bottom',
   ...props
 }) => (
-  <div className={css({ NoLabel: !label })} data-testid={test()}>
+  <div className={bem({ NoLabel: !label })} data-testid={bem()}>
     <IconButton
-      className={css('Button', {}, [props.className])}
-      data-testid={test('Button')}
+      className={bem('Button', {}, [props.className])}
+      data-testid={bem('Button')}
       disableRipple={true}
       disableFocusRipple={true}
       disableTouchRipple={true}
@@ -35,8 +32,8 @@ export const RoundButton: React.FC<RoundButtonProps> = ({
     </IconButton>
 
     <span
-      className={css('Label', { ...cssMod(labelPosition) }, ['noselect'])}
-      data-testid={test('Label')}
+      className={bem('Label', { ...cssMod(labelPosition) }, ['noselect'])}
+      data-testid={bem('Label')}
     >
       {label}
     </span>

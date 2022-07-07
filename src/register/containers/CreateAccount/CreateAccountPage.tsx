@@ -1,4 +1,5 @@
 // tslint:disable: prettier
+import { useDispatch, useSelector } from 'react-redux'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { cn } from '@bem-react/classname'
@@ -6,8 +7,6 @@ import { cn } from '@bem-react/classname'
 import logo from 'assets/images/logo1.svg'
 
 import './CreateAccountPage.scss'
-
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
 import { StepOne } from 'register/components/StepOne/StepOne'
 import { StepTwo } from 'register/components/StepTwo/StepTwo'
@@ -17,27 +16,23 @@ import { StepThree } from 'register/components/StepThree/StepThree'
 import { StepHeader } from 'register/components/StepHeader/StepHeader'
 import { ImportAccount } from 'register/components/ImportAccount/ImportAccount'
 import { RegisterStage } from 'register/state/models/register-stage'
-import { registerSlice } from 'register/state/register.reducer'
+import { registerActions } from 'register/state/register.reducer'
 import { selectSeed, selectStage, selectShowSteps } from 'register/state/register.selectors'
-import { useAppSelector, useAppDispatch } from 'state'
+
 import { selectReadiness } from 'wallet/state/demo.selectors'
 // tslint:enable: prettier
 
 export const componentId = 'CreateAccountPage'
-
 const bem = cn(componentId)
-const rsa = registerSlice.actions
 
-type CreateAccountProps = {}
-
-export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
+export const CreateAccountPage: React.FC<{}> = () => {
   const navigate = useNavigate()
-  const seedInWallet = useAppSelector(selectReadiness)
-  const seed = useAppSelector(selectSeed)
-  const stage = useAppSelector(selectStage)
-  const showSteps = useAppSelector(selectShowSteps)
-  const dispatch = useAppDispatch()
-  const stepBack = () => dispatch(rsa.stepBack())
+  const seedInWallet = useSelector(selectReadiness)
+  const seed = useSelector(selectSeed)
+  const stage = useSelector(selectStage)
+  const showSteps = useSelector(selectShowSteps)
+  const dispatch = useDispatch()
+  const stepBack = () => dispatch(registerActions.stepBack())
 
   useEffect(() => {
     if (seedInWallet) {
@@ -48,17 +43,17 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
   const components = () => {
     switch (stage) {
       case RegisterStage.STEP1:
-        return <StepOne onGenerate={() => dispatch(rsa.generateSeed())} onBack={stepBack}/>
+        return <StepOne onGenerate={() => dispatch(registerActions.generateSeed())} onBack={stepBack}/>
       case RegisterStage.STEP2:
-        return <StepTwo seed={seed} onSubmit={() => dispatch(rsa.submitSeed())} onBack={stepBack}/>
+        return <StepTwo seed={seed} onSubmit={() => dispatch(registerActions.submitSeed())} onBack={stepBack}/>
       case RegisterStage.STEP3:
-        return <StepThree seed={seed} onConfirm={() => dispatch(rsa.confirmSeed())} onBack={stepBack}/>
+        return <StepThree seed={seed} onConfirm={() => dispatch(registerActions.confirmSeed())} onBack={stepBack}/>
       case RegisterStage.STEP4:
         return (
           <StepFour
             onBack={stepBack}
             onRegister={({ password }) => {
-              dispatch(rsa.register(password))
+              dispatch(registerActions.register(password))
               navigate('/wallet')
             }}
           />
@@ -67,25 +62,21 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
         return (
           <ImportAccount
             onBack={() => {
-              dispatch(rsa.stepBack())
+              dispatch(registerActions.stepBack())
             }}
             onImport={(data) => {
-              dispatch(rsa.import(data))
+              dispatch(registerActions.import(data))
               navigate('/wallet')
-              // navigate(0)
             }}
           />
         )
       default:
         return (
           <Welcome
-            // TODO: remove next line after API is connected
-            onMockedLogin={() => navigate('/wallet')}
-            onCreate={() => dispatch(rsa.startRegister())}
-            onImport={() => dispatch(rsa.startImport())}
+            onCreate={() => dispatch(registerActions.startRegister())}
+            onImport={() => dispatch(registerActions.startImport())}
             onAbout={() => {
               navigate('/about')
-              // navigate(0)
             }}
           />
         )
@@ -102,7 +93,7 @@ export const CreateAccountPage: React.FC<CreateAccountProps> = () => {
 
       {stage && showSteps ? (
         <div className={bem('Footer')}>
-          <img src={logo} alt="ZeroPool" style={{ margin: 'auto', height: '50px' }} />
+          <img className={bem('Logo')} src={logo} alt="ZeroPool"/>
         </div>
       ) : null}
     </div>

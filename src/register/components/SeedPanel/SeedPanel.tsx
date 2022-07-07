@@ -4,15 +4,11 @@ import React, { useEffect, useState } from 'react'
 
 import './SeedPanel.scss'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { shuffleArray } from 'shared/utils/shuffle'
-
 import { SeedTag } from 'register/components/SeedTag/SeedTag'
 
 export const componentId = 'SeedPanel'
-
-const css = cn(componentId)
-const test = testIdBuilder(componentId)
+const bem = cn(componentId)
 
 export interface SeedPanelProps {
   classes?: string[]
@@ -50,8 +46,8 @@ export const SeedPanel: React.FC<SeedPanelProps> = ({ classes = [], seed, check,
   }
 
   return (
-    <Paper className={css('', classes)} data-testid={test()}>
-      <div className={css('Body')} data-testid={test('Body')}>
+    <Paper className={bem('', classes)} data-testid={bem()}>
+      <div className={bem('Body')} data-testid={bem('Body')}>
         {check
           ? confirmedSeed.map((tag: string, index: number) => (
               <SeedTag text={tag} num={index} key={index} onClick={bodyTagClickHandler} />
@@ -61,7 +57,7 @@ export const SeedPanel: React.FC<SeedPanelProps> = ({ classes = [], seed, check,
             ))}
       </div>
 
-      <div className={css('Footer')} data-testid={test('Footer')}>
+      <div className={bem('Footer')} data-testid={bem('Footer')}>
         {check
           ? shuffledSeed.map((tag: string, index: number) => (
               <SeedTag
@@ -75,7 +71,7 @@ export const SeedPanel: React.FC<SeedPanelProps> = ({ classes = [], seed, check,
             ))
           : null}
         {confirmedSeed.length === seed.length && !success ? (
-          <div className={css('Warning')} data-testid={test('Warning')}>
+          <div className={bem('Warning')} data-testid={bem('Warning')}>
             The phrases do not match!
           </div>
         ) : null}

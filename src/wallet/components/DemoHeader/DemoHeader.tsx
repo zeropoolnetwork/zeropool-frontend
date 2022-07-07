@@ -5,13 +5,11 @@ import { cn } from '@bem-react/classname'
 
 import './DemoHeader.scss'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { beautifyAddress, beautifyAmount } from 'shared/helpers/addres.helper'
+import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
 
 export const componentId = 'DemoHeader'
-
-const css = cn(componentId)
-const test = testIdBuilder(componentId)
+const bem = cn(componentId)
 
 export type DemoHeaderProps = {
   publicBalance?: number
@@ -31,20 +29,11 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
   const { enqueueSnackbar } = useSnackbar()
   const handleAddressClick = (event: MouseEvent<HTMLSpanElement>): void => {
     const address = (event.target as HTMLElement).id === 'Public' ? walletAddress : privateAddress
-    navigator.clipboard.writeText(address as string).then(
-      () => {
-        enqueueSnackbar('Address copied to the clipboard', {
-          variant: 'success',
-        })
-      },
-      (err) => {
-        enqueueSnackbar(`Can't access clipboard`, { variant: 'error' })
-      },
-    )
+    copyToClipboard((address as string), 'Address', enqueueSnackbar)
   }
   return (
-    <div className={css()} data-testid={test()}>
-      <div className={css('Amounts')}>
+    <div className={bem()} data-testid={bem()}>
+      <div className={bem('Amounts')}>
         <div>
           Public address:&nbsp;
 
@@ -61,14 +50,12 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
           </span>
         </div>
 
-        {/* <Divider className={css('Divider')} variant="middle" /> */}
-
         <div>
           Public balance:&nbsp;
 
           <Tooltip title={publicBalance || ''}>
             {publicBalance === undefined
-              ? <CircularProgress className={css('Progress')} color="inherit" />
+              ? <CircularProgress className={bem('Progress')} color="inherit" />
               : <span>{beautifyAmount(publicBalance)}</span>}
           </Tooltip>
         </div>
@@ -78,7 +65,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
 
           <Tooltip title={tokenBalance || ''}>
             {tokenBalance === undefined
-              ? <CircularProgress className={css('Progress')} color="inherit" />
+              ? <CircularProgress className={bem('Progress')} color="inherit" />
               : <span>{beautifyAmount(tokenBalance)}</span>}
           </Tooltip>
         </div>
@@ -88,7 +75,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
 
           <Tooltip title={privateBalance || ''}>
             {privateBalance === undefined
-              ? <CircularProgress className={css('Progress')} color="inherit" />
+              ? <CircularProgress className={bem('Progress')} color="inherit" />
               : <span>{beautifyAmount(privateBalance)}</span>}
           </Tooltip>
         </div>

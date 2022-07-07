@@ -7,16 +7,14 @@ import { Close, Visibility, VisibilityOff } from '@mui/icons-material'
 import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
 
 import { confirmValidator, passwordValidator, seedValidator } from 'shared/utils/form-validators'
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { strToArray } from 'shared/utils/str-to-array'
 import { SeedPanel } from 'register/components/SeedPanel/SeedPanel'
-
-import './ImportAccount.scss'
 // tslint:enable: max-line-length prettier
 
+import './ImportAccount.scss'
+
 export const componentId = 'ImportAccount'
-const css = cn(componentId)
-const test = testIdBuilder(componentId)
+const bem = cn(componentId)
 
 // #region INTERFACES
 interface FormData {
@@ -45,25 +43,25 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
   // tslint:enable: max-line-length prettier
 
   return (
-    <div className={css()} data-testid={test()}>
+    <div className={bem()} data-testid={bem()}>
       {process.env.NODE_ENV !== 'production' && <DevTool control={control} />}
       <section>
-        <SeedPanel classes={[css('SeedPanel')]} seed={strToArray(watchSeed)} />
+        <SeedPanel classes={[bem('SeedPanel')]} seed={strToArray(watchSeed)} />
 
         <form
           onSubmit={handleSubmit((data: FormData) => onImport({ password: data.password, seed: strToArray(watchSeed) }))}
-          className={css('Form')}
+          className={bem('Form')}
         >
-          <FormControl className={css('FormControl')} error={!!errors.seed}>
-            <InputLabel color="secondary" className={css('FormControlLabel')} htmlFor="seed">
+          <FormControl className={bem('FormControl')} error={!!errors.seed}>
+            <InputLabel color="secondary" className={bem('FormControlLabel')} htmlFor="seed">
               Secret phrase
             </InputLabel>
 
             <Input
               id="seed"
-              className={css('Seed')}
+              className={bem('Seed')}
               color="secondary"
-              inputProps={{ 'data-testid': test('Seed') }}
+              inputProps={{ 'data-testid': bem('Seed') }}
               ref={refSeed}
               name={nameSeed}
               onChange={onChangeSeed}
@@ -73,7 +71,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                 <InputAdornment position="end">
                   {watchSeed.length ? (
                     <IconButton
-                      className={css('FormControlButton')}
+                      className={bem('FormControlButton')}
                       aria-label="empty seed"
                       onClick={() => {
                         setValue('seed', '')
@@ -91,23 +89,23 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
             />
 
             {errors.seed ? (
-              <FormHelperText data-testid={test('SeedError')}>
+              <FormHelperText data-testid={bem('SeedError')}>
                 {errors.seed.message || 'Input 12 uniq words divided with comas or spaces'}
               </FormHelperText>
             ) : null}
           </FormControl>
 
-          <FormControl className={css('FormControl')} error={!!errors.password}>
-            <InputLabel className={css('FormControlLabel')} htmlFor="password">
+          <FormControl className={bem('FormControl')} error={!!errors.password}>
+            <InputLabel className={bem('FormControlLabel')} htmlFor="password">
               Password
             </InputLabel>
 
             <Input
               id="password"
-              className={css('Password')}
+              className={bem('Password')}
               color="secondary"
-              classes={{ input: css('PasswordInput') }}
-              inputProps={{ 'data-testid': test('Password') }}
+              classes={{ input: bem('PasswordInput') }}
+              inputProps={{ 'data-testid': bem('Password') }}
               ref={refPassword}
               name={namePassword}
               onChange={onChangePassword}
@@ -117,7 +115,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                 <InputAdornment position="end">
                   {watchPassword ? (
                     <IconButton
-                      className={css('FormControlButton')}
+                      className={bem('FormControlButton')}
                       aria-label="empty password"
                       onClick={() => {
                         setValue('password', '')
@@ -134,7 +132,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                   )}
 
                   <IconButton
-                    className={css('FormControlButton')}
+                    className={bem('FormControlButton')}
                     aria-label="toggle visibility"
                     onClick={() => setShowPassword(!showPassword)}
                     onMouseDown={(event) => event.preventDefault()}
@@ -146,23 +144,23 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
             />
 
             {errors.password ? (
-              <FormHelperText data-testid={test('PasswordError')}>
+              <FormHelperText data-testid={bem('PasswordError')}>
                 {errors.password.message}
               </FormHelperText>
             ) : null}
           </FormControl>
 
-          <FormControl className={css('FormControl')} error={!!errors.confirm}>
-            <InputLabel className={css('FormControlLabel')} htmlFor="confirm">
+          <FormControl className={bem('FormControl')} error={!!errors.confirm}>
+            <InputLabel className={bem('FormControlLabel')} htmlFor="confirm">
               Confirm password
             </InputLabel>
 
             <Input
               id="confirm"
-              className={css('Password')}
+              className={bem('Password')}
               color="secondary"
-              classes={{ input: css('PasswordInput') }}
-              inputProps={{ 'data-testid': test('Confirm') }}
+              classes={{ input: bem('PasswordInput') }}
+              inputProps={{ 'data-testid': bem('Confirm') }}
               ref={refConfirm}
               name={nameConfirm}
               onChange={onChangeConfirm}
@@ -172,7 +170,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                 <InputAdornment position="end">
                   {watchConfirm ? (
                     <IconButton
-                      className={css('FormControlButton')}
+                      className={bem('FormControlButton')}
                       aria-label="empty confirmation"
                       onClick={() => {
                         errors.confirm = undefined
@@ -187,7 +185,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                   )}
 
                   <IconButton
-                    className={css('FormControlButton')}
+                    className={bem('FormControlButton')}
                     aria-label="toggle visibility"
                     onClick={() => setShowPassword(!showPassword)}
                     onMouseDown={(event) => event.preventDefault()}
@@ -199,7 +197,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
             />
 
             {errors.confirm ? (
-              <FormHelperText data-testid={test('PasswordConfirmError')}>
+              <FormHelperText data-testid={bem('PasswordConfirmError')}>
                 Passwords do not match
               </FormHelperText>
             ) : null}
@@ -208,8 +206,8 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
           <Button
             color="primary"
             variant="contained"
-            className={css('Button')}
-            data-testid={test('Import')}
+            className={bem('Button')}
+            data-testid={bem('Import')}
             type="submit"
           >
             Import
@@ -218,8 +216,8 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
           <Button
             color="primary"
             variant="outlined"
-            className={css('Button')}
-            data-testid={test('Back')}
+            className={bem('Button')}
+            data-testid={bem('Back')}
             onClick={onBack}
           >
             Back

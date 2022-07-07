@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
-import { cn } from '@bem-react/classname'
 import { Button } from '@mui/material'
+import { cn } from '@bem-react/classname'
 
 import './StepThree.scss'
 
 import { SeedPanel } from 'register/components/SeedPanel/SeedPanel'
 
 export const componentId = 'StepThree'
-
 const bem = cn(componentId)
 
 export interface StepThreeProps {

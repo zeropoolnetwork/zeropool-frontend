@@ -6,7 +6,7 @@ import { Recovery, componentId, RecoveryProps } from './Recovery'
 describe('ExportSeed', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<RecoveryProps>
-  const testName = 'Recover your wallet'
+  const testName = 'Recover wallet'
 
   beforeEach(() => {
     outputSpy = jest.fn()

@@ -5,13 +5,10 @@ import { Button, MobileStepper, Tooltip } from '@mui/material'
 
 import './StepHeader.scss'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { Perl } from 'register/components/Perl/Perl'
 
 export const componentId = 'StepHeader'
-
-const css = cn(componentId)
-const test = testIdBuilder(componentId)
+const bem = cn(componentId)
 
 export type StepHeaderProps = {
   step: number
@@ -21,22 +18,22 @@ export type StepHeaderProps = {
 
 export const StepHeader: React.FC<StepHeaderProps> = ({ step, total, onBack }) => {
   return (
-    <div className={css()} data-testid={test()}>
+    <div className={bem()} data-testid={bem()}>
       <Tooltip title="Step back" placement="top-end">
         <Button
-          className={css('Button')}
-          data-testid={test('BackButton')}
+          className={bem('Button')}
+          data-testid={bem('BackButton')}
           onClick={onBack}
           disableRipple={true}
         >
-          <ArrowBack className={css('Icon')} />
+          <ArrowBack className={bem('Icon')} />
         </Button>
       </Tooltip>
 
-      <div className={css('Perls')} data-testid={test('Perls')}>
+      <div className={bem('Perls')} data-testid={bem('Perls')}>
         {[1, 2, 3, 4].map((value) => (
           <Perl
-            classes={[css('Perl', { Active: value === step })]}
+            classes={[bem('Perl', { Active: value === step })]}
             isActive={value === step}
             key={value}
             num={value}
@@ -45,7 +42,7 @@ export const StepHeader: React.FC<StepHeaderProps> = ({ step, total, onBack }) =
       </div>
 
       <MobileStepper
-        className={css('Progress')}
+        className={bem('Progress')}
         variant="progress"
         steps={total + 1}
         position="static"

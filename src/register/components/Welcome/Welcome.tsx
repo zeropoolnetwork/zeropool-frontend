@@ -3,53 +3,39 @@ import { Button } from '@mui/material'
 import { cn } from '@bem-react/classname'
 
 import './Welcome.scss'
-import guy from 'assets/images/logo_white.png'
+import logo from 'assets/images/logo_white.png'
 
-import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 
 export const componentId = 'Welcome'
 export interface WelcomeProps {
-  // TODO: remove onMockedLogin after API is connected
-  onMockedLogin: () => void
   onCreate: () => void
   onImport: () => void
   onAbout: () => void
 }
 
-const css = cn(componentId)
-const test = testIdBuilder(componentId)
+const bem = cn(componentId)
 
 export const Welcome: React.FC<WelcomeProps> = ({
   onCreate,
   onImport,
   onAbout,
-  onMockedLogin,
 }) => {
   return (
-    <div className={css()} data-testid={test()}>
+    <div className={bem()} data-testid={bem()}>
       <section className="noselect">
         <img
-          src={guy}
-          className={css('Logo')}
-          data-testid={test('Logo')}
+          src={logo}
+          className={bem('Logo')}
+          data-testid={bem('Logo')}
           alt="logo"
-          onClick={onMockedLogin}
         />
-
-        {/* <h1 className={css('Greeting')} data-testid={test('Greeting')}>
-          Welcome to ZeroPool
-        </h1> */}
-
-        {/* <p className={css('Description')} data-testid={test('Description')}>
-          Please create a new wallet or import an existing one using a secret phrase
-        </p> */}
       </section>
 
       <Button
         color="primary"
         variant="contained"
-        className={css('Button')}
-        data-testid={test('CreateButton')}
+        className={bem('Button')}
+        data-testid={bem('CreateButton')}
         onClick={onCreate}
       >
         Create wallet
@@ -58,8 +44,8 @@ export const Welcome: React.FC<WelcomeProps> = ({
       <Button
         color="primary"
         variant="contained"
-        className={css('Button')}
-        data-testid={test('ImportButton')}
+        className={bem('Button')}
+        data-testid={bem('ImportButton')}
         onClick={onImport}
       >
         Import wallet
@@ -68,8 +54,8 @@ export const Welcome: React.FC<WelcomeProps> = ({
       <Button
         color="primary"
         variant="outlined"
-        className={css('Button')}
-        data-testid={test('AboutButton')}
+        className={bem('Button')}
+        data-testid={bem('AboutButton')}
         onClick={onAbout}
       >
         About zeropool
