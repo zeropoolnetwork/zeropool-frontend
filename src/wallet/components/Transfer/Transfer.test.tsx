@@ -12,8 +12,6 @@ describe('Transfer', () => {
     outputSpy = jest.fn()
     component = (
       <Transfer
-        publicAddress={'publicAddress'}
-        privateAddress={'privateAddress'}
         onCancel={jest.fn()}
         onSubmit={jest.fn()}
       />

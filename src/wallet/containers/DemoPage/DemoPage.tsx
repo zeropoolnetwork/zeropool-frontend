@@ -300,8 +300,6 @@ export const DemoPage: React.FC<{}> = () => {
         <DialogContent dividers={true}>
           <Transfer
             data-testid={bem('Transfer')}
-            publicAddress={walletAddress as string}
-            privateAddress={privateAddress as string}
             onSubmit={(data: TransferData) => dispatch(demoActions.transfer(data))}
             onCancel={() => dispatch(demoActions.transferModal(false))}
           />
