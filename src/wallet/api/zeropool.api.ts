@@ -10,6 +10,7 @@ import { EvmNetwork } from 'zeropool-client-js/lib/networks/evm'
 import { PolkadotNetwork } from 'zeropool-client-js/lib/networks/polkadot'
 
 import { isEvmBased, isSubstrateBased } from 'wallet/api/networks'
+import { TransferData } from 'shared/models'
 
 export let client: NetworkClient
 export let zpClient: ZeropoolClient
@@ -275,11 +276,22 @@ export const withdrawShielded = async (tokens: string): Promise<string> => {
   }
 }
 
-export const transfer = async (to: string, amount: string | number): Promise<void> => {
+export const transfer = async (data: TransferData): Promise<string|void> => {
+  switch (data.type) {
+    case 'privateToPrivate':
+      return transferShielded(data.to, data.amount)
+    case 'publicToPublic':
+      return transferOpen(data.to, data.amount)
+    default:
+      return Promise.reject(String('Not implemented'));
+  }
+}
+
+export const transferOpen = async (to: string, amount: string): Promise<void> => {
   try {
     apiCheck()
 
-    return await client.transfer(to, String(amount))
+    return await client.transfer(to, String(client.toBaseUnit(amount)))
   } catch (e: any) {
     return Promise.reject(String(e.message))
   }

@@ -1,5 +1,5 @@
 // tslint:disable: prettier max-line-length
-import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, Box, SwipeableDrawer, Dialog, DialogContent } from '@mui/material'
+import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, SwipeableDrawer, Dialog, DialogContent } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight'
 import { useEffect, useState } from 'react'
@@ -15,11 +15,13 @@ import './DemoPage.scss'
 import logo from 'assets/images/logo1.svg'
 import { badAmount } from 'shared/utils/bad-amount'
 
-import { selectBackdrop, selectDeposit, selectReadiness, selectInitials, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectTransfer, selectWalletAddress, selectWithdraw, selectRecovery } from 'wallet/state/demo.selectors'
+import { selectBackdrop, selectDeposit, selectReadiness, selectInitials, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectTransfer, selectWalletAddress, selectWithdraw, selectRecovery, selectTransferModal } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
 import { DemoDrowler } from 'wallet/components/DemoDrowler/DemoDrowler'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
 import { Recovery } from 'wallet/components/Recovery/Recovery'
+import { Transfer } from 'wallet/components/Transfer/Transfer'
+import { TransferData } from 'shared/models'
 // tslint:enable: prettier max-line-length
 
 export const componentId = 'DemoPage'
@@ -43,6 +45,7 @@ export const DemoPage: React.FC<{}> = () => {
   const transfer = useSelector(selectTransfer)
   const readiness = useSelector(selectReadiness)
   const recorevery = useSelector(selectRecovery)
+  const transferModal = useSelector(selectTransferModal)
 
   const [mintAmount, setMintAmount] = useState('')
   const [depositAmount, setDepositAmount] = useState('')
@@ -63,12 +66,8 @@ export const DemoPage: React.FC<{}> = () => {
   const toggleDrawer = (open?: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
   ) => {
-    if (  
-      event?.type === 'keydown'
-      &&
-      (event as React.KeyboardEvent).key !== 'Escape'
-    ){
-      return
+    if (event?.type === 'keydown' && (event as React.KeyboardEvent).key !== 'Escape') {
+      return 
     }
 
     setDrowler(open === undefined ? !drowler : open)
@@ -237,11 +236,8 @@ export const DemoPage: React.FC<{}> = () => {
               color="primary"
               variant="contained"
               startIcon={<KeyboardDoubleArrowRight />}
-              disabled={deposit || withdraw || transfer || badAmount(privateBalance || 0)}
-              onClick={() => {
-                dispatch(demoActions.transferModal(true))
-                setTransferAmount('')
-              }}
+              disabled={transferModal || deposit || withdraw || transfer || badAmount(privateBalance || 0)}
+              onClick={() => dispatch(demoActions.transferModal(true))}
             >
               Transfer
             </LoadingButton>
@@ -283,7 +279,6 @@ export const DemoPage: React.FC<{}> = () => {
       </SwipeableDrawer>
 
       <Dialog
-        // onClose={() => setRecoveryDialog(false)}
         open={recorevery}
         fullWidth={true}
         maxWidth={'xs'}
@@ -293,6 +288,22 @@ export const DemoPage: React.FC<{}> = () => {
             data-testid={bem('Recovery')}
             onReset={() => { dispatch(demoActions.resetAccount(null)); navigate('/register') }}
             onRecover={(password: string) => dispatch(demoActions.recoverWallet(password))}
+          />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={transferModal}
+        fullWidth={true}
+        maxWidth={'xs'}
+      >
+        <DialogContent dividers={true}>
+          <Transfer
+            data-testid={bem('Transfer')}
+            publicAddress={walletAddress as string}
+            privateAddress={privateAddress as string}
+            onSubmit={(data: TransferData) => dispatch(demoActions.transfer(data))}
+            onCancel={() => dispatch(demoActions.transferModal(false))}
           />
         </DialogContent>
       </Dialog>

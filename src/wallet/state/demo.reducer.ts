@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { TransferData } from 'shared/models'
 
 export type DemoState = {
   initials: { seed: string, password: string } | null | undefined
@@ -47,6 +48,7 @@ export const demoSlice = createSlice({
       state.backdrop = true
       state.readiness = false
       state.recovery = false
+      state.transferModal = false
     },
     initApiSuccess: (state, action: PayloadAction<null>) => {
       state.backdrop = false
@@ -105,7 +107,7 @@ export const demoSlice = createSlice({
       state.withdraw = false
     },
 
-    transfer: (state, action: PayloadAction<{ to: string, tokens: string }>) => {
+    transfer: (state, action: PayloadAction<TransferData>) => {
       state.transfer = true
     },
     transferSuccess: (state, action: PayloadAction<string>) => {

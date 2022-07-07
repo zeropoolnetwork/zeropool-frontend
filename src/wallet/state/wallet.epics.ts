@@ -213,7 +213,7 @@ const sendTransaction$: Epic = (
         !!value.sendData && !!value.wallet,
     ),
     switchMap(({ sendData, wallet }) =>
-      from(api.transfer(sendData.address, sendData.amount)).pipe(
+      from(api.transferOpen(sendData.address, String(sendData.amount))).pipe(
         tap(() => toast.success('Transaction completed successfully')),
         // TODO: change after implementing the Log
         // mapTo(actions.openTransactionsView(wallet)),
