@@ -280,10 +280,10 @@ export const transfer = async (data: TransferData): Promise<string|void> => {
   switch (data.type) {
     case 'privateToPrivate':
       return transferShielded(data.to, data.amount)
-    case 'publicToPublic':
+    case 'funds':
       return transferOpen(data.to, data.amount)
     default:
-      return Promise.reject(String('Not implemented'));
+      return Promise.reject(String(`Transfer ${data.type} not implemented`));
   }
 }
 

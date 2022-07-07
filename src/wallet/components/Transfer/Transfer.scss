@@ -17,6 +17,19 @@
     display: flex;
     justify-content: center;
     margin-top: 10px;
+    @media screen and (max-width: $screen-xs-max) {
+      margin: 0 0 3px !important;
+    }
+  }
+
+  &-Switch {
+    @media screen and (max-width: $screen-xs-max) {
+      margin: 5px !important;
+      > span {
+        font-size: $small-font-size !important;
+        margin: 0 2px 4px;
+      }
+    }
   }
 
   &-FormControl {

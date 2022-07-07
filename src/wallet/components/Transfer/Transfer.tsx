@@ -13,8 +13,6 @@ export const componentId = 'Transfer'
 const bem = cn(componentId)
 
 export type TransferProps = {
-  publicAddress: string
-  privateAddress: string
   onSubmit: (transfer: TransferData) => void
   onCancel: () => void
 }
@@ -23,20 +21,24 @@ export const Transfer: React.FC<TransferProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const [from, setFrom] = useState('')
   const [to, setTo] = useState('')
   const [amount, setAmount] = useState('')
   const [error, setError] = useState('')
-  const [type, setType] = useState<TransferType>('publicToPublic')
   const [fromPrivate, setFromPrivate] = useState(false)
   const [toPrivate, setToPrivate] = useState(false)
+  const [funds, setFunds] = useState(false)
+
+  const getType = (): TransferType => {
+    if (funds) { return 'funds' }
+    else if (fromPrivate) { return toPrivate? 'privateToPrivate' : 'privateToPublic' }
+    else { return toPrivate? 'publicToPrivate' : 'publicToPublic' }
+  }
 
   const transferData = (): TransferData => ({
-    from,
     to,
     amount,
     id: Date.now(),
-    type,
+    type: getType(),
   })
 
   return (
@@ -45,16 +47,28 @@ export const Transfer: React.FC<TransferProps> = ({
 
       <div className={bem('Switches')}>
         <FormControlLabel
+          className={bem('Switch')}
           labelPlacement="top"
+          control={<ZPSwitch sx={{ m: 1 }} defaultChecked={true} />}
+          label={`${funds ? 'funds' : 'tokens'}`}
+          onChange={() => setFunds(!funds) }	
+        />
+        
+        <FormControlLabel
+          className={bem('Switch')}
+          labelPlacement="top"
+          disabled={funds}
           control={<ZPSwitch sx={{ m: 1 }} defaultChecked={false} />}
-          label={`From: ${fromPrivate ? 'Private' : 'Public'}`}
+          label={`from ${fromPrivate ? 'private' : 'public'}`}
           onChange={() => setFromPrivate(!fromPrivate)}
         />
 
         <FormControlLabel
+          className={bem('Switch')}
           labelPlacement="top"
+          disabled={funds}
           control={<ZPSwitch sx={{ m: 1 }} defaultChecked={false} />}
-          label={`To: ${toPrivate ? 'Private' : 'Public'}`}
+          label={`to ${toPrivate ? 'private' : 'public'}`}
           onChange={() => setToPrivate(!toPrivate)}
         />
       </div>

@@ -104,7 +104,10 @@ const withdraw: Epic = (action$, state$) =>
 const transfer: Epic = (action$, state$) =>
   action$.pipe(
     filter(demoActions.transfer.match),
-    tap(({payload}) => toast.info(`Processing transfer of ${payload.amount} tokens...`, { key: 'tranfer', persist: true })),
+    tap(({payload}) => toast.info(
+      `Processing transfer of ${payload.amount} ${payload.type === 'funds'? `funds` : `tokens`}...`,
+      { key: 'tranfer', persist: true },
+    )),
     switchMap(({ payload }) =>
       from(api.transfer(payload)).pipe(
         tap(() => toast.close('tranfer')),
