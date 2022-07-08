@@ -300,6 +300,7 @@ export const DemoPage: React.FC<{}> = () => {
         <DialogContent dividers={true}>
           <Transfer
             data-testid={bem('Transfer')}
+            processing={transfer}
             onSubmit={(data: TransferData) => dispatch(demoActions.transfer(data))}
             onCancel={() => dispatch(demoActions.transferModal(false))}
           />
