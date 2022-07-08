@@ -12,6 +12,7 @@ describe('Transfer', () => {
     outputSpy = jest.fn()
     component = (
       <Transfer
+        processing={false}
         onCancel={jest.fn()}
         onSubmit={jest.fn()}
       />

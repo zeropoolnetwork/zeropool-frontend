@@ -15,11 +15,13 @@ const bem = cn(componentId)
 export type TransferProps = {
   onSubmit: (transfer: TransferData) => void
   onCancel: () => void
+  processing: boolean
 }
 
 export const Transfer: React.FC<TransferProps> = ({
   onSubmit,
   onCancel,
+  processing,
 }) => {
   const [to, setTo] = useState('')
   const [amount, setAmount] = useState('')
@@ -143,7 +145,7 @@ export const Transfer: React.FC<TransferProps> = ({
 
       <div className={bem('Buttons')}>
         <Button
-          disabled={!!error}
+          disabled={!!error || processing}
           className={bem('Button')}
           data-testid={bem('Submit')}
           onClick={() => onSubmit(transferData())}
@@ -159,6 +161,7 @@ export const Transfer: React.FC<TransferProps> = ({
           onClick={onCancel}
           color="primary"
           variant="contained"
+          disabled={processing}
         >
           Cancel
         </Button>
