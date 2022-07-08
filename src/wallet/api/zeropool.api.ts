@@ -242,7 +242,7 @@ export const depositShielded = async (tokens: string): Promise<string> => {
     }
 
     console.log('Making deposit...')
-    jobId = await zpClient.deposit(TOKEN_ADDRESS, amount, (data) => client.sign(data), fromAddress)
+    jobId = await zpClient.deposit(TOKEN_ADDRESS, amount, (data) => client.sign(data), fromAddress, '0', undefined, [])
     console.log('Please wait relayer complete the job %s...', jobId)
 
     return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
@@ -279,15 +279,21 @@ export const withdrawShielded = async (tokens: string): Promise<string> => {
 export const transfer = async (data: TransferData): Promise<string|void> => {
   switch (data.type) {
     case 'privateToPrivate':
-      return transferShielded(data.to, data.amount)
+      return transferPrivateToPrivate(data.to, data.amount)
     case 'funds':
-      return transferOpen(data.to, data.amount)
+      return transferFunds(data.to, data.amount)
+    case 'publicToPublic':
+      return transferTokens(data.to, data.amount)
+    case 'publicToPrivate':
+      return transferPublicToPrivate(data.to, data.amount)
+    case 'privateToPublic':
+      return transferPrivateToPublic(data.to, data.amount)
     default:
       return Promise.reject(String(`Transfer ${data.type} not implemented`));
   }
 }
 
-export const transferOpen = async (to: string, amount: string): Promise<void> => {
+export const transferFunds = async (to: string, amount: string): Promise<void> => {
   try {
     apiCheck()
 
@@ -297,7 +303,55 @@ export const transferOpen = async (to: string, amount: string): Promise<void> =>
   }
 }
 
-export const transferShielded = async (to: string, tokens: string): Promise<string> => {
+export const transferTokens = async (to: string, amount: string): Promise<void> => {
+  try {
+    apiCheck()
+
+    return await client.transferToken(TOKEN_ADDRESS, to, String(client.toBaseUnit(amount)))
+  } catch (e: any) {
+    return Promise.reject(String(e.message))
+  }
+}
+
+export const transferPublicToPrivate = async (to: string, tokens: string): Promise<string> => {
+  try {
+    apiCheck()
+
+    const amount = client.toBaseUnit(tokens)
+    let fromAddress = null
+
+    if (isSubstrateBased(NETWORK)) fromAddress = await client.getPublicKey()
+    else if (isEvmBased(NETWORK)) {
+      console.log(
+        'Approving allowance the Pool (%s) to spend our tokens (%s)',
+        CONTRACT_ADDRESS,
+        amount,
+      )
+      await client.approve(TOKEN_ADDRESS, CONTRACT_ADDRESS, amount)
+    }
+
+    return await zpClient.deposit(TOKEN_ADDRESS, String(client.toBaseUnit(amount)), (data) => client.sign(data), fromAddress, '0', undefined, [{to, amount}])
+  } catch (e: any) {
+    return Promise.reject(String(e.message))
+  }
+}
+
+export const transferPrivateToPublic = async (to: string, tokens: string): Promise<string> => {
+  try {
+    apiCheck()
+
+    const amount = client.toBaseUnit(tokens)
+
+    const jobId = await zpClient.withdraw(TOKEN_ADDRESS, to, amount)
+
+    return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
+  } catch (e: any) {
+    return Promise.reject(String(e.message))
+  }
+}
+
+
+export const transferPrivateToPrivate = async (to: string, tokens: string): Promise<string> => {
   try {
     apiCheck()
 
