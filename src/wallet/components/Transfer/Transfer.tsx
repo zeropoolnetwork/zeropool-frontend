@@ -26,14 +26,14 @@ export const Transfer: React.FC<TransferProps> = ({
   const [to, setTo] = useState('')
   const [amount, setAmount] = useState('')
   const [error, setError] = useState('')
-  const [fromPrivate, setFromPrivate] = useState(false)
-  const [toPrivate, setToPrivate] = useState(false)
+  const [fromPrivate, setFromPrivate] = useState(true)
+  const [toPrivate, setToPrivate] = useState(true)
   const [funds, setFunds] = useState(false)
 
   const getType = (): TransferType => {
     if (funds) { return 'funds' }
-    else if (fromPrivate) { return toPrivate? 'privateToPrivate' : 'privateToPublic' }
-    else { return toPrivate? 'publicToPrivate' : 'publicToPublic' }
+    else if (fromPrivate) { return toPrivate ? 'privateToPrivate' : 'privateToPublic' }
+    else { return toPrivate ? 'publicToPrivate' : 'publicToPublic' }
   }
 
   const transferData = (): TransferData => ({
@@ -53,16 +53,16 @@ export const Transfer: React.FC<TransferProps> = ({
           labelPlacement="top"
           control={<ZPSwitch sx={{ m: 1 }} defaultChecked={true} />}
           label={`${funds ? 'funds' : 'tokens'}`}
-          onChange={() => setFunds(!funds) }	
+          onChange={(event, checked) => setFunds(!checked)}
         />
-        
+
         <FormControlLabel
           className={bem('Switch')}
           labelPlacement="top"
           disabled={funds}
           control={<ZPSwitch sx={{ m: 1 }} defaultChecked={true} />}
           label={`from ${fromPrivate ? 'private' : 'public'}`}
-          onChange={() => setFromPrivate(!fromPrivate)}
+          onChange={(event, checked) => setFromPrivate(checked)}
         />
 
         <FormControlLabel
@@ -71,7 +71,7 @@ export const Transfer: React.FC<TransferProps> = ({
           disabled={funds}
           control={<ZPSwitch sx={{ m: 1 }} defaultChecked={true} />}
           label={`to ${toPrivate ? 'private' : 'public'}`}
-          onChange={() => setToPrivate(!toPrivate)}
+          onChange={(event, checked) => setToPrivate(checked)}
         />
       </div>
 
@@ -89,7 +89,7 @@ export const Transfer: React.FC<TransferProps> = ({
           endAdornment={
             <InputAdornment position="end">
               <IconButton
-                className={bem('FormControlButton', {Hidden: !to})}
+                className={bem('FormControlButton', { Hidden: !to })}
                 aria-label="empty confirmation"
                 onClick={() => setTo('')}
                 onMouseDown={(event) => event.preventDefault()}
@@ -123,7 +123,7 @@ export const Transfer: React.FC<TransferProps> = ({
           endAdornment={
             <InputAdornment position="end">
               <IconButton
-                className={bem('FormControlButton', {Hidden: !amount})}
+                className={bem('FormControlButton', { Hidden: !amount })}
                 aria-label="empty confirmation"
                 onClick={() => setAmount('')}
                 onMouseDown={(event) => event.preventDefault()}
