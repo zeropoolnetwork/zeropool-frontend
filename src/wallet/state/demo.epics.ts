@@ -85,7 +85,7 @@ const deposit: Epic = (action$, state$) =>
 const withdraw: Epic = (action$, state$) =>
   action$.pipe(
     filter(demoActions.withdraw.match),
-    tap((payload) => toast.info(`Withdrawing ${payload} tokens...`, { key: 'withdraw', persist: true })),
+    tap(({ payload }) => toast.info(`Withdrawing ${payload} tokens...`, { key: 'withdraw', persist: true })),
     switchMap(({ payload }) =>
       from(api.withdrawShielded(payload)).pipe(
         tap(() => toast.close('withdraw')),
@@ -104,8 +104,8 @@ const withdraw: Epic = (action$, state$) =>
 const transfer: Epic = (action$, state$) =>
   action$.pipe(
     filter(demoActions.transfer.match),
-    tap(({payload}) => toast.info(
-      `Processing transfer of ${payload.amount} ${payload.type === 'funds'? `funds` : `tokens`}...`,
+    tap(({ payload }) => toast.info(
+      `Processing transfer of ${payload.amount} ${payload.type === 'funds' ? `funds` : `tokens`}...`,
       { key: 'tranfer', persist: true },
     )),
     switchMap(({ payload }) =>
@@ -229,7 +229,7 @@ const updateBalancesAfterWithdraw = (action$: Action$, state$: State$) =>
 const exportSeed = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.exportSeed.match),
-    mergeMap(({payload}) =>
+    mergeMap(({ payload }) =>
       from(api.getSeed(payload)).pipe(
         map((seed) => demoActions.exportSeedSuccess(seed)),
         catchError((errMsg: string) => {
@@ -244,7 +244,7 @@ const exportSeed = (action$: Action$, state$: State$) =>
 const exportSeedSuccess = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.exportSeedSuccess.match),
-    tap(({payload}) => {
+    tap(({ payload }) => {
       navigator.clipboard.writeText(payload).then(
         () => {
           toast.success(`Seed copied to the clipboard`)
@@ -290,7 +290,7 @@ const restoreSession = (action$: Action$, state$: State$) =>
         return of(demoActions.recoverWallet(null))
       } else {
         return of(
-          demoActions.setSeedAndPasword({seed, password}),
+          demoActions.setSeedAndPasword({ seed, password }),
           demoActions.initApi(null),
         )
       }
@@ -300,11 +300,11 @@ const restoreSession = (action$: Action$, state$: State$) =>
 const recowerWallet = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.recoverWallet.match),
-    map(({payload}) => payload),
+    map(({ payload }) => payload),
     filter(isNonNull),
     mergeMap((password) =>
       from(api.getSeed(password)).pipe(
-        map((seed) => demoActions.recoverWalletSuccess({seed, password})),
+        map((seed) => demoActions.recoverWalletSuccess({ seed, password })),
         catchError((errMsg: string) => {
           toast.error(errMsg)
 
@@ -317,7 +317,7 @@ const recowerWallet = (action$: Action$, state$: State$) =>
 const recoverWalletSuccess = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.recoverWalletSuccess.match),
-    mergeMap(({payload}) => of(
+    mergeMap(({ payload }) => of(
       demoActions.setSeedAndPasword(payload),
       demoActions.initApi(null),
     )),
