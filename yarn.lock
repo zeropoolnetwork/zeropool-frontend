@@ -19342,9 +19342,9 @@ yup@^0.32.11:
     web3-eth-personal "^1.7.0"
     web3-utils "^1.7.0"
 
-"zeropool-support-js@https://github.com/zeropoolnetwork/zeropool-support-js":
+"zeropool-support-js@https://github.com/zeropoolnetwork/zeropool-support-js#e3d393564ae40fd7642cbfb8eb2e6642a471c68f":
   version "0.5.1"
-  resolved "https://github.com/zeropoolnetwork/zeropool-support-js#f742072ad034f69474315362f2f2e54de4951aec"
+  resolved "https://github.com/zeropoolnetwork/zeropool-support-js#e3d393564ae40fd7642cbfb8eb2e6642a471c68f"
   dependencies:
     "@ethereumjs/tx" "^3.2.1"
     "@polkadot/api" "^7.11.1"

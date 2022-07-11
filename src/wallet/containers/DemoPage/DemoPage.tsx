@@ -236,7 +236,7 @@ export const DemoPage: React.FC<{}> = () => {
               color="primary"
               variant="contained"
               startIcon={<KeyboardDoubleArrowRight />}
-              disabled={transferModal || deposit || withdraw || transfer || badAmount(privateBalance || 0)}
+              disabled={transferModal || deposit || withdraw || transfer}
               onClick={() => dispatch(demoActions.transferModal(true))}
             >
               Transfer

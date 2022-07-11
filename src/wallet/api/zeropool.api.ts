@@ -330,7 +330,7 @@ export const transferPublicToPrivate = async (to: string, tokens: string): Promi
       await client.approve(TOKEN_ADDRESS, CONTRACT_ADDRESS, amount)
     }
 
-    return await zpClient.deposit(TOKEN_ADDRESS, String(client.toBaseUnit(amount)), (data) => client.sign(data), fromAddress, '0', undefined, [{to, amount}])
+    return await zpClient.deposit(TOKEN_ADDRESS, String(amount), (data) => client.sign(data), fromAddress, '0', undefined, [{to, amount}])
   } catch (e: any) {
     return Promise.reject(String(e.message))
   }
