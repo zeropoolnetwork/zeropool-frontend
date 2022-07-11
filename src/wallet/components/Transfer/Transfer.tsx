@@ -53,25 +53,31 @@ export const Transfer: React.FC<TransferProps> = ({
           labelPlacement="top"
           control={<ZPSwitch sx={{ m: 1 }} defaultChecked={true} />}
           label={`${funds ? 'funds' : 'tokens'}`}
-          onChange={(event, checked) => setFunds(!checked)}
+          onChange={(event, checked) => {
+            setFunds(!checked)
+            setFromPrivate(checked)
+            setToPrivate(checked)
+          }}
         />
 
         <FormControlLabel
           className={bem('Switch')}
           labelPlacement="top"
           disabled={funds}
-          control={<ZPSwitch sx={{ m: 1 }} defaultChecked={true} />}
+          control={<ZPSwitch sx={{ m: 1 }} />}
           label={`from ${fromPrivate ? 'private' : 'public'}`}
           onChange={(event, checked) => setFromPrivate(checked)}
+          checked={fromPrivate}
         />
 
         <FormControlLabel
           className={bem('Switch')}
           labelPlacement="top"
           disabled={funds}
-          control={<ZPSwitch sx={{ m: 1 }} defaultChecked={true} />}
+          control={<ZPSwitch sx={{ m: 1 }} />}
           label={`to ${toPrivate ? 'private' : 'public'}`}
           onChange={(event, checked) => setToPrivate(checked)}
+          checked={toPrivate}
         />
       </div>
 
