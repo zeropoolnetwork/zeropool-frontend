@@ -3,7 +3,7 @@ import { cn } from '@bem-react/classname'
 import { DevTool } from '@hookform/devtools'
 import { useForm } from 'react-hook-form'
 import React, { useState } from 'react'
-import { Close, Visibility, VisibilityOff } from '@mui/icons-material'
+import { Close, Visibility, VisibilityOff, CopyAll } from '@mui/icons-material'
 import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
 
 import { confirmValidator, passwordValidator, seedValidator } from 'shared/utils/form-validators'
@@ -84,6 +84,17 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                   ) : (
                     <span />
                   )}
+                  <IconButton
+                    className={bem('FormControlButton')}
+                    aria-label="paste"
+                    onClick={() => navigator.clipboard.readText().then(seed => {
+                      setValue('seed', seed);
+                      (document.getElementById('seed') as any).focus();
+                    })}
+                  >
+                    <CopyAll />
+                  </IconButton>
+
                 </InputAdornment>
               }
             />
