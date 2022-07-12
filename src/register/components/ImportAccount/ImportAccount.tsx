@@ -12,6 +12,8 @@ import { SeedPanel } from 'register/components/SeedPanel/SeedPanel'
 // tslint:enable: max-line-length prettier
 
 import './ImportAccount.scss'
+import { copyFromClipboard } from 'shared/utils/copy-from-clipboard'
+import { useSnackbar } from 'notistack'
 
 export const componentId = 'ImportAccount'
 const bem = cn(componentId)
@@ -40,6 +42,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
   const watchSeed = watch('seed', '')
   const watchPassword = watch('password', '')
   const watchConfirm = watch('confirm', '')
+  const { enqueueSnackbar } = useSnackbar()
   // tslint:enable: max-line-length prettier
 
   return (
@@ -87,7 +90,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                   <IconButton
                     className={bem('FormControlButton')}
                     aria-label="paste"
-                    onClick={() => navigator.clipboard.readText().then(seed => {
+                    onClick={() => copyFromClipboard('Seed', enqueueSnackbar, seed => {
                       setValue('seed', seed);
                       (document.getElementById('seed') as any).focus();
                     })}
