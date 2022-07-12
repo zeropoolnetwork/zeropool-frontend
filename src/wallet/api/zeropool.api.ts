@@ -3,13 +3,16 @@ import Utf8 from 'crypto-js/enc-utf8'
 import bip39 from 'bip39-light'
 import HDWalletProvider from '@truffle/hdwallet-provider'
 import { EthereumClient, PolkadotClient, Client as NetworkClient } from 'zeropool-support-js'
+
 import { init as initZPClient, ZeropoolClient } from 'zeropool-client-js'
 import { deriveSpendingKey } from 'zeropool-client-js/lib/utils'
+import { PolkadotNetwork } from 'zeropool-client-js/lib/networks/polkadot'
 import { NetworkType } from 'zeropool-client-js/lib/network-type'
 import { EvmNetwork } from 'zeropool-client-js/lib/networks/evm'
-import { PolkadotNetwork } from 'zeropool-client-js/lib/networks/polkadot'
 
+import { apiErrorHandler } from 'wallet/api/error.handlers'
 import { isEvmBased, isSubstrateBased } from 'wallet/api/networks'
+
 import { TransferData } from 'shared/models'
 
 export let client: NetworkClient
@@ -76,7 +79,7 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
       e.message = `probably you didn't copy static files. Pls copy them and clear all applicaton data using browser DevTools.`
     }
 
-    return Promise.reject(`Can't init ZeropoolClient: ${e.message}`)
+    return Promise.reject(`Can't init ZeropoolClient: ${apiErrorHandler(e.message)}`)
   }
 
   try {
