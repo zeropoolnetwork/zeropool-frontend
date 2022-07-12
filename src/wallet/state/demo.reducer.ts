@@ -33,7 +33,6 @@ export const initialDemoState: DemoState = {
   transferModal: false,
   readiness: false,
   recovery: false,
-
 }
 
 // tslint:disable: no-empty
