@@ -6,6 +6,8 @@ import { cn } from '@bem-react/classname'
 
 import './Transfer.scss'
 import { ZPSwitch } from 'shared/components/ZPSwitch/zpswitch'
+import { useSnackbar } from 'notistack'
+import { copyFromClipboard } from 'shared/utils/copy-from-clipboard'
 
 
 export const componentId = 'Transfer'
@@ -29,6 +31,7 @@ export const Transfer: React.FC<TransferProps> = ({
   const [fromPrivate, setFromPrivate] = useState(true)
   const [toPrivate, setToPrivate] = useState(true)
   const [funds, setFunds] = useState(false)
+  const { enqueueSnackbar } = useSnackbar()
 
   const getType = (): TransferType => {
     if (funds) { return 'funds' }
@@ -106,7 +109,7 @@ export const Transfer: React.FC<TransferProps> = ({
               <IconButton
                 className={bem('FormControlButton')}
                 aria-label="paste"
-                onClick={() => navigator.clipboard.readText().then(text => setTo(text))}
+                onClick={() => copyFromClipboard('Address', enqueueSnackbar, text => setTo(text))}
               >
                 <CopyAll />
               </IconButton>
@@ -140,7 +143,7 @@ export const Transfer: React.FC<TransferProps> = ({
               <IconButton
                 className={bem('FormControlButton')}
                 aria-label="paste"
-                onClick={() => navigator.clipboard.readText().then(text => setAmount(text))}
+                onClick={() => copyFromClipboard('Amount', enqueueSnackbar, text => setAmount(text))}
               >
                 <CopyAll />
               </IconButton>
