@@ -22,7 +22,5 @@ export const apiErrorHandler = (message?: string): string  => {
     result = 'Unknown error'
   }
 
-  
-  
   return result
 }

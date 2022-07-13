@@ -1,5 +1,5 @@
 // tslint:disable: prettier max-line-length
-import { catchError, filter, from, ignoreElements, map, mergeMap, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs'
+import { catchError, delay, filter, from, ignoreElements, map, mergeMap, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs'
 import { combineEpics, Epic } from 'redux-observable'
 import { PayloadAction } from '@reduxjs/toolkit'
 
@@ -111,7 +111,7 @@ const transfer: Epic = (action$, state$) =>
     switchMap(({ payload }) =>
       from(api.transfer(payload)).pipe(
         tap(() => toast.close('tranfer')),
-        tap(() => toast.success('Transfer success, pls update balances in a while')),
+        tap(() => toast.success('Transfer success')),
         map((res) => demoActions.transferSuccess(res || 'Success')),
         catchError((errMsg: string) => {
           toast.close('tranfer')
@@ -126,14 +126,19 @@ const transfer: Epic = (action$, state$) =>
 const getPublicBalance = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.updateBalances.match),
-    mergeMap(() =>
-      from(api.getRegularBalance()).pipe(
-        map((balance) => demoActions.publicBalance(+balance)),
-        catchError((errMsg: string) => {
-          toast.error(errMsg)
+    switchMap(({ payload }) =>
+      of(1).pipe(
+        delay(payload?.funds || 0),
+        switchMap(() =>
+          from(api.getRegularBalance()).pipe(
+            map((balance) => demoActions.publicBalance(+balance)),
+            catchError((errMsg: string) => {
+              toast.error(errMsg)
 
-          return of(demoActions.updateBalancesFailure(errMsg))
-        }),
+              return of(demoActions.updateBalancesFailure(errMsg))
+            }),
+          ),
+        ),
       ),
     ),
   )
@@ -141,14 +146,19 @@ const getPublicBalance = (action$: Action$, state$: State$) =>
 const getTokenBalance = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.updateBalances.match),
-    mergeMap(() =>
-      from(api.getTokenBalance()).pipe(
-        map((balance) => demoActions.tokenBalance(+balance)),
-        catchError((errMsg: string) => {
-          toast.error(errMsg)
+    switchMap(({payload}) =>
+      of(1).pipe(
+        delay(payload?.tokens || 0),
+        switchMap(() =>
+          from(api.getTokenBalance()).pipe(
+            map((balance) => demoActions.tokenBalance(+balance)),
+            catchError((errMsg: string) => {
+              toast.error(errMsg)
 
-          return of(demoActions.updateBalancesFailure(errMsg))
-        }),
+              return of(demoActions.updateBalancesFailure(errMsg))
+            }),
+          ),
+        ),
       ),
     ),
   )
@@ -156,14 +166,19 @@ const getTokenBalance = (action$: Action$, state$: State$) =>
 const getPrivateBalance = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.updateBalances.match),
-    mergeMap(() =>
-      from(api.getShieldedBalances()).pipe(
-        map((balance) => demoActions.privateBalance(+balance)),
-        catchError((errMsg: string) => {
-          toast.error(errMsg)
+    switchMap(({payload}) =>
+      of(1).pipe(
+        delay(payload?.private || 0),
+        switchMap(() =>
+          from(api.getShieldedBalances()).pipe(
+            map((balance) => demoActions.privateBalance(+balance)),
+            catchError((errMsg: string) => {
+              toast.error(errMsg)
 
-          return of(demoActions.updateBalancesFailure(errMsg))
-        }),
+              return of(demoActions.updateBalancesFailure(errMsg))
+            }),
+          ),
+        ),
       ),
     ),
   )
@@ -217,13 +232,19 @@ const updateBalancesAfterMint = (action$: Action$, state$: State$) =>
 const updateBalancesAfterDeposit = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.depositSuccess.match),
-    map(() => demoActions.updateBalances(null)),
+    map(() => demoActions.updateBalances({ funds: 2500, tokens: 5000, private: 30000})),
   )
 
 const updateBalancesAfterWithdraw = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.withdrawSuccess.match),
-    map(() => demoActions.updateBalances(null)),
+    map(() => demoActions.updateBalances({ funds: 2500, tokens: 5000, private: 30000})),
+  )
+
+const updateBalancesAfterTransfer = (action$: Action$, state$: State$) =>
+  action$.pipe(
+    filter(demoActions.transferSuccess.match),
+    map(() => demoActions.updateBalances({ funds: 2500, tokens: 5000, private: 30000})),
   )
 
 const exportSeed = (action$: Action$, state$: State$) =>
@@ -344,4 +365,5 @@ export const demoEpics: Epic = combineEpics(
   exportSeedSuccess,
   recowerWallet,
   recoverWalletSuccess,
+  updateBalancesAfterTransfer,
 )

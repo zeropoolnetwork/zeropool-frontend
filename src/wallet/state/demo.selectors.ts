@@ -16,3 +16,20 @@ export const selectTransferModal = (state: RS) => selectDemoState(state).transfe
 export const selectInitials = (state: RS) => selectDemoState(state).initials
 export const selectReadiness = (state: RS) => selectDemoState(state).readiness
 export const selectRecovery = (state: RS) => selectDemoState(state).recovery
+export const selectCanMint = (state: RS) => !selectMinting(state) && !selectPublicBalance(state)
+export const selectCanWithdraw = (state: RS) => 
+  !selectPrivateBalance(state) &&
+  !selectWithdraw(state) && 
+  !selectDeposit(state) &&
+  !selectTransfer(state) &&
+  selectPrivateBalance(state)
+export const selectCanDeposit = (state: RS) => 
+  !selectTransfer(state) &&
+  !selectDeposit(state) && 
+  !selectWithdraw(state) &&
+  selectTokenBalance(state)
+export const selectCanTransfer = (state: RS) => 
+  !selectTransfer(state) && 
+  selectPrivateBalance(state) &&
+  selectPublicBalance(state) &&
+  selectTokenBalance(state)

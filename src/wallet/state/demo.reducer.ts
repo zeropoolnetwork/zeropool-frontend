@@ -48,6 +48,9 @@ export const demoSlice = createSlice({
       state.readiness = false
       state.recovery = false
       state.transferModal = false
+      state.minting = false
+      state.deposit = false
+      state.withdraw = false
       state.transfer = false
     },
     initApiSuccess: (state, action: PayloadAction<null>) => {
@@ -60,7 +63,7 @@ export const demoSlice = createSlice({
       state.initials = null
     },
 
-    updateBalances: (state, action: PayloadAction<null>) => {
+    updateBalances: (state, action: PayloadAction<null|{funds: number, tokens: number, private: number}>) => {
       state.privateBalance = undefined
       state.publicBalance = undefined
       state.tokenBalance = undefined
