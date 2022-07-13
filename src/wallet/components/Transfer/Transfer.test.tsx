@@ -15,6 +15,7 @@ describe('Transfer', () => {
         processing={false}
         onCancel={jest.fn()}
         onSubmit={jest.fn()}
+        canTransfer={true}
       />
     )
   })

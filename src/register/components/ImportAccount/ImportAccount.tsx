@@ -97,7 +97,6 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                   >
                     <CopyAll />
                   </IconButton>
-
                 </InputAdornment>
               }
             />

@@ -18,12 +18,14 @@ export type TransferProps = {
   onSubmit: (transfer: TransferData) => void
   onCancel: () => void
   processing: boolean
+  canTransfer: boolean
 }
 
 export const Transfer: React.FC<TransferProps> = ({
   onSubmit,
   onCancel,
   processing,
+  canTransfer,
 }) => {
   const [to, setTo] = useState('')
   const [amount, setAmount] = useState('')
@@ -154,7 +156,7 @@ export const Transfer: React.FC<TransferProps> = ({
 
       <div className={bem('Buttons')}>
         <Button
-          disabled={!!error || processing}
+          disabled={!canTransfer}
           className={bem('Button')}
           data-testid={bem('Submit')}
           onClick={() => onSubmit(transferData())}

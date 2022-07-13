@@ -15,7 +15,7 @@ import './DemoPage.scss'
 import logo from 'assets/images/logo1.svg'
 import { badAmount } from 'shared/utils/bad-amount'
 
-import { selectBackdrop, selectDeposit, selectReadiness, selectInitials, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectTransfer, selectWalletAddress, selectWithdraw, selectRecovery, selectTransferModal } from 'wallet/state/demo.selectors'
+import { selectBackdrop, selectDeposit, selectReadiness, selectInitials, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectTransfer, selectWalletAddress, selectWithdraw, selectRecovery, selectTransferModal, selectCanMint, selectCanWithdraw, selectCanDeposit, selectCanTransfer } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
 import { DemoDrowler } from 'wallet/components/DemoDrowler/DemoDrowler'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
@@ -46,14 +46,15 @@ export const DemoPage: React.FC<{}> = () => {
   const readiness = useSelector(selectReadiness)
   const recorevery = useSelector(selectRecovery)
   const transferModal = useSelector(selectTransferModal)
+  const canMint = useSelector(selectCanMint)
+  const canWithdraw = useSelector(selectCanWithdraw)
+  const canDeposit = useSelector(selectCanDeposit)
+  const canTransfer = useSelector(selectCanTransfer)
 
   const [mintAmount, setMintAmount] = useState('')
   const [depositAmount, setDepositAmount] = useState('')
   const [withdrawAmount, setWithdrawAmount] = useState('')
-  const [transferAmount, setTransferAmount] = useState('')
-  const [transferTo, setTransferTo] = useState('')
   const [drowler, setDrowler] = useState(false)
-
 
   useEffect(() => {
     if (!readiness && !initials) {
@@ -138,7 +139,7 @@ export const DemoPage: React.FC<{}> = () => {
             className={bem('Button')}
             data-testid={bem('MintButton')}
             startIcon={<SoupKitchenIcon />}
-            disabled={minting || badAmount(mintAmount)}
+            disabled={!canMint || badAmount(mintAmount)}
             onClick={() => { dispatch(demoActions.mint(mintAmount)); setMintAmount('') }}
           >
             Mint
@@ -167,7 +168,7 @@ export const DemoPage: React.FC<{}> = () => {
             color="primary"
             variant="contained"
             startIcon={<KeyboardArrowRightIcon />}
-            disabled={deposit || withdraw || transfer || badAmount(depositAmount) || +depositAmount > (tokenBalance || 0)}
+            disabled={!canDeposit || badAmount(depositAmount) || +depositAmount > (tokenBalance || 0)}
             onClick={() => { dispatch(demoActions.deposit(depositAmount)); setDepositAmount('') }}
           >
             Deposit
@@ -196,52 +197,26 @@ export const DemoPage: React.FC<{}> = () => {
             color="primary"
             variant="contained"
             startIcon={<KeyboardArrowLeft />}
-            disabled={deposit || withdraw || transfer || badAmount(withdrawAmount) || +withdrawAmount > (privateBalance || 0)}
+            disabled={!canWithdraw || badAmount(withdrawAmount) || +withdrawAmount > (privateBalance || 0)}
             onClick={() => { dispatch(demoActions.withdraw(withdrawAmount)); setWithdrawAmount('') }}
           >
             Withdraw
           </LoadingButton>
         </div>
 
-          {/* <div>
-            <Input
-              className={bem('TransferTo')}
-              sx={{ color: 'black' }}
-              color="primary"
-              value={transferTo}
-              placeholder="Recipient private address"
-              classes={{ input: bem('TransferTo') }}
-              inputProps={{ 'data-testid': bem('TransferTo'), maxLength: 120 }}
-              onChange={(event) => setTransferTo(event.target.value)}
-            />
-          </div> */}
-
-          {/* <div>
-            <Input
-              className={bem('TransferAmount')}
-              sx={{ color: 'black' }}
-              color="primary"
-              value={transferAmount === '0' ? '' : transferAmount}
-              placeholder="Transfer amount in tokens"
-              classes={{ input: bem('TransferAmount') }}
-              inputProps={{ 'data-testid': bem('TransferAmount'), maxLength: 20 }}
-              onChange={(event) => setTransferAmount(event.target.value)}
-            /> */}
-
-            <LoadingButton
-              loading={transfer}
-              className={bem('Button', {Transfer: true})}
-              data-testid={bem('TransferButton')}
-              loadingPosition="start"
-              color="primary"
-              variant="contained"
-              startIcon={<KeyboardDoubleArrowRight />}
-              disabled={transferModal || deposit || withdraw || transfer}
-              onClick={() => dispatch(demoActions.transferModal(true))}
-            >
-              Transfer
-            </LoadingButton>
-          {/* </div> */}
+        <LoadingButton
+          loading={transfer}
+          className={bem('Button', {Transfer: true})}
+          data-testid={bem('TransferButton')}
+          loadingPosition="start"
+          color="primary"
+          variant="contained"
+          startIcon={<KeyboardDoubleArrowRight />}
+          disabled={transferModal || deposit || withdraw || transfer}
+          onClick={() => dispatch(demoActions.transferModal(true))}
+        >
+          Transfer
+        </LoadingButton>
       </div>
 
       <div className={bem('Info')}>
@@ -301,6 +276,7 @@ export const DemoPage: React.FC<{}> = () => {
           <Transfer
             data-testid={bem('Transfer')}
             processing={transfer}
+            canTransfer={!!canTransfer}
             onSubmit={(data: TransferData) => dispatch(demoActions.transfer(data))}
             onCancel={() => dispatch(demoActions.transferModal(false))}
           />
