@@ -1,4 +1,4 @@
-import { Button, FormControl, FormControlLabel, FormGroup, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
+import { Button, CircularProgress, FormControl, FormControlLabel, FormGroup, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
 import React, { useState } from 'react'
 import { TransferData, TransferType } from 'shared/models'
 import { Close, CopyAll } from '@mui/icons-material'
@@ -8,6 +8,8 @@ import './Transfer.scss'
 import { ZPSwitch } from 'shared/components/ZPSwitch/zpswitch'
 import { useSnackbar } from 'notistack'
 import { copyFromClipboard } from 'shared/utils/copy-from-clipboard'
+import { LoadingButton } from '@mui/lab'
+import { transfer } from 'wallet/api/zeropool.api'
 
 
 export const componentId = 'Transfer'
@@ -163,7 +165,7 @@ export const Transfer: React.FC<TransferProps> = ({
           color="primary"
           variant="contained"
         >
-          Submit
+          { processing ? <CircularProgress color="inherit" size={25}/> : 'Submit' }
         </Button>
 
         <Button
@@ -172,9 +174,8 @@ export const Transfer: React.FC<TransferProps> = ({
           onClick={onCancel}
           color="primary"
           variant="contained"
-          disabled={processing}
         >
-          Cancel
+          Close
         </Button>
       </div>
     </FormGroup>
