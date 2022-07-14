@@ -1,5 +1,5 @@
 // tslint:disable: prettier max-line-length
-import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, SwipeableDrawer, Dialog, DialogContent, LinearProgress } from '@mui/material'
+import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, SwipeableDrawer, Dialog, DialogContent, Paper, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight'
 import { useEffect, useState } from 'react'
@@ -117,36 +117,7 @@ export const DemoPage: React.FC<{}> = () => {
       </AppBar>
 
       <div className={bem('Wrapper')}>
-        <div>
-          <Input
-            id="mint-amount"
-            className={bem('Input')}
-            data-testid={bem('MintInput')}
-            sx={{ color: 'black' }}
-            color="primary"
-            value={mintAmount}
-            classes={{ input: bem('MintInput') }}
-            placeholder="Mint amount in tokens"
-            inputProps={{ 'data-testid': bem('Mint'), maxLength: 20 }}
-            onChange={(event) => setMintAmount(event.target.value)}
-          />
-
-          <LoadingButton
-            loading={minting}
-            loadingPosition="start"
-            color="primary"
-            variant="contained"
-            className={bem('Button')}
-            data-testid={bem('MintButton')}
-            startIcon={<SoupKitchenIcon />}
-            disabled={!canMint || badAmount(mintAmount)}
-            onClick={() => { dispatch(demoActions.mint(mintAmount)); setMintAmount('') }}
-          >
-            Mint
-          </LoadingButton>
-        </div>
-
-        <div>
+        <div className={bem('Transaction')}>
           <Input
             id="deposit-amount"
             className={bem('Input')}
@@ -175,7 +146,7 @@ export const DemoPage: React.FC<{}> = () => {
           </LoadingButton>
         </div>
 
-        <div>
+        <div className={bem('Transaction')}>
           <Input
             color="primary"
             className={bem('Input')}
@@ -219,14 +190,46 @@ export const DemoPage: React.FC<{}> = () => {
         </LoadingButton>
       </div>
 
-      <div className={bem('Info')}>
-        <span>To perform any action on this page you need to have enough funds on your public balance.</span>
-        <span>
+      <Paper className={bem('Info')} elevation={2}>
+        <Typography variant="h6" className={bem('InfoTitle')}>🚀 Plonk test</Typography>
+
+        <div className={bem('Transaction', {Mint: true})}>
+          <Input
+            id="mint-amount"
+            className={bem('Input')}
+            data-testid={bem('MintInput')}
+            sx={{ color: 'black' }}
+            color="primary"
+            value={mintAmount}
+            classes={{ input: bem('MintInput') }}
+            placeholder="Mint amount in tokens"
+            inputProps={{ 'data-testid': bem('Mint'), maxLength: 20 }}
+            onChange={(event) => setMintAmount(event.target.value)}
+          />
+
+          <LoadingButton
+            loading={minting}
+            loadingPosition="start"
+            color="primary"
+            variant="contained"
+            className={bem('Button')}
+            data-testid={bem('MintButton')}
+            startIcon={<SoupKitchenIcon />}
+            disabled={!canMint || badAmount(mintAmount)}
+            onClick={() => { dispatch(demoActions.mint(mintAmount)); setMintAmount('') }}
+          >
+            Mint
+          </LoadingButton>
+        </div>
+
+        <span className={bem('InfoText')}>To perform any action on this page you need to have enough funds on your public balance.</span>
+        
+        <span className={bem('InfoText')}>
           Click on your public address and use it on the&nbsp; 
-          <a href='https://gitter.im/kovan-testnet/faucet#' target={'_blank'}>Kovan Faset</a> or&nbsp; 
+          <a href='https://gitter.im/kovan-testnet/faucet#' target={'_blank'}>Kovan Faucet</a> or&nbsp; 
           <a href='https://ethdrop.dev/' target={'_blank'}>Ethdrop</a> page to get free funds.
         </span>
-      </div>
+      </Paper>
 
       <div className={bem('Footer')}>
         <img className={bem('Logo')} src={logo} alt="ZeroPool"/>

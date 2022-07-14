@@ -35,6 +35,7 @@
     "modules.d.ts"
   ],
   "exclude": [
-    "templates"
+    "templates",
+    "**/*.stories.tsx"
   ]
 }

@@ -24,6 +24,7 @@ module.exports = {
         'net': false,
         'tls': false,
         'tty': false,
+        'url': require.resolve('url'),
         'assert': require.resolve('assert'),
         'constants': require.resolve('constants-browserify'),
         'crypto': require.resolve('crypto-browserify'),

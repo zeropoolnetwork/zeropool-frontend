@@ -39,6 +39,14 @@
     width: 100%;
   }
 
+  &-Transaction {
+    margin-bottom: 5px;
+
+    &_Mint {
+      margin: 0 auto 5px;
+    }
+  }
+
   &-Input{
     width: 220px;
     margin-right: 10px;
@@ -57,21 +65,13 @@
     }
 
     &_Transfer {
-      font-size: 20px !important;
-      font-weight: bold;
-      margin: 40px auto 0 !important;;
-      height: 70px;
+      margin: 26px auto 0 !important;;
     }
   }
 
   &-TransferTo{
     margin-bottom: 8px;
     width: 355px;
-  }
-
-  &-Title{
-    flex-grow: 1;
-    align-self: flex-end;
   }
   
   &-Wrapper{
@@ -80,24 +80,32 @@
     flex-direction: column;
 
     @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
-      margin: 20px auto;
+      margin: 26px auto;
     }
   }
 
   &-Info{
+    background-color: $blue-light !important;
     display: flex;
     flex-direction: column;
-    margin: auto auto 120px;
+    margin: auto auto 130px;
     padding: 20px;
 
-    > span {
-      margin-bottom: 5px;
-    }
-
-    @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
+    @media (max-width: $screen-s-width), (max-height: $screen-xs-heigh) {
       font-size: $small-font-size;
-      margin: 0 auto;
+      margin: auto 10px 90px;
     }
+  }
+  
+  &-InfoTitle{
+    @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
+      height: 0;
+      overflow: hidden;
+    }
+  }
+
+  &-InfoText{
+    margin-bottom: 6px;
   }
 
   &-Footer{
@@ -108,7 +116,7 @@
     height: 120px;
     width: 100%;
 
-    @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
+    @media (max-width: $screen-s-width), (max-height: $screen-xs-heigh) {
       height: 80px;
     }
   }
