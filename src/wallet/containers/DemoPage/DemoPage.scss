@@ -43,7 +43,7 @@
     width: 220px;
     margin-right: 10px;
 
-    @media screen and (max-width: $screen-xs-max) {
+    @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
       font-size: $small-font-size !important;
       margin: 0;
       width: 180px;
@@ -51,7 +51,7 @@
   }
 
   &-Button{
-    @media screen and (max-width: $screen-xs-max) {
+    @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
       font-size: $small-font-size !important;
       margin-left: 10px !important;
     }
@@ -79,7 +79,7 @@
     margin: 50px auto;
     flex-direction: column;
 
-    @media screen and (max-width: $screen-xs-max) {
+    @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
       margin: 20px auto;
     }
   }
@@ -94,9 +94,9 @@
       margin-bottom: 5px;
     }
 
-    @media screen and (max-width: $screen-xs-max) {
+    @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
       font-size: $small-font-size;
-      margin: 0;
+      margin: 0 auto;
     }
   }
 
@@ -108,7 +108,7 @@
     height: 120px;
     width: 100%;
 
-    @media screen and (max-width: $screen-xs-max) {
+    @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
       height: 80px;
     }
   }
@@ -117,7 +117,7 @@
     margin: auto;
     height: 60px; 
 
-    @media screen and (max-width: $screen-xs-max) {
+    @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
       height: 40px;
     }
   }

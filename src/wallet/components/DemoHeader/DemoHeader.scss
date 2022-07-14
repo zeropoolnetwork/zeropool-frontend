@@ -6,7 +6,7 @@
   flex-direction: column;
   padding: 26px 0px;
 
-  @media screen and (max-width: $screen-xs-max) {
+  @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
     padding: 10px 0px 30px;
   }
 
@@ -24,7 +24,7 @@
     height: 128px;
     margin: auto;
 
-    @media screen and (max-width: $screen-xs-max) {
+    @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
       height: 90px;
     }
   }
