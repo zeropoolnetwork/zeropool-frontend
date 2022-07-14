@@ -21,7 +21,9 @@ export const selectTransaction = (state: RS) =>
   selectDeposit(state) ||
   selectTransfer(state) ||
   selectMinting(state)
-export const selectCanMint = (state: RS) => !selectTransaction(state) && selectPublicBalance(state)
+export const selectCanMint = (state: RS) => 
+  !selectTransaction(state) && 
+  selectPublicBalance(state)
 export const selectCanWithdraw = (state: RS) =>
   !selectTransaction(state) &&
   selectPrivateBalance(state) &&
@@ -31,10 +33,7 @@ export const selectCanDeposit = (state: RS) =>
   selectTokenBalance(state) &&
   selectPublicBalance(state)
 export const selectCanTransfer = (state: RS) =>
-  !selectTransfer(state) &&
-  !selectMinting(state) &&
-  !selectDeposit(state) &&
-  !selectWithdraw(state) &&
-  selectPrivateBalance(state) &&
-  selectPublicBalance(state) &&
-  selectTokenBalance(state)
+  !selectTransaction(state) &&
+  selectPrivateBalance(state) !== undefined &&
+  selectPublicBalance(state) !== undefined &&
+  selectTokenBalance(state) !== undefined
