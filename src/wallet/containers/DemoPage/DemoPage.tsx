@@ -1,5 +1,5 @@
 // tslint:disable: prettier max-line-length
-import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, SwipeableDrawer, Dialog, DialogContent } from '@mui/material'
+import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, SwipeableDrawer, Dialog, DialogContent, LinearProgress } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight'
 import { useEffect, useState } from 'react'
@@ -205,14 +205,14 @@ export const DemoPage: React.FC<{}> = () => {
         </div>
 
         <LoadingButton
-          loading={transfer}
+          loading={false}
           className={bem('Button', {Transfer: true})}
           data-testid={bem('TransferButton')}
           loadingPosition="start"
           color="primary"
           variant="contained"
-          startIcon={<KeyboardDoubleArrowRight />}
-          disabled={transferModal || deposit || withdraw || transfer}
+          startIcon={transfer ? <CircularProgress color="inherit" size={20} /> : <KeyboardDoubleArrowRight />}
+          disabled={false}
           onClick={() => dispatch(demoActions.transferModal(true))}
         >
           Transfer
