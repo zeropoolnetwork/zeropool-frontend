@@ -131,7 +131,7 @@ const getPublicBalance = (action$: Action$, state$: State$) =>
         delay(payload?.funds || 0),
         switchMap(() =>
           from(api.getRegularBalance()).pipe(
-            map((balance) => demoActions.publicBalance(+balance)),
+            map((balance) => demoActions.publicBalance(balance)),
             catchError((errMsg: string) => {
               toast.error(errMsg)
 
@@ -151,7 +151,7 @@ const getTokenBalance = (action$: Action$, state$: State$) =>
         delay(payload?.tokens || 0),
         switchMap(() =>
           from(api.getTokenBalance()).pipe(
-            map((balance) => demoActions.tokenBalance(+balance)),
+            map((balance) => demoActions.tokenBalance(balance)),
             catchError((errMsg: string) => {
               toast.error(errMsg)
 
@@ -171,7 +171,7 @@ const getPrivateBalance = (action$: Action$, state$: State$) =>
         delay(payload?.private || 0),
         switchMap(() =>
           from(api.getShieldedBalances()).pipe(
-            map((balance) => demoActions.privateBalance(+balance)),
+            map((balance) => demoActions.privateBalance(balance)),
             catchError((errMsg: string) => {
               toast.error(errMsg)
 

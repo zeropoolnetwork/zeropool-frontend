@@ -108,9 +108,9 @@ export const DemoPage: React.FC<{}> = () => {
             <DemoHeader
               walletAddress={backdrop ? '-' : walletAddress}
               privateAddress={backdrop ? '-' : privateAddress}
-              publicBalance={backdrop ? 0 : publicBalance}
-              privateBalance={backdrop ? 0 : privateBalance}
-              tokenBalance={backdrop ? 0 : tokenBalance}
+              publicBalance={backdrop ? '0' : publicBalance}
+              privateBalance={backdrop ? '0' : privateBalance}
+              tokenBalance={backdrop ? '0' : tokenBalance}
             />
           </div>
         </Toolbar>

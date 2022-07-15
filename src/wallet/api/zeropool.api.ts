@@ -101,6 +101,8 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
       throw new Error(`Unknown network ${NETWORK}`)
     }
   } catch (e: any) {
+    console.error(e)
+
     return Promise.reject(e.message)
   }
 
@@ -164,7 +166,9 @@ export const getSeed = (password: string): Promise<string> => {
     if (!bip39.validateMnemonic(seed)) return Promise.reject('Incorect password!')
 
     return Promise.resolve(seed)
-  } catch (_) {
+  } catch (e) {
+    console.error(e)
+
     return Promise.reject('Incorrect password')
   }
 }
@@ -198,6 +202,8 @@ export const getTokenBalance = async (): Promise<string> => {
     apiCheck()
     return client.fromBaseUnit(await client.getTokenBalance(TOKEN_ADDRESS))
   } catch (e: any) {
+    console.error(e)
+
     return Promise.reject(String(e.message))
   }
 }
@@ -250,8 +256,9 @@ export const depositShielded = async (tokens: string): Promise<string> => {
 
     return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
   } catch (e: any) {
-    return Promise.reject(String(e.message))
+    console.error(e)
 
+    return Promise.reject(String(e.message))
   }
 }
 
@@ -275,6 +282,8 @@ export const withdrawShielded = async (tokens: string): Promise<string> => {
 
     return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
   } catch (e: any) {
+    console.error(e)
+
     return Promise.reject(String(e.message))
   }
 }
@@ -303,6 +312,8 @@ export const transferFunds = async (to: string, amount: string): Promise<void> =
 
     return await client.transfer(to, String(client.toBaseUnit(amount)))
   } catch (e: any) {
+    console.error(e)
+
     return Promise.reject(String(e.message))
   }
 }
@@ -313,6 +324,8 @@ export const transferTokens = async (to: string, amount: string): Promise<void> 
 
     return await client.transferToken(TOKEN_ADDRESS, to, String(client.toBaseUnit(amount)))
   } catch (e: any) {
+    console.error(e)
+
     return Promise.reject(String(e.message))
   }
 }
@@ -336,6 +349,8 @@ export const transferPublicToPrivate = async (to: string, tokens: string): Promi
 
     return await zpClient.deposit(TOKEN_ADDRESS, String(amount), (data) => client.sign(data), fromAddress, '0', undefined, [{to, amount}])
   } catch (e: any) {
+    console.error(e)
+
     return Promise.reject(String(e.message))
   }
 }
@@ -350,6 +365,8 @@ export const transferPrivateToPublic = async (to: string, tokens: string): Promi
 
     return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
   } catch (e: any) {
+    console.error(e)
+
     return Promise.reject(String(e.message))
   }
 }
@@ -366,6 +383,8 @@ export const transferPrivateToPrivate = async (to: string, tokens: string): Prom
 
     return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
   } catch (e: any) {
+    console.error(e)
+
     return Promise.reject(String(e.message))
   }
 }

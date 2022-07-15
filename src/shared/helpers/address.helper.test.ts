@@ -47,5 +47,11 @@ describe('adress beautifyer', () => {
     expect(beautifyAmount(amount)).toBe(result)
   })
 
+  it('transforms amount 8e-9 to 0.0...0008', () => {
+    const amount = 8e-9
+    const result = '0.0...0008'
+
+    expect(beautifyAmount(amount)).toBe(result)
+  })
 })
 

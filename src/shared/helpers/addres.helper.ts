@@ -1,5 +1,6 @@
 import { isEthereumAddress } from 'shared/helpers/validators/eth.validator'
 import { TokenSymbol } from 'shared/models'
+import { toPlainString } from 'shared/utils/toPlainString'
 
 export const validateAddress = (address: string, symbol: TokenSymbol): boolean | undefined => {
   let result
@@ -41,7 +42,7 @@ export const beautifyAddress = (address: string, limit = 6): string => {
 
 export const beautifyAmount = (amount: string | number): string => {
   if (typeof amount === 'number') {
-    amount = amount.toString()
+    amount = toPlainString(amount)
   }
 
   if (!amount || amount === '0') {

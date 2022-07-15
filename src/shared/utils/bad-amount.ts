@@ -8,7 +8,7 @@ export const badAmount = (
       return true
     }
 
-    if (+amount < 0) {
+    if (+amount < 0 || +amount === 0) {
       return true
     }
 

@@ -12,9 +12,9 @@ export const componentId = 'DemoHeader'
 const bem = cn(componentId)
 
 export type DemoHeaderProps = {
-  publicBalance?: number
-  privateBalance?: number
-  tokenBalance?: number
+  publicBalance?: string
+  privateBalance?: string
+  tokenBalance?: string
   walletAddress?: string
   privateAddress?: string
 }
@@ -53,7 +53,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
         <div>
           Public balance:&nbsp;
 
-          <Tooltip title={publicBalance || ''}>
+          <Tooltip title={publicBalance || ''} onClick={() => alert(publicBalance)}>
             {publicBalance === undefined
               ? <CircularProgress className={bem('Progress')} color="inherit" />
               : <span>{beautifyAmount(publicBalance)}</span>}
@@ -63,7 +63,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
         <div>
           Token balance:&nbsp;
 
-          <Tooltip title={tokenBalance || ''}>
+          <Tooltip title={tokenBalance || ''} onClick={() => alert(tokenBalance)}>
             {tokenBalance === undefined
               ? <CircularProgress className={bem('Progress')} color="inherit" />
               : <span>{beautifyAmount(tokenBalance)}</span>}
@@ -73,7 +73,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
         <div>
           Private balance:&nbsp;
 
-          <Tooltip title={privateBalance || ''}>
+          <Tooltip title={privateBalance || ''} onClick={() => alert(privateBalance)}>
             {privateBalance === undefined
               ? <CircularProgress className={bem('Progress')} color="inherit" />
               : <span>{beautifyAmount(privateBalance)}</span>}

@@ -3,9 +3,9 @@ import { TransferData } from 'shared/models'
 
 export type DemoState = {
   initials: { seed: string, password: string } | null | undefined
-  publicBalance: number | undefined
-  privateBalance: number | undefined
-  tokenBalance: number | undefined
+  publicBalance: string | undefined
+  privateBalance: string | undefined
+  tokenBalance: string | undefined
   minting: boolean
   walletAddress: string | undefined
   privateAddress: string | undefined
@@ -70,13 +70,13 @@ export const demoSlice = createSlice({
     },
     updateBalancesFailure: (state, action: PayloadAction<string>) => { },
 
-    publicBalance: (state, action: PayloadAction<number>) => {
+    publicBalance: (state, action: PayloadAction<string>) => {
       state.publicBalance = action.payload
     },
-    privateBalance: (state, action: PayloadAction<number>) => {
+    privateBalance: (state, action: PayloadAction<string>) => {
       state.privateBalance = action.payload
     },
-    tokenBalance: (state, action: PayloadAction<number>) => {
+    tokenBalance: (state, action: PayloadAction<string>) => {
       state.tokenBalance = action.payload
     },
 
