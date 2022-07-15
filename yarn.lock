@@ -15545,9 +15545,9 @@ yup@^0.32.11:
     property-expr "^2.0.4"
     toposort "^2.0.2"
 
-"zeropool-client-js@https://github.com/zeropoolnetwork/zeropool-client-js#f89cba2498b9c85dfd8144e366b3772bd3925d51":
+"zeropool-client-js@https://github.com/zeropoolnetwork/zeropool-client-js#7a4735691e7138d577a9e12cd3c8b3e77867fe5a":
   version "0.3.1"
-  resolved "https://github.com/zeropoolnetwork/zeropool-client-js#f89cba2498b9c85dfd8144e366b3772bd3925d51"
+  resolved "https://github.com/zeropoolnetwork/zeropool-client-js#7a4735691e7138d577a9e12cd3c8b3e77867fe5a"
   dependencies:
     comlink "^4.3.1"
     hdwallet-babyjub "^0.0.1"
