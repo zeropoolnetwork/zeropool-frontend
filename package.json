@@ -58,7 +58,7 @@
     "typescript": "^4.3.5",
     "wallet.ts": "1.0.1",
     "zeropool-client-js": "https://github.com/zeropoolnetwork/zeropool-client-js#42bb86e4652b56046a6998da42156aff894728c9",
-    "zeropool-support-js": "https://github.com/zeropoolnetwork/zeropool-support-js#06a071d142c86ecbcbdfeb7ec7a0837a56bce195"
+    "zeropool-support-js": "https://github.com/zeropoolnetwork/zeropool-support-js#37d8b942c0d8fd5e732a1b39816d1600645d5cbd"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^8.2.1",
