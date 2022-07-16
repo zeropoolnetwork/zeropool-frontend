@@ -70,7 +70,7 @@ const deposit: Epic = (action$, state$) =>
     switchMap(({ payload }) =>
       from(api.depositShielded(payload)).pipe(
         tap(() => toast.close('deposit')),
-        tap(() => toast.success('Deposit success, pls update balances in a while')),
+        tap(() => toast.success('Deposit success')),
         map((res) => demoActions.depositSuccess(payload)),
         catchError((errMsg: string) => {
           toast.close('deposit')
@@ -89,7 +89,7 @@ const withdraw: Epic = (action$, state$) =>
     switchMap(({ payload }) =>
       from(api.withdrawShielded(payload)).pipe(
         tap(() => toast.close('withdraw')),
-        tap(() => toast.success('Withdraw success, pls update balances in a while')),
+        tap(() => toast.success('Withdraw success')),
         map((res) => demoActions.withdrawSuccess(payload)),
         catchError((errMsg: string) => {
           toast.close('withdraw')
@@ -146,7 +146,7 @@ const getPublicBalance = (action$: Action$, state$: State$) =>
 const getTokenBalance = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.updateBalances.match),
-    switchMap(({payload}) =>
+    switchMap(({ payload }) =>
       of(1).pipe(
         delay(payload?.tokens || 0),
         switchMap(() =>
@@ -166,7 +166,7 @@ const getTokenBalance = (action$: Action$, state$: State$) =>
 const getPrivateBalance = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.updateBalances.match),
-    switchMap(({payload}) =>
+    switchMap(({ payload }) =>
       of(1).pipe(
         delay(payload?.private || 0),
         switchMap(() =>
@@ -232,19 +232,19 @@ const updateBalancesAfterMint = (action$: Action$, state$: State$) =>
 const updateBalancesAfterDeposit = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.depositSuccess.match),
-    map(() => demoActions.updateBalances({ funds: 2500, tokens: 5000, private: 30000})),
+    map(() => demoActions.updateBalances({ funds: 2500, tokens: 5000, private: 30000 })),
   )
 
 const updateBalancesAfterWithdraw = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.withdrawSuccess.match),
-    map(() => demoActions.updateBalances({ funds: 2500, tokens: 5000, private: 30000})),
+    map(() => demoActions.updateBalances({ funds: 2500, tokens: 5000, private: 30000 })),
   )
 
 const updateBalancesAfterTransfer = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.transferSuccess.match),
-    map(() => demoActions.updateBalances({ funds: 2500, tokens: 5000, private: 30000})),
+    map(() => demoActions.updateBalances({ funds: 2500, tokens: 5000, private: 30000 })),
   )
 
 const exportSeed = (action$: Action$, state$: State$) =>
