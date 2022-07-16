@@ -232,19 +232,19 @@ const updateBalancesAfterMint = (action$: Action$, state$: State$) =>
 const updateBalancesAfterDeposit = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.depositSuccess.match),
-    map(() => demoActions.updateBalances({ funds: 2500, tokens: 5000, private: 30000 })),
+    map(() => demoActions.updateBalances({ funds: 2500, tokens: 10000, private: 30000 })),
   )
 
 const updateBalancesAfterWithdraw = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.withdrawSuccess.match),
-    map(() => demoActions.updateBalances({ funds: 2500, tokens: 5000, private: 30000 })),
+    map(() => demoActions.updateBalances({ funds: 2500, tokens: 10000, private: 30000 })),
   )
 
 const updateBalancesAfterTransfer = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.transferSuccess.match),
-    map(() => demoActions.updateBalances({ funds: 2500, tokens: 5000, private: 30000 })),
+    map(() => demoActions.updateBalances({ funds: 2500, tokens: 10000, private: 30000 })),
   )
 
 const exportSeed = (action$: Action$, state$: State$) =>
