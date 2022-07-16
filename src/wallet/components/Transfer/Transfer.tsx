@@ -10,6 +10,7 @@ import { useSnackbar } from 'notistack'
 import { copyFromClipboard } from 'shared/utils/copy-from-clipboard'
 import { LoadingButton } from '@mui/lab'
 import { transfer } from 'wallet/api/zeropool.api'
+import { badAmount } from 'shared/utils/bad-amount'
 
 
 export const componentId = 'Transfer'
@@ -158,14 +159,14 @@ export const Transfer: React.FC<TransferProps> = ({
 
       <div className={bem('Buttons')}>
         <Button
-          disabled={!canTransfer}
+          disabled={!canTransfer || badAmount(amount) || !to}
           className={bem('Button')}
           data-testid={bem('Submit')}
           onClick={() => onSubmit(transferData())}
           color="primary"
           variant="contained"
         >
-          { processing ? <CircularProgress color="inherit" size={25}/> : 'Submit' }
+          {processing ? <CircularProgress color="inherit" size={25} /> : 'Submit'}
         </Button>
 
         <Button
