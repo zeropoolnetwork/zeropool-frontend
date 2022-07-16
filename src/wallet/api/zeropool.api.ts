@@ -295,8 +295,7 @@ export const transfer = async (data: TransferData): Promise<string|void> => {
     case 'funds':
       return transferFunds(data.to, data.amount)
     case 'publicToPublic':
-      return Promise.reject(String(`Public to public token transfer temporary disabled due to web3.js limitations`))
-      // return transferTokens(data.to, data.amount)
+      return transferTokens(data.to, data.amount)
     case 'publicToPrivate':
       return transferPublicToPrivate(data.to, data.amount)
     case 'privateToPublic':
