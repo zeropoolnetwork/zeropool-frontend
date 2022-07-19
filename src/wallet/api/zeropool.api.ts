@@ -254,7 +254,7 @@ export const depositShielded = async (tokens: string): Promise<string> => {
     jobId = await zpClient.deposit(TOKEN_ADDRESS, amount, (data) => client.sign(data), fromAddress, '0', undefined, [])
     console.log('Please wait relayer complete the job %s...', jobId)
 
-    return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
+    // return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
   } catch (e: any) {
     console.error(e)
 
