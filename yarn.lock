@@ -3071,15 +3071,20 @@
     "@types/node" "*"
     form-data "^3.0.0"
 
-"@types/node@*", "@types/node@>=13.7.0":
-  version "18.0.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.0.4.tgz#48aedbf35efb3af1248e4cd4d792c730290cd5d6"
-  integrity sha512-M0+G6V0Y4YV8cqzHssZpaNCqvYwlCiulmm0PwpNLF55r/+cT8Ol42CHRU1SEaYFH2rTwiiE1aYg/2g2rrtGdPA==
+"@types/node@*":
+  version "18.0.6"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.0.6.tgz#0ba49ac517ad69abe7a1508bc9b3a5483df9d5d7"
+  integrity sha512-/xUq6H2aQm261exT6iZTMifUySEt4GR5KX8eYyY+C4MSNPqSh9oNIP7tz2GLKTlFaiBbgZNxffoR3CVRG+cljw==
 
 "@types/node@11.11.6":
   version "11.11.6"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-11.11.6.tgz#df929d1bb2eee5afdda598a41930fe50b43eaa6a"
   integrity sha512-Exw4yUWMBXM3X+8oqzJNRqZSwUAaS4+7NdvHqQuFi/d+synz++xmX3QIf+BFqneW8N31R8Ky+sikfZUXq07ggQ==
+
+"@types/node@>=13.7.0":
+  version "18.0.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.0.4.tgz#48aedbf35efb3af1248e4cd4d792c730290cd5d6"
+  integrity sha512-M0+G6V0Y4YV8cqzHssZpaNCqvYwlCiulmm0PwpNLF55r/+cT8Ol42CHRU1SEaYFH2rTwiiE1aYg/2g2rrtGdPA==
 
 "@types/node@^12.12.6":
   version "12.20.55"
@@ -5022,9 +5027,9 @@ cliui@^7.0.2:
     wrap-ansi "^7.0.0"
 
 clone-response@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/clone-response/-/clone-response-1.0.2.tgz#d1dc973920314df67fbeb94223b4ee350239e96b"
-  integrity sha512-yjLXh88P599UOyPTFX0POsd7WxnbsVsGohcwzHOLspIhhpalPw1BcqED8NblyZLKcGrL8dTgMlcaZxV2jAD41Q==
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/clone-response/-/clone-response-1.0.3.tgz#af2032aa47816399cf5f0a1d0db902f517abb8c3"
+  integrity sha512-ROoL94jJH2dUVML2Y/5PEDNaSHgeOdSDicUyS7izcF63G6sTc/FTjLub4b8Il9S8S0beOfYt0TaA5qvFK+w0wA==
   dependencies:
     mimic-response "^1.0.0"
 
@@ -9776,15 +9781,15 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-libzeropool-rs-wasm-web-mt@^0.3.19:
-  version "0.3.19"
-  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web-mt/-/libzeropool-rs-wasm-web-mt-0.3.19.tgz#f60e2b59142ca7f1f7c1b7914cd061d0ffddc89e"
-  integrity sha512-ZoUqh1cvL2i0zZNDOSFtgEyBqTgcYRM94a8ZT2WwEbkDD8+tVwHocs34QxeZpf2sex38ArJnNBXsv6xpIVm6jA==
+libzeropool-rs-wasm-web-mt@^0.3.20:
+  version "0.3.20"
+  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web-mt/-/libzeropool-rs-wasm-web-mt-0.3.20.tgz#34776a4856bc674001f655c118ace5843238698b"
+  integrity sha512-raj5wnVv9N9K8sOj01Wr6LoY0WccG0T+u87g5g0qYrGgVKCHEZo45pL4Fp+q2xE8yY8FfV/XbX/Hl+vOy+Okeg==
 
-libzeropool-rs-wasm-web@^0.3.19:
-  version "0.3.19"
-  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web/-/libzeropool-rs-wasm-web-0.3.19.tgz#3190fa8f9f009713e79551182eacd64e97dca2bb"
-  integrity sha512-vQCLw1ujoW6EH7nkKDkRO69sWFJDVLZbDJs5wXT8hbWifzQCBvk7qtkgcxJHnD/GoHst377nmH/VJ3xUxfWaSQ==
+libzeropool-rs-wasm-web@^0.3.20:
+  version "0.3.20"
+  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web/-/libzeropool-rs-wasm-web-0.3.20.tgz#8a72ee14998dfb05b49cd013bde5da49386cc481"
+  integrity sha512-EArWlN8skoLhd7vgE2hFwnymBQxzdIGePEwRYxH6qADR2wMyExWZxqTw5fJvJHEfZpG3zcec+Y6IHPMdTT/nhA==
 
 lilconfig@^2.0.3, lilconfig@^2.0.5:
   version "2.0.6"
@@ -15545,15 +15550,15 @@ yup@^0.32.11:
     property-expr "^2.0.4"
     toposort "^2.0.2"
 
-"zeropool-client-js@https://github.com/zeropoolnetwork/zeropool-client-js#3c47616a87ffd1f6661b860cf20fa5d94a5dd10c":
+"zeropool-client-js@https://github.com/zeropoolnetwork/zeropool-client-js#temp-fixes":
   version "0.3.1"
-  resolved "https://github.com/zeropoolnetwork/zeropool-client-js#3c47616a87ffd1f6661b860cf20fa5d94a5dd10c"
+  resolved "https://github.com/zeropoolnetwork/zeropool-client-js#770401a6f5224d2064a2d7f3598c1e7e46b914dc"
   dependencies:
     comlink "^4.3.1"
     hdwallet-babyjub "^0.0.1"
     idb "^7.0.0"
-    libzeropool-rs-wasm-web "^0.3.19"
-    libzeropool-rs-wasm-web-mt "^0.3.19"
+    libzeropool-rs-wasm-web "^0.3.20"
+    libzeropool-rs-wasm-web-mt "^0.3.20"
     regenerator-runtime "^0.13.9"
     wasm-feature-detect "^1.2.11"
     web3 "^1.7.0"
