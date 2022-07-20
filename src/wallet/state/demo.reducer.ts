@@ -90,20 +90,20 @@ export const demoSlice = createSlice({
       state.minting = false
     },
 
-    deposit: (state, action) => {
+    deposit: (state, action: PayloadAction<string>) => {
       state.deposit = true
     },
-    depositSuccess: (state, action: PayloadAction<number>) => {
+    depositSuccess: (state, action: PayloadAction<string>) => {
       state.deposit = false
     },
     depositFalure: (state, action: PayloadAction<string>) => {
       state.deposit = false
     },
 
-    withdraw: (state, action) => {
+    withdraw: (state, action: PayloadAction<string>) => {
       state.withdraw = true
     },
-    withdrawSuccess: (state, action: PayloadAction<number>) => {
+    withdrawSuccess: (state, action: PayloadAction<string>) => {
       state.withdraw = false
     },
     withdrawFalure: (state, action: PayloadAction<string>) => {
