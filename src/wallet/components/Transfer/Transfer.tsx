@@ -18,17 +18,21 @@ export const componentId = 'Transfer'
 const bem = cn(componentId)
 
 export type TransferProps = {
+  onChange: (type: TransferType, amount: string) => void
   onSubmit: (transfer: TransferData) => void
   onCancel: () => void
   processing: boolean
   canTransfer: boolean
+  balanceError: boolean
 }
 
 export const Transfer: React.FC<TransferProps> = ({
+  onChange,
   onSubmit,
   onCancel,
   processing,
   canTransfer,
+  balanceError,
 }) => {
   const [to, setTo] = useState('')
   const [amount, setAmount] = useState('')
@@ -65,6 +69,7 @@ export const Transfer: React.FC<TransferProps> = ({
             setFunds(!checked)
             setFromPrivate(checked)
             setToPrivate(checked)
+            onChange(getType(), amount)
           }}
         />
 
@@ -74,7 +79,7 @@ export const Transfer: React.FC<TransferProps> = ({
           disabled={funds}
           control={<ZPSwitch sx={{ m: 1 }} />}
           label={`from ${fromPrivate ? 'private' : 'public'}`}
-          onChange={(event, checked) => setFromPrivate(checked)}
+          onChange={(event, checked) => { setFromPrivate(checked); onChange(getType(), amount) }}
           checked={fromPrivate}
         />
 
@@ -84,7 +89,7 @@ export const Transfer: React.FC<TransferProps> = ({
           disabled={funds}
           control={<ZPSwitch sx={{ m: 1 }} />}
           label={`to ${toPrivate ? 'private' : 'public'}`}
-          onChange={(event, checked) => setToPrivate(checked)}
+          onChange={(event, checked) => { setToPrivate(checked); onChange(getType(), amount) }}
           checked={toPrivate}
         />
       </div>
@@ -133,7 +138,7 @@ export const Transfer: React.FC<TransferProps> = ({
           className={bem('Input')}
           value={amount}
           type={'text'}
-          onChange={(event) => setAmount(event.target.value)}
+          onChange={(event) => { setAmount(event.target.value); onChange(getType(), event.target.value) }}
           endAdornment={
             <InputAdornment position="end">
               <IconButton
@@ -159,7 +164,7 @@ export const Transfer: React.FC<TransferProps> = ({
 
       <div className={bem('Buttons')}>
         <Button
-          disabled={!canTransfer || badAmount(amount) || !to}
+          disabled={!canTransfer || badAmount(amount) || !to || balanceError}
           className={bem('Button')}
           data-testid={bem('Submit')}
           onClick={() => onSubmit(transferData())}

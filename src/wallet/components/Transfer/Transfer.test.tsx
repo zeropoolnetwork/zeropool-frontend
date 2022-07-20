@@ -16,6 +16,8 @@ describe('Transfer', () => {
         onCancel={jest.fn()}
         onSubmit={jest.fn()}
         canTransfer={true}
+        balanceError={false}
+        onChange={jest.fn()}
       />
     )
   })
