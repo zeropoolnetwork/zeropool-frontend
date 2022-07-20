@@ -67,19 +67,18 @@ const deposit: Epic = (action$, state$) =>
   action$.pipe(
     filter(demoActions.deposit.match),
     tap(({ payload }) => toast.info(`Depositing ${payload} tokens...`, { key: 'deposit', persist: true })),
-    switchMap(({ payload }) =>
-      from(api.depositShielded(payload)).pipe(
-        tap(() => toast.close('deposit')),
-        tap(() => toast.success('Deposit success')),
-        map((res) => demoActions.depositSuccess(payload)),
-        catchError((errMsg: string) => {
-          toast.close('deposit')
-          toast.error(errMsg)
+    switchMap(({ payload }) => api.depositShielded(payload).pipe(
+      filter((transaction) => transaction.status === 'pending'),
+      tap(() => toast.close('deposit')),
+      tap(() => toast.success('Deposit success')),
+      map((res) => demoActions.depositSuccess(payload)),
+      catchError((errMsg: string) => {
+        toast.close('deposit')
+        toast.error(errMsg)
 
-          return of(demoActions.depositFalure(errMsg))
-        }),
-      ),
-    ),
+        return of(demoActions.depositFalure(errMsg))
+      }),
+    )),
   )
 
 const withdraw: Epic = (action$, state$) =>
@@ -232,13 +231,13 @@ const updateBalancesAfterMint = (action$: Action$, state$: State$) =>
 const updateBalancesAfterDeposit = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.depositSuccess.match),
-    map(() => demoActions.updateBalances({ funds: 2500, tokens: 10000, private: 30000 })),
+    map(() => demoActions.updateBalances({ funds: 500, tokens: 1000, private: 30000 })),
   )
 
 const updateBalancesAfterWithdraw = (action$: Action$, state$: State$) =>
   action$.pipe(
     filter(demoActions.withdrawSuccess.match),
-    map(() => demoActions.updateBalances({ funds: 2500, tokens: 10000, private: 30000 })),
+    map(() => demoActions.updateBalances({ funds: 500, tokens: 1000, private: 30000 })),
   )
 
 const updateBalancesAfterTransfer = (action$: Action$, state$: State$) =>

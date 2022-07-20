@@ -1,4 +1,4 @@
-import { Transaction } from 'wallet/state/models/transaction'
+import { Transaction } from 'shared/models/transaction'
 import transactionHelper from './transaction.helper'
 
 jest.mock('wallet/state/models/sorted-transactions')

@@ -2,6 +2,7 @@ import AES from 'crypto-js/aes'
 import Utf8 from 'crypto-js/enc-utf8'
 import bip39 from 'bip39-light'
 import HDWalletProvider from '@truffle/hdwallet-provider'
+import { catchError, from, map, Observable, of, Subject, Subscription, switchMap, tap } from 'rxjs'
 import { EthereumClient, PolkadotClient, Client as NetworkClient } from 'zeropool-support-js'
 
 import { init as initZPClient, ZeropoolClient } from 'zeropool-client-js'
@@ -14,6 +15,7 @@ import { apiErrorHandler } from 'wallet/api/error.handlers'
 import { isEvmBased, isSubstrateBased } from 'wallet/api/networks'
 
 import { TransferData } from 'shared/models'
+import { Transaction, TransactionStatus } from 'shared/models/transaction'
 
 export let client: NetworkClient
 export let zpClient: ZeropoolClient
@@ -232,34 +234,35 @@ export const getShieldedBalances = async (): Promise<string> => {
   }
 }
 
-export const depositShielded = async (tokens: string): Promise<string> => {
-  try {
-    apiCheck()
+export const depositShielded = (tokens: string): Observable<Transaction> => {
+  const transaction: Transaction = {type: 'deposit', status: 'started'}	
+  const transaction$ = new Subject<Transaction>()
+  
+  const sub = apiCheck$().pipe(
+    map(() => client.toBaseUnit(tokens)),
+    switchMap((amount) => from(approve(amount)).pipe(
+      tap(() => transaction$.next(transaction)),
+      switchMap((source) => from(zpClient.deposit(TOKEN_ADDRESS, amount, (data) => client.sign(data), source, '0', undefined, [])).pipe(
+        tap(() => transaction$.next({...transaction, status: 'pending'})),
+        switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
+          tap(() => transaction$.next({...transaction, status: 'success'})),
+          tap(() => { transaction$.complete(); sub.unsubscribe() }),
+        )),
+      )),
+    )),
+    catchError((e) => {
+      console.error(e)
+      transaction$.next({...transaction, status: 'failed', error: e.message})
+      sub.unsubscribe()
+      return transaction$
+    }),
+  ).subscribe()
 
-    const amount = client.toBaseUnit(tokens)
-    let fromAddress = null
-    let jobId = null
-
-    if (isSubstrateBased(NETWORK)) fromAddress = await client.getPublicKey()
-    else if (isEvmBased(NETWORK)) {
-      console.log(
-        'Approving allowance the Pool (%s) to spend our tokens (%s)',
-        CONTRACT_ADDRESS,
-        amount,
-      )
-      await client.approve(TOKEN_ADDRESS, CONTRACT_ADDRESS, amount)
-    }
-
-    console.log('Making deposit...')
-    jobId = await zpClient.deposit(TOKEN_ADDRESS, amount, (data) => client.sign(data), fromAddress, '0', undefined, [])
-    console.log('Please wait relayer complete the job %s...', jobId)
-
-    // return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
-  } catch (e: any) {
-    console.error(e)
-
-    return Promise.reject(apiErrorHandler(e.message))
-  }
+  return transaction$.pipe(
+    tap((transaction) => { 
+      console.log(`Transaction status: ${transaction.status}`)
+    })
+  )
 }
 
 export const withdrawShielded = async (tokens: string): Promise<string> => {
@@ -392,6 +395,22 @@ export const addressShielded = (address: string, token: string): boolean => {
   return false
 }
 
+export const approve = async (amount: string): Promise<string | null> => {
+let fromAddress = null
+
+  if (isSubstrateBased(NETWORK)) fromAddress = await client.getPublicKey()
+  else if (isEvmBased(NETWORK)) {
+    console.log(
+      'Approving allowance the Pool (%s) to spend our tokens (%s)',
+      CONTRACT_ADDRESS,
+      amount,
+    )
+    await client.approve(TOKEN_ADDRESS, CONTRACT_ADDRESS, amount)
+  }
+
+  return fromAddress
+}
+
 /*
 const _getWalletBalance = (token: Token, walletId: string) => {
   // clientCheck()
@@ -519,7 +538,10 @@ const zpInitialized = (): boolean => {
   return !!zpClient
 }
 
-const apiCheck = (): void => {
+const apiCheck = (): boolean => {
   if (!networkInitialized()) throw Error('Networt Client not available!')
   else if (!zpInitialized()) throw Error('ZP client not available!')
+  return true
 }
+
+const apiCheck$ = (): Observable<boolean> => of(apiCheck())

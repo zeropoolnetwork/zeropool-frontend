@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { SortedTransactions } from 'wallet/state/models/sorted-transactions'
-import { Transaction } from 'wallet/state/models/transaction'
+import { Transaction } from 'shared/models/transaction'
 
 const sortByDays = (transactions: Transaction[]) => {
   const result: SortedTransactions[] = []
@@ -27,7 +27,7 @@ const sortByDays = (transactions: Transaction[]) => {
         })
       } else {
         if (
-          isAfter(lastElement(lastElement(result).transactions).timestamp, transaction.timestamp)
+          isAfter(lastElement(lastElement(result).transactions).timestamp || 0, transaction.timestamp || 0)
         ) {
           result.push({
             date: m(transaction.timestamp).format('D MMM YYYY'),
