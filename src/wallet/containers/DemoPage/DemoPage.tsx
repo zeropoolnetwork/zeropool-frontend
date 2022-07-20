@@ -193,7 +193,7 @@ export const DemoPage: React.FC<{}> = () => {
       </div>
 
       <Paper className={bem('Info')} elevation={2}>
-        <Typography variant="h6" className={bem('InfoTitle')}>🚀 Plonk test</Typography>
+        <Typography variant="h6" className={bem('InfoTitle')}>🚀 Mint test token</Typography>
 
         <div className={bem('Transaction', { Mint: true })}>
           <Input
