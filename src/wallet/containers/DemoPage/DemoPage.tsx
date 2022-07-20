@@ -22,6 +22,7 @@ import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
 import { Recovery } from 'wallet/components/Recovery/Recovery'
 import { Transfer } from 'wallet/components/Transfer/Transfer'
 import { TransferData } from 'shared/models'
+import { lowBalanceHelper } from 'wallet/state/helpers/low-balance.helper'
 // tslint:enable: prettier max-line-length
 
 export const componentId = 'DemoPage'
@@ -55,6 +56,7 @@ export const DemoPage: React.FC<{}> = () => {
   const [depositAmount, setDepositAmount] = useState('')
   const [withdrawAmount, setWithdrawAmount] = useState('')
   const [drowler, setDrowler] = useState(false)
+  const [lowBalance, setLowBalance] = useState(true)
 
   useEffect(() => {
     if (!readiness && !initials) {
@@ -68,7 +70,7 @@ export const DemoPage: React.FC<{}> = () => {
     event: React.KeyboardEvent | React.MouseEvent,
   ) => {
     if (event?.type === 'keydown' && (event as React.KeyboardEvent).key !== 'Escape') {
-      return 
+      return
     }
 
     setDrowler(open === undefined ? !drowler : open)
@@ -177,7 +179,7 @@ export const DemoPage: React.FC<{}> = () => {
 
         <LoadingButton
           loading={false}
-          className={bem('Button', {Transfer: true})}
+          className={bem('Button', { Transfer: true })}
           data-testid={bem('TransferButton')}
           loadingPosition="start"
           color="primary"
@@ -193,7 +195,7 @@ export const DemoPage: React.FC<{}> = () => {
       <Paper className={bem('Info')} elevation={2}>
         <Typography variant="h6" className={bem('InfoTitle')}>🚀 Plonk test</Typography>
 
-        <div className={bem('Transaction', {Mint: true})}>
+        <div className={bem('Transaction', { Mint: true })}>
           <Input
             id="mint-amount"
             className={bem('Input')}
@@ -223,16 +225,16 @@ export const DemoPage: React.FC<{}> = () => {
         </div>
 
         <span className={bem('InfoText')}>To perform any action on this page you need to have enough funds on your public balance.</span>
-        
+
         <span className={bem('InfoText')}>
-          Click on your public address and use it on the&nbsp; 
-          <a href='https://gitter.im/kovan-testnet/faucet#' target={'_blank'}>Kovan Faucet</a> or&nbsp; 
+          Click on your public address and use it on the&nbsp;
+          <a href='https://gitter.im/kovan-testnet/faucet#' target={'_blank'}>Kovan Faucet</a> or&nbsp;
           <a href='https://ethdrop.dev/' target={'_blank'}>Ethdrop</a> page to get free funds.
         </span>
       </Paper>
 
       <div className={bem('Footer')}>
-        <img className={bem('Logo')} src={logo} alt="ZeroPool"/>
+        <img className={bem('Logo')} src={logo} alt="ZeroPool" />
       </div>
 
       <SwipeableDrawer
@@ -282,6 +284,8 @@ export const DemoPage: React.FC<{}> = () => {
             canTransfer={!!canTransfer}
             onSubmit={(data: TransferData) => dispatch(demoActions.transfer(data))}
             onCancel={() => dispatch(demoActions.transferModal(false))}
+            onChange={(type, amount) => { setLowBalance(lowBalanceHelper(type, amount, publicBalance, tokenBalance, privateBalance)) }}
+            balanceError={lowBalance}
           />
         </DialogContent>
       </Dialog>
