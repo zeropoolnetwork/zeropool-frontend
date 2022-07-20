@@ -258,7 +258,7 @@ export const depositShielded = async (tokens: string): Promise<string> => {
   } catch (e: any) {
     console.error(e)
 
-    return Promise.reject(String(e.message))
+    return Promise.reject(apiErrorHandler(e.message))
   }
 }
 
@@ -284,11 +284,11 @@ export const withdrawShielded = async (tokens: string): Promise<string> => {
   } catch (e: any) {
     console.error(e)
 
-    return Promise.reject(String(e.message))
+    return Promise.reject(apiErrorHandler(e.message))
   }
 }
 
-export const transfer = async (data: TransferData): Promise<string|void> => {
+export const transfer = async (data: TransferData): Promise<string | void> => {
   switch (data.type) {
     case 'privateToPrivate':
       return transferPrivateToPrivate(data.to, data.amount)
@@ -313,7 +313,7 @@ export const transferFunds = async (to: string, amount: string): Promise<void> =
   } catch (e: any) {
     console.error(e)
 
-    return Promise.reject(String(e.message))
+    return Promise.reject(apiErrorHandler(e.message))
   }
 }
 
@@ -325,7 +325,7 @@ export const transferTokens = async (to: string, amount: string): Promise<void> 
   } catch (e: any) {
     console.error(e)
 
-    return Promise.reject(String(e.message))
+    return Promise.reject(apiErrorHandler(e.message))
   }
 }
 
@@ -346,11 +346,11 @@ export const transferPublicToPrivate = async (to: string, tokens: string): Promi
       await client.approve(TOKEN_ADDRESS, CONTRACT_ADDRESS, amount)
     }
 
-    return await zpClient.deposit(TOKEN_ADDRESS, String(amount), (data) => client.sign(data), fromAddress, '0', undefined, [{to, amount}])
+    return await zpClient.deposit(TOKEN_ADDRESS, String(amount), (data) => client.sign(data), fromAddress, '0', undefined, [{ to, amount }])
   } catch (e: any) {
     console.error(e)
 
-    return Promise.reject(String(e.message))
+    return Promise.reject(apiErrorHandler(e.message))
   }
 }
 
@@ -366,7 +366,7 @@ export const transferPrivateToPublic = async (to: string, tokens: string): Promi
   } catch (e: any) {
     console.error(e)
 
-    return Promise.reject(String(e.message))
+    return Promise.reject(apiErrorHandler(e.message))
   }
 }
 
@@ -384,7 +384,7 @@ export const transferPrivateToPrivate = async (to: string, tokens: string): Prom
   } catch (e: any) {
     console.error(e)
 
-    return Promise.reject(String(e.message))
+    return Promise.reject(apiErrorHandler(e.message))
   }
 }
 
