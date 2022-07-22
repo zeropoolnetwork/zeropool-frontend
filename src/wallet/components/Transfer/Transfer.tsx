@@ -108,6 +108,7 @@ export const Transfer: React.FC<TransferProps> = ({
           endAdornment={
             <InputAdornment position="end">
               <IconButton
+                tabIndex={-1}
                 className={bem('FormControlButton', { Hidden: !to })}
                 aria-label="empty confirmation"
                 onClick={() => setTo('')}
@@ -117,6 +118,7 @@ export const Transfer: React.FC<TransferProps> = ({
               </IconButton>
 
               <IconButton
+                tabIndex={-1}
                 className={bem('FormControlButton')}
                 aria-label="paste"
                 onClick={() => copyFromClipboard('Address', enqueueSnackbar, text => setTo(text))}
@@ -142,6 +144,7 @@ export const Transfer: React.FC<TransferProps> = ({
           endAdornment={
             <InputAdornment position="end">
               <IconButton
+                tabIndex={-1}
                 className={bem('FormControlButton', { Hidden: !amount })}
                 aria-label="empty confirmation"
                 onClick={() => setAmount('')}
@@ -151,6 +154,7 @@ export const Transfer: React.FC<TransferProps> = ({
               </IconButton>
 
               <IconButton
+                tabIndex={-1}
                 className={bem('FormControlButton')}
                 aria-label="paste"
                 onClick={() => copyFromClipboard('Amount', enqueueSnackbar, text => setAmount(text))}
