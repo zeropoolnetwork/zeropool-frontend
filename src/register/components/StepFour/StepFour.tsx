@@ -76,6 +76,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister, onBack }) => {
               <InputAdornment position="end">
                 {watchPassword ? (
                   <IconButton
+                    tabIndex={-1}
                     className={bem('FormControlButton')}
                     aria-label="empty password"
                     onClick={() => {
@@ -91,6 +92,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister, onBack }) => {
                 ) : null}
 
                 <IconButton
+                  tabIndex={-1}
                   className={bem('FormControlButton')}
                   aria-label="toggle visibility"
                   onClick={() => setShowPassword(!showPassword)}
@@ -128,6 +130,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister, onBack }) => {
               <InputAdornment position="end">
                 {watchConfirm ? (
                   <IconButton
+                    tabIndex={-1}
                     className={bem('FormControlButton')}
                     aria-label="empty confirmation"
                     onClick={() => {
@@ -141,6 +144,7 @@ export const StepFour: React.FC<StepFourProps> = ({ onRegister, onBack }) => {
                 ) : null}
 
                 <IconButton
+                  tabIndex={-1}
                   className={bem('FormControlButton')}
                   aria-label="toggle visibility"
                   onClick={() => setShowPassword(!showPassword)}

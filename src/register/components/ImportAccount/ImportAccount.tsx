@@ -74,6 +74,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                 <InputAdornment position="end">
                   {watchSeed.length ? (
                     <IconButton
+                      tabIndex={-1}
                       className={bem('FormControlButton')}
                       aria-label="empty seed"
                       onClick={() => {
@@ -90,6 +91,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                   <IconButton
                     className={bem('FormControlButton')}
                     aria-label="paste"
+                    tabIndex={-1}
                     onClick={() => copyFromClipboard('Seed', enqueueSnackbar, seed => {
                       setValue('seed', seed);
                       (document.getElementById('seed') as any).focus();
@@ -128,6 +130,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                 <InputAdornment position="end">
                   {watchPassword ? (
                     <IconButton
+                      tabIndex={-1}
                       className={bem('FormControlButton')}
                       aria-label="empty password"
                       onClick={() => {
@@ -147,6 +150,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                   <IconButton
                     className={bem('FormControlButton')}
                     aria-label="toggle visibility"
+                    tabIndex={-1}
                     onClick={() => setShowPassword(!showPassword)}
                     onMouseDown={(event) => event.preventDefault()}
                   >
@@ -183,6 +187,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                 <InputAdornment position="end">
                   {watchConfirm ? (
                     <IconButton
+                      tabIndex={-1}
                       className={bem('FormControlButton')}
                       aria-label="empty confirmation"
                       onClick={() => {
@@ -198,6 +203,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                   )}
 
                   <IconButton
+                    tabIndex={-1}
                     className={bem('FormControlButton')}
                     aria-label="toggle visibility"
                     onClick={() => setShowPassword(!showPassword)}
