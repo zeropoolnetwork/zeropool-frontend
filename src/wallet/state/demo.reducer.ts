@@ -52,6 +52,11 @@ export const demoSlice = createSlice({
       state.deposit = false
       state.withdraw = false
       state.transfer = false
+      state.publicBalance = undefined
+      state.privateBalance = undefined
+      state.tokenBalance = undefined
+      state.walletAddress = undefined
+      state.privateAddress = undefined
     },
     initApiSuccess: (state, action: PayloadAction<null>) => {
       state.backdrop = false
@@ -63,7 +68,7 @@ export const demoSlice = createSlice({
       state.initials = null
     },
 
-    updateBalances: (state, action: PayloadAction<null|{funds: number, tokens: number, private: number}>) => {
+    updateBalances: (state, action: PayloadAction<null | { funds: number, tokens: number, private: number }>) => {
       state.privateBalance = undefined
       state.publicBalance = undefined
       state.tokenBalance = undefined
@@ -121,15 +126,15 @@ export const demoSlice = createSlice({
     },
 
     resetAccount: (state, action: PayloadAction<null>) => initialDemoState,
-    recoverWallet: (state, action: PayloadAction<string|null>) => {
+    recoverWallet: (state, action: PayloadAction<string | null>) => {
       state.backdrop = false
       state.recovery = true
       state.readiness = true
     },
-    recoverWalletSuccess: (state, action: PayloadAction<{seed: string, password: string}>) => {
+    recoverWalletSuccess: (state, action: PayloadAction<{ seed: string, password: string }>) => {
       state.recovery = false
     },
-    recoverWalletFailure: (state, action: PayloadAction<string>) => {},
+    recoverWalletFailure: (state, action: PayloadAction<string>) => { },
 
     getWalletAddress: (state, action: PayloadAction<null>) => { },
     getWalletAddressSuccess: (state, action: PayloadAction<string>) => {
@@ -147,9 +152,9 @@ export const demoSlice = createSlice({
       state.privateAddress = 'Cant get private address'
     },
 
-    exportSeed: (state, action: PayloadAction<string>) => {},
-    exportSeedSuccess: (state, action: PayloadAction<string>) => {},
-    exportSeedFailure: (state, action: PayloadAction<string>) => {},
+    exportSeed: (state, action: PayloadAction<string>) => { },
+    exportSeedSuccess: (state, action: PayloadAction<string>) => { },
+    exportSeedFailure: (state, action: PayloadAction<string>) => { },
 
     transferModal: (state, action: PayloadAction<boolean>) => {
       state.transferModal = action.payload
