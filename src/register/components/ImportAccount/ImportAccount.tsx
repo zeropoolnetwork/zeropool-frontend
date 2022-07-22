@@ -49,7 +49,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
     <div className={bem()} data-testid={bem()}>
       {process.env.NODE_ENV !== 'production' && <DevTool control={control} />}
       <section>
-        <SeedPanel classes={[bem('SeedPanel')]} seed={strToArray(watchSeed)} />
+        {/* <SeedPanel classes={[bem('SeedPanel')]} seed={strToArray(watchSeed)} /> */}
 
         <form
           onSubmit={handleSubmit((data: FormData) => onImport({ password: data.password, seed: strToArray(watchSeed) }))}
@@ -223,7 +223,7 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
             data-testid={bem('Import')}
             type="submit"
           >
-            Import
+            Save
           </Button>
 
           <Button
