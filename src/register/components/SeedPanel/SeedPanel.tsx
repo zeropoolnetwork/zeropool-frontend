@@ -10,7 +10,7 @@ import { SeedTag } from 'register/components/SeedTag/SeedTag'
 export const componentId = 'SeedPanel'
 const bem = cn(componentId)
 
-export interface SeedPanelProps {
+export type SeedPanelProps = {
   classes?: string[]
   seed: string[]
   check?: boolean
@@ -18,9 +18,9 @@ export interface SeedPanelProps {
 }
 
 export const SeedPanel: React.FC<SeedPanelProps> = ({ classes = [], seed, check, onCheck }) => {
-  const [confirmedSeed, setConfirmedSeed] = useState([] as string[])
+  const [confirmedSeed, setConfirmedSeed] = useState<string[]>([])
   const [success, setSuccess] = useState(false)
-  const [shuffledSeed, setShuffledSeed] = useState([] as string[])
+  const [shuffledSeed, setShuffledSeed] = useState<string[]>([])
 
   useEffect(() => {
     if (!shuffledSeed.length && check) {
@@ -50,25 +50,25 @@ export const SeedPanel: React.FC<SeedPanelProps> = ({ classes = [], seed, check,
       <div className={bem('Body')} data-testid={bem('Body')}>
         {check
           ? confirmedSeed.map((tag: string, index: number) => (
-              <SeedTag text={tag} num={index} key={index} onClick={bodyTagClickHandler} />
-            ))
+            <SeedTag text={tag} num={index} key={index} onClick={bodyTagClickHandler} />
+          ))
           : seed.map((tag: string, index: number) => (
-              <SeedTag text={tag} num={index} key={index} />
-            ))}
+            <SeedTag text={tag} num={index} key={index} />
+          ))}
       </div>
 
       <div className={bem('Footer')} data-testid={bem('Footer')}>
         {check
           ? shuffledSeed.map((tag: string, index: number) => (
-              <SeedTag
-                text={tag}
-                num={seed.findIndex((str) => str === tag)}
-                hidden={confirmedSeed.includes(tag)}
-                hideNumber={true}
-                key={seed.findIndex((str) => str === tag)}
-                onClick={footerTagClickHandler}
-              />
-            ))
+            <SeedTag
+              text={tag}
+              num={seed.findIndex((str) => str === tag)}
+              hidden={confirmedSeed.includes(tag)}
+              hideNumber={true}
+              key={seed.findIndex((str) => str === tag)}
+              onClick={footerTagClickHandler}
+            />
+          ))
           : null}
         {confirmedSeed.length === seed.length && !success ? (
           <div className={bem('Warning')} data-testid={bem('Warning')}>
