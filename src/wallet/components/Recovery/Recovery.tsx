@@ -23,6 +23,15 @@ export const Recovery: React.FC<RecoveryProps> = ({
   const [password, setPassword] = useState('')
   const minLength = 4
 
+  const handleInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && password.length >= minLength) {
+      onRecover(password)
+      e.preventDefault()
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+    }
+  }
+
   return (
     <form className={bem()} data-testid={bem()}>
       <p className={bem('Name')}>Recover wallet</p>
@@ -40,9 +49,11 @@ export const Recovery: React.FC<RecoveryProps> = ({
           onChange={(event) => {
             setPassword(event.target.value)
           }}
+          onKeyDown={handleInput}
           endAdornment={
             <InputAdornment position="end">
               <IconButton
+                tabIndex={-1}
                 className={bem('FormControlButton')}
                 aria-label="toggle visibility"
                 onClick={() => setShowPassword(!showPassword)}
