@@ -1,38 +1,41 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TransferData } from 'shared/models'
+import { Transaction, TransactionStatus } from 'shared/models/transaction'
 
 export type DemoState = {
+  backdrop: boolean
+  deposit: boolean
   initials: { seed: string, password: string } | null | undefined
   publicBalance: string | undefined
   privateBalance: string | undefined
   tokenBalance: string | undefined
   minting: boolean
-  walletAddress: string | undefined
   privateAddress: string | undefined
-  backdrop: boolean
-  deposit: boolean
-  withdraw: boolean
-  transfer: boolean
-  transferModal: boolean
   readiness: boolean
   recovery: boolean
+  transfer: boolean
+  transferModal: boolean
+  transactionStatus: TransactionStatus | undefined
+  walletAddress: string | undefined
+  withdraw: boolean
 }
 
 export const initialDemoState: DemoState = {
+  backdrop: false,
+  deposit: false,
   initials: undefined,
   publicBalance: undefined,
   privateBalance: undefined,
   tokenBalance: undefined,
   minting: false,
-  walletAddress: undefined,
   privateAddress: undefined,
-  backdrop: false,
-  deposit: false,
-  withdraw: false,
-  transfer: false,
-  transferModal: false,
   readiness: false,
   recovery: false,
+  transfer: false,
+  transferModal: false,
+  transactionStatus: undefined,
+  walletAddress: undefined,
+  withdraw: false,
 }
 
 // tslint:disable: no-empty
@@ -85,6 +88,9 @@ export const demoSlice = createSlice({
       state.tokenBalance = action.payload
     },
 
+    transaction: (state, action: PayloadAction<Transaction>) => {
+      state.transactionStatus = action.payload.status
+    },
     mint: (state, action: PayloadAction<string>) => {
       state.minting = true
     },
@@ -101,7 +107,7 @@ export const demoSlice = createSlice({
     depositSuccess: (state, action: PayloadAction<string>) => {
       state.deposit = false
     },
-    depositFalure: (state, action: PayloadAction<string>) => {
+    depositFailure: (state, action: PayloadAction<string>) => {
       state.deposit = false
     },
 
@@ -111,7 +117,7 @@ export const demoSlice = createSlice({
     withdrawSuccess: (state, action: PayloadAction<string>) => {
       state.withdraw = false
     },
-    withdrawFalure: (state, action: PayloadAction<string>) => {
+    withdrawFailure: (state, action: PayloadAction<string>) => {
       state.withdraw = false
     },
 
@@ -121,7 +127,7 @@ export const demoSlice = createSlice({
     transferSuccess: (state, action: PayloadAction<string>) => {
       state.transfer = false
     },
-    transferFalure: (state, action: PayloadAction<string>) => {
+    transferFailure: (state, action: PayloadAction<string>) => {
       state.transfer = false
     },
 

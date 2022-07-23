@@ -9781,15 +9781,15 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-libzeropool-rs-wasm-web-mt@^0.3.20:
-  version "0.3.20"
-  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web-mt/-/libzeropool-rs-wasm-web-mt-0.3.20.tgz#34776a4856bc674001f655c118ace5843238698b"
-  integrity sha512-raj5wnVv9N9K8sOj01Wr6LoY0WccG0T+u87g5g0qYrGgVKCHEZo45pL4Fp+q2xE8yY8FfV/XbX/Hl+vOy+Okeg==
+libzeropool-rs-wasm-web-mt@^0.3.21:
+  version "0.3.21"
+  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web-mt/-/libzeropool-rs-wasm-web-mt-0.3.21.tgz#74cbd3561b9d17f53e1b5ef4e5543c774ddd04b6"
+  integrity sha512-IEASfOFrJzcJwrHEwVBn3cxKf79GB3f2kDLIVqAyP9y0qxaI0fHLDZKecSyiRvblqXV2ev1y3L/FwrvzgQt5ig==
 
-libzeropool-rs-wasm-web@^0.3.20:
-  version "0.3.20"
-  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web/-/libzeropool-rs-wasm-web-0.3.20.tgz#8a72ee14998dfb05b49cd013bde5da49386cc481"
-  integrity sha512-EArWlN8skoLhd7vgE2hFwnymBQxzdIGePEwRYxH6qADR2wMyExWZxqTw5fJvJHEfZpG3zcec+Y6IHPMdTT/nhA==
+libzeropool-rs-wasm-web@^0.3.21:
+  version "0.3.21"
+  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web/-/libzeropool-rs-wasm-web-0.3.21.tgz#3fb410583cfaff1fd88e95b3518062ae80bb3bec"
+  integrity sha512-ix9liGQALLquEX+nie5buhlnMBVJhpwpymjy5cZxDAL0Bp+tD/kv+9s2jXo5bF/SP3d+6K8idY76qdUJISpKGQ==
 
 lilconfig@^2.0.3, lilconfig@^2.0.5:
   version "2.0.6"
@@ -15550,24 +15550,24 @@ yup@^0.32.11:
     property-expr "^2.0.4"
     toposort "^2.0.2"
 
-"zeropool-client-js@https://github.com/zeropoolnetwork/zeropool-client-js#temp-fixes":
+"zeropool-client-js@https://github.com/zeropoolnetwork/zeropool-client-js#5783ecda558f368055a1ac912ee8879fde2d0241":
   version "0.3.1"
-  resolved "https://github.com/zeropoolnetwork/zeropool-client-js#770401a6f5224d2064a2d7f3598c1e7e46b914dc"
+  resolved "https://github.com/zeropoolnetwork/zeropool-client-js#5783ecda558f368055a1ac912ee8879fde2d0241"
   dependencies:
     comlink "^4.3.1"
     hdwallet-babyjub "^0.0.1"
     idb "^7.0.0"
-    libzeropool-rs-wasm-web "^0.3.20"
-    libzeropool-rs-wasm-web-mt "^0.3.20"
+    libzeropool-rs-wasm-web "^0.3.21"
+    libzeropool-rs-wasm-web-mt "^0.3.21"
     regenerator-runtime "^0.13.9"
     wasm-feature-detect "^1.2.11"
     web3 "^1.7.0"
     web3-eth-personal "^1.7.0"
     web3-utils "^1.7.0"
 
-"zeropool-support-js@https://github.com/zeropoolnetwork/zeropool-support-js#37d8b942c0d8fd5e732a1b39816d1600645d5cbd":
+"zeropool-support-js@https://github.com/zeropoolnetwork/zeropool-support-js#4d128f1b0440db3268f38f04c902037ab51ea5ec":
   version "0.5.1"
-  resolved "https://github.com/zeropoolnetwork/zeropool-support-js#37d8b942c0d8fd5e732a1b39816d1600645d5cbd"
+  resolved "https://github.com/zeropoolnetwork/zeropool-support-js#4d128f1b0440db3268f38f04c902037ab51ea5ec"
   dependencies:
     "@ethereumjs/tx" "^3.2.1"
     "@polkadot/api" "^7.11.1"

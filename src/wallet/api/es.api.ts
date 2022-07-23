@@ -12,7 +12,7 @@ const getUrl = (address: string) =>
 
 const toTransaction = (tr: any) =>
   ({
-    hash: tr.hash,
+    jobId: tr.jobId,
     blockHash: tr.blockHash,
     status: 'started',
     amount: tr.value,
