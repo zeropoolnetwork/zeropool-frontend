@@ -1,5 +1,6 @@
 import { TransferType } from 'shared/models'
 
+export type TransactionType = TransferType | 'deposit' | 'withdraw' | 'mint'
 export type TransactionStatus =
   'started' | 
   'pending' | 
@@ -7,14 +8,20 @@ export type TransactionStatus =
   'failed'
 
 export type Transaction = {
+  status: TransactionStatus,
+  type: TransferType | 'deposit' | 'withdraw' | 'mint',
   amount?: string,
   blockHash?: string,
   error?: string,
   from?: string,
-  hash?: string,
-  status?: TransactionStatus,
+  jobId?: string,
   to?: string,
   timestamp?: number,
-  type: TransferType | 'deposit' | 'withdraw' | 'mint',
 }
+
+export const transaction = (type: TransactionType , status: TransactionStatus, error?: string): Transaction => ({
+  error,
+  status,
+  type,
+})
 

@@ -2,7 +2,7 @@ import AES from 'crypto-js/aes'
 import Utf8 from 'crypto-js/enc-utf8'
 import bip39 from 'bip39-light'
 import HDWalletProvider from '@truffle/hdwallet-provider'
-import { catchError, from, map, Observable, of, Subject, Subscription, switchMap, tap } from 'rxjs'
+import { catchError, concat, concatMap, from, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs'
 import { EthereumClient, PolkadotClient, Client as NetworkClient } from 'zeropool-support-js'
 
 import { init as initZPClient, ZeropoolClient } from 'zeropool-client-js'
@@ -14,9 +14,10 @@ import { EvmNetwork } from 'zeropool-client-js/lib/networks/evm'
 import { apiErrorHandler } from 'wallet/api/error.handlers'
 import { isEvmBased, isSubstrateBased } from 'wallet/api/networks'
 
-import { TransferData } from 'shared/models'
-import { Transaction, TransactionStatus } from 'shared/models/transaction'
-
+import { transaction, Transaction, TransactionStatus } from 'shared/models/transaction'
+import { TransferData, TransferType } from 'shared/models'
+import { debug } from 'shared/operators/debug.operator'
+// #region Initialization
 export let client: NetworkClient
 export let zpClient: ZeropoolClient
 export let account: string
@@ -43,7 +44,7 @@ if (process.env.NODE_ENV === 'development') {
   RPC_URL = REACT_APP_RPC_URL
   TRANSACTION_URL = REACT_APP_TRANSACTION_URL
 }
-
+// #endregion
 // tslint:disable: prettier
 
 export const accountPresent = (): boolean => {
@@ -135,7 +136,6 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
     sessionStorage.setItem('zp.development.password', password)
   }
 }
-
 export const mint = async (tokens: string): Promise<void> => {
   try {
     apiCheck()
@@ -148,15 +148,12 @@ export const mint = async (tokens: string): Promise<void> => {
     return Promise.reject(e.message)
   }
 }
-
 export const getDevSeed = (): string => {
   return sessionStorage.getItem('zp.development.seed') as string
 }
-
 export const getDevPassword = (): string => {
   return sessionStorage.getItem('zp.development.password') as string
 }
-
 export const getSeed = (password: string): Promise<string> => {
   let seed
   const cipherText = localStorage.getItem(`zp.production.seed`)
@@ -174,7 +171,6 @@ export const getSeed = (password: string): Promise<string> => {
     return Promise.reject('Incorrect password')
   }
 }
-
 export const getRegularAddress = async (): Promise<string> => {
   try {
     apiCheck()
@@ -186,7 +182,6 @@ export const getRegularAddress = async (): Promise<string> => {
     return Promise.reject(String(e.message))
   }
 }
-
 export const getShieldedAddress = (): Promise<string> => {
   try {
     apiCheck()
@@ -209,7 +204,6 @@ export const getTokenBalance = async (): Promise<string> => {
     return Promise.reject(String(e.message))
   }
 }
-
 export const getRegularBalance = async (): Promise<string> => {
   try {
     apiCheck()
@@ -221,7 +215,6 @@ export const getRegularBalance = async (): Promise<string> => {
     return Promise.reject(String(e.message))
   }
 }
-
 export const getShieldedBalances = async (): Promise<string> => {
   try {
     apiCheck()
@@ -234,167 +227,213 @@ export const getShieldedBalances = async (): Promise<string> => {
   }
 }
 
-export const depositShielded = (tokens: string): Observable<Transaction> => {
-  const transaction: Transaction = {type: 'deposit', status: 'started'}	
-  const transaction$ = new Subject<Transaction>()
+export const deposit = (tokens: string): Observable<Transaction> => {
+  const tr = transaction('deposit', 'started')	
+  const tr$ = new Subject<Transaction>()
   
   const sub = apiCheck$().pipe(
     map(() => client.toBaseUnit(tokens)),
     switchMap((amount) => from(approve(amount)).pipe(
-      tap(() => transaction$.next(transaction)),
-      switchMap((source) => from(zpClient.deposit(TOKEN_ADDRESS, amount, (data) => client.sign(data), source, '0', undefined, [])).pipe(
-        tap(() => transaction$.next({...transaction, status: 'pending'})),
+      tap(() => tr$.next(tr)),
+      switchMap((address) => from(zpClient.deposit(TOKEN_ADDRESS, amount, (data) => client.sign(data), address, '0', undefined, [])).pipe(
+        tap((jobId) => tr$.next({...tr, status: 'pending', jobId})),
         switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
-          tap(() => transaction$.next({...transaction, status: 'success'})),
-          tap(() => { transaction$.complete(); sub.unsubscribe() }),
+          tap(() => tr$.next({...tr, status: 'success', jobId})),
+          tap(() => { tr$.complete(); sub.unsubscribe() }),
         )),
       )),
     )),
     catchError((e) => {
       console.error(e)
-      transaction$.next({...transaction, status: 'failed', error: e.message})
+      tr$.next({...tr, status: 'failed', error: e.message})
       sub.unsubscribe()
-      return transaction$
-    }),
-  ).subscribe()
 
-  return transaction$.pipe(
-    tap((transaction) => { 
-      console.log(`Transaction status: ${transaction.status}`)
+      return of(false)
+    }),
+  ).pipe(take(1)).subscribe()
+
+  return tr$.pipe(
+    tap((tr) => { 
+      console.log(`---> Transaction status: ${tr.status}`)
     })
   )
 }
+export const withdraw = (tokens: string): Observable<Transaction> => {
+  const tr: Transaction = transaction('withdraw', 'started')	
+  const tr$ = new Subject<Transaction>()
 
-export const withdrawShielded = async (tokens: string): Promise<string> => {
-  try {
-    apiCheck()
+  const sub = apiCheck$().pipe(
+    map(() => client.toBaseUnit(tokens)),
+    switchMap((amount) => from(getAddress()).pipe(
+      tap(() => tr$.next(tr)),
+      switchMap((address) => from(zpClient.withdraw(TOKEN_ADDRESS, address, amount)).pipe(
+        tap((jobId) => tr$.next({...tr, status: 'pending', jobId})),
+        switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
+          tap(() => tr$.next({...tr, status: 'success', jobId})),
+          tap(() => { tr$.complete(); sub.unsubscribe() }),
+        )),
+      )),
+    )),
+    catchError((e) => {
+      console.error(e)
+      tr$.next({...tr, status: 'failed', error: e.message})
+      sub.unsubscribe()
 
-    const amount = client.toBaseUnit(tokens)
-    let address = null
+      return of(false)
+    }),
+  ).pipe(take(1)).subscribe()
 
-    if (isEvmBased(NETWORK)) address = await client.getAddress()
-    else if (isSubstrateBased(NETWORK)) address = await client.getPublicKey()
-
-    if (!address) throw new Error('No address found for withdrawal')
-
-    console.log('Making withdraw...')
-
-    const jobId = await zpClient.withdraw(TOKEN_ADDRESS, address, amount)
-
-    console.log('Please wait relayer complete the job %s...', jobId)
-
-    return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
-  } catch (e: any) {
-    console.error(e)
-
-    return Promise.reject(apiErrorHandler(e.message))
-  }
+  return tr$.pipe(
+    tap((tr) => { 
+      console.log(`---> Transaction status: ${tr.status}`)
+    })
+  )
 }
-
-export const transfer = async (data: TransferData): Promise<string | void> => {
+export const transfer = (data: TransferData): Observable<Transaction> => {
   switch (data.type) {
-    case 'privateToPrivate':
-      return transferPrivateToPrivate(data.to, data.amount)
     case 'funds':
       return transferFunds(data.to, data.amount)
     case 'publicToPublic':
-      return transferTokens(data.to, data.amount)
+      return transferPublicToPublic(data.to, data.amount)
     case 'publicToPrivate':
       return transferPublicToPrivate(data.to, data.amount)
-    case 'privateToPublic':
-      return transferPrivateToPublic(data.to, data.amount)
+      case 'privateToPublic':
+        return transferPrivateToPublic(data.to, data.amount)
+      case 'privateToPrivate':
+        return transferPrivateToPrivate(data.to, data.amount)
     default:
-      return Promise.reject(String(`Transfer ${data.type} not implemented`));
+      return from(Promise.reject(String(`Transfer ${data.type} turned off at the moment`)));
   }
 }
 
-export const transferFunds = async (to: string, amount: string): Promise<void> => {
-  try {
-    apiCheck()
+export const transferFunds = (to: string, amount: string): Observable<Transaction> => {
+  const type = 'funds'
 
-    return await client.transfer(to, String(client.toBaseUnit(amount)))
-  } catch (e: any) {
-    console.error(e)
+  return apiCheck$().pipe(
+    switchMap(() => concat(
+      of(transaction(type, 'started')),
+      from(client.transfer(to, String(client.toBaseUnit(amount)))).pipe(map(() => transaction(type, 'pending')), catchError((e) => { throw Error(apiErrorHandler(e.message))})),
+      of(transaction(type, 'success')),
+    )),
+    catchError((e) => {
+      console.error(e)
 
-    return Promise.reject(apiErrorHandler(e.message))
-  }
+      return of({...transaction(type, 'pending'), error: e.message})
+    })
+  )
 }
+export const transferPublicToPublic = (to: string, amount: string): Observable<Transaction> => {
+  const type = 'publicToPublic'
 
-export const transferTokens = async (to: string, amount: string): Promise<void> => {
-  try {
-    apiCheck()
+  return apiCheck$().pipe(
+    switchMap(() => concat(
+      of(transaction(type, 'started')),
+      from(client.transferToken(TOKEN_ADDRESS, to, String(client.toBaseUnit(amount)))).pipe(map(() => transaction(type, 'pending')), catchError((e) => { throw Error(apiErrorHandler(e.message))})),
+      of(transaction(type, 'success')),
+    )),
+    catchError((e) => {
+      console.error(e)
 
-    return await client.transferToken(TOKEN_ADDRESS, to, String(client.toBaseUnit(amount)))
-  } catch (e: any) {
-    console.error(e)
-
-    return Promise.reject(apiErrorHandler(e.message))
-  }
+      return of({type, status: 'failed', error: e.message} as Transaction)
+    })
+  )
 }
+export const transferPublicToPrivate = (to: string, tokens: string): Observable<Transaction> => {
+  const tr: Transaction = transaction('publicToPrivate', 'started')	
+  const tr$ = new Subject<Transaction>()
 
-export const transferPublicToPrivate = async (to: string, tokens: string): Promise<string> => {
-  try {
-    apiCheck()
+  const sub = apiCheck$().pipe(
+    map(() => client.toBaseUnit(tokens)),
+    switchMap((amount) => from(approve(amount)).pipe(
+      // tap(() => tr$.next(tr)),
+      switchMap((address) => from(zpClient.deposit(TOKEN_ADDRESS, amount, (data) => client.sign(data), address, '0', undefined, [{ to, amount }])).pipe(
+        tap((jobId) => tr$.next({...tr, status: 'pending', jobId})),
+        switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
+          tap(() => tr$.next({...tr, status: 'success', jobId})),
+          tap(() => { tr$.complete(); sub.unsubscribe() }),
+        )),
+      )),
+    )),
+    catchError((e) => {
+      console.error(e)
+      tr$.next({...tr, status: 'failed', error: e.message})
+      sub.unsubscribe()
 
-    const amount = client.toBaseUnit(tokens)
-    let fromAddress = null
+      return of(false)
+    }),
+  ).pipe(take(1)).subscribe()
 
-    if (isSubstrateBased(NETWORK)) fromAddress = await client.getPublicKey()
-    else if (isEvmBased(NETWORK)) {
-      console.log(
-        'Approving allowance the Pool (%s) to spend our tokens (%s)',
-        CONTRACT_ADDRESS,
-        amount,
+  return tr$.pipe(
+    tap((tr) => { 
+      console.log(`---> Transaction status: ${tr.status}`)
+    })
+  )
+}
+export const transferPrivateToPublic = (to: string, tokens: string): Observable<Transaction> => {
+  const tr: Transaction = transaction('privateToPublic', 'started')	
+  const tr$ = new Subject<Transaction>()
+
+  const sub = apiCheck$().pipe(
+    // tap(() => tr$.next(tr)),
+    map(() => client.toBaseUnit(tokens)),
+    switchMap((amount) => from(zpClient.withdraw(TOKEN_ADDRESS, to, amount)).pipe(
+      tap((jobId) => tr$.next({...tr, status: 'pending', jobId})),
+      switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
+        tap(() => tr$.next({...tr, status: 'success', jobId})),
+        tap(() => { tr$.complete(); sub.unsubscribe() }),
+      )),
+    )),
+    catchError((e) => {
+      console.error(e)
+      tr$.next({...tr, status: 'failed', error: e.message})
+      sub.unsubscribe()
+
+      return of(false)
+    }),
+  ).pipe(take(1)).subscribe()
+
+  return tr$.pipe(
+    tap((tr) => { 
+      console.log(`---> Transaction status: ${tr.status}`)
+    })
+  )
+}
+export const transferPrivateToPrivate = (to: string, tokens: string): Observable<Transaction> => {
+  const tr: Transaction = transaction('privateToPrivate', 'started')	
+  const tr$ = new Subject<Transaction>()
+
+  const sub = apiCheck$().pipe(
+    map(() => client.toBaseUnit(tokens)),
+    switchMap((amount) => {
+      tr$.next(tr) //TODO: NOT WORKING!
+
+      return from(zpClient.transfer(TOKEN_ADDRESS,  [{ to, amount }])).pipe(
+        tap((jobId) => tr$.next({...tr, status: 'pending', jobId})),
+        switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
+        tap(() => tr$.next({...tr, status: 'success', jobId})),
+        tap(() => { tr$.complete(); sub.unsubscribe() }),
+        )),
       )
-      await client.approve(TOKEN_ADDRESS, CONTRACT_ADDRESS, amount)
-    }
+    }),
+    catchError((e) => {
+      console.error(e)
+      tr$.next({...tr, status: 'failed', error: e.message})
+      sub.unsubscribe()
 
-    return await zpClient.deposit(TOKEN_ADDRESS, String(amount), (data) => client.sign(data), fromAddress, '0', undefined, [{ to, amount }])
-  } catch (e: any) {
-    console.error(e)
+      return of(false)
+    }),
+  ).pipe(take(1)).subscribe()
 
-    return Promise.reject(apiErrorHandler(e.message))
-  }
-}
-
-export const transferPrivateToPublic = async (to: string, tokens: string): Promise<string> => {
-  try {
-    apiCheck()
-
-    const amount = client.toBaseUnit(tokens)
-
-    const jobId = await zpClient.withdraw(TOKEN_ADDRESS, to, amount)
-
-    return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
-  } catch (e: any) {
-    console.error(e)
-
-    return Promise.reject(apiErrorHandler(e.message))
-  }
-}
-
-
-export const transferPrivateToPrivate = async (to: string, tokens: string): Promise<string> => {
-  try {
-    apiCheck()
-
-    const amount = client.toBaseUnit(tokens)
-    const jobId = await zpClient.transfer(TOKEN_ADDRESS, [{ to, amount }])
-
-    console.log('Please wait relayer complete the job %s...', jobId)
-
-    return await zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)
-  } catch (e: any) {
-    console.error(e)
-
-    return Promise.reject(apiErrorHandler(e.message))
-  }
+  return tr$.pipe(
+    tap((tr) => { 
+      console.log(`---> Transaction status: ${tr.status}`)
+    })
+  )
 }
 
 export const addressShielded = (address: string, token: string): boolean => {
   return false
 }
-
 export const approve = async (amount: string): Promise<string | null> => {
 let fromAddress = null
 
@@ -409,6 +448,14 @@ let fromAddress = null
   }
 
   return fromAddress
+}
+export const getAddress = async (): Promise<string> => {
+  let address
+  
+  if (isEvmBased(NETWORK)) address = await client.getAddress()
+  else if (isSubstrateBased(NETWORK)) address = await client.getPublicKey()
+  
+  return address || Promise.reject(`No address found for withdrawal`)
 }
 
 /*
@@ -533,15 +580,13 @@ const _isPrivateAddress = (address: string, token: TokenSymbol) => {
 const networkInitialized = (): boolean => {
   return !!client
 }
-
 const zpInitialized = (): boolean => {
   return !!zpClient
 }
-
 const apiCheck = (): boolean => {
   if (!networkInitialized()) throw Error('Networt Client not available!')
   else if (!zpInitialized()) throw Error('ZP client not available!')
+
   return true
 }
-
 const apiCheck$ = (): Observable<boolean> => of(apiCheck())
