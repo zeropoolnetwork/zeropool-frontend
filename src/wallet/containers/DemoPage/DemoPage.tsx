@@ -108,11 +108,11 @@ export const DemoPage: React.FC<{}> = () => {
 
           <div className={bem('ToolbarBody')}>
             <DemoHeader
-              walletAddress={backdrop ? '-' : walletAddress}
-              privateAddress={backdrop ? '-' : privateAddress}
-              publicBalance={backdrop ? '-' : publicBalance}
-              privateBalance={backdrop ? '-' : privateBalance}
-              tokenBalance={backdrop ? '-' : tokenBalance}
+              walletAddress={backdrop || recorevery ? '-' : walletAddress}
+              privateAddress={backdrop || recorevery ? '-' : privateAddress}
+              publicBalance={backdrop || recorevery ? '-' : publicBalance}
+              privateBalance={backdrop || recorevery ? '-' : privateBalance}
+              tokenBalance={backdrop || recorevery ? '-' : tokenBalance}
             />
           </div>
         </Toolbar>
