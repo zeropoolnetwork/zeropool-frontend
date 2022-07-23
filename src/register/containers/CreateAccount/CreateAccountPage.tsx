@@ -43,11 +43,11 @@ export const CreateAccountPage: React.FC<{}> = () => {
   const components = () => {
     switch (stage) {
       case RegisterStage.STEP1:
-        return <StepOne onGenerate={() => dispatch(registerActions.generateSeed())} onBack={stepBack}/>
+        return <StepOne onGenerate={() => dispatch(registerActions.generateSeed())} onBack={stepBack} />
       case RegisterStage.STEP2:
-        return <StepTwo seed={seed} onSubmit={() => dispatch(registerActions.submitSeed())} onBack={stepBack}/>
+        return <StepTwo seed={seed} onSubmit={() => dispatch(registerActions.submitSeed())} onBack={stepBack} />
       case RegisterStage.STEP3:
-        return <StepThree seed={seed} onConfirm={() => dispatch(registerActions.confirmSeed())} onBack={stepBack}/>
+        return <StepThree seed={seed} onConfirm={() => dispatch(registerActions.confirmSeed())} onBack={stepBack} />
       case RegisterStage.STEP4:
         return (
           <StepFour
@@ -93,7 +93,7 @@ export const CreateAccountPage: React.FC<{}> = () => {
 
       {stage && showSteps ? (
         <div className={bem('Footer')}>
-          <img className={bem('Logo')} src={logo} alt="ZeroPool"/>
+          <img className={bem('Logo')} src={logo} alt="ZeroPool" />
         </div>
       ) : null}
     </div>
