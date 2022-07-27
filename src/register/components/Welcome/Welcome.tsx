@@ -4,6 +4,8 @@ import { cn } from '@bem-react/classname'
 
 import './Welcome.scss'
 import logo from 'assets/images/logo_white.png'
+import { Browser } from 'shared/utils/detect-browser'
+import { BrowserCheck } from 'register/components/BrowserCheck/BrowserCheck'
 
 
 export const componentId = 'Welcome'
@@ -20,6 +22,8 @@ export const Welcome: React.FC<WelcomeProps> = ({
   onImport,
   onAbout,
 }) => {
+  const [badBrowser, setBadBrowser] = React.useState<boolean>(false)
+
   return (
     <div className={bem()} data-testid={bem()}>
       <section className="noselect">
@@ -37,6 +41,7 @@ export const Welcome: React.FC<WelcomeProps> = ({
         className={bem('Button')}
         data-testid={bem('CreateButton')}
         onClick={onCreate}
+        disabled={badBrowser}
       >
         Create wallet
       </Button>
@@ -47,6 +52,7 @@ export const Welcome: React.FC<WelcomeProps> = ({
         className={bem('Button')}
         data-testid={bem('ImportButton')}
         onClick={onImport}
+        disabled={badBrowser}
       >
         Import wallet
       </Button>
@@ -60,6 +66,8 @@ export const Welcome: React.FC<WelcomeProps> = ({
       >
         About zeropool
       </Button>
+
+      <BrowserCheck onBadBrowser={(value) => {setBadBrowser(value)}} />
     </div>
   )
 }
