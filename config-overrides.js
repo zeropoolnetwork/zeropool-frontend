@@ -5,6 +5,7 @@ const path = require('path')
 
 module.exports = {
   webpack: function override(config, env) {
+    config.mode = 'development'
     console.log(`Modifying webpack config in ${process.env.NODE_ENV} mode`)
 
     config.output.environment = {

@@ -4,9 +4,7 @@ import { cn } from '@bem-react/classname'
 
 import './Welcome.scss'
 import logo from 'assets/images/logo_white.png'
-import { Browser } from 'shared/utils/detect-browser'
-import { BrowserCheck } from 'register/components/BrowserCheck/BrowserCheck'
-
+import { BrowserCheck } from 'shared/components/BrowserCheck/BrowserCheck'
 
 export const componentId = 'Welcome'
 export interface WelcomeProps {
