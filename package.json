@@ -1,6 +1,6 @@
 {
   "name": "zeropool-frontend",
-  "version": "0.3.3",
+  "version": "0.22.7",
   "license": "MIT",
   "private": false,
   "scripts": {
@@ -8,7 +8,7 @@
     "start": "set \"GENERATE_SOURCEMAP=false\" && react-app-rewired start",
     "build": "set \"GENERATE_SOURCEMAP=false\" && set \"PUBLIC_URL=/\" && env-cmd -f ./.env.build.docker react-app-rewired build",
     "build:local": "set \"PUBLIC_URL=/build\" && set \"GENERATE_SOURCEMAP=false\" && env-cmd -f ./.env.build.local react-app-rewired build",
-    "republish": "set VERSION=0.3.3 && env-cmd ./scripts/publish-docker",
+    "republish": "set VERSION=0.22.7 && env-cmd ./scripts/publish-docker",
     "test:debug": "react-app-rewired test",
     "test": "react-app-rewired test --coverage --watchAll=false",
     "eject": "react-scripts eject",
