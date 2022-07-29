@@ -3,6 +3,8 @@ import { fireEvent, render } from '@testing-library/react'
 
 import { componentId, StepOne, StepOneProps } from './StepOne'
 
+jest.mock('register/components/SeedPanel/SeedPanel')
+
 describe('StepOne', () => {
   let component: React.ReactElement<StepOneProps>
   let onSubmitSpy: jest.Mock

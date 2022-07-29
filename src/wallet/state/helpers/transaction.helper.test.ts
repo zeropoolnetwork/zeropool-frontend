@@ -1,6 +1,9 @@
 import { Transaction } from 'wallet/state/models/transaction'
 import transactionHelper from './transaction.helper'
 
+jest.mock('wallet/state/models/sorted-transactions')
+jest.mock('wallet/state/models/sorted-transactions')
+
 describe('Sort transactions by days', () => {
   const transactions: Partial<Transaction>[] = [
     { timestamp: 1615458796000 },

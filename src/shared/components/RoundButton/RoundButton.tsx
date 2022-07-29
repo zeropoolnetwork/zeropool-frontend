@@ -1,9 +1,9 @@
 import React, { HTMLAttributes } from 'react'
+import { IconButton } from '@mui/material'
 import { cn } from '@bem-react/classname'
 
 import './RoundButton.scss'
 
-import { IconButton } from '@mui/material'
 import { cssMod } from 'shared/utils/css-mod'
 
 export const componentId = 'RoundButton'

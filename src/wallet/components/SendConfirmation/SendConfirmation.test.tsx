@@ -5,6 +5,8 @@ import { SendConfirmation, componentId, SendConfirmationProps } from './SendConf
 
 import { _testWalletsEth } from 'shared/helpers/test/app-state.helper'
 
+jest.mock('wallet/state/models/wallet')
+
 describe('SendConfirmation', () => {
   let outputSpy: jest.Mock = jest.fn()
   let component: React.ReactElement<SendConfirmationProps>

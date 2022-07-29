@@ -3,6 +3,8 @@ import { fireEvent, render } from '@testing-library/react'
 
 import { SeedTag, componentId, SeedTagProps } from './SeedTag'
 
+jest.mock('shared/utils/shuffle')
+
 describe('SeedTag', () => {
   let outputSpy: jest.Mock
   let spyCall

@@ -17,6 +17,8 @@ const useSnackbarMock = useSnackbar as jest.Mock
 const validateAddressMock = validateAddress as jest.Mock
 const outputSpy = jest.fn()
 
+jest.mock('assets/images/logo_black.png')
+
 jest.mock('notistack', () => ({
   ...jest.requireActual('notistack'),
   useSnackbar: jest.fn(),

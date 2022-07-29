@@ -3,6 +3,8 @@ import { render } from '@testing-library/react'
 
 import { Balance, componentId, BalanceProps } from './Balance'
 
+jest.mock('wallet/components/TokenRow/TokenRow', () => ({ TokenRow: () => <div/> }))
+
 jest.mock('shared/helpers/addres.helper', () => {
   return {
     beautifyAmount: jest.fn(),
@@ -12,8 +14,6 @@ jest.mock('shared/helpers/addres.helper', () => {
 describe('Balance', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<BalanceProps>
-
-  // jest.mock('wallet/components/TokenRow/TokenRow', () => () => <span>TokenRow</span>)
 
   beforeEach(() => {
     outputSpy = jest.fn()

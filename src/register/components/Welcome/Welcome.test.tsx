@@ -4,6 +4,7 @@ import { fireEvent, render } from '@testing-library/react'
 import { Welcome, componentId, WelcomeProps } from './Welcome'
 
 jest.mock('shared/components/BrowserCheck/BrowserCheck')
+jest.mock('assets/images/logo_white.png')
 
 describe('Welcome Page', () => {
   let outputSpy: jest.Mock
