@@ -4,8 +4,11 @@ import { useSnackbar } from 'notistack'
 
 import { Transfer, componentId, TransferProps } from './Transfer'
 
+jest.mock('shared/models')
 jest.mock('shared/components/ZPSwitch/zpswitch')
+jest.mock('shared/utils/copy-from-clipboard')
 jest.mock('notistack', () => ({useSnackbar: jest.fn()}))
+jest.mock('shared/utils/bad-amount', () => ({badAmount: jest.fn()}))
 
 describe('Transfer', () => {
   let outputSpy: jest.Mock

@@ -3,6 +3,8 @@ import { initBalances } from 'wallet/state/helpers/init-balances.helper'
 import { balancesMock } from 'shared/helpers/test/app-state.helper'
 import { Wallet } from 'wallet/state/models'
 
+jest.mock('wallet/state/models')
+
 describe('init-balances helper', () => {
   const balances: Record<TokenSymbol, any[]> = balancesMock
   const hdWallet: any = {

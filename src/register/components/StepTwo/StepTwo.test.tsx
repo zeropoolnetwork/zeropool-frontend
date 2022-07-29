@@ -6,6 +6,9 @@ import { componentId, StepTwo, StepTwoProps } from './StepTwo'
 
 const useSnackbarMock = useSnackbar as jest.Mock
 
+jest.mock('register/components/SeedPanel/SeedPanel')
+jest.mock('shared/utils/copy-to-clipboard')
+jest.mock('shared/utils/str-from-array')
 jest.mock('notistack', () => ({
   ...jest.requireActual('notistack'),
   useSnackbar: jest.fn(),

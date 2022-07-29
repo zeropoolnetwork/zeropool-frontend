@@ -1,3 +1,5 @@
+import { createReducer } from '@reduxjs/toolkit'
+
 import supportedTokens from 'assets/settings/supported-tokens.json'
 
 import { recordFromArray } from 'shared/utils/from'
@@ -10,7 +12,6 @@ import { amountsHelper } from 'wallet/state/helpers/amounts.helper'
 import { walletsHelper } from 'wallet/state/helpers/wallets.helper'
 import { Transaction } from 'wallet/state/models/transaction'
 import { WalletView } from 'wallet/state/models/wallet-view'
-import { createReducer } from '@reduxjs/toolkit'
 import { demoActions } from 'wallet/state/demo.reducer'
 
 export const initialWalletName = 'Main wallet'

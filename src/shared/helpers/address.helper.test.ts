@@ -1,5 +1,6 @@
 import { beautifyAddress, beautifyAmount } from 'shared/helpers/addres.helper'
 
+jest.mock('shared/models')
 jest.mock('shared/helpers/validators/eth.validator', () => {
   return {
     isEthereumAddress: jest.fn(),

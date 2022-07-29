@@ -5,13 +5,15 @@ import { Token } from 'shared/models/token'
 
 import { TokenRow, componentId, TokenRowProps } from './TokenRow'
 
+jest.mock('shared/components/Icon/Icon')
+jest.mock('shared/components/Icon/IconOption')
 jest.mock('shared/helpers/addres.helper', () => {
   return {
     beautifyAmount: jest.fn(),
   }
 })
 
-describe('Token', () => {
+describe('TokenRow', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<TokenRowProps>
 

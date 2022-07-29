@@ -10,6 +10,13 @@ import { walletActions as actions } from 'wallet/state/wallet.actions'
 
 import { initialWalletState, walletReducer, WalletState } from './wallet.reducer'
 
+jest.mock('wallet/state/helpers/amounts.helper', () => ({amountsHelper: { 
+  getAmounts: jest.fn(),
+  getAmountsForAllTakens: jest.fn(),
+  getAmountsForToken: jest.fn(),
+  getAmountsForWallet: jest.fn(),
+}}))
+
 describe('wallet reducer', () => {
   const initialState: WalletState = deepFreeze(initialWalletState)
 
