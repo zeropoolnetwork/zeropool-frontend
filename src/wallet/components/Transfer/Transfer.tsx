@@ -1,16 +1,14 @@
 import { Button, CircularProgress, FormControl, FormControlLabel, FormGroup, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
 import React, { useState } from 'react'
-import { TransferData, TransferType } from 'shared/models'
 import { Close, CopyAll } from '@mui/icons-material'
+import { useSnackbar } from 'notistack'
 import { cn } from '@bem-react/classname'
 
 import './Transfer.scss'
 import { ZPSwitch } from 'shared/components/ZPSwitch/zpswitch'
-import { useSnackbar } from 'notistack'
-import { copyFromClipboard } from 'shared/utils/copy-from-clipboard'
-import { LoadingButton } from '@mui/lab'
-import { transfer } from 'wallet/api/zeropool.api'
 import { badAmount } from 'shared/utils/bad-amount'
+import { copyFromClipboard } from 'shared/utils/copy-from-clipboard'
+import { TransferData, TransferType } from 'shared/models'
 
 
 export const componentId = 'Transfer'
@@ -32,7 +30,6 @@ export const Transfer: React.FC<TransferProps> = ({
 }) => {
   const [to, setTo] = useState('')
   const [amount, setAmount] = useState('')
-  const [error, setError] = useState('')
   const [fromPrivate, setFromPrivate] = useState(true)
   const [toPrivate, setToPrivate] = useState(true)
   const [funds, setFunds] = useState(false)

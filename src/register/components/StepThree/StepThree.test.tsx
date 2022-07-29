@@ -1,7 +1,10 @@
 import React from 'react'
+import sinon from 'sinon'
 import { fireEvent, render } from '@testing-library/react'
 
 import { componentId, StepThree, StepThreeProps } from './StepThree'
+
+jest.mock('register/components/SeedPanel/SeedPanel', () => (<div />))
 
 describe('StepThree', () => {
   let outputSpy: jest.Mock
@@ -21,17 +24,23 @@ describe('StepThree', () => {
   })
 
   describe('Confirm button', () => {
+    beforeAll(() => {
+      // sinon
+    })
+
     it('should render', () => {
       const { getByTestId } = render(component)
 
       expect(getByTestId(`${componentId}-Confirm`)).toBeInTheDocument()
     })
 
-    xit('should call onConfirm prop callback when clicked', () => {
+    it('should call onConfirm prop callback when clicked', () => {
       const { getByTestId } = render(component)
+      const seedPanel = getByTestId(`${componentId}-SeedPanel`)
+
       fireEvent.click(getByTestId(`${componentId}-Confirm`))
 
-
+      expect(seedPanel).toBeDefined()
       expect(outputSpy).toHaveBeenCalledTimes(1); // need to enable button first
     })
   })

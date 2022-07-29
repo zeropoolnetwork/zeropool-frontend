@@ -3,10 +3,12 @@ import { fireEvent, render } from '@testing-library/react'
 
 import { Welcome, componentId, WelcomeProps } from './Welcome'
 
+jest.mock('shared/components/BrowserCheck/BrowserCheck')
+
 describe('Welcome Page', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<WelcomeProps>
-
+  
   beforeEach(() => {
     outputSpy = jest.fn()
     component = (
