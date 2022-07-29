@@ -1,4 +1,5 @@
 import { cn } from '@bem-react/classname'
+import { useSnackbar } from 'notistack'
 import React, { ReactElement } from 'react'
 
 import { componentId, ImportAccount, ImportAccountProps } from './ImportAccount'
@@ -8,6 +9,7 @@ import { createClientRender, queryByAttribute } from 'shared/utils/render.js'
 const bem = cn(componentId)
 const getById = queryByAttribute.bind(null, 'id')
 
+jest.mock('notistack', () => ({useSnackbar: jest.fn()}))
 jest.mock('register/state/helpers/seed.helper', () => ({
   validateSeed: jest.fn(),
 }))
@@ -18,6 +20,7 @@ describe('ImportAccount', () => {
   const render = createClientRender({ strict: false })
 
   beforeEach(() => {
+    (useSnackbar as jest.Mock).mockImplementation(() => ({enqueueSnackbar: jest.fn()}))
     outputSpy = jest.fn()
     component = <ImportAccount onImport={outputSpy} onBack={outputSpy} />
   })

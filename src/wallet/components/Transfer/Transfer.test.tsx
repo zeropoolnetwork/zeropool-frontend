@@ -1,7 +1,11 @@
 import React from 'react'
 import { render } from '@testing-library/react'
+import { useSnackbar } from 'notistack'
 
 import { Transfer, componentId, TransferProps } from './Transfer'
+
+jest.mock('shared/components/ZPSwitch/zpswitch')
+jest.mock('notistack', () => ({useSnackbar: jest.fn()}))
 
 describe('Transfer', () => {
   let outputSpy: jest.Mock
@@ -9,6 +13,7 @@ describe('Transfer', () => {
   const testName = 'Transfer'
 
   beforeEach(() => {
+    (useSnackbar as jest.Mock).mockImplementation(() => ({enqueueSnackbar: jest.fn()}))
     outputSpy = jest.fn()
     component = (
       <Transfer
