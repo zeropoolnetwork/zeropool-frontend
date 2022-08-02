@@ -11,7 +11,7 @@ export const BrowserCheck: React.FC<BrowserCheckProps> = ({onBadBrowser}) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const browser = detectBrowser()
   const badBrowsers: Browser[] = [
-    // Browser.Firefox
+    Browser.Firefox
   ]
 
   useEffect(() => {
