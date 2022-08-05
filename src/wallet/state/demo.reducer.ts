@@ -97,7 +97,7 @@ export const demoSlice = createSlice({
     mintSuccess: (state, action: PayloadAction<number>) => {
       state.minting = false
     },
-    mintFalure: (state, action: PayloadAction<string>) => {
+    mintFailure: (state, action: PayloadAction<string>) => {
       state.minting = false
     },
 

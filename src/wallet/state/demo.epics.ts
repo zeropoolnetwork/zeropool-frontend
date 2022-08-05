@@ -18,346 +18,384 @@ import { transaction, Transaction } from 'shared/models/transaction'
 type Action$ = Observable<PayloadAction>
 type State$ = Observable<RootState>
 
-const initApi = (action$: Action$, state$: State$) => { return action$.pipe(
-  filter(demoActions.initApi.match),
-  withLatestFrom(state$.pipe(map(selectInitials))),
-  map(([, initials]) => initials),
-  filter((initials) => !!initials),
-  tap(() => toast.info('Initializing, it can take up to few minutes...', { key: 'initApi', persist: true })),
-  switchMap((initials) =>
-    from(
-      api.init(
-        (initials as any).seed,
-        (initials as any).password,
+const initApi = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.initApi.match),
+    withLatestFrom(state$.pipe(map(selectInitials))),
+    map(([, initials]) => initials),
+    filter((initials) => !!initials),
+    tap(() => toast.info('Initializing, it can take up to few minutes...', { key: 'initApi', persist: true })),
+    switchMap((initials) =>
+      from(
+        api.init(
+          (initials as any).seed,
+          (initials as any).password,
+        ),
+      ).pipe(
+        map(() => demoActions.initApiSuccess(null)),
+        tap(() => toast.close('initApi')),
+        tap(() => toast.success('Wallet initialized')),
+        catchError((errMsg: string) => {
+          toast.close('initApi')
+          toast.error(errMsg)
+
+          return of(demoActions.initApiFailure(errMsg))
+        }),
       ),
-    ).pipe(
-      map(() => demoActions.initApiSuccess(null)),
-      tap(() => toast.close('initApi')),
-      tap(() => toast.success('Wallet initialized')),
-      catchError((errMsg: string) => {
-        toast.close('initApi')
-        toast.error(errMsg)
-
-        return of(demoActions.initApiFailure(errMsg))
-      }),
     ),
-  ),
-)}
-const mint: Epic = (action$, state$) => { return action$.pipe(
-  filter(demoActions.mint.match),
-  tap(({ payload }) => toast.info(`Minting ${payload} tokens...`, { key: 'mint', persist: true })),
-  switchMap(({ payload }) =>
-    from(api.mint(payload)).pipe(
-      tap(() => toast.close('mint')),
-      tap(() => toast.success('Mint success')),
-      map((res) => demoActions.mintSuccess(+payload)),
-      catchError((errMsg: string) => {
-        toast.close('mint')
-        toast.error(errMsg)
+  )
+}
+const mint: Epic = (action$, state$) => {
+  return action$.pipe(
+    filter(demoActions.mint.match),
+    tap(({ payload }) => toast.info(`Minting ${payload} tokens...`, { key: 'mint', persist: true })),
+    switchMap(({ payload }) =>
+      from(api.mint(payload)).pipe(
+        tap(() => toast.close('mint')),
+        tap(() => toast.success('Mint success')),
+        map((res) => demoActions.mintSuccess(+payload)),
+        catchError((errMsg: string) => {
+          toast.close('mint')
+          toast.error(errMsg)
 
-        return of(demoActions.mintFalure(errMsg))
-      }),
+          return of(demoActions.mintFailure(errMsg))
+        }),
+      ),
     ),
-  ),
-)}
-const deposit: Epic = (action$, state$) => { return action$.pipe(
-  filter(demoActions.deposit.match),
-  switchMap(({ payload }) => api.deposit(payload).pipe(
-    switchMap((transaction: Transaction) => {
-      switch(transaction.status) {
-        case 'started':
-          toast.info(`Depositing ${payload} tokens...`, { key: 'deposit', persist: true })
-          
-          return of(demoActions.transaction(transaction))
-        case 'pending':
-          toast.close('deposit')
-          toast.success('Deposit success')
-          // toast.info(`Confirming deposit...`, { key: transaction.jobId, persist: true })
-          
-          return of(demoActions.transaction(transaction))
-        case 'success':
-          toast.close(transaction.jobId as string)
-          // toast.success(`Deposit confirmed`, { key: transaction.jobId, persist: false })
-          
-          return of(demoActions.transaction(transaction), demoActions.depositSuccess(payload))
-        default: return of(
-          demoActions.depositFailure(transaction.error || 'Transaction failed'),
-        )
-      }
-    }),
-  )),
-)}
-const withdraw: Epic = (action$, state$) => { return action$.pipe(
-  filter(demoActions.withdraw.match),
-  switchMap(({ payload }) => api.withdraw(payload).pipe(
-    switchMap((transaction: Transaction) => {
-      switch(transaction.status) {
-        case 'started':
-          toast.info(`Withdrawing ${payload} tokens...`, { key: 'withdraw', persist: true })
-          
-          return of(demoActions.transaction(transaction))
-        case 'pending':
-          toast.close('withdraw')
-          toast.success('Withdraw success')
-          // toast.info(`Confirming withdraw...`, { key: transaction.jobId, persist: true })
-          
-          return of(demoActions.transaction(transaction))
-        case 'success':
-          // toast.close(transaction.jobId as string)
-          toast.success(`Withdraw confirmed`)
-          
-          return of(demoActions.transaction(transaction), demoActions.withdrawSuccess(payload))
-        default: return of(
-          demoActions.withdrawFailure(transaction.error || 'Transaction failed'),
-        )
-      }
-    }),
-  )),
-)}
-const transfer: Epic = (action$, state$) => { return action$.pipe(
-  filter(demoActions.transfer.match),
-  tap(({ payload }) => toast.info(
-    `Processing transfer of ${payload.amount} ${payload.type === 'funds' ? `funds` : `tokens`}...`,
-    { key: 'transfer', persist: true },
-  )),
-  switchMap(({ payload }) => api.transfer(payload).pipe(
-    switchMap((transaction: Transaction) => {
-      switch(transaction.status) {
-        case 'started':
-          toast.info(
-            `Processing transfer of ${payload.amount} ${payload.type === 'funds' ? `funds` : `tokens`}...`,
-            { key: 'transfer', persist: true },
-          )
-          
-          return of(demoActions.transaction(transaction))
-        case 'pending':
-          toast.close('transfer')
-          toast.success('Transfer success')
-          // toast.info(`Confirming transfer...`, { key: transaction.jobId, persist: true })
-          
-          return of(demoActions.transaction(transaction))
-        case 'success':
-          // toast.close(transaction.jobId as string)
-          // toast.success(`Transfer confirmed`)
-          
-          return of(
-            demoActions.transaction(transaction),
-            demoActions.transferSuccess(payload.type),
-          )
-        default: 
-          toast.close('transfer')
-          toast.error(transaction.error || 'Transaction failed')
-          
-          return of(
-            demoActions.transaction(transaction),
-            demoActions.transferFailure(transaction.error || 'Transaction failed'),
-          )
-      }
-    }),
-  )),
-)}
+  )
+}
+const deposit: Epic = (action$, state$) => {
+  return action$.pipe(
+    filter(demoActions.deposit.match),
+    switchMap(({ payload }) => api.deposit(payload).pipe(
+      switchMap((transaction: Transaction) => {
+        switch (transaction.status) {
+          case 'started':
+            toast.info(`Depositing ${payload} tokens...`, { key: 'deposit', persist: true })
 
-const getPublicBalance = (action$: Action$, state$: State$) => { return action$.pipe(
-  filter(demoActions.updateBalances.match),
-  switchMap(({ payload }) =>
-    of(1).pipe(
-      delay(payload?.funds || 0),
-      switchMap(() =>
-        from(api.getRegularBalance()).pipe(
-          map((balance) => demoActions.publicBalance(balance)),
-          catchError((errMsg: string) => {
-            toast.error(errMsg)
+            return of(demoActions.transaction(transaction))
+          case 'pending':
+            toast.close('deposit')
+            toast.success('Deposit success')
+            // toast.info(`Confirming deposit...`, { key: transaction.jobId, persist: true })
 
-            return of(demoActions.updateBalancesFailure(errMsg))
-          }),
+            return of(demoActions.transaction(transaction))
+          case 'success':
+            toast.close(transaction.jobId as string)
+            // toast.success(`Deposit confirmed`, { key: transaction.jobId, persist: false })
+
+            return of(demoActions.transaction(transaction), demoActions.depositSuccess(payload))
+          default: return of(
+            demoActions.depositFailure(transaction.error || 'Transaction failed'),
+          )
+        }
+      }),
+    )),
+  )
+}
+const withdraw: Epic = (action$, state$) => {
+  return action$.pipe(
+    filter(demoActions.withdraw.match),
+    switchMap(({ payload }) => api.withdraw(payload).pipe(
+      switchMap((transaction: Transaction) => {
+        switch (transaction.status) {
+          case 'started':
+            toast.info(`Withdrawing ${payload} tokens...`, { key: 'withdraw', persist: true })
+
+            return of(demoActions.transaction(transaction))
+          case 'pending':
+            toast.close('withdraw')
+            toast.success('Withdraw success')
+            // toast.info(`Confirming withdraw...`, { key: transaction.jobId, persist: true })
+
+            return of(demoActions.transaction(transaction))
+          case 'success':
+            // toast.close(transaction.jobId as string)
+            toast.success(`Withdraw confirmed`)
+
+            return of(demoActions.transaction(transaction), demoActions.withdrawSuccess(payload))
+          default: return of(
+            demoActions.withdrawFailure(transaction.error || 'Transaction failed'),
+          )
+        }
+      }),
+    )),
+  )
+}
+const transfer: Epic = (action$, state$) => {
+  return action$.pipe(
+    filter(demoActions.transfer.match),
+    tap(({ payload }) => toast.info(
+      `Processing transfer of ${payload.amount} ${payload.type === 'funds' ? `funds` : `tokens`}...`,
+      { key: 'transfer', persist: true },
+    )),
+    switchMap(({ payload }) => api.transfer(payload).pipe(
+      switchMap((transaction: Transaction) => {
+        switch (transaction.status) {
+          case 'started':
+            toast.info(
+              `Processing transfer of ${payload.amount} ${payload.type === 'funds' ? `funds` : `tokens`}...`,
+              { key: 'transfer', persist: true },
+            )
+
+            return of(demoActions.transaction(transaction))
+          case 'pending':
+            toast.close('transfer')
+            toast.success('Transfer success')
+            // toast.info(`Confirming transfer...`, { key: transaction.jobId, persist: true })
+
+            return of(demoActions.transaction(transaction))
+          case 'success':
+            // toast.close(transaction.jobId as string)
+            // toast.success(`Transfer confirmed`)
+
+            return of(
+              demoActions.transaction(transaction),
+              demoActions.transferSuccess(payload.type),
+            )
+          default:
+            toast.close('transfer')
+            toast.error(transaction.error || 'Transaction failed')
+
+            return of(
+              demoActions.transaction(transaction),
+              demoActions.transferFailure(transaction.error || 'Transaction failed'),
+            )
+        }
+      }),
+    )),
+  )
+}
+
+const getPublicBalance = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.updateBalances.match),
+    switchMap(({ payload }) =>
+      of(1).pipe(
+        delay(payload?.funds || 0),
+        switchMap(() =>
+          from(api.getRegularBalance()).pipe(
+            map((balance) => demoActions.publicBalance(balance)),
+            catchError((errMsg: string) => {
+              toast.error(errMsg)
+
+              return of(demoActions.updateBalancesFailure(errMsg))
+            }),
+          ),
         ),
       ),
     ),
-  ),
-)}
-const getTokenBalance = (action$: Action$, state$: State$) => { return action$.pipe(
-  filter(demoActions.updateBalances.match),
-  switchMap(({ payload }) =>
-    of(1).pipe(
-      delay(payload?.tokens || 0),
-      switchMap(() =>
-        from(api.getTokenBalance()).pipe(
-          map((balance) => demoActions.tokenBalance(balance)),
-          catchError((errMsg: string) => {
-            toast.error(errMsg)
+  )
+}
+const getTokenBalance = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.updateBalances.match),
+    switchMap(({ payload }) =>
+      of(1).pipe(
+        delay(payload?.tokens || 0),
+        switchMap(() =>
+          from(api.getTokenBalance()).pipe(
+            map((balance) => demoActions.tokenBalance(balance)),
+            catchError((errMsg: string) => {
+              toast.error(errMsg)
 
-            return of(demoActions.updateBalancesFailure(errMsg))
-          }),
+              return of(demoActions.updateBalancesFailure(errMsg))
+            }),
+          ),
         ),
       ),
     ),
-  ),
-)}
-const getPrivateBalance = (action$: Action$, state$: State$) => { return action$.pipe(
-  filter(demoActions.updateBalances.match),
-  switchMap(({ payload }) =>
-    of(1).pipe(
-      delay(payload?.private || 0),
-      switchMap(() =>
-        from(api.getShieldedBalances()).pipe(
-          map((balance) => demoActions.privateBalance(balance)),
-          catchError((errMsg: string) => {
-            toast.error(errMsg)
+  )
+}
+const getPrivateBalance = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.updateBalances.match),
+    switchMap(({ payload }) =>
+      of(1).pipe(
+        delay(payload?.private || 0),
+        switchMap(() =>
+          from(api.getShieldedBalances()).pipe(
+            map((balance) => demoActions.privateBalance(balance)),
+            catchError((errMsg: string) => {
+              toast.error(errMsg)
 
-            return of(demoActions.updateBalancesFailure(errMsg))
-          }),
+              return of(demoActions.updateBalancesFailure(errMsg))
+            }),
+          ),
         ),
       ),
     ),
-  ),
-)}
+  )
+}
 
-const getWalletAddress = (action$: Action$, state$: State$) => { return action$.pipe(
-  filter(demoActions.getWalletAddress.match),
-  mergeMap(() =>
-    from(api.getRegularAddress()).pipe(
-      map((address) => demoActions.getWalletAddressSuccess(address)),
-      catchError((errMsg: string) => {
-        toast.error(errMsg)
+const getWalletAddress = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.getWalletAddress.match),
+    mergeMap(() =>
+      from(api.getRegularAddress()).pipe(
+        map((address) => demoActions.getWalletAddressSuccess(address)),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
 
-        return of(demoActions.getWalletAddressFailure(errMsg))
-      }),
+          return of(demoActions.getWalletAddressFailure(errMsg))
+        }),
+      ),
     ),
-  ),
-)}
-const getPrivateAddress = (action$: Action$, state$: State$) => { return action$.pipe(
-  filter(demoActions.getPrivateAddress.match),
-  mergeMap(() =>
-    from(api.getShieldedAddress()).pipe(
-      map((address) => demoActions.getPrivateAddressSuccess(address)),
-      catchError((errMsg: string) => {
-        toast.error(errMsg)
+  )
+}
+const getPrivateAddress = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.getPrivateAddress.match),
+    mergeMap(() =>
+      from(api.getShieldedAddress()).pipe(
+        map((address) => demoActions.getPrivateAddressSuccess(address)),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
 
-        return of(demoActions.getPrivateAddressFailure(errMsg))
-      }),
+          return of(demoActions.getPrivateAddressFailure(errMsg))
+        }),
+      ),
     ),
-  ),
-)}
+  )
+}
 
-const updateDataAfterInitialization = (action$: Action$, state$: State$) => { return action$.pipe(
-  filter(demoActions.initApiSuccess.match),
-  mergeMap(() => of(
-    demoActions.getWalletAddress(null),
-    demoActions.getPrivateAddress(null),
-    demoActions.updateBalances(null),
-  )),
-)}
-const updateBalancesAfterMint = (action$: Action$, state$: State$) => { return action$.pipe(
-  filter(demoActions.mintSuccess.match),
-  map(() => demoActions.updateBalances(null)),
-)}
+const updateDataAfterInitialization = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.initApiSuccess.match),
+    mergeMap(() => of(
+      demoActions.getWalletAddress(null),
+      demoActions.getPrivateAddress(null),
+      demoActions.updateBalances(null),
+    )),
+  )
+}
+const updateBalancesAfterMint = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.mintSuccess.match),
+    map(() => demoActions.updateBalances(null)),
+  )
+}
 // const updateBalancesAfterTransactionPending = (action$: Action$, state$: State$) => { return action$.pipe(
 //   filter(demoActions.transaction.match),
 //   filter((transaction) => 'pending' === transaction.payload.status),
 //   map(() => demoActions.updateBalances({ funds: 0, tokens: 5000, private: 1000 })),
 // )}
-const updateBalancesAfterTransactionSuccess = (action$: Action$, state$: State$) => { return action$.pipe(
-  filter(demoActions.transaction.match),
-  filter(({ payload: tr }) => 'success' === tr.status),
-  map(({ payload: tr }) => demoActions.updateBalances({ 
-    funds: 0,
-    tokens: ['privateToPublic', 'privateToPrivate'].includes(tr.type) ? 0 : 4000,
-    private: 1000,
-  })),
-)}
+const updateBalancesAfterTransactionSuccess = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.transaction.match),
+    filter(({ payload: tr }) => 'success' === tr.status),
+    map(({ payload: tr }) => demoActions.updateBalances({
+      funds: 0,
+      tokens: ['privateToPublic', 'privateToPrivate'].includes(tr.type) ? 0 : 4000,
+      private: 1000,
+    })),
+  )
+}
 
 // const updateBalancesAfterTransfer = (action$: Action$, state$: State$) => { return action$.pipe(
 //   filter(demoActions.transferSuccess.match),
 //   map(() => demoActions.updateBalances({ funds: 0, tokens: 1000, private: 1000 })),
 // )}
 
-const exportSeed = (action$: Action$, state$: State$) => { return action$.pipe(
-  filter(demoActions.exportSeed.match),
-  mergeMap(({ payload }) =>
-    from(api.getSeed(payload)).pipe(
-      map((seed) => demoActions.exportSeedSuccess(seed)),
-      catchError((errMsg: string) => {
-        toast.error(errMsg)
+const exportSeed = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.exportSeed.match),
+    mergeMap(({ payload }) =>
+      from(api.getSeed(payload)).pipe(
+        map((seed) => demoActions.exportSeedSuccess(seed)),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
 
-        return of(demoActions.exportSeedFailure(errMsg))
-      }),
+          return of(demoActions.exportSeedFailure(errMsg))
+        }),
+      ),
     ),
-  ),
-)}
-const exportSeedSuccess = (action$: Action$, state$: State$) => { return action$.pipe(
-  filter(demoActions.exportSeedSuccess.match),
-  tap(({ payload }) => {
-    navigator.clipboard.writeText(payload).then(
-      () => {
-        toast.success(`Seed copied to the clipboard`)
-      },
-      (err) => {
-        toast.error(`Can't access clipboard`)
-      },
-    )
-  }),
-  ignoreElements(),
-)}
-
-const recowerWallet = (action$: Action$, state$: State$) => { return action$.pipe(
-  filter(demoActions.recoverWallet.match),
-  map(({ payload }) => payload),
-  filter(isNonNull),
-  mergeMap((password) =>
-    from(api.getSeed(password)).pipe(
-      map((seed) => demoActions.recoverWalletSuccess({ seed, password })),
-      catchError((errMsg: string) => {
-        toast.error(errMsg)
-
-        return of(demoActions.recoverWalletFailure(errMsg))
-      }),
-    ),
-  ),
-  )}
-const recoverWalletSuccess = (action$: Action$, state$: State$) => { return action$.pipe(
-  filter(demoActions.recoverWalletSuccess.match),
-  mergeMap(({ payload }) => of(
-    demoActions.setSeedAndPasword(payload),
-    demoActions.initApi(null),
-  )),
-)}
-
-const resetAccount: Epic = (action$: Action$) => { return action$.pipe(
-  filter(demoActions.resetAccount.match),
-  tap(() => {
-    sessionStorage.clear()
-    localStorage.clear()
-    caches.keys().then(keys => {
-      keys.forEach(key => caches.delete(key))
-    })
-    indexedDB.databases().then(dbs => {
-      dbs.forEach(db => indexedDB.deleteDatabase((db as any).name))
-    })
-  }),
-  tap((a) => toast.success('Wallet reseted and data cleared')),
-  ignoreElements(),
-)}
-const restoreSession = (action$: Action$, state$: State$) => { return action$.pipe(
-  filter(demoActions.initApi.match),
-  withLatestFrom(state$.pipe(map(selectInitials))),
-  filter(([, initials]) => !initials),
-  mergeMap(() => {
-    let seed, password
-    // first we try to restore session from SessionStorage (for development)
-    seed = api.getDevSeed()
-    password = api.getDevPassword()
-
-    if (!seed || !password) {
-      // if not found, we run recovery proccess
-      return of(demoActions.recoverWallet(null))
-    } else {
-      return of(
-        demoActions.setSeedAndPasword({ seed, password }),
-        demoActions.initApi(null),
+  )
+}
+const exportSeedSuccess = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.exportSeedSuccess.match),
+    tap(({ payload }) => {
+      navigator.clipboard.writeText(payload).then(
+        () => {
+          toast.success(`Seed copied to the clipboard`)
+        },
+        (err) => {
+          toast.error(`Can't access clipboard`)
+        },
       )
-    }
-  }),
-)}
+    }),
+    ignoreElements(),
+  )
+}
+
+const recowerWallet = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.recoverWallet.match),
+    map(({ payload }) => payload),
+    filter(isNonNull),
+    mergeMap((password) =>
+      from(api.getSeed(password)).pipe(
+        map((seed) => demoActions.recoverWalletSuccess({ seed, password })),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
+
+          return of(demoActions.recoverWalletFailure(errMsg))
+        }),
+      ),
+    ),
+  )
+}
+const recoverWalletSuccess = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.recoverWalletSuccess.match),
+    mergeMap(({ payload }) => of(
+      demoActions.setSeedAndPasword(payload),
+      demoActions.initApi(null),
+    )),
+  )
+}
+
+const resetAccount: Epic = (action$: Action$) => {
+  return action$.pipe(
+    filter(demoActions.resetAccount.match),
+    tap(() => {
+      sessionStorage.clear()
+      localStorage.clear()
+      caches.keys().then(keys => {
+        keys.forEach(key => caches.delete(key))
+      })
+      indexedDB.databases().then(dbs => {
+        dbs.forEach(db => indexedDB.deleteDatabase((db as any).name))
+      })
+    }),
+    tap((a) => toast.success('Wallet reseted and data cleared')),
+    ignoreElements(),
+  )
+}
+const restoreSession = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.initApi.match),
+    withLatestFrom(state$.pipe(map(selectInitials))),
+    filter(([, initials]) => !initials),
+    mergeMap(() => {
+      let seed, password
+      // first we try to restore session from SessionStorage (for development)
+      seed = api.getDevSeed()
+      password = api.getDevPassword()
+
+      if (!seed || !password) {
+        // if not found, we run recovery proccess
+        return of(demoActions.recoverWallet(null))
+      } else {
+        return of(
+          demoActions.setSeedAndPasword({ seed, password }),
+          demoActions.initApi(null),
+        )
+      }
+    }),
+  )
+}
 
 export const demoEpics: Epic = combineEpics(
   initApi,
