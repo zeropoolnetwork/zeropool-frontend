@@ -21,7 +21,7 @@ const setUseSnackbarRef = (useSnackbarRefProp: WithSnackbarProps) => {
   useSnackbarRef = useSnackbarRefProp
 }
 
-const toast = {
+export const toast = {
   success(msg: string, options: OptionsObject = {}) {
     this.toast(msg, { ...options, variant: 'success' })
   },
@@ -45,5 +45,3 @@ const toast = {
 export const SnackbarUtilsConfigurator = () => {
   return <InnerSnackbarUtilsConfigurator setUseSnackbarRef={setUseSnackbarRef} />
 }
-
-export default toast

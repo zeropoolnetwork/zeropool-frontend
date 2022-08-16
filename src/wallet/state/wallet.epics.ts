@@ -4,7 +4,7 @@ import { from, iif, Observable, of } from 'rxjs'
 import { Epic, combineEpics } from 'redux-observable'
 import { PayloadAction } from '@reduxjs/toolkit'
 
-import toast from 'shared/helpers/toast.helper'
+import { toast } from 'shared/helpers/toast.helper'
 import { Token } from 'shared/models'
 import { getPayload } from 'shared/operators/get-payload.operator'
 import { handleEpicError } from 'shared/operators/handle-epic-error.operator'

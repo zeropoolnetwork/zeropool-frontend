@@ -1,4 +1,4 @@
-import toast from 'shared/helpers/toast.helper'
+import { toast } from 'shared/helpers/toast.helper'
 
 export const promiceErrorHandler = <T>(mock: T, message?: string) => (err: Error) => {
   console.error('Api error:')

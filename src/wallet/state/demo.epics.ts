@@ -9,7 +9,7 @@ import { selectInitials } from 'wallet/state/demo.selectors'
 
 import { RootState } from 'state'
 
-import toast from 'shared/helpers/toast.helper'
+import { toast } from 'shared/helpers/toast.helper'
 import { debug } from 'shared/operators/debug.operator'
 import { isNonNull } from 'shared/operators/is-not-null'
 import { transaction, Transaction } from 'shared/models/transaction'
@@ -68,7 +68,7 @@ const deposit: Epic = (action$, state$) => {
   return action$.pipe(
     filter(demoActions.deposit.match),
     switchMap(({ payload }) => api.deposit(payload).pipe(
-      switchMap((transaction: Transaction) => {
+      mergeMap((transaction: Transaction) => {
         switch (transaction.status) {
           case 'started':
             toast.info(`Depositing ${payload} tokens...`, { key: 'deposit', persist: true })
@@ -81,7 +81,7 @@ const deposit: Epic = (action$, state$) => {
 
             return of(demoActions.transaction(transaction))
           case 'success':
-            toast.close(transaction.jobId as string)
+            toast.close('deposit')
             // toast.success(`Deposit confirmed`, { key: transaction.jobId, persist: false })
 
             return of(demoActions.transaction(transaction), demoActions.depositSuccess(payload))
@@ -89,6 +89,11 @@ const deposit: Epic = (action$, state$) => {
             demoActions.depositFailure(transaction.error || 'Transaction failed'),
           )
         }
+      }),
+      catchError((errMsg: string) => {
+        toast.error(errMsg)
+
+        return of(demoActions.depositFailure(errMsg || 'Transaction failed'))
       }),
     )),
   )
@@ -119,7 +124,13 @@ const withdraw: Epic = (action$, state$) => {
           )
         }
       }),
-    )),
+      catchError((errMsg: string) => {
+        toast.error(errMsg)
+
+        return of(demoActions.withdrawFailure(errMsg || 'Transaction failed'))
+      }
+      )),
+    )
   )
 }
 const transfer: Epic = (action$, state$) => {
@@ -131,6 +142,7 @@ const transfer: Epic = (action$, state$) => {
     )),
     switchMap(({ payload }) => api.transfer(payload).pipe(
       switchMap((transaction: Transaction) => {
+        console.log('epic:', transaction)
         switch (transaction.status) {
           case 'started':
             toast.info(

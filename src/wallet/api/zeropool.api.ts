@@ -136,6 +136,7 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
     sessionStorage.setItem('zp.development.password', password)
   }
 }
+
 export const mint = async (tokens: string): Promise<void> => {
   try {
     apiCheck()
@@ -228,24 +229,24 @@ export const getShieldedBalances = async (): Promise<string> => {
 }
 
 export const deposit = (tokens: string): Observable<Transaction> => {
-  const tr = transaction('deposit', 'started')	
+  const tr = transaction('deposit', 'started')
   const tr$ = new Subject<Transaction>()
-  
+
   const sub = apiCheck$().pipe(
     map(() => client.toBaseUnit(tokens)),
     switchMap((amount) => from(approve(amount)).pipe(
       tap(() => tr$.next(tr)),
       switchMap((address) => from(zpClient.deposit(TOKEN_ADDRESS, amount, (data) => client.sign(data), address, '0', undefined, [])).pipe(
-        tap((jobId) => tr$.next({...tr, status: 'pending', jobId})),
+        tap((jobId) => tr$.next({ ...tr, status: 'pending', jobId })),
         switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
-          tap(() => tr$.next({...tr, status: 'success', jobId})),
+          tap(() => tr$.next({ ...tr, status: 'success', jobId })),
           tap(() => { tr$.complete(); sub.unsubscribe() }),
         )),
       )),
     )),
     catchError((e) => {
       console.error(e)
-      tr$.next({...tr, status: 'failed', error: e.message})
+      tr$.next({ ...tr, status: 'failed', error: e.message })
       sub.unsubscribe()
 
       return of(false)
@@ -253,13 +254,13 @@ export const deposit = (tokens: string): Observable<Transaction> => {
   ).pipe(take(1)).subscribe()
 
   return tr$.pipe(
-    tap((tr) => { 
+    tap((tr) => {
       console.log(`---> Transaction status: ${tr.status}`)
     })
   )
 }
 export const withdraw = (tokens: string): Observable<Transaction> => {
-  const tr: Transaction = transaction('withdraw', 'started')	
+  const tr: Transaction = transaction('withdraw', 'started')
   const tr$ = new Subject<Transaction>()
 
   const sub = apiCheck$().pipe(
@@ -267,16 +268,16 @@ export const withdraw = (tokens: string): Observable<Transaction> => {
     switchMap((amount) => from(getAddress()).pipe(
       tap(() => tr$.next(tr)),
       switchMap((address) => from(zpClient.withdraw(TOKEN_ADDRESS, address, amount)).pipe(
-        tap((jobId) => tr$.next({...tr, status: 'pending', jobId})),
+        tap((jobId) => tr$.next({ ...tr, status: 'pending', jobId })),
         switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
-          tap(() => tr$.next({...tr, status: 'success', jobId})),
+          tap(() => tr$.next({ ...tr, status: 'success', jobId })),
           tap(() => { tr$.complete(); sub.unsubscribe() }),
         )),
       )),
     )),
     catchError((e) => {
       console.error(e)
-      tr$.next({...tr, status: 'failed', error: e.message})
+      tr$.next({ ...tr, status: 'failed', error: e.message })
       sub.unsubscribe()
 
       return of(false)
@@ -284,7 +285,7 @@ export const withdraw = (tokens: string): Observable<Transaction> => {
   ).pipe(take(1)).subscribe()
 
   return tr$.pipe(
-    tap((tr) => { 
+    tap((tr) => {
       console.log(`---> Transaction status: ${tr.status}`)
     })
   )
@@ -297,10 +298,10 @@ export const transfer = (data: TransferData): Observable<Transaction> => {
       return transferPublicToPublic(data.to, data.amount)
     case 'publicToPrivate':
       return transferPublicToPrivate(data.to, data.amount)
-      case 'privateToPublic':
-        return transferPrivateToPublic(data.to, data.amount)
-      case 'privateToPrivate':
-        return transferPrivateToPrivate(data.to, data.amount)
+    case 'privateToPublic':
+      return transferPrivateToPublic(data.to, data.amount)
+    case 'privateToPrivate':
+      return transferPrivateToPrivate(data.to, data.amount)
     default:
       return from(Promise.reject(String(`Transfer ${data.type} turned off at the moment`)));
   }
@@ -312,13 +313,13 @@ export const transferFunds = (to: string, amount: string): Observable<Transactio
   return apiCheck$().pipe(
     switchMap(() => concat(
       of(transaction(type, 'started')),
-      from(client.transfer(to, String(client.toBaseUnit(amount)))).pipe(map(() => transaction(type, 'pending')), catchError((e) => { throw Error(apiErrorHandler(e.message))})),
+      from(client.transfer(to, String(client.toBaseUnit(amount)))).pipe(map(() => transaction(type, 'pending')), catchError((e) => { throw Error(apiErrorHandler(e.message)) })),
       of(transaction(type, 'success')),
     )),
     catchError((e) => {
       console.error(e)
 
-      return of({...transaction(type, 'pending'), error: e.message})
+      return of({ ...transaction(type, 'pending'), error: e.message })
     })
   )
 }
@@ -328,18 +329,18 @@ export const transferPublicToPublic = (to: string, amount: string): Observable<T
   return apiCheck$().pipe(
     switchMap(() => concat(
       of(transaction(type, 'started')),
-      from(client.transferToken(TOKEN_ADDRESS, to, String(client.toBaseUnit(amount)))).pipe(map(() => transaction(type, 'pending')), catchError((e) => { throw Error(apiErrorHandler(e.message))})),
+      from(client.transferToken(TOKEN_ADDRESS, to, String(client.toBaseUnit(amount)))).pipe(map(() => transaction(type, 'pending')), catchError((e) => { throw Error(apiErrorHandler(e.message)) })),
       of(transaction(type, 'success')),
     )),
     catchError((e) => {
       console.error(e)
 
-      return of({type, status: 'failed', error: e.message} as Transaction)
+      return of({ type, status: 'failed', error: e.message } as Transaction)
     })
   )
 }
 export const transferPublicToPrivate = (to: string, tokens: string): Observable<Transaction> => {
-  const tr: Transaction = transaction('publicToPrivate', 'started')	
+  const tr: Transaction = transaction('publicToPrivate', 'started')
   const tr$ = new Subject<Transaction>()
 
   const sub = apiCheck$().pipe(
@@ -347,16 +348,16 @@ export const transferPublicToPrivate = (to: string, tokens: string): Observable<
     switchMap((amount) => from(approve(amount)).pipe(
       // tap(() => tr$.next(tr)),
       switchMap((address) => from(zpClient.deposit(TOKEN_ADDRESS, amount, (data) => client.sign(data), address, '0', undefined, [{ to, amount }])).pipe(
-        tap((jobId) => tr$.next({...tr, status: 'pending', jobId})),
+        tap((jobId) => tr$.next({ ...tr, status: 'pending', jobId })),
         switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
-          tap(() => tr$.next({...tr, status: 'success', jobId})),
+          tap(() => tr$.next({ ...tr, status: 'success', jobId })),
           tap(() => { tr$.complete(); sub.unsubscribe() }),
         )),
       )),
     )),
     catchError((e) => {
       console.error(e)
-      tr$.next({...tr, status: 'failed', error: e.message})
+      tr$.next({ ...tr, status: 'failed', error: e.message })
       sub.unsubscribe()
 
       return of(false)
@@ -364,28 +365,28 @@ export const transferPublicToPrivate = (to: string, tokens: string): Observable<
   ).pipe(take(1)).subscribe()
 
   return tr$.pipe(
-    tap((tr) => { 
+    tap((tr) => {
       console.log(`---> Transaction status: ${tr.status}`)
     })
   )
 }
 export const transferPrivateToPublic = (to: string, tokens: string): Observable<Transaction> => {
-  const tr: Transaction = transaction('privateToPublic', 'started')	
+  const tr: Transaction = transaction('privateToPublic', 'started')
   const tr$ = new Subject<Transaction>()
 
   const sub = apiCheck$().pipe(
     // tap(() => tr$.next(tr)),
     map(() => client.toBaseUnit(tokens)),
     switchMap((amount) => from(zpClient.withdraw(TOKEN_ADDRESS, to, amount)).pipe(
-      tap((jobId) => tr$.next({...tr, status: 'pending', jobId})),
+      tap((jobId) => tr$.next({ ...tr, status: 'pending', jobId })),
       switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
-        tap(() => tr$.next({...tr, status: 'success', jobId})),
+        tap(() => tr$.next({ ...tr, status: 'success', jobId })),
         tap(() => { tr$.complete(); sub.unsubscribe() }),
       )),
     )),
     catchError((e) => {
       console.error(e)
-      tr$.next({...tr, status: 'failed', error: e.message})
+      tr$.next({ ...tr, status: 'failed', error: e.message })
       sub.unsubscribe()
 
       return of(false)
@@ -393,13 +394,13 @@ export const transferPrivateToPublic = (to: string, tokens: string): Observable<
   ).pipe(take(1)).subscribe()
 
   return tr$.pipe(
-    tap((tr) => { 
+    tap((tr) => {
       console.log(`---> Transaction status: ${tr.status}`)
     })
   )
 }
 export const transferPrivateToPrivate = (to: string, tokens: string): Observable<Transaction> => {
-  const tr: Transaction = transaction('privateToPrivate', 'started')	
+  const tr: Transaction = transaction('privateToPrivate', 'started')
   const tr$ = new Subject<Transaction>()
 
   const sub = apiCheck$().pipe(
@@ -407,17 +408,17 @@ export const transferPrivateToPrivate = (to: string, tokens: string): Observable
     switchMap((amount) => {
       tr$.next(tr) //TODO: NOT WORKING!
 
-      return from(zpClient.transfer(TOKEN_ADDRESS,  [{ to, amount }])).pipe(
-        tap((jobId) => tr$.next({...tr, status: 'pending', jobId})),
+      return from(zpClient.transfer(TOKEN_ADDRESS, [{ to, amount }])).pipe(
+        tap((jobId) => tr$.next({ ...tr, status: 'pending', jobId })),
         switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
-        tap(() => tr$.next({...tr, status: 'success', jobId})),
-        tap(() => { tr$.complete(); sub.unsubscribe() }),
+          tap(() => tr$.next({ ...tr, status: 'success', jobId })),
+          tap(() => { tr$.complete(); sub.unsubscribe() }),
         )),
       )
     }),
     catchError((e) => {
       console.error(e)
-      tr$.next({...tr, status: 'failed', error: e.message})
+      tr$.next({ ...tr, status: 'failed', error: e.message })
       sub.unsubscribe()
 
       return of(false)
@@ -425,7 +426,7 @@ export const transferPrivateToPrivate = (to: string, tokens: string): Observable
   ).pipe(take(1)).subscribe()
 
   return tr$.pipe(
-    tap((tr) => { 
+    tap((tr) => {
       console.log(`---> Transaction status: ${tr.status}`)
     })
   )
@@ -435,7 +436,7 @@ export const addressShielded = (address: string, token: string): boolean => {
   return false
 }
 export const approve = async (amount: string): Promise<string | null> => {
-let fromAddress = null
+  let fromAddress = null
 
   if (isSubstrateBased(NETWORK)) fromAddress = await client.getPublicKey()
   else if (isEvmBased(NETWORK)) {
@@ -451,10 +452,10 @@ let fromAddress = null
 }
 export const getAddress = async (): Promise<string> => {
   let address
-  
+
   if (isEvmBased(NETWORK)) address = await client.getAddress()
   else if (isSubstrateBased(NETWORK)) address = await client.getPublicKey()
-  
+
   return address || Promise.reject(`No address found for withdrawal`)
 }
 

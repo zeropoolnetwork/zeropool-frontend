@@ -1,6 +1,6 @@
 import { RootState as RS } from 'state'
 
-const selectDemoState = (state: RS) => state.demo
+export const selectDemoState = (state: RS) => state.demo
 
 export const selectPublicBalance = (state: RS) => selectDemoState(state).publicBalance
 export const selectPrivateBalance = (state: RS) => selectDemoState(state).privateBalance
@@ -21,8 +21,8 @@ export const selectTransaction = (state: RS) =>
   selectDeposit(state) ||
   selectTransfer(state) ||
   selectMinting(state)
-export const selectCanMint = (state: RS) => 
-  !selectTransaction(state) && 
+export const selectCanMint = (state: RS) =>
+  !selectTransaction(state) &&
   selectPublicBalance(state)
 export const selectCanWithdraw = (state: RS) =>
   !selectTransaction(state) &&
