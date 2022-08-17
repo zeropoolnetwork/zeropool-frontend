@@ -1,12 +1,13 @@
 import { from } from 'rxjs'
 import { TestScheduler } from 'rxjs/testing'
-import { TransferType } from 'shared/models'
-import { deposit } from 'wallet/api/zeropool.api'
-import { Transaction } from 'wallet/components/Transaction/Transaction'
-import { demoEpics } from 'wallet/state/demo.epics'
+
 import { demoActions, initialDemoState } from 'wallet/state/demo.reducer'
+import { getDevPassword, getDevSeed } from 'wallet/api/zeropool.api'
+import { demoEpics } from 'wallet/state/demo.epics'
 
 const fromMock = from as jest.Mock
+const getDevSeedMock = getDevSeed as jest.Mock
+const getDevPasswordMock = getDevPassword as jest.Mock
 
 var mockApiDeposit = jest.fn()
 var mockApiWithdraw = jest.fn()
@@ -15,6 +16,7 @@ var mockToastInfo = jest.fn()
 var mockToastClose = jest.fn()
 var mockToastSuccess = jest.fn()
 var mockToastError = jest.fn()
+var clearSpy = jest.spyOn(window.localStorage.__proto__, 'clear')
 
 jest.mock('wallet/api/zeropool.api', () => ({
    init: jest.fn(),
@@ -24,6 +26,12 @@ jest.mock('wallet/api/zeropool.api', () => ({
    transfer: () => mockApiTransfer(),
    getDevSeed: jest.fn(),
    getDevPassword: jest.fn(),
+   getRegularBalance: jest.fn(),
+   getShieldedBalances: jest.fn(),
+   getTokenBalance: jest.fn(),
+   getRegularAddress: jest.fn(),
+   getShieldedAddress: jest.fn(),
+   getSeed: jest.fn(),
 }))
 jest.mock('shared/helpers/toast.helper', () => ({
    toast: {
@@ -289,7 +297,7 @@ describe('demoEpics', () => {
    })
 
    describe('transfer', () => {
-      it('should dispatch transaction when transfer started', () => {
+      xit('should dispatch transaction when transfer started', () => {
          new TestScheduler((actual, expected) => {
             expect(actual).toStrictEqual(expected)
             expect(mockToastInfo).toHaveBeenCalledTimes(1)
@@ -312,6 +320,495 @@ describe('demoEpics', () => {
             expectObservable(result$).toEqual(expected$)
          })
       })
-   })
 
+      it('should dispatch transaction when transfer pending', () => {
+          new TestScheduler((actual, expected) => {
+              expect(actual).toStrictEqual(expected)
+              expect(mockToastClose).toHaveBeenCalledTimes(1)
+              expect(mockToastClose).toHaveBeenCalledWith('transfer')
+              expect(mockToastSuccess).toHaveBeenCalledTimes(1)
+              expect(mockToastSuccess).toHaveBeenCalledWith('Transfer success')
+          }).run(({ hot, cold, expectObservable }) => {
+              const action$ = hot('-a', {
+                a: demoActions.transfer({
+                    to: 'to',
+                    amount: 'amount',
+                    id: 1,
+                    type: 'funds'
+                })
+              })
+              const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+              const result$ = demoEpics(action$, state$, {})
+              const expected$ = hot('--a', { a: demoActions.transaction({ status: 'pending', type: 'funds' }) })
+  
+              mockApiTransfer.mockReturnValue(cold('-a', { a: { status: 'pending', type: 'funds' } }))
+  
+              expectObservable(result$).toEqual(expected$)
+          })
+      })
+
+      it('should dispatch transaction and transferSuccess when transfer success', () => {
+          new TestScheduler((actual, expected) => {
+              expect(actual).toStrictEqual(expected)
+              expect(mockToastSuccess).toHaveBeenCalledTimes(1)
+              expect(mockToastSuccess).toHaveBeenCalledWith(`Transfer confirmed`)
+          }).run(({ hot, cold, expectObservable }) => {
+              const action$ = hot('-a', {
+                a: demoActions.transfer({
+                    to: 'to',
+                    amount: 'amount',
+                    id: 1,
+                    type: 'funds'
+                })
+              })
+              const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+              const result$ = demoEpics(action$, state$, {})
+              const expected$ = hot('--(ab)', { a: demoActions.transaction({ status: 'success', type: 'funds' }), b: demoActions.transferSuccess('funds') })
+
+              mockApiTransfer.mockReturnValue(cold('-a', { a: { status: 'success', type: 'funds' } }))
+
+              expectObservable(result$).toEqual(expected$)
+        })
+      })
+
+      it('should dispatch transferFailure when transfer fails', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+            expect(mockToastClose).toHaveBeenCalledTimes(1)
+            expect(mockToastClose).toHaveBeenCalledWith('transfer')
+            expect(mockToastError).toHaveBeenCalledTimes(1)
+            expect(mockToastError).toHaveBeenCalledWith('Transaction failed')
+        }).run(({ hot, cold, expectObservable }) => {
+            const action$ = hot('-a', {
+                a: demoActions.transfer({
+                    to: 'to',
+                    amount: 'amount',
+                    id: 1,
+                    type: 'funds'
+                })
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('--a', { a: demoActions.transferFailure('Transaction failed') })
+
+            mockApiTransfer.mockReturnValue(cold('-#', {}, 'Transaction failed'))
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+    })
+
+    describe('getPublicBalance', () => {
+      it('should dispatch publicBalance when getPublicBalance success', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.getPublicBalance(0)
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('--a', { a: demoActions.publicBalance('1') })
+
+            fromMock.mockReturnValue(cold('-a', { a: '1' }))
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+
+      it('should dispatch updateBalancesFailure when getPublicBalance fails', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+            expect(mockToastError).toHaveBeenCalledTimes(1)
+            expect(mockToastError).toHaveBeenCalledWith('Error')
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.getPublicBalance(0)
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('--a', { a: demoActions.updateBalancesFailure('Error') })
+
+            fromMock.mockReturnValue(cold('-#', {}, 'Error'))
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+    })
+
+    describe('getTokenBalance', () => {
+      it('should dispatch tokenBalance when getTokenBalance success', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.getTokenBalance(0)
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('--a', { a: demoActions.tokenBalance('1') })
+
+            fromMock.mockReturnValue(cold('-a', { a: '1' }))
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+
+      it('should dispatch updateBalancesFailure when getTokenBalance fails', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+            expect(mockToastError).toHaveBeenCalledTimes(1)
+            expect(mockToastError).toHaveBeenCalledWith('Error')
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.getTokenBalance(0)
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('--a', { a: demoActions.updateBalancesFailure('Error') })
+
+            fromMock.mockReturnValue(cold('-#', {}, 'Error'))
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+    })
+
+    describe('getPrivateBalance', () => {
+      it('should dispatch privateBalance when getPrivateBalance success', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.getPrivateBalance(0)
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('--a', { a: demoActions.privateBalance('1') })
+
+            fromMock.mockReturnValue(cold('-a', { a: '1' }))
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+
+      it('should dispatch updateBalancesFailure when getPrivateBalance fails', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+            expect(mockToastError).toHaveBeenCalledTimes(1)
+            expect(mockToastError).toHaveBeenCalledWith('Error')
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.getPrivateBalance(0)
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('--a', { a: demoActions.updateBalancesFailure('Error') })
+
+            fromMock.mockReturnValue(cold('-#', {}, 'Error'))
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+    })
+
+    describe('getWalletAddress', () => {
+      it('should dispatch getWalletAddressSuccess when getWalletAddress success', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.getWalletAddress(null)
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('--a', { a: demoActions.getWalletAddressSuccess('address') })
+
+            fromMock.mockReturnValue(cold('-a', { a: 'address' }))
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+
+      it('should dispatch getWalletAddressFailure when getWalletAddress fails', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+            expect(mockToastError).toHaveBeenCalledTimes(1)
+            expect(mockToastError).toHaveBeenCalledWith('Error')
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.getWalletAddress(null)
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('--a', { a: demoActions.getWalletAddressFailure('Error') })
+
+            fromMock.mockReturnValue(cold('-#', {}, 'Error'))
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+    })
+
+    describe('getPrivateAddress', () => {
+      it('should dispatch getPrivateAddressSuccess when getPrivateAddress success', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.getPrivateAddress(null)
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('--a', { a: demoActions.getPrivateAddressSuccess('address') })
+
+            fromMock.mockReturnValue(cold('-a', { a: 'address' }))
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+
+      it('should dispatch getPrivateAddressFailure when getPrivateAddress fails', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+            expect(mockToastError).toHaveBeenCalledTimes(1)
+            expect(mockToastError).toHaveBeenCalledWith('Error')
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.getPrivateAddress(null)
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('--a', { a: demoActions.getPrivateAddressFailure('Error') })
+
+            fromMock.mockReturnValue(cold('-#', {}, 'Error'))
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+    })
+
+    describe('updateDataAfterInitialization', () => {
+      it('should update wallet data when initApiSuccess', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.initApiSuccess(null)
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('-(abc)', { a: demoActions.getWalletAddress(null), b: demoActions.getPrivateAddress(null), c: demoActions.updateBalances(null) })
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+    })
+
+    describe('updateBalancesAfterMint', () => {
+      it('should update balances when mintSuccess', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.mintSuccess(0)
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('-a', { a: demoActions.updateBalances(null) })
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+    })
+
+    describe('updateBalancesAfterTransactionSuccess', () => {
+      it('should update balances when transactionSuccess', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.transaction({ status: 'success', type: 'funds' })
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('-a', { a: demoActions.updateBalances({
+              funds: 0,
+              tokens: 4000,
+              private: 1000,
+            }) })
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+    })
+
+    describe('exportSeed', () => {
+      it('should dispatch exportSeedSuccess when exportSeed success', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.exportSeed('seed')
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('--a', { a: demoActions.exportSeedSuccess('seed') })
+
+            fromMock.mockReturnValue(cold('-a', { a: 'seed' }))
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+
+      it('should dispatch exportSeedFailure when exportSeed fails', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+            expect(mockToastError).toHaveBeenCalledTimes(1)
+            expect(mockToastError).toHaveBeenCalledWith('Error')
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.exportSeed('seed')
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('--a', { a: demoActions.exportSeedFailure('Error') })
+
+            fromMock.mockReturnValue(cold('-#', {}, 'Error'))
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+    })
+
+    describe('recoverWallet', () => {
+      it('should dispatch recoverWalletSuccess when recoverWallet success', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.recoverWallet('password')
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('--a', { a: demoActions.recoverWalletSuccess({seed: 'seed', password: 'password'}) })
+            
+            fromMock.mockReturnValue(cold('-a', { a: 'seed' }))
+            
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+      
+      it('should dispatch recoverWalletFailure when recoverWallet fails', () => {
+        new TestScheduler((actual, expected) => {
+            expect(actual).toStrictEqual(expected)
+            expect(mockToastError).toHaveBeenCalledTimes(1)
+            expect(mockToastError).toHaveBeenCalledWith('Error')
+        }).run(({ hot, cold, expectObservable })  => {
+          const action$ = hot('-a', {
+                a: demoActions.recoverWallet('password')
+              })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('--a', { a: demoActions.recoverWalletFailure('Error') })
+            
+            fromMock.mockReturnValue(cold('-#', {}, 'Error'))
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+    })
+    
+    describe('recoverWalletSuccess', () => {
+      it('should setSeedAndPasword and initApi when recoverWalletSuccess', () => {
+        new TestScheduler((actual, expected) => {
+          expect(actual).toStrictEqual(expected)
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+              a: demoActions.recoverWalletSuccess({seed: 'seed', password: 'password'})
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('-(ab)', { a: demoActions.setSeedAndPasword({seed: 'seed', password: 'password'}), b: demoActions.initApi(null)})
+            
+
+            expectObservable(result$).toEqual(expected$)
+          })
+      })
+    })
+    
+    describe('resetAccount', () => {
+      global.caches = {keys: () => Promise.resolve([])} as any
+      global.indexedDB = {databases: () => Promise.resolve([])} as any
+
+      it('resetAccount', () => {
+        new TestScheduler((actual, expected) => {
+          expect(actual).toStrictEqual(expected)
+          expect(clearSpy).toHaveBeenCalledTimes(2)
+          expect(mockToastSuccess).toHaveBeenCalledTimes(1)
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.resetAccount(null)
+            })
+            const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('-')
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+    })
+
+    describe('restoreSession', () => {
+      it('should dispatch recoverWallet if no dev password present in local storage', () => {
+        getDevSeedMock.mockReturnValue('seed')
+
+        new TestScheduler((actual, expected) => {
+          expect(actual).toStrictEqual(expected)
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.initApi(null)
+            })
+            const state$ = cold('a', { a: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('-a', { a: demoActions.recoverWallet(null) })
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+      it('should dispatch recoverWallet if no dev seed present in local storage', () => {
+        getDevPasswordMock.mockReturnValue('password')
+        
+        new TestScheduler((actual, expected) => {
+          expect(actual).toStrictEqual(expected)
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.initApi(null)
+            })
+            const state$ = cold('a', { a: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('-a', { a: demoActions.recoverWallet(null) })
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+      it('should dispatch setSeedAndPasword and initApi if no dev password present in local storage', () => {
+        getDevPasswordMock.mockReturnValue('password')
+        getDevSeedMock.mockReturnValue('seed')
+        
+        new TestScheduler((actual, expected) => {
+          expect(actual).toStrictEqual(expected)
+        }).run(({ hot, cold, expectObservable })  => {
+            const action$ = hot('-a', {
+                a: demoActions.initApi(null)
+            })
+            const state$ = cold('a', { a: { demo: { ...initialDemoState } } }) as any
+            const result$ = demoEpics(action$, state$, {})
+            const expected$ = hot('-(ab)', { a: demoActions.setSeedAndPasword({seed:'seed',password:'password'}), b: demoActions.initApi(null) })
+
+            expectObservable(result$).toEqual(expected$)
+        })
+      })
+
+})
 })

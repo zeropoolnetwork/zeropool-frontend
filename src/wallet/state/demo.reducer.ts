@@ -78,12 +78,15 @@ export const demoSlice = createSlice({
     },
     updateBalancesFailure: (state, action: PayloadAction<string>) => { },
 
+    getPublicBalance:(state, action: PayloadAction<number>) => {},
     publicBalance: (state, action: PayloadAction<string>) => {
       state.publicBalance = action.payload
     },
+    getPrivateBalance:(state, action: PayloadAction<number>) => {},
     privateBalance: (state, action: PayloadAction<string>) => {
       state.privateBalance = action.payload
     },
+    getTokenBalance:(state, action: PayloadAction<number>) => {},
     tokenBalance: (state, action: PayloadAction<string>) => {
       state.tokenBalance = action.payload
     },

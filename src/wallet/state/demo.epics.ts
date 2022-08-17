@@ -142,7 +142,6 @@ const transfer: Epic = (action$, state$) => {
     )),
     switchMap(({ payload }) => api.transfer(payload).pipe(
       switchMap((transaction: Transaction) => {
-        console.log('epic:', transaction)
         switch (transaction.status) {
           case 'started':
             toast.info(
@@ -159,7 +158,7 @@ const transfer: Epic = (action$, state$) => {
             return of(demoActions.transaction(transaction))
           case 'success':
             // toast.close(transaction.jobId as string)
-            // toast.success(`Transfer confirmed`)
+            toast.success(`Transfer confirmed`)
 
             return of(
               demoActions.transaction(transaction),
@@ -175,16 +174,33 @@ const transfer: Epic = (action$, state$) => {
             )
         }
       }),
+      catchError((errMsg: string) => {
+        toast.close('transfer')
+        toast.error(errMsg)
+
+        return of(demoActions.transferFailure(errMsg || 'Transaction failed'))
+      })
+    )),
+  )
+}
+
+const updateBalances: Epic = (action$, state$) => {
+  return action$.pipe(
+    filter(demoActions.updateBalances.match),
+    switchMap(({payload}) => of(
+      demoActions.getPublicBalance(payload?.funds || 0),
+      demoActions.getPrivateBalance(payload?.private || 0),
+      demoActions.getTokenBalance(payload?.tokens || 0),
     )),
   )
 }
 
 const getPublicBalance = (action$: Action$, state$: State$) => {
   return action$.pipe(
-    filter(demoActions.updateBalances.match),
+    filter(demoActions.getPublicBalance.match),
     switchMap(({ payload }) =>
       of(1).pipe(
-        delay(payload?.funds || 0),
+        delay(payload),
         switchMap(() =>
           from(api.getRegularBalance()).pipe(
             map((balance) => demoActions.publicBalance(balance)),
@@ -201,10 +217,10 @@ const getPublicBalance = (action$: Action$, state$: State$) => {
 }
 const getTokenBalance = (action$: Action$, state$: State$) => {
   return action$.pipe(
-    filter(demoActions.updateBalances.match),
+    filter(demoActions.getTokenBalance.match),
     switchMap(({ payload }) =>
       of(1).pipe(
-        delay(payload?.tokens || 0),
+        delay(payload),
         switchMap(() =>
           from(api.getTokenBalance()).pipe(
             map((balance) => demoActions.tokenBalance(balance)),
@@ -221,10 +237,10 @@ const getTokenBalance = (action$: Action$, state$: State$) => {
 }
 const getPrivateBalance = (action$: Action$, state$: State$) => {
   return action$.pipe(
-    filter(demoActions.updateBalances.match),
+    filter(demoActions.getPrivateBalance.match),
     switchMap(({ payload }) =>
       of(1).pipe(
-        delay(payload?.private || 0),
+        delay(payload),
         switchMap(() =>
           from(api.getShieldedBalances()).pipe(
             map((balance) => demoActions.privateBalance(balance)),
@@ -392,20 +408,22 @@ const restoreSession = (action$: Action$, state$: State$) => {
     filter(([, initials]) => !initials),
     mergeMap(() => {
       let seed, password
-      // first we try to restore session from SessionStorage (for development)
       seed = api.getDevSeed()
       password = api.getDevPassword()
-
-      if (!seed || !password) {
-        // if not found, we run recovery proccess
-        return of(demoActions.recoverWallet(null))
-      } else {
+      if (seed && password) {
         return of(
           demoActions.setSeedAndPasword({ seed, password }),
           demoActions.initApi(null),
         )
+      } else {
+        return of(demoActions.recoverWallet(null))
       }
     }),
+    catchError((errMsg: string) => {
+      toast.error(errMsg)
+
+      return of(demoActions.initApiFailure(errMsg))
+    })
   )
 }
 
@@ -415,6 +433,7 @@ export const demoEpics: Epic = combineEpics(
   deposit,
   withdraw,
   transfer,
+  updateBalances,
   getPublicBalance,
   getPrivateBalance,
   getTokenBalance,
