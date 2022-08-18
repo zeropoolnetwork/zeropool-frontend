@@ -1,5 +1,5 @@
 import { Button, CircularProgress, FormControl, FormControlLabel, FormGroup, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Close, CopyAll } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
 import { cn } from '@bem-react/classname'
@@ -16,7 +16,7 @@ export const componentId = 'Transfer'
 const bem = cn(componentId)
 
 export type TransferProps = {
-  onChange: (type: TransferType, amount: string) => void
+  onEdit: (type: TransferType, amount: string) => void
   onSubmit: (transfer: TransferData) => void
   onCancel: () => void
   processing: boolean
@@ -25,7 +25,7 @@ export type TransferProps = {
 }
 
 export const Transfer: React.FC<TransferProps> = ({
-  onChange,
+  onEdit,
   onSubmit,
   onCancel,
   processing,
@@ -52,6 +52,11 @@ export const Transfer: React.FC<TransferProps> = ({
     type: getType(),
   })
 
+  useEffect(() => {
+    onEdit(getType(), amount)
+    console.log('working')
+  }, [amount, funds, fromPrivate, toPrivate])
+
   return (
     <FormGroup className={bem()} data-testid={bem()}>
       <p className={bem('Name')}>Transfer</p>
@@ -66,7 +71,6 @@ export const Transfer: React.FC<TransferProps> = ({
             setFunds(!checked)
             setFromPrivate(checked)
             setToPrivate(checked)
-            onChange(getType(), amount)
           }}
         />
 
@@ -76,7 +80,7 @@ export const Transfer: React.FC<TransferProps> = ({
           disabled={funds}
           control={<ZPSwitch sx={{ m: 1 }} />}
           label={`from ${fromPrivate ? 'private' : 'public'}`}
-          onChange={(event, checked) => { setFromPrivate(checked); onChange(getType(), amount) }}
+          onChange={(event, checked) => { setFromPrivate(checked) }}
           checked={fromPrivate}
         />
 
@@ -86,7 +90,7 @@ export const Transfer: React.FC<TransferProps> = ({
           disabled={funds}
           control={<ZPSwitch sx={{ m: 1 }} />}
           label={`to ${toPrivate ? 'private' : 'public'}`}
-          onChange={(event, checked) => { setToPrivate(checked); onChange(getType(), amount) }}
+          onChange={(event, checked) => { setToPrivate(checked) }}
           checked={toPrivate}
         />
       </div>
@@ -137,7 +141,7 @@ export const Transfer: React.FC<TransferProps> = ({
           className={bem('Input')}
           value={amount}
           type={'text'}
-          onChange={(event) => { setAmount(event.target.value); onChange(getType(), event.target.value) }}
+          onChange={(event) => { setAmount(event.target.value) }}
           endAdornment={
             <InputAdornment position="end">
               <IconButton

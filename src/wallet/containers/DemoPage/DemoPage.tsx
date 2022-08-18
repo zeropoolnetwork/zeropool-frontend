@@ -284,7 +284,7 @@ export const DemoPage: React.FC<{}> = () => {
             canTransfer={!!canTransfer}
             onSubmit={(data: TransferData) => dispatch(demoActions.transfer(data))}
             onCancel={() => dispatch(demoActions.transferModal(false))}
-            onChange={(type, amount) => { setLowBalance(lowBalanceHelper(type, amount, publicBalance, tokenBalance, privateBalance)) }}
+            onEdit={(type, amount) => { setLowBalance(lowBalanceHelper(type, amount, publicBalance, tokenBalance, privateBalance)) }}
             balanceError={lowBalance}
           />
         </DialogContent>

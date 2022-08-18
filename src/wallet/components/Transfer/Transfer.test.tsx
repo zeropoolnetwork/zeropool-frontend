@@ -7,8 +7,8 @@ import { Transfer, componentId, TransferProps } from './Transfer'
 jest.mock('shared/models')
 jest.mock('shared/components/ZPSwitch/zpswitch')
 jest.mock('shared/utils/copy-from-clipboard')
-jest.mock('notistack', () => ({useSnackbar: jest.fn()}))
-jest.mock('shared/utils/bad-amount', () => ({badAmount: jest.fn()}))
+jest.mock('notistack', () => ({ useSnackbar: jest.fn() }))
+jest.mock('shared/utils/bad-amount', () => ({ badAmount: jest.fn() }))
 
 describe('Transfer', () => {
   let outputSpy: jest.Mock
@@ -16,7 +16,7 @@ describe('Transfer', () => {
   const testName = 'Transfer'
 
   beforeEach(() => {
-    (useSnackbar as jest.Mock).mockImplementation(() => ({enqueueSnackbar: jest.fn()}))
+    (useSnackbar as jest.Mock).mockImplementation(() => ({ enqueueSnackbar: jest.fn() }))
     outputSpy = jest.fn()
     component = (
       <Transfer
@@ -25,7 +25,7 @@ describe('Transfer', () => {
         onSubmit={jest.fn()}
         canTransfer={true}
         balanceError={false}
-        onChange={jest.fn()}
+        onEdit={jest.fn()}
       />
     )
   })

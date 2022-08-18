@@ -1,3 +1,4 @@
+import { ConnectedTvOutlined } from '@mui/icons-material';
 import { TransferType } from 'shared/models';
 
 export const lowBalanceHelper = (
