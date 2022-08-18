@@ -144,10 +144,11 @@ const transfer: Epic = (action$, state$) => {
       switchMap((transaction: Transaction) => {
         switch (transaction.status) {
           case 'started':
-            toast.info(
-              `Processing transfer of ${payload.amount} ${payload.type === 'funds' ? `funds` : `tokens`}...`,
-              { key: 'transfer', persist: true },
-            )
+            // -------- in some cases was duble alet--------------
+            // toast.info(
+            //   `Processing transfer of ${payload.amount} ${payload.type === 'funds' ? `funds` : `tokens`}...`,
+            //   { key: 'transfer', persist: true },
+            // )
 
             return of(demoActions.transaction(transaction))
           case 'pending':
@@ -187,7 +188,7 @@ const transfer: Epic = (action$, state$) => {
 const updateBalances: Epic = (action$, state$) => {
   return action$.pipe(
     filter(demoActions.updateBalances.match),
-    switchMap(({payload}) => of(
+    switchMap(({ payload }) => of(
       demoActions.getPublicBalance(payload?.funds || 0),
       demoActions.getPrivateBalance(payload?.private || 0),
       demoActions.getTokenBalance(payload?.tokens || 0),

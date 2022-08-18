@@ -54,7 +54,6 @@ export const Transfer: React.FC<TransferProps> = ({
 
   useEffect(() => {
     onEdit(getType(), amount)
-    console.log('working')
   }, [amount, funds, fromPrivate, toPrivate])
 
   return (
