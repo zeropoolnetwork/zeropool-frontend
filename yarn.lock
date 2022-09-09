@@ -20477,7 +20477,7 @@ yup@^0.32.11:
 
 "zeropool-client-js@https://github.com/zeropoolnetwork/zeropool-client-js#zkbob-fork":
   version "0.5.2"
-  resolved "https://github.com/zeropoolnetwork/zeropool-client-js#c3b1d37d6bf547a8447c9af4d60cc894b6ee69fd"
+  resolved "https://github.com/zeropoolnetwork/zeropool-client-js#91b67001def3656884cfa64293c21a29d23f186c"
   dependencies:
     comlink "^4.3.1"
     ethereum-block-by-date "^1.4.5"
