@@ -5,7 +5,7 @@ import HDWalletProvider from '@truffle/hdwallet-provider'
 import { catchError, concat, concatMap, from, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs'
 import { EthereumClient, PolkadotClient, Client as NetworkClient } from 'zeropool-support-js'
 
-import { init as initZPClient, ZeropoolClient } from 'zeropool-client-js'
+import { HistoryTransactionType, init as initZPClient, ZeropoolClient } from 'zeropool-client-js'
 import { deriveSpendingKey } from 'zeropool-client-js/lib/utils'
 import { PolkadotNetwork } from 'zeropool-client-js/lib/networks/polkadot'
 import { NetworkType } from 'zeropool-client-js/lib/network-type'
@@ -198,7 +198,33 @@ export const getShieldedAddress = (): Promise<string> => {
 export const getTokenBalance = async (): Promise<string> => {
   try {
     apiCheck()
-    return client.fromBaseUnit(await client.getTokenBalance(TOKEN_ADDRESS))
+
+    const tokenBalance = await client.getTokenBalance(TOKEN_ADDRESS)
+    const history = await zpClient.getAllHistory(TOKEN_ADDRESS)
+    const pending = history.filter((h) => h.pending)
+
+    let pendingDeltaGwei = BigInt(0)
+
+    for (const h of pending) {
+      switch (h.type) {
+        case HistoryTransactionType.Deposit:
+        case HistoryTransactionType.TransferIn: {
+          pendingDeltaGwei += h.amount
+          break;
+        }
+        case HistoryTransactionType.Withdrawal:
+        case HistoryTransactionType.TransferOut: {
+          pendingDeltaGwei -= h.amount + h.fee
+          break;
+        }
+
+        default: break;
+      }
+    }
+
+    const pendingDelta = pendingDeltaGwei / zpClient.getDenominator(TOKEN_ADDRESS)
+
+    return client.fromBaseUnit(tokenBalance + pendingDelta)
   } catch (e: any) {
     console.error(e)
 
@@ -435,11 +461,10 @@ export const transferPrivateToPrivate = (to: string, tokens: string): Observable
 export const addressShielded = (address: string, token: string): boolean => {
   return false
 }
-export const approve = async (amount: string): Promise<string | null> => {
-  let fromAddress = null
+export const approve = async (amount: string): Promise<string> => {
+  let fromAddress = await client.getAddress()
 
-  if (isSubstrateBased(NETWORK)) fromAddress = await client.getPublicKey()
-  else if (isEvmBased(NETWORK)) {
+  if (isEvmBased(NETWORK)) {
     console.log(
       'Approving allowance the Pool (%s) to spend our tokens (%s)',
       CONTRACT_ADDRESS,
