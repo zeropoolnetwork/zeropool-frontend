@@ -20475,7 +20475,7 @@ yup@^0.32.11:
     property-expr "^2.0.4"
     toposort "^2.0.2"
 
-"zeropool-client-js@https://github.com/zeropoolnetwork/zeropool-client-js#zyarn kbob-fork":
+"zeropool-client-js@https://github.com/zeropoolnetwork/zeropool-client-js#zkbob-fork":
   version "0.5.2"
   resolved "https://github.com/zeropoolnetwork/zeropool-client-js#c3b1d37d6bf547a8447c9af4d60cc894b6ee69fd"
   dependencies:
