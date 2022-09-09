@@ -4,6 +4,8 @@ declare module '*.bin' {
 }
 
 declare var REACT_APP_NETWORK: string;
+declare var REACT_APP_NETWORK_NAME: string;
+declare var REACT_APP_NETWORK_FAUCET: string;
 declare var REACT_APP_RPC_URL: string;
 declare var REACT_APP_RELAYER_URL: string;
 declare var REACT_APP_TOKEN_ADDRESS: string;

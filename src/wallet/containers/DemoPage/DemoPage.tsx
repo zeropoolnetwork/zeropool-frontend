@@ -229,7 +229,7 @@ export const DemoPage: React.FC<{}> = () => {
         <span className={bem('InfoText')}>
           Click on your public address and use it on the&nbsp;
           {/* <a href='https://fauceth.komputing.org/?chain=5' target={'_blank'}>Goerli Faucet</a> or&nbsp; */}
-          <a href='https://ethdrop.dev/' target={'_blank'}>Goerli Ethdrop</a> page to get free funds.
+          <a href={process.env.REACT_APP_NETWORK_FAUCET} target={'_blank'}>{process.env.REACT_APP_NETWORK_NAME} Faucet</a> page to get free funds.
         </span>
       </Paper>
 
