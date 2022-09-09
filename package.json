@@ -57,7 +57,7 @@
     "rxjs": "^7.0.0",
     "typescript": "^4.3.5",
     "wallet.ts": "1.0.1",
-    "zeropool-client-js": "https://github.com/zeropoolnetwork/zeropool-client-js#5783ecda558f368055a1ac912ee8879fde2d0241",
+    "zeropool-client-js": "https://github.com/zeropoolnetwork/zeropool-client-js#zkbob-fork",
     "zeropool-support-js": "https://github.com/zeropoolnetwork/zeropool-support-js#4d128f1b0440db3268f38f04c902037ab51ea5ec"
   },
   "devDependencies": {

@@ -220,7 +220,7 @@ export const getShieldedBalances = async (): Promise<string> => {
   try {
     apiCheck()
 
-    return client.fromBaseUnit((await zpClient.getBalances(TOKEN_ADDRESS))[0])
+    return client.fromBaseUnit((await zpClient.getOptimisticTotalBalance(TOKEN_ADDRESS)).toString())
   } catch (e: any) {
     console.error(e)
 
@@ -236,8 +236,8 @@ export const deposit = (tokens: string): Observable<Transaction> => {
     map(() => client.toBaseUnit(tokens)),
     switchMap((amount) => from(approve(amount)).pipe(
       tap(() => tr$.next(tr)),
-      switchMap((address) => from(zpClient.deposit(TOKEN_ADDRESS, amount, (data) => client.sign(data), address, '0', undefined, [])).pipe(
-        tap((jobId) => tr$.next({ ...tr, status: 'pending', jobId })),
+      switchMap((address) => from(zpClient.deposit(TOKEN_ADDRESS, BigInt(amount), (data: any) => client.sign(data), address, BigInt(0))).pipe(
+        tap((jobId: any) => tr$.next({ ...tr, status: 'pending', jobId })),
         switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
           tap(() => tr$.next({ ...tr, status: 'success', jobId })),
           tap(() => { tr$.complete(); sub.unsubscribe() }),
@@ -267,8 +267,8 @@ export const withdraw = (tokens: string): Observable<Transaction> => {
     map(() => client.toBaseUnit(tokens)),
     switchMap((amount) => from(getAddress()).pipe(
       tap(() => tr$.next(tr)),
-      switchMap((address) => from(zpClient.withdraw(TOKEN_ADDRESS, address, amount)).pipe(
-        tap((jobId) => tr$.next({ ...tr, status: 'pending', jobId })),
+      switchMap((address) => from(zpClient.withdraw(TOKEN_ADDRESS, address, BigInt(amount))).pipe(
+        tap((jobId: any) => tr$.next({ ...tr, status: 'pending', jobId })),
         switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
           tap(() => tr$.next({ ...tr, status: 'success', jobId })),
           tap(() => { tr$.complete(); sub.unsubscribe() }),
@@ -347,8 +347,8 @@ export const transferPublicToPrivate = (to: string, tokens: string): Observable<
     map(() => client.toBaseUnit(tokens)),
     switchMap((amount) => from(approve(amount)).pipe(
       // tap(() => tr$.next(tr)),
-      switchMap((address) => from(zpClient.deposit(TOKEN_ADDRESS, amount, (data) => client.sign(data), address, '0', undefined, [{ to, amount }])).pipe(
-        tap((jobId) => tr$.next({ ...tr, status: 'pending', jobId })),
+      switchMap((address) => from(zpClient.deposit(TOKEN_ADDRESS, BigInt(amount), (data: any) => client.sign(data), address, BigInt(0), [{ to, amount }])).pipe(
+        tap((jobId: any) => tr$.next({ ...tr, status: 'pending', jobId })),
         switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
           tap(() => tr$.next({ ...tr, status: 'success', jobId })),
           tap(() => { tr$.complete(); sub.unsubscribe() }),
@@ -377,8 +377,8 @@ export const transferPrivateToPublic = (to: string, tokens: string): Observable<
   const sub = apiCheck$().pipe(
     // tap(() => tr$.next(tr)),
     map(() => client.toBaseUnit(tokens)),
-    switchMap((amount) => from(zpClient.withdraw(TOKEN_ADDRESS, to, amount)).pipe(
-      tap((jobId) => tr$.next({ ...tr, status: 'pending', jobId })),
+    switchMap((amount) => from(zpClient.withdraw(TOKEN_ADDRESS, to, BigInt(amount))).pipe(
+      tap((jobId: any) => tr$.next({ ...tr, status: 'pending', jobId })),
       switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
         tap(() => tr$.next({ ...tr, status: 'success', jobId })),
         tap(() => { tr$.complete(); sub.unsubscribe() }),
@@ -409,7 +409,7 @@ export const transferPrivateToPrivate = (to: string, tokens: string): Observable
       tr$.next(tr) //TODO: NOT WORKING!
 
       return from(zpClient.transfer(TOKEN_ADDRESS, [{ to, amount }])).pipe(
-        tap((jobId) => tr$.next({ ...tr, status: 'pending', jobId })),
+        tap((jobId: any) => tr$.next({ ...tr, status: 'pending', jobId })),
         switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
           tap(() => tr$.next({ ...tr, status: 'success', jobId })),
           tap(() => { tr$.complete(); sub.unsubscribe() }),
