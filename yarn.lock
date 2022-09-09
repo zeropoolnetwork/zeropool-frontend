@@ -13116,15 +13116,15 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-libzeropool-rs-wasm-web-mt@0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web-mt/-/libzeropool-rs-wasm-web-mt-0.6.1.tgz#2e78d4df2afc75cd3b6e189ca8b632ef82ae0c34"
-  integrity sha512-xmejfYD1CFyffDrZtLfL4Btd/5DJSpaqrpaONZyDQ4uOw9IriWfKVe6Fil2lpPleh2A91mNjoHfeAWdpUMSkdQ==
+libzeropool-rs-wasm-web-mt@0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web-mt/-/libzeropool-rs-wasm-web-mt-0.6.2.tgz#dcd9f5ac5af562fa721d143e2b10638db069be7b"
+  integrity sha512-qcycv7n/UHcwjWFypRC254vmHFb9uWtB77BK7j6WhFcmXBgc7BEjy1k3V9vfi5XBgEvxSmCDeIXJTrKtZhQ8rg==
 
-libzeropool-rs-wasm-web@0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web/-/libzeropool-rs-wasm-web-0.6.1.tgz#1dcb18284f8a0fcb0873ee3fdd00fdc490b342dc"
-  integrity sha512-9pFlrJKiPFjPl5X0kqP8tnxp0S22GsLPMS5uUW4Hl+js0JE51zpNEwWSFc0QK5gHde47wlko4btKSRwbNF8XQw==
+libzeropool-rs-wasm-web@0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web/-/libzeropool-rs-wasm-web-0.6.2.tgz#f7037e6b529162e747411ed2efed8b0163a90add"
+  integrity sha512-ZGybZoGmDxlAFMqGl7LDaeqkryN7ywUbq9rrYQagSqjPSqFBmgLkeO0REX0AlY9feEUJUWtvH7yIe4kQs1XfSw==
 
 lilconfig@^2.0.3, lilconfig@^2.0.5:
   version "2.0.6"
@@ -20477,15 +20477,15 @@ yup@^0.32.11:
 
 "zeropool-client-js@https://github.com/zeropoolnetwork/zeropool-client-js#zkbob-fork":
   version "0.5.2"
-  resolved "https://github.com/zeropoolnetwork/zeropool-client-js#91b67001def3656884cfa64293c21a29d23f186c"
+  resolved "https://github.com/zeropoolnetwork/zeropool-client-js#3a37cfedffc176dc2af8b2db27ef1f41278ac7da"
   dependencies:
     comlink "^4.3.1"
     ethereum-block-by-date "^1.4.5"
     ethereumjs-util "^7.1.5"
     hdwallet-babyjub "^0.0.1"
     idb "^7.0.0"
-    libzeropool-rs-wasm-web "0.6.1"
-    libzeropool-rs-wasm-web-mt "0.6.1"
+    libzeropool-rs-wasm-web "0.6.2"
+    libzeropool-rs-wasm-web-mt "0.6.2"
     regenerator-runtime "^0.13.9"
     wasm-feature-detect "^1.2.11"
     web3 "^1.7.0"
