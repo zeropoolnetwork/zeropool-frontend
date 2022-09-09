@@ -205,6 +205,7 @@ export const getTokenBalance = async (): Promise<string> => {
   try {
     apiCheck()
 
+    const address = await client.getAddress()
     const tokenBalance = BigInt(await client.getTokenBalance(TOKEN_ADDRESS))
     const history = await zpClient.getAllHistory(TOKEN_ADDRESS)
     const pending = history.filter((h) => h.pending)
@@ -218,9 +219,14 @@ export const getTokenBalance = async (): Promise<string> => {
           pendingDeltaShielded -= h.amount
           break;
         }
-        case HistoryTransactionType.Withdrawal:
+        case HistoryTransactionType.Withdrawal: {
+          if (h.to.toLowerCase() === address.toLowerCase()) {
+            pendingDeltaShielded += h.amount
+          }
+          break;
+        }
         case HistoryTransactionType.TransferOut: {
-          pendingDeltaShielded += h.amount + h.fee
+          pendingDeltaShielded += h.amount
           break;
         }
 
