@@ -23,6 +23,8 @@ export let zpClient: ZeropoolClient
 export let account: string
 
 export let NETWORK: string
+export let NETWORK_NAME: string
+export let NETWORK_FAUCET: string
 export let CONTRACT_ADDRESS: string
 export let TOKEN_ADDRESS: string
 export let RELAYER_URL: string
@@ -32,6 +34,8 @@ export let TRANSACTION_URL: string
 if (process.env.NODE_ENV === 'development') {
   NETWORK = process.env.REACT_APP_NETWORK as string
   CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS as string
+  NETWORK_NAME = process.env.REACT_APP_NETWORK_NAME as string
+  NETWORK_FAUCET = process.env.REACT_APP_NETWORK_FAUCET as string
   TOKEN_ADDRESS = process.env.REACT_APP_TOKEN_ADDRESS as string
   RELAYER_URL = process.env.REACT_APP_RELAYER_URL as string
   RPC_URL = process.env.REACT_APP_RPC_URL as string
@@ -39,6 +43,8 @@ if (process.env.NODE_ENV === 'development') {
 } else if (process.env.NODE_ENV === 'production') {
   NETWORK = REACT_APP_NETWORK
   CONTRACT_ADDRESS = REACT_APP_CONTRACT_ADDRESS
+  NETWORK_NAME = REACT_APP_NETWORK_NAME
+  NETWORK_FAUCET = REACT_APP_NETWORK_FAUCET
   TOKEN_ADDRESS = REACT_APP_TOKEN_ADDRESS
   RELAYER_URL = REACT_APP_RELAYER_URL
   RPC_URL = REACT_APP_RPC_URL
