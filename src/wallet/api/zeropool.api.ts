@@ -206,7 +206,6 @@ export const getTokenBalance = async (): Promise<string> => {
     let pendingDeltaShielded = BigInt(0)
 
     for (const h of pending) {
-      console.log(h)
       switch (h.type) {
         case HistoryTransactionType.Deposit:
         case HistoryTransactionType.TransferIn: {
