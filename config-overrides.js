@@ -1,6 +1,14 @@
+
 const webpack = require('webpack')
 const CopyPlugin = require('copy-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
+// const WebpackVersionFilePlugin = require('webpack-version-file-plugin')
+// const execa = require('execa')
+
+// const gitHash = execa.sync('git', ['rev-parse', '--short', 'HEAD']).stdout
+// const gitNumCommits = Number(execa.sync('git', ['rev-list', 'HEAD', '--count']).stdout)
+// const gitDirty = execa.sync('git', ['status', '-s', '-uall']).stdout.length > 0
+
 
 module.exports = {
   webpack: function override(config, env) {
@@ -70,6 +78,19 @@ module.exports = {
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('development'),
       }),
+      /*
+      new WebpackVersionFilePlugin({
+        packageFile: path.join(__dirname, 'package.json'),
+        template: path.join(__dirname, 'version.ejs'),
+        outputFile: path.join('build/ts/', 'version.json'),
+        extras: {
+          'githash': gitHash,
+          'gitNumCommits': gitNumCommits,
+          'timestamp': Date.now(),
+          'dirty': gitDirty
+        }
+      }),
+      */
     ])
 
     config.ignoreWarnings = [
