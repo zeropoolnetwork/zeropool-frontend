@@ -71,14 +71,10 @@ module.exports = {
       }),
       new CopyPlugin({
         patterns: [
-          {
-            from: 'src/env.js',
-            to: '[name].[fullhash][ext]',
-            toType: 'template',
-          },
+          { from: 'src/env.js' },
         ],
       }),
-      new CompressionPlugin({ exclude: /env\..*js/ }),
+      new CompressionPlugin({ exclude: 'env.js' }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('development'),
       }),
