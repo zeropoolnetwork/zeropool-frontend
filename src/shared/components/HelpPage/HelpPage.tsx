@@ -15,18 +15,18 @@ export const HelpPage: React.FC<HelpPageProps> = () => {
       <h2> Wallet is in test mode. How to start:</h2>
 
       <p>
-        We use Kovan test network to emulate operations with Ethereum and standard Near's test
+        We use Goerli test network to emulate operations with Ethereum and standard Near's test
         network for the Near. Operations with Waves are not yet implemented.
       </p>
 
       <h3>Ethereum</h3>
 
       <p>
-        To try it out you can install Metamask, select Kovan network, get some free Eth from the
-        <a href="https://gitter.im/kovan-testnet/faucet#" target="_blank" rel="noopener noreferrer">
-          {' '}kovan faucet{' '}
+        To try it out you can install Metamask, select Goerli network, get some free Eth from the
+        <a href="https://gitter.im/goerli-testnet/faucet#" target="_blank" rel="noopener noreferrer">
+          {' '}goerli faucet{' '}
         </a>
-        and send it to one of your Zero Pool <b>Eth</b> Wallet's address.
+        and send it to your Zero Pool <b>Eth</b> Wallet's address.
       </p>
 
       <h3>Near</h3>
