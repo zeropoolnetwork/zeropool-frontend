@@ -71,7 +71,11 @@ module.exports = {
       }),
       new CopyPlugin({
         patterns: [
-          { from: 'src/env.js' },
+          {
+            from: 'src/env.js',
+            to: '[name].[fullhash][ext]',
+            toType: 'template',
+          },
         ],
       }),
       new CompressionPlugin({ exclude: 'env.js' }),

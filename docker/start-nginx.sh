@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 printenv
-original='env.js'
+original=$(find . -name "env*.js")
 tmp=$(mktemp)
 
 echo "Original ${original}"
