@@ -23,6 +23,7 @@ import { Recovery } from 'wallet/components/Recovery/Recovery'
 import { Transfer } from 'wallet/components/Transfer/Transfer'
 import { TransferData } from 'shared/models'
 import { lowBalanceHelper } from 'wallet/state/helpers/low-balance.helper'
+import { NETWORK_FAUCET, NETWORK_NAME } from 'wallet/api/zeropool.api'
 // tslint:enable: prettier max-line-length
 
 export const componentId = 'DemoPage'
@@ -228,8 +229,8 @@ export const DemoPage: React.FC<{}> = () => {
 
         <span className={bem('InfoText')}>
           Click on your public address and use it on the&nbsp;
-          <a href='https://gitter.im/kovan-testnet/faucet#' target={'_blank'}>Kovan Faucet</a> or&nbsp;
-          <a href='https://ethdrop.dev/' target={'_blank'}>Ethdrop</a> page to get free funds.
+          {/* <a href='https://fauceth.komputing.org/?chain=5' target={'_blank'}>Goerli Faucet</a> or&nbsp; */}
+          <a href={NETWORK_FAUCET} target={'_blank'}>{NETWORK_NAME} Faucet</a> page to get free funds.
         </span>
       </Paper>
 

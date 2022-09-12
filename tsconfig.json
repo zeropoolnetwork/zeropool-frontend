@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "baseUrl": "src",
-    "target": "es5",
+    "target": "esnext",
+    "module": "commonjs",
     "lib": [
       "dom",
       "dom.iterable",
@@ -25,7 +26,6 @@
     "strict": true,
     "strictNullChecks": true,
     "isolatedModules": true,
-    "module": "esnext",
     "moduleResolution": "node",
     "suppressImplicitAnyIndexErrors": true,
     "noFallthroughCasesInSwitch": true

@@ -1,8 +1,6 @@
 # Wallet
 
-In actual version (0.22.7-alpha) we only support Kovan test network. Wallet awailable [here](https://kovan.testnet.frontend.v2.zeropool.network/).
-
-If you mast use Firefox (that is not supported RN), try use [development build](https://kovan.testnet.frontend.dev.v2.zeropool.network/).
+In actual version (0.22.8) we only support Goerli test network. Wallet awailable [here](https://goerli.testnet.frontend.v2.zeropool.network/).
 
 <!-- # Important! How to run project:
 
