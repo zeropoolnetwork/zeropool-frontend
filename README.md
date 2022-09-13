@@ -45,10 +45,10 @@ Build the test coverage report.
 
 Runs local server to show test coverage report.
 
-## `yarn build:local`
+<!-- ## `yarn build:local`
 
 Build the app to be tested on localhost.
 Then you can run the app (in VSCode):
 - install LiveServer plugin
 - open build/index.html in the VS Code editor
-- click on Live Server icon in the lower right corner
+- click on Live Server icon in the lower right corner -->
