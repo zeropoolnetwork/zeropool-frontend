@@ -21,7 +21,7 @@ export const SeedTag: React.FC<SeedTagProps> = ({ text, num, hidden, hideNumber,
 
   return (
     <div className={bem({ Placeholder: hidden })} data-testid={bem()} onClick={clickHandler}>
-      {hidden || hideNumber || !num ? null : <div className={bem('Number')}>{num + 1}</div>}
+      {hidden || hideNumber || !Number.isInteger(num) ? null : <div className={bem('Number')}>{num + 1}</div>}
 
       <div className={bem('Text')}>{hidden ? shuffleString(text) : text}</div>
     </div>
