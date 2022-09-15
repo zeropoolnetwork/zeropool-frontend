@@ -18,6 +18,10 @@ import { isEvmBased, isSubstrateBased } from 'wallet/api/networks'
 import { transaction, Transaction, TransactionStatus } from 'shared/models/transaction'
 import { TransferData, TransferType } from 'shared/models'
 import { debug } from 'shared/operators/debug.operator'
+
+const WORKER_ST_PATH = '/workerSt.js'
+const WORKER_MT_PATH = '/workerMt.js'
+
 // #region Initialization
 export let client: NetworkClient
 export let zpClient: ZeropoolClient
@@ -79,7 +83,7 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
 
   try {
     const initialized =
-      await initZPClient(snarkParamsConfig as any)
+      await initZPClient(snarkParamsConfig as any, { workerSt: WORKER_ST_PATH, workerMt: WORKER_MT_PATH })
 
     worker = initialized.worker
     snarkParams = initialized.snarkParams

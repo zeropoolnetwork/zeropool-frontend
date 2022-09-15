@@ -6,7 +6,7 @@
   "scripts": {
     "bdd": "cucumber-js --publish",
     "start": "set \"GENERATE_SOURCEMAP=false\" && react-app-rewired start",
-    "build": "set \"GENERATE_SOURCEMAP=false\" && set \"PUBLIC_URL=/\" && env-cmd -f ./.env.build.docker react-app-rewired build",
+    "build": "set \"PUBLIC_URL=/\" && env-cmd -f ./.env.build.docker react-app-rewired build && webpack --config webpack.worker.conf.js",
     "build:local": "set \"PUBLIC_URL=/build\" && set \"GENERATE_SOURCEMAP=false\" && env-cmd -f ./.env.build.local react-app-rewired build",
     "republish": "set VERSION=0.22.8 && env-cmd ./publish-docker",
     "test:debug": "react-app-rewired test",
@@ -59,8 +59,8 @@
     "typescript": "^4.3.5",
     "wallet.ts": "1.0.1",
     "webpack-version-file-plugin": "^0.4.0",
-    "zeropool-client-js": "https://github.com/zeropoolnetwork/zeropool-client-js#zkbob-fork",
-    "zeropool-support-js": "https://github.com/zeropoolnetwork/zeropool-support-js#4d128f1b0440db3268f38f04c902037ab51ea5ec"
+    "zeropool-client-js": "0.5.5",
+    "zeropool-support-js": "https://github.com/zeropoolnetwork/zeropool-support-js"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^8.2.1",
@@ -116,7 +116,8 @@
     "tslint-react": "^5.0.0",
     "url": "^0.11.0",
     "util": "^0.12.4",
-    "webpack": "^5.74.0"
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
   },
   "eslintConfig": {
     "extends": "react-app",
