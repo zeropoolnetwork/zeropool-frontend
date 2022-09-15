@@ -3,13 +3,14 @@ import Utf8 from 'crypto-js/enc-utf8'
 import bip39 from 'bip39-light'
 import HDWalletProvider from '@truffle/hdwallet-provider'
 import { catchError, concat, concatMap, from, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs'
-import { EthereumClient, PolkadotClient, Client as NetworkClient } from 'zeropool-support-js'
+import { EthereumClient, PolkadotClient, NearClient, Client as NetworkClient } from 'zeropool-support-js'
 
 import { HistoryTransactionType, init as initZPClient, ZeropoolClient } from 'zeropool-client-js'
 import { deriveSpendingKey } from 'zeropool-client-js/lib/utils'
 import { PolkadotNetwork } from 'zeropool-client-js/lib/networks/polkadot'
 import { NetworkType } from 'zeropool-client-js/lib/network-type'
 import { EvmNetwork } from 'zeropool-client-js/lib/networks/evm'
+import { NearNetwork } from 'zeropool-client-js/lib/networks/near'
 
 import { apiErrorHandler } from 'wallet/api/error.handlers'
 import { isEvmBased, isSubstrateBased } from 'wallet/api/networks'
@@ -106,6 +107,12 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
         mnemonic,
         { rpcUrl: RPC_URL, transactionUrl: TRANSACTION_URL },
       )
+    } else if (NETWORK == 'near') {
+      network = new NearNetwork(RELAYER_URL)
+      client = await NearClient.create({
+        networkId: 'default',
+        nodeUrl: RPC_URL,
+      }, CONTRACT_ADDRESS)
     } else {
       throw new Error(`Unknown network ${NETWORK}`)
     }
