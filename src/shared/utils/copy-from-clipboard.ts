@@ -8,6 +8,13 @@ export const copyFromClipboard = (
 
     return
   }
+
+  if (!navigator.clipboard.readText) {
+    fn('Your browser not allowing this operation', { variant: 'error' })
+
+    return
+  }
+
   navigator.clipboard.readText().then(
     (text) => {
         fn(`${name} copied from the clipboard`, { variant: 'success' })
