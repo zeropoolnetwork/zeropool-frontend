@@ -19,8 +19,8 @@ import { transaction, Transaction, TransactionStatus } from 'shared/models/trans
 import { TransferData, TransferType } from 'shared/models'
 import { debug } from 'shared/operators/debug.operator'
 
-const WORKER_ST_PATH = '/workerSt.js'
-const WORKER_MT_PATH = '/workerMt.js'
+const WORKER_ST_PATH = '/workerSt.js?' + process.env.CACHE_BUST
+const WORKER_MT_PATH = '/workerMt.js?' + process.env.CACHE_BUST
 
 // #region Initialization
 export let client: NetworkClient

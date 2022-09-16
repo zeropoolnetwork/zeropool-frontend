@@ -72,11 +72,14 @@ module.exports = {
       new CopyPlugin({
         patterns: [
           { from: 'src/env.js' },
+          { from: '*', context: 'build-workers'}
         ],
       }),
       new CompressionPlugin({ exclude: 'env.js' }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('development'),
+        // Manual cache busting for external assets
+        'process.env.CACHE_BUST': JSON.stringify(new Date().getTime()),
       }),
       /*
       new WebpackVersionFilePlugin({
