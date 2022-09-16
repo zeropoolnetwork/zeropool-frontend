@@ -25,44 +25,24 @@ module.exports = {
       module: false,
       optionalChaining: true,
       templateLiteral: true,
-    },
-
-      config.resolve.fallback = {
-        'fs': false,
-        'net': false,
-        'tls': false,
-        'tty': false,
-        'url': require.resolve('url'),
-        'assert': require.resolve('assert'),
-        'constants': require.resolve('constants-browserify'),
-        'crypto': require.resolve('crypto-browserify'),
-        'http': require.resolve('stream-http'),
-        'https': require.resolve('https-browserify'),
-        'os': require.resolve('os-browserify/browser'),
-        'path': require.resolve('path-browserify'),
-        'stream': require.resolve('stream-browserify'),
-        'zlib': require.resolve('browserify-zlib'),
-      }
-
-    config.resolve.alias = {
-      process: 'process/browser',
-      stream: 'stream-browserify',
     }
 
-    config.module.rules = [
-      ...config.module.rules,
-      {
-        test: /\.js$/,
-        enforce: 'pre',
-        use: ['source-map-loader'],
-      }, {
-        test: /\.wasm$/,
-        type: 'asset/resource',
-      }, {
-        test: /\.bin$/,
-        type: 'asset/resource',
-      }
-    ]
+    config.resolve.fallback = {
+      'fs': false,
+      'net': false,
+      'tls': false,
+      'tty': false,
+      'url': require.resolve('url'),
+      'assert': require.resolve('assert'),
+      'constants': require.resolve('constants-browserify'),
+      'crypto': require.resolve('crypto-browserify'),
+      'http': require.resolve('stream-http'),
+      'https': require.resolve('https-browserify'),
+      'os': require.resolve('os-browserify/browser'),
+      'path': require.resolve('path-browserify'),
+      'stream': require.resolve('stream-browserify'),
+      'zlib': require.resolve('browserify-zlib'),
+    }
 
     config.plugins = (config.plugins || []).concat([
       new webpack.ProvidePlugin({

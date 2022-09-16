@@ -5,7 +5,7 @@
   "private": false,
   "scripts": {
     "bdd": "cucumber-js --publish",
-    "start": "set \"GENERATE_SOURCEMAP=false\" && webpack --config webpack.worker.conf.js && react-app-rewired start",
+    "start": "webpack --config webpack.worker.conf.js && react-app-rewired start",
     "build": "set \"PUBLIC_URL=/\" && webpack --config webpack.worker.conf.js && env-cmd -f ./.env.build.docker react-app-rewired build",
     "republish": "set VERSION=0.22.8 && env-cmd ./publish-docker",
     "republish:dev": "set VERSION=DEV && env-cmd ./publish-docker",

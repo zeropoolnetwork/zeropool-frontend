@@ -14,15 +14,7 @@ module.exports = {
   },
   target: 'webworker',
   mode: 'production',
-  module: {
-    rules: [
-      {
-        test: /\.(ts)$/,
-        use: 'ts-loader',
-      }
-    ],
-  },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.js'],
   },
 };
