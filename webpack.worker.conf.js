@@ -7,9 +7,9 @@ module.exports = {
     workerMt: './node_modules/zeropool-client-js/lib/workerMt.js',
   },
   output: {
-    path: path.join(process.cwd(), 'build'),
+    path: path.join(process.cwd(), 'build-workers'),
     filename: '[name].js',
-    assetModuleFilename: '[name][ext]',
+    assetModuleFilename: '[name][hash][ext]',
     publicPath: './',
   },
   target: 'webworker',
