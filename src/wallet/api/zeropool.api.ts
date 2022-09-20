@@ -368,7 +368,7 @@ export const transferFunds = (to: string, amount: string): Observable<Transactio
     catchError((e) => {
       console.error(e)
 
-      return of({ ...transaction(type, 'pending'), error: e.message })
+      return of({ type, status: 'failed', error: e.message } as Transaction)
     })
   )
 }

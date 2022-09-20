@@ -19,6 +19,10 @@ export const apiErrorHandler = (message?: string): string => {
       result = 'Insufficient funds to complete the translation. Please, top up your public balace'
     } else if (message.includes('Insufficient balance')) {
       result = 'Insufficient balance to complete the translation. Please, top up your private balance'
+    } else if (message.includes('Provided address')) {
+      result = 'Invalid address, please check the address and try again'
+    } else if (message.includes('invalid address')) {
+      result = 'Invalid address, expected public address'
     } else { result = message }
   } else if (message === '') {
     result = 'Empty error message'
