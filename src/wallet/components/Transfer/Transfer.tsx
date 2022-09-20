@@ -63,6 +63,7 @@ export const Transfer: React.FC<TransferProps> = ({
       <div className={bem('Switches')}>
         <FormControlLabel
           className={bem('Switch')}
+          disabled={processing}
           labelPlacement="top"
           control={<ZPSwitch sx={{ m: 1 }} defaultChecked={true} />}
           label={`${funds ? 'funds' : 'tokens'}`}
@@ -76,7 +77,7 @@ export const Transfer: React.FC<TransferProps> = ({
         <FormControlLabel
           className={bem('Switch')}
           labelPlacement="top"
-          disabled={funds}
+          disabled={funds || processing}
           control={<ZPSwitch sx={{ m: 1 }} />}
           label={`from ${fromPrivate ? 'private' : 'public'}`}
           onChange={(event, checked) => { setFromPrivate(checked) }}
@@ -86,7 +87,7 @@ export const Transfer: React.FC<TransferProps> = ({
         <FormControlLabel
           className={bem('Switch')}
           labelPlacement="top"
-          disabled={funds}
+          disabled={funds || processing}
           control={<ZPSwitch sx={{ m: 1 }} />}
           label={`to ${toPrivate ? 'private' : 'public'}`}
           onChange={(event, checked) => { setToPrivate(checked) }}
