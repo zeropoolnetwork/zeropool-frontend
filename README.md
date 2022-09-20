@@ -1,6 +1,6 @@
 # Wallet
 
-In actual version (0.22.8) we only support Goerli test network. Wallet awailable [here](https://goerli.testnet.frontend.v2.zeropool.network/).
+In actual version (0.22.9) we only support Goerli test network. Wallet awailable [here](https://goerli.testnet.frontend.v2.zeropool.network/).
 
 <!-- # Important! How to run project:
 
