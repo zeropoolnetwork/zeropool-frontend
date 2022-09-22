@@ -428,6 +428,29 @@ const restoreSession = (action$: Action$, state$: State$) => {
   )
 }
 
+const callGetTransactionsOnTransactionsModalOpen = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.transactionsModal.match),
+    map(() => demoActions.getTransactions(null)),
+  )
+}
+
+const getTransactions = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.getTransactions.match),
+    switchMap(() =>
+      api.getTransactions().pipe(
+        map((transactions) => demoActions.getTransactionsSuccess(transactions)),
+      ),
+    ),
+    catchError((errMsg: string) => {
+      toast.error(errMsg)
+
+      return of(demoActions.getTransactionsFailure(errMsg))
+    }),
+  )
+}
+
 export const demoEpics: Epic = combineEpics(
   initApi,
   mint,
@@ -450,5 +473,7 @@ export const demoEpics: Epic = combineEpics(
   exportSeedSuccess,
   recowerWallet,
   recoverWalletSuccess,
+  callGetTransactionsOnTransactionsModalOpen,
+  getTransactions,
   // updateBalancesAfterTransfer,
 )

@@ -18,6 +18,7 @@ import { isEvmBased, isSubstrateBased } from 'wallet/api/networks'
 import { transaction, Transaction, TransactionStatus } from 'shared/models/transaction'
 import { TransferData, TransferType } from 'shared/models'
 import { debug } from 'shared/operators/debug.operator'
+import { transactionsMock } from 'mocks/transactions.mock'
 
 const WORKER_ST_PATH = '/workerSt.js?' + process.env.CACHE_BUST
 const WORKER_MT_PATH = '/workerMt.js?' + process.env.CACHE_BUST
@@ -506,6 +507,14 @@ export const getAddress = async (): Promise<string> => {
 
   return address || Promise.reject(`No address found for withdrawal`)
 }
+export const getTransactions = (): Observable<Transaction[]> => {
+  let transactions: Transaction[] = []
+
+  for (let i = 0; i < 30; i++) {
+    transactions.push(transactionsMock[0])
+  }
+  return of(transactions)
+}
 
 /*
 const _getWalletBalance = (token: Token, walletId: string) => {
@@ -638,4 +647,5 @@ const apiCheck = (): boolean => {
 
   return true
 }
+
 const apiCheck$ = (): Observable<boolean> => of(apiCheck())

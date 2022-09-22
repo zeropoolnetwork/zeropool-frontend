@@ -33,7 +33,7 @@ describe('Transaction', () => {
 
   beforeEach(() => {
     outputSpy = jest.fn()
-    component = <Transaction transaction={tr1} wallet={wallet as any} />
+    component = <Transaction transaction={tr1} address={wallet.address as any} />
   })
 
   it('should render component', () => {

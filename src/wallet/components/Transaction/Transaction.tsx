@@ -6,8 +6,6 @@ import { CallReceived } from '@mui/icons-material'
 
 import './Transaction.scss'
 
-import { Wallet } from 'wallet/state/models'
-
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { beautifyAddress, beautifyAmount } from 'shared/helpers/addres.helper'
 
@@ -18,13 +16,13 @@ const test = testIdBuilder(componentId)
 
 export type TransactionProps = {
   transaction: any
-  wallet: Wallet
+  address: string
 }
 
-export const Transaction: React.FC<TransactionProps> = ({ transaction, wallet }) => {
+export const Transaction: React.FC<TransactionProps> = ({ transaction, address }) => {
   let isIncoming: boolean
 
-  if (wallet.address.toLowerCase() === transaction.to.toLocaleLowerCase()) {
+  if (address.toLowerCase() === transaction.to.toLocaleLowerCase()) {
     isIncoming = true
   } else {
     isIncoming = false
@@ -54,7 +52,7 @@ export const Transaction: React.FC<TransactionProps> = ({ transaction, wallet })
         {' '}
         <Tooltip title={transaction.amount} placement="bottom">
           <span>
-            {isIncoming ? '+' : '-'} {beautifyAmount(transaction.amount)} {wallet.token.symbol}
+            {isIncoming ? '+' : '-'} {beautifyAmount(transaction.amount)}
           </span>
         </Tooltip>
       </span>
