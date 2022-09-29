@@ -1,0 +1,16 @@
+@import "../../../styles/styles.scss";
+
+.TransactionType {
+   width: 55px !important;
+   text-align: center;
+   background-color: $grey-light;
+   color: $blue-ink;
+   font-size: 11px;
+   border-radius: 5px;
+   padding: 0px 2px 2px 2px;
+   margin: 0 5px;
+   
+   &_Private {
+      background-color: $blue-light;
+   }
+}

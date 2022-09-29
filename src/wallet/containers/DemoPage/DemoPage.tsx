@@ -307,6 +307,12 @@ export const DemoPage: React.FC<{}> = () => {
       </Dialog>
 
       <Dialog
+        PaperProps={{
+          style: {
+            width: '550px',
+            margin: '10% 2%',
+          },
+        }}
         open={transactionsModal}
       >
         <DialogContent>

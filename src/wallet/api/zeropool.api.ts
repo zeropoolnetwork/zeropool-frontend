@@ -511,7 +511,7 @@ export const getTransactions = (): Observable<Transaction[]> => {
   let transactions: Transaction[] = []
 
   for (let i = 0; i < 30; i++) {
-    transactions.push(transactionsMock[0])
+    transactions.push(transactionsMock[i % 2 === 0 ? 0 : 1])
   }
   return of(transactions)
 }

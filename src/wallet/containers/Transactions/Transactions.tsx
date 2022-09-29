@@ -12,6 +12,7 @@ import { SortedTransactions } from 'wallet/state/models/sorted-transactions'
 import transactionHelper from 'wallet/state/helpers/transaction.helper'
 import { Transaction as TransactionRow } from 'wallet/components/Transaction/Transaction'
 import { Transaction } from 'shared/models/transaction'
+import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
 
 export const componentId = 'Transactions'
 
@@ -59,27 +60,29 @@ export const Transactions: React.FC<TransactionsProps> = ({ transactions, addres
 
   return (
     <div className={bem()} data-testid={test()}>
-      {transactions ? (
-        sorted.map((day, i) => (
-          <div className={bem('Day')} key={i}>
-            <div className={bem('Date')}>
-              <span className={bem('Arrow', { Down: opened[i] })} onClick={() => openHandler(i)}>
-                {'>'}
-              </span>
+      <div className={bem('Days')}>
+        {transactions ? (
+          sorted.map((day, i) => (
+            <div className={bem('Day')} key={i}>
+              <div className={bem('Date')}>
+                <span className={bem('Arrow', { Down: opened[i] })} onClick={() => openHandler(i)}>
+                  {'>'}
+                </span>
 
-              {' ' + day.date}
-            </div>
-
-            {day.transactions.map((transaction, j) => (
-              <div className={bem('TransactionRow', { Open: opened[i] })} key={j}>
-                <TransactionRow transaction={transaction} key={j} address={address} />
+                {' ' + day.date}
               </div>
-            ))}
-          </div>
-        ))
-      ) : (
-        <CircularProgress />
-      )}
+
+              {day.transactions.map((transaction, j) => (
+                <div className={bem('TransactionRow', { Open: opened[i] })} key={j}>
+                  <TransactionRow transaction={transaction} key={j} address={address} />
+                </div>
+              ))}
+            </div>
+          ))
+        ) : (
+          <CircularProgress sx={{ margin: "auto" }} />
+        )}
+      </div>
 
       <div className={bem('Close')}>
         <Button

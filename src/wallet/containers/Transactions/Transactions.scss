@@ -7,13 +7,29 @@
   color: $grey-primary;
   //font-size: ;
   padding-bottom: 4px;
+  height: 85vh;
 
+  @media (max-width: 500px) {
+    min-width: 250px;
+  }
   &-Date {
-    font-size: 14px;
+    font-size: 20px;
+
+    @media (max-width: 500px) {
+      font-size: 18px;
+   }
+  }
+  
+  &-Days {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: scroll;
   }
 
   &-Day {
     padding-bottom: 6px;
+    margin: 0 7px;
   }
 
   &-Arrow {
@@ -24,9 +40,12 @@
     user-select: none;
     position: relative;
     top: -1px;
+    color: $button-border-color;
 
+ 
     &_Down {
       transform: rotate(0.25turn);
+      color: $button-border-color;
     }
   }
 
@@ -45,5 +64,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    flex: 0 0;
+    margin:15px 0 0 0;
   }
 }

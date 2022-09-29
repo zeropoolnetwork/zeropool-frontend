@@ -8,9 +8,17 @@
   font-size: 20px;
   margin-left: 10px;
   max-width: 600px;
+  margin-left: 5px;
+
+  @media (max-width: 522px) {
+    font-size: 12px;
+ }
   
   &-Direction {
     padding: 0 4px;
+    @media (max-width: 522px) {
+      font-size: 15px;
+   }
   }
 
   &-Icon {
@@ -26,5 +34,9 @@
     flex-grow: 1;
     padding: 0 4px;
     text-align: end;
+
+    @media (max-width: 522px) {
+      font-size: 12px;
+   }
   }
 }
