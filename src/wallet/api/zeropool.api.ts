@@ -2,7 +2,20 @@ import AES from 'crypto-js/aes'
 import Utf8 from 'crypto-js/enc-utf8'
 import bip39 from 'bip39-light'
 import HDWalletProvider from '@truffle/hdwallet-provider'
-import { catchError, concat, concatMap, from, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs'
+import {
+  catchError,
+  concat,
+  concatMap,
+  from,
+  map,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+  take,
+  tap,
+  withLatestFrom
+} from 'rxjs'
 import { EthereumClient, PolkadotClient, NearClient, Client as NetworkClient } from 'zeropool-support-js'
 
 import { HistoryTransactionType, init as initZPClient, ZeropoolClient } from 'zeropool-client-js'
@@ -285,7 +298,8 @@ export const deposit = (tokens: string): Observable<Transaction> => {
     map(() => client.toBaseUnit(tokens)),
     switchMap((amount) => from(approve(amount)).pipe(
       tap(() => tr$.next(tr)),
-      switchMap((address) => from(zpClient.deposit(TOKEN_ADDRESS, BigInt(amount), (data: any) => client.sign(data), address, BigInt(0))).pipe(
+      withLatestFrom(from(client.getAddress())),
+      switchMap(([depositId, address]) => from(zpClient.deposit(TOKEN_ADDRESS, BigInt(amount), (data: any) => client.sign(data), address, BigInt(0), [], false, depositId)).pipe(
         tap((jobId: any) => tr$.next({ ...tr, status: 'pending', jobId })),
         switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
           tap(() => tr$.next({ ...tr, status: 'success', jobId })),
@@ -396,7 +410,8 @@ export const transferPublicToPrivate = (to: string, tokens: string): Observable<
     map(() => client.toBaseUnit(tokens)),
     switchMap((amount) => from(approve(amount)).pipe(
       // tap(() => tr$.next(tr)),
-      switchMap((address) => from(zpClient.deposit(TOKEN_ADDRESS, BigInt(amount), (data: any) => client.sign(data), address, BigInt(0), [{ to, amount }])).pipe(
+      withLatestFrom(from(client.getAddress())),
+      switchMap(([depositId, address]) => from(zpClient.deposit(TOKEN_ADDRESS, BigInt(amount), (data: any) => client.sign(data), address, BigInt(0), [{ to, amount }], false, depositId)).pipe(
         tap((jobId: any) => tr$.next({ ...tr, status: 'pending', jobId })),
         switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
           tap(() => tr$.next({ ...tr, status: 'success', jobId })),
@@ -484,20 +499,17 @@ export const transferPrivateToPrivate = (to: string, tokens: string): Observable
 export const addressShielded = (address: string, token: string): boolean => {
   return false
 }
-export const approve = async (amount: string): Promise<string> => {
-  let fromAddress = await client.getAddress()
 
-  if (isEvmBased(NETWORK)) {
-    console.log(
-      'Approving allowance the Pool (%s) to spend our tokens (%s)',
-      CONTRACT_ADDRESS,
-      amount,
-    )
-    await client.approve(TOKEN_ADDRESS, CONTRACT_ADDRESS, amount)
-  }
+export const approve = async (amount: string): Promise<number | null> => {
+  console.log(
+    'Approving allowance the Pool (%s) to spend our tokens (%s)',
+    CONTRACT_ADDRESS,
+    amount,
+  )
 
-  return fromAddress
+  return await client.approve(TOKEN_ADDRESS, CONTRACT_ADDRESS, amount)
 }
+
 export const getAddress = async (): Promise<string> => {
   let address
 
