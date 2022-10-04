@@ -20571,10 +20571,10 @@ yup@^0.32.11:
     property-expr "^2.0.4"
     toposort "^2.0.2"
 
-zeropool-client-js@0.5.8:
-  version "0.5.8"
-  resolved "https://registry.yarnpkg.com/zeropool-client-js/-/zeropool-client-js-0.5.8.tgz#23b7b7c62aa8884a60328a831b86d156c6da8a18"
-  integrity sha512-kADiWb/lcbG7DkxcvGucivU9V6D3Uy7IpGWZ0T/d1yaNZqu7EuURkXRxkp/eoM8GC3OPq2LScjaiin4Bcp1HxA==
+zeropool-client-js@0.5.9:
+  version "0.5.9"
+  resolved "https://registry.yarnpkg.com/zeropool-client-js/-/zeropool-client-js-0.5.9.tgz#5184cbfde7c9958ea8f9ae40737df89b6e211f61"
+  integrity sha512-nx/XW3H0grLcjvxv9xNo2oR293efDMmHQjx1T2YvGb9HW8VAtJBg02Fq28iJIVk2WIasD4TTxOQLMFoSU4FK5A==
   dependencies:
     borsh "^0.7.0"
     comlink "^4.3.1"
@@ -20591,10 +20591,10 @@ zeropool-client-js@0.5.8:
     web3 "^1.7.0"
     web3-utils "^1.7.0"
 
-zeropool-support-js@0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/zeropool-support-js/-/zeropool-support-js-0.5.0.tgz#eb1b2982816e9d243747aac9d2f3944f35b57794"
-  integrity sha512-mxeZXvBRbRh1Ivms+WdylYAl6T8F06BaP6AQ0yKWOyLwm5yU+QcUa10Ka3I+8yY3Y3grEdiaQSVh8Y986k8GuQ==
+zeropool-support-js@0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/zeropool-support-js/-/zeropool-support-js-0.5.3.tgz#a835fee0460b122f8241c8ab8bf731889d830a3f"
+  integrity sha512-QRVXwxzVR1PQKpKrvk7+X1aTDfN4+VpwmNK8SWB37/FAut2uH0gl29D7m14p41hldzymdtKk5SElTws+sqDd5w==
   dependencies:
     "@ethereumjs/tx" "^3.2.1"
     "@polkadot/api" "^7.11.1"
