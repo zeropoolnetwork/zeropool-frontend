@@ -75,7 +75,7 @@ export const accountPresent = (): boolean => {
   return !!localStorage.getItem(`zp.${account}.seed`)
 }
 
-export const init = async (mnemonic: string, password: string): Promise<void> => {
+export const init = async (mnemonic: string, password: string, accountId: string | null): Promise<void> => {
   console.log('------------------------------------------------------')
   console.log('NETWORK: ', NETWORK)
   console.log('CONTRACT_ADDRESS: ', CONTRACT_ADDRESS)
@@ -125,11 +125,20 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
         { rpcUrl: RPC_URL, transactionUrl: TRANSACTION_URL },
       )
     } else if (NETWORK == 'near') {
+      if (!accountId) {
+        throw new Error('Account id is required for Near network')
+      }
+
+      localStorage.setItem('zp.production.accountId', accountId)
+      sessionStorage.setItem('zp.development.password', accountId)
+
       network = new NearNetwork(RELAYER_URL)
       client = await NearClient.create({
-        networkId: 'default',
+        networkId: 'testnet', // TODO: Make it configurable
         nodeUrl: RPC_URL,
-      }, CONTRACT_ADDRESS)
+        walletUrl: "https://wallet.testnet.near.org",
+        helperUrl: "https://helper.testnet.near.org",
+      }, CONTRACT_ADDRESS, accountId, mnemonic)
     } else {
       throw new Error(`Unknown network ${NETWORK}`)
     }
@@ -184,6 +193,12 @@ export const getDevSeed = (): string => {
 }
 export const getDevPassword = (): string => {
   return sessionStorage.getItem('zp.development.password') as string
+}
+export const getDevAccountId= (): string => {
+  return sessionStorage.getItem('zp.development.accountId') as string
+}
+export const getAccountId= (): string => {
+  return localStorage.getItem('zp.production.accountId') as string
 }
 export const getSeed = (password: string): Promise<string> => {
   let seed
@@ -299,7 +314,7 @@ export const deposit = (tokens: string): Observable<Transaction> => {
     switchMap((amount) => from(approve(amount)).pipe(
       tap(() => tr$.next(tr)),
       withLatestFrom(from(client.getAddress())),
-      switchMap(([depositId, address]) => from(zpClient.deposit(TOKEN_ADDRESS, BigInt(amount), (data: any) => client.sign(data), address, BigInt(0), [], false, depositId)).pipe(
+      switchMap(([depositId, address]) => from(zpClient.deposit(TOKEN_ADDRESS, BigInt(amount), (data: any) => client.sign(data), address, BigInt(0), [], depositId)).pipe(
         tap((jobId: any) => tr$.next({ ...tr, status: 'pending', jobId })),
         switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
           tap(() => tr$.next({ ...tr, status: 'success', jobId })),
@@ -411,7 +426,7 @@ export const transferPublicToPrivate = (to: string, tokens: string): Observable<
     switchMap((amount) => from(approve(amount)).pipe(
       // tap(() => tr$.next(tr)),
       withLatestFrom(from(client.getAddress())),
-      switchMap(([depositId, address]) => from(zpClient.deposit(TOKEN_ADDRESS, BigInt(amount), (data: any) => client.sign(data), address, BigInt(0), [{ to, amount }], false, depositId)).pipe(
+      switchMap(([depositId, address]) => from(zpClient.deposit(TOKEN_ADDRESS, BigInt(amount), (data: any) => client.sign(data), address, BigInt(0), [{ to, amount }], depositId)).pipe(
         tap((jobId: any) => tr$.next({ ...tr, status: 'pending', jobId })),
         switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
           tap(() => tr$.next({ ...tr, status: 'success', jobId })),

@@ -303,7 +303,7 @@ describe('Register reducer', () => {
 
       const newState = registerSlice.reducer(
         oldState,
-        rsa.import({ seed: [''], password: '' }),
+        rsa.import({ seed: [''], password: '', accountId: '' }),
       )
 
       expect(newState.stage).toBe(undefined)
@@ -317,7 +317,7 @@ describe('Register reducer', () => {
 
       const newState = registerSlice.reducer(
         oldState,
-        rsa.import({ seed: [''], password: '' }),
+        rsa.import({ seed: [''], password: '', accountId: '' }),
       )
 
       expect(newState.showSteps).toBe(false)

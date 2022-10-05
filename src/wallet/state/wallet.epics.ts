@@ -9,7 +9,16 @@ import { Token } from 'shared/models'
 import { getPayload } from 'shared/operators/get-payload.operator'
 import { handleEpicError } from 'shared/operators/handle-epic-error.operator'
 
-import { getActiveView, getActiveWallet, getPollSettings, selectSeed, getSendData, getSupportedTokens, getWallets } from 'wallet/state/wallet.selectors'
+import {
+  getActiveView,
+  getActiveWallet,
+  getPollSettings,
+  selectSeed,
+  getSendData,
+  getSupportedTokens,
+  getWallets,
+  selectAccountId
+} from 'wallet/state/wallet.selectors'
 import { SendData, Wallet, WalletRecord, WalletView } from 'wallet/state/models'
 import { walletActions as actions } from 'wallet/state/wallet.actions'
 import { mapRatesToTokens } from 'wallet/state/helpers/map-rates-to-tokens'
@@ -62,10 +71,11 @@ const initApi$: Epic = (
     filter(actions.openBalanceView.match),
     withLatestFrom(
       state$.pipe(map(selectSeed)),
+      state$.pipe(map(selectAccountId)),
       state$.pipe(map(getWallets)),
       // state$.pipe(map(getSupportedTokens)),
     ),
-    switchMap(([, _seed, wallets]) =>
+    switchMap(([, _seed, accountId, wallets]) =>
       iif(
         () => !!_seed,
         of(_seed).pipe(
@@ -75,7 +85,7 @@ const initApi$: Epic = (
               api.init(
                 seed,
                 '123455678',
-                // tokens.map((item) => item.name as CoinType),
+                accountId,
               ),
             ).pipe(
               map(() => (!wallets ? actions.initWallets() : actions.updateBalances())),

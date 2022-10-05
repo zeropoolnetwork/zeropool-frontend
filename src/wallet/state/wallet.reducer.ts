@@ -25,6 +25,7 @@ export type WalletState = {
   amounts: Record<TokenSymbol, number> | null
   pollSettings: PollSettings
   seed: string | null
+  accountId: string | null
   send: SendData | null
   supportedTokens: Token[]
   supportedTokensRecord: Record<TokenSymbol, Token>
@@ -45,6 +46,7 @@ export const initialWalletState: WalletState = {
   amounts: null,
   pollSettings: pollSettingsDefault,
   seed: null,
+  accountId: null,
   send: null,
   supportedTokens: supportedTokens.supported,
   supportedTokensRecord: recordFromArray(supportedTokens.supported, 'symbol'),
@@ -112,6 +114,10 @@ export const walletReducer = createReducer(initialWalletState, (builder) =>
     .addCase(actions.setSeed, (state, { payload }) => ({
       ...state,
       seed: payload,
+    }))
+    .addCase(actions.setAccountId, (state, { payload }) => ({
+      ...state,
+      accountId: payload,
     }))
     .addCase(actions.updateWalletsSuccess, (state, { payload }) => ({
       ...state,
