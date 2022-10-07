@@ -2,14 +2,14 @@ import { TransferType } from 'shared/models'
 
 export type TransactionType = TransferType | 'deposit' | 'withdraw' | 'mint'
 export type TransactionStatus =
-  'started' | 
-  'pending' | 
-  'success' | 
+  'started' |
+  'pending' |
+  'success' |
   'failed'
 
 export type Transaction = {
   status: TransactionStatus,
-  type: TransferType | 'deposit' | 'withdraw' | 'mint',
+  type: TransactionType,
   amount?: string,
   blockHash?: string,
   error?: string,
@@ -19,7 +19,7 @@ export type Transaction = {
   timestamp?: number,
 }
 
-export const transaction = (type: TransactionType , status: TransactionStatus, error?: string): Transaction => ({
+export const transaction = (type: TransactionType, status: TransactionStatus, error?: string): Transaction => ({
   error,
   status,
   type,

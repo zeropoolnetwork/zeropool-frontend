@@ -43,3 +43,58 @@ describe('Sort transactions by days', () => {
     )
   })
 })
+
+describe('Convert transaction to Transaction type', () => {
+  const record: any = {
+    pending: false,
+    amount: 1000000000n,
+    fee: 0n,
+    txHash: '0x123',
+    from: '0x123',
+    to: '0x123',
+    timestamp: 1664897388,
+    type: 4,
+  }
+
+  const result: Transaction = {
+    status: 'success',
+    type: 'privateToPublic',
+    amount: '1',
+    blockHash: '0x123',
+    from: '0x123',
+    to: '0x123',
+    timestamp: 1664897388000,
+  }
+
+  const fromBaseUnit = (value: string) => {
+    return (Number(value) / 10 ** 18).toString()
+  }
+
+  const denominator = BigInt(10 ** 9)
+
+  it('shold convert privateToPublic(3) transaction', () => {
+
+    expect(transactionHelper.fromHistory(record, fromBaseUnit, denominator)).toEqual(result)
+  })
+
+  it('shold convert privateToPrivate transaction', () => {
+    const recordPTP3 = { ...record, type: 3 }
+    const resultPTP3 = { ...result, type: 'privateToPrivate' }
+
+    expect(transactionHelper.fromHistory(recordPTP3, fromBaseUnit, denominator)).toEqual(resultPTP3)
+  })
+
+  it('shold convert privateToPrivate(2) transaction', () => {
+    const recordPTP2 = { ...record, type: 2 }
+    const resultPTP2 = { ...result, type: 'privateToPrivate' }
+
+    expect(transactionHelper.fromHistory(recordPTP2, fromBaseUnit, denominator)).toEqual(resultPTP2)
+  })
+
+  it('shold convert privateToPrivate(5) transaction', () => {
+    const recordPTP5 = { ...record, type: 5 }
+    const resultPTP5 = { ...result, type: 'privateToPrivate' }
+
+    expect(transactionHelper.fromHistory(recordPTP5, fromBaseUnit, denominator)).toEqual(resultPTP5)
+  })
+})

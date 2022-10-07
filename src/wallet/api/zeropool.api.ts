@@ -2,6 +2,7 @@ import AES from 'crypto-js/aes'
 import Utf8 from 'crypto-js/enc-utf8'
 import bip39 from 'bip39-light'
 import HDWalletProvider from '@truffle/hdwallet-provider'
+import transactionHelper from 'wallet/state/helpers/transaction.helper'
 import { catchError, concat, concatMap, from, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs'
 import { EthereumClient, PolkadotClient, NearClient, Client as NetworkClient } from 'zeropool-support-js'
 
@@ -508,12 +509,18 @@ export const getAddress = async (): Promise<string> => {
   return address || Promise.reject(`No address found for withdrawal`)
 }
 export const getTransactions = (): Observable<Transaction[]> => {
-  let transactions: Transaction[] = []
 
-  for (let i = 0; i < 30; i++) {
-    transactions.push(transactionsMock[i % 2 === 0 ? 0 : 1])
-  }
-  return of(transactions)
+  let history: Promise<any[]> = (zpClient as any).zpStates[TOKEN_ADDRESS].history.getAllHistory()
+
+  return from(history).pipe(
+    map((history: any[]) => history.map((record) =>
+      transactionHelper.fromHistory(record, client.fromBaseUnit.bind(client), zpClient.getDenominator(TOKEN_ADDRESS))
+    )),
+    catchError((e) => {
+      console.error(e)
+      return of([])
+    }
+    ))
 }
 
 /*
