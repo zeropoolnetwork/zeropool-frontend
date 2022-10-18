@@ -25,7 +25,7 @@ const WORKER_ST_PATH = '/workerSt.js?' + process.env.CACHE_BUST
 const WORKER_MT_PATH = '/workerMt.js?' + process.env.CACHE_BUST
 
 // #region Initialization
-export let client: NetworkClient
+export let zpSupport: NetworkClient
 export let zpClient: ZeropoolClient
 export let account: string
 
@@ -105,17 +105,17 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
         providerOrUrl: RPC_URL,
       })
 
-      client = new EthereumClient(provider, { transactionUrl: TRANSACTION_URL })
+      zpSupport = new EthereumClient(provider, { transactionUrl: TRANSACTION_URL })
       network = new EvmNetwork(RPC_URL)
     } else if (isSubstrateBased(NETWORK)) {
       network = new PolkadotNetwork();
-      client = await PolkadotClient.create(
+      zpSupport = await PolkadotClient.create(
         mnemonic,
         { rpcUrl: RPC_URL, transactionUrl: TRANSACTION_URL },
       )
     } else if (NETWORK == 'near') {
       network = new NearNetwork(RELAYER_URL)
-      client = await NearClient.create({
+      zpSupport = await NearClient.create({
         networkId: 'default',
         nodeUrl: RPC_URL,
       }, CONTRACT_ADDRESS)
@@ -159,9 +159,9 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
 export const mint = async (tokens: string): Promise<void> => {
   try {
     apiCheck()
-    const amount = client.toBaseUnit(tokens)
+    const amount = zpSupport.toBaseUnit(tokens)
 
-    return await client.mint(TOKEN_ADDRESS, amount)
+    return await zpSupport.mint(TOKEN_ADDRESS, amount)
   } catch (e: any) {
     console.error(e)
 
@@ -195,7 +195,7 @@ export const getRegularAddress = async (): Promise<string> => {
   try {
     apiCheck()
 
-    return await client.getAddress()
+    return await zpSupport.getAddress()
   } catch (e: any) {
     console.error(e)
 
@@ -218,8 +218,8 @@ export const getTokenBalance = async (): Promise<string> => {
   try {
     apiCheck()
 
-    const address = await client.getAddress()
-    const tokenBalance = BigInt(await client.getTokenBalance(TOKEN_ADDRESS))
+    const address = await zpSupport.getAddress()
+    const tokenBalance = BigInt(await zpSupport.getTokenBalance(TOKEN_ADDRESS))
     const history = await zpClient.getAllHistory(TOKEN_ADDRESS)
     const pending = history.filter((h) => h.pending)
 
@@ -249,7 +249,7 @@ export const getTokenBalance = async (): Promise<string> => {
 
     const pendingDelta = pendingDeltaShielded * zpClient.getDenominator(TOKEN_ADDRESS)
 
-    return client.fromBaseUnit((tokenBalance + pendingDelta).toString())
+    return zpSupport.fromBaseUnit((tokenBalance + pendingDelta).toString())
   } catch (e: any) {
     console.error(e)
 
@@ -260,7 +260,7 @@ export const getRegularBalance = async (): Promise<string> => {
   try {
     apiCheck()
 
-    return client.fromBaseUnit(await client.getBalance())
+    return zpSupport.fromBaseUnit(await zpSupport.getBalance())
   } catch (e: any) {
     console.error(e)
 
@@ -271,7 +271,7 @@ export const getShieldedBalances = async (): Promise<string> => {
   try {
     apiCheck()
 
-    return client.fromBaseUnit((await zpClient.getOptimisticTotalBalance(TOKEN_ADDRESS)).toString())
+    return zpSupport.fromBaseUnit((await zpClient.getOptimisticTotalBalance(TOKEN_ADDRESS)).toString())
   } catch (e: any) {
     console.error(e)
 
@@ -284,10 +284,10 @@ export const deposit = (tokens: string): Observable<Transaction> => {
   const tr$ = new Subject<Transaction>()
 
   const sub = apiCheck$().pipe(
-    map(() => client.toBaseUnit(tokens)),
+    map(() => zpSupport.toBaseUnit(tokens)),
     switchMap((amount) => from(approve(amount)).pipe(
       tap(() => tr$.next(tr)),
-      switchMap((address) => from(zpClient.deposit(TOKEN_ADDRESS, BigInt(amount), (data: any) => client.sign(data), address, BigInt(0))).pipe(
+      switchMap((address) => from(zpClient.deposit(TOKEN_ADDRESS, BigInt(amount), (data: any) => zpSupport.sign(data), address, BigInt(0))).pipe(
         tap((jobId: any) => tr$.next({ ...tr, status: 'pending', jobId })),
         switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
           tap(() => tr$.next({ ...tr, status: 'success', jobId })),
@@ -315,7 +315,7 @@ export const withdraw = (tokens: string): Observable<Transaction> => {
   const tr$ = new Subject<Transaction>()
 
   const sub = apiCheck$().pipe(
-    map(() => client.toBaseUnit(tokens)),
+    map(() => zpSupport.toBaseUnit(tokens)),
     switchMap((amount) => from(getAddress()).pipe(
       tap(() => tr$.next(tr)),
       switchMap((address) => from(zpClient.withdraw(TOKEN_ADDRESS, address, BigInt(amount))).pipe(
@@ -364,7 +364,7 @@ export const transferFunds = (to: string, amount: string): Observable<Transactio
   return apiCheck$().pipe(
     switchMap(() => concat(
       of(transaction(type, 'started')),
-      from(client.transfer(to, String(client.toBaseUnit(amount)))).pipe(map(() => transaction(type, 'pending')), catchError((e) => { throw Error(apiErrorHandler(e.message)) })),
+      from(zpSupport.transfer(to, String(zpSupport.toBaseUnit(amount)))).pipe(map(() => transaction(type, 'pending')), catchError((e) => { throw Error(apiErrorHandler(e.message)) })),
       of(transaction(type, 'success')),
     )),
     catchError((e) => {
@@ -380,7 +380,7 @@ export const transferPublicToPublic = (to: string, amount: string): Observable<T
   return apiCheck$().pipe(
     switchMap(() => concat(
       of(transaction(type, 'started')),
-      from(client.transferToken(TOKEN_ADDRESS, to, String(client.toBaseUnit(amount)))).pipe(map(() => transaction(type, 'pending')), catchError((e) => { throw Error(apiErrorHandler(e.message)) })),
+      from(zpSupport.transferToken(TOKEN_ADDRESS, to, String(zpSupport.toBaseUnit(amount)))).pipe(map(() => transaction(type, 'pending')), catchError((e) => { throw Error(apiErrorHandler(e.message)) })),
       of(transaction(type, 'success')),
     )),
     catchError((e) => {
@@ -395,10 +395,10 @@ export const transferPublicToPrivate = (to: string, tokens: string): Observable<
   const tr$ = new Subject<Transaction>()
 
   const sub = apiCheck$().pipe(
-    map(() => client.toBaseUnit(tokens)),
+    map(() => zpSupport.toBaseUnit(tokens)),
     switchMap((amount) => from(approve(amount)).pipe(
       // tap(() => tr$.next(tr)),
-      switchMap((address) => from(zpClient.deposit(TOKEN_ADDRESS, BigInt(amount), (data: any) => client.sign(data), address, BigInt(0), [{ to, amount }])).pipe(
+      switchMap((address) => from(zpClient.deposit(TOKEN_ADDRESS, BigInt(amount), (data: any) => zpSupport.sign(data), address, BigInt(0), [{ to, amount }])).pipe(
         tap((jobId: any) => tr$.next({ ...tr, status: 'pending', jobId })),
         switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
           tap(() => tr$.next({ ...tr, status: 'success', jobId })),
@@ -427,7 +427,7 @@ export const transferPrivateToPublic = (to: string, tokens: string): Observable<
 
   const sub = apiCheck$().pipe(
     // tap(() => tr$.next(tr)),
-    map(() => client.toBaseUnit(tokens)),
+    map(() => zpSupport.toBaseUnit(tokens)),
     switchMap((amount) => from(zpClient.withdraw(TOKEN_ADDRESS, to, BigInt(amount))).pipe(
       tap((jobId: any) => tr$.next({ ...tr, status: 'pending', jobId })),
       switchMap((jobId) => from(zpClient.waitJobCompleted(TOKEN_ADDRESS, jobId)).pipe(
@@ -455,7 +455,7 @@ export const transferPrivateToPrivate = (to: string, tokens: string): Observable
   const tr$ = new Subject<Transaction>()
 
   const sub = apiCheck$().pipe(
-    map(() => client.toBaseUnit(tokens)),
+    map(() => zpSupport.toBaseUnit(tokens)),
     switchMap((amount) => {
       tr$.next(tr) //TODO: NOT WORKING!
 
@@ -487,7 +487,7 @@ export const addressShielded = (address: string, token: string): boolean => {
   return false
 }
 export const approve = async (amount: string): Promise<string> => {
-  let fromAddress = await client.getAddress()
+  let fromAddress = await zpSupport.getAddress()
 
   if (isEvmBased(NETWORK)) {
     console.log(
@@ -495,7 +495,7 @@ export const approve = async (amount: string): Promise<string> => {
       CONTRACT_ADDRESS,
       amount,
     )
-    await client.approve(TOKEN_ADDRESS, CONTRACT_ADDRESS, amount)
+    await zpSupport.approve(TOKEN_ADDRESS, CONTRACT_ADDRESS, amount)
   }
 
   return fromAddress
@@ -503,8 +503,8 @@ export const approve = async (amount: string): Promise<string> => {
 export const getAddress = async (): Promise<string> => {
   let address
 
-  if (isEvmBased(NETWORK)) address = await client.getAddress()
-  else if (isSubstrateBased(NETWORK)) address = await client.getPublicKey()
+  if (isEvmBased(NETWORK)) address = await zpSupport.getAddress()
+  else if (isSubstrateBased(NETWORK)) address = await zpSupport.getPublicKey()
 
   return address || Promise.reject(`No address found for withdrawal`)
 }
@@ -514,7 +514,7 @@ export const getTransactions = (): Observable<Transaction[]> => {
 
   return from(history).pipe(
     map((history: any[]) => history.map((record) =>
-      transactionHelper.fromHistory(record, client.fromBaseUnit.bind(client), zpClient.getDenominator(TOKEN_ADDRESS))
+      transactionHelper.fromHistory(record, zpSupport.fromBaseUnit.bind(zpSupport), zpClient.getDenominator(TOKEN_ADDRESS))
     )),
     catchError((e) => {
       console.error(e)
@@ -643,7 +643,7 @@ const _isPrivateAddress = (address: string, token: TokenSymbol) => {
 */
 
 const networkInitialized = (): boolean => {
-  return !!client
+  return !!zpSupport
 }
 const zpInitialized = (): boolean => {
   return !!zpClient
