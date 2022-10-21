@@ -16,8 +16,8 @@ import { NearNetwork } from 'zeropool-client-js/lib/networks/near'
 import { apiErrorHandler } from 'wallet/api/error.handlers'
 import { isEvmBased, isSubstrateBased } from 'wallet/api/networks'
 
-import { transaction, Transaction, TransactionStatus } from 'shared/models/transaction'
-import { TransferData, TransferType } from 'shared/models'
+import { transaction, Transaction } from 'shared/models/transaction'
+import { TransferData } from 'shared/models'
 import { debug } from 'shared/operators/debug.operator'
 import { transactionsMock } from 'mocks/transactions.mock'
 
@@ -115,10 +115,15 @@ export const init = async (mnemonic: string, password: string): Promise<void> =>
       )
     } else if (NETWORK == 'near') {
       network = new NearNetwork(RELAYER_URL)
-      zpSupport = await NearClient.create({
-        networkId: 'default',
-        nodeUrl: RPC_URL,
-      }, CONTRACT_ADDRESS)
+      zpSupport = await NearClient.create(
+        {
+          networkId: 'default',
+          nodeUrl: RPC_URL,
+        },
+        CONTRACT_ADDRESS,
+        '0',
+        mnemonic,
+      )
     } else {
       throw new Error(`Unknown network ${NETWORK}`)
     }
@@ -509,18 +514,34 @@ export const getAddress = async (): Promise<string> => {
   return address || Promise.reject(`No address found for withdrawal`)
 }
 export const getTransactions = (): Observable<Transaction[]> => {
+  let privHistory: Promise<Transaction[]> =
+    (zpClient as any).zpStates[TOKEN_ADDRESS].history.getAllHistory().then((history: any) =>
+      history.map((record: any) =>
+        transactionHelper.fromPrivateHistory(
+          record,
+          zpSupport.fromBaseUnit.bind(zpSupport),
+          zpClient.getDenominator(TOKEN_ADDRESS),
+        )
+      )
+    )
+  
+  let pubHistory: Promise<Transaction[]> =
+    (zpSupport as any).getAllHistory(TOKEN_ADDRESS).then((history: any) =>
+      history.map((record: any) =>
+        transactionHelper.fromPublicHistory(
+          record,
+          zpSupport.fromBaseUnit.bind(zpSupport),
+        )
+      )
+    )
 
-  let history: Promise<any[]> = (zpClient as any).zpStates[TOKEN_ADDRESS].history.getAllHistory()
-
-  return from(history).pipe(
-    map((history: any[]) => history.map((record) =>
-      transactionHelper.fromHistory(record, zpSupport.fromBaseUnit.bind(zpSupport), zpClient.getDenominator(TOKEN_ADDRESS))
-    )),
+  return from(Promise.all([privHistory, pubHistory])).pipe(
+    map(([priv, pub]) => priv.concat(pub)),
     catchError((e) => {
       console.error(e)
       return of([])
-    }
-    ))
+    }),
+  )
 }
 
 /*
