@@ -14,6 +14,8 @@
   }
   &-Date {
     font-size: 20px;
+    position: relative;
+    left: -7px;
 
     @media (max-width: 500px) {
       font-size: 18px;

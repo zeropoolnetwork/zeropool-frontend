@@ -36,6 +36,7 @@ export type PublicHistorySourceRecord = {
   transactionIndex: string
   txreceipt_status: string
   value: string
+  tokenName?: string
 }
 
 const sortByDays = (transactions: Transaction[]) => {
@@ -50,10 +51,10 @@ const sortByDays = (transactions: Transaction[]) => {
 
   transactions
     .slice(0)
+    .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
     .reverse()
     .forEach((transaction, index) => {
       if ((transaction.timestamp + '').length !== 13) {
-        debugger
         throw Error('Timestamps should have 13 digits!')
       }
 
@@ -97,30 +98,36 @@ const fromPrivateHistory = (
 })
 
 const fromPublicHistory = (
-  record: any,
+  record: PublicHistorySourceRecord,
   fromBaseUnit: (value: string) => string,
+  contractAddress: string,
 ): Transaction => ({
-  status: record.pending ? 'pending' : 'success',
-  type: getTransactionType(0),
-  amount: fromBaseUnit(toPlainString(record.amount)),
-  blockHash: record.txHash,
+  status: 'success',
+  type: record.tokenName
+    ? record.to.toUpperCase() === contractAddress.toUpperCase()
+      ? getTransactionType(1)
+      : getTransactionType(2)
+    : getTransactionType(0),
+  amount: fromBaseUnit(record.value),
+  blockHash: record.hash,
   from: record.from,
   to: record.to,
-  timestamp: fixTimestamp(record.timestamp),
+  timestamp: fixTimestamp(record.timeStamp),
 })
 
 function getTransactionType(type: number): TransactionType {
   switch (type) {
     case 1:
       return 'publicToPrivate'
+    case 2:
+      return 'publicToPublic'
     case 4:
       return 'privateToPublic'
-    case 2:
     case 3:
     case 5:
       return 'privateToPrivate'
     default:
-      return 'publicToPublic'
+      return 'funds'
   }
 }
 
