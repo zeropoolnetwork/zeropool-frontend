@@ -41,6 +41,7 @@ export const beautifyAddress = (address: string, limit = 6): string => {
 }
 
 export const beautifyAmount = (amount: string | number): string => {
+
   if (typeof amount === 'number') {
     amount = toPlainString(amount)
   }
@@ -59,19 +60,18 @@ export const beautifyAmount = (amount: string | number): string => {
     const prefixLength = 10
     const prefix = amount.slice(0, prefixLength)
 
-    return `${prefix}...`
+    return `${prefix.replace(/0+$/g, '')}...`
   } else if (amount.length > 7 && amountNum > 1 && amountNum < 1000) {
     const prefixLength = 7
     const prefix = amount.slice(0, prefixLength)
 
-    return `${prefix}...`
+    return `${prefix.replace(/0+$/g, '')}...`
   } else if (amountNum > 9999999) {
     const prefixLength = 8
     const prefix = amount.slice(0, prefixLength)
 
-    return `${prefix}...`
+    return `${prefix.replace(/0+$/g, '')}...`
   }
-
 
   return amount
 }
