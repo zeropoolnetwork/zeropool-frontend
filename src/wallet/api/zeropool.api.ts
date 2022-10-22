@@ -526,10 +526,7 @@ export const approve = async (amount: string): Promise<number | null> => {
 }
 
 export const getAddress = async (): Promise<string> => {
-  let address
-
-  if (isEvmBased(NETWORK)) address = await client.getAddress()
-  else if (isSubstrateBased(NETWORK)) address = await client.getPublicKey()
+  let address = await client.getAddress()
 
   return address || Promise.reject(`No address found for withdrawal`)
 }
