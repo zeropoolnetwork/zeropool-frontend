@@ -13,9 +13,11 @@ export const selectDeposit = (state: RS) => selectDemoState(state).deposit
 export const selectWithdraw = (state: RS) => selectDemoState(state).withdraw
 export const selectTransfer = (state: RS) => selectDemoState(state).transfer
 export const selectTransferModal = (state: RS) => selectDemoState(state).transferModal
+export const selectTransactionLogModal = (state: RS) => selectDemoState(state).transactionsModal
 export const selectInitials = (state: RS) => selectDemoState(state).initials
 export const selectReadiness = (state: RS) => selectDemoState(state).readiness
 export const selectRecovery = (state: RS) => selectDemoState(state).recovery
+export const selectTransactions = (state: RS) => selectDemoState(state).transactions
 export const selectTransaction = (state: RS) =>
   selectWithdraw(state) ||
   selectDeposit(state) ||

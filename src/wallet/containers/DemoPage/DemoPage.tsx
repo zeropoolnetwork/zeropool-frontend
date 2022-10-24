@@ -1,5 +1,6 @@
 // tslint:disable: prettier max-line-length
-import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, SwipeableDrawer, Dialog, DialogContent, Paper, Typography } from '@mui/material'
+import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, SwipeableDrawer, Dialog, DialogContent, Paper, Typography, Button } from '@mui/material'
+import RestoreIcon from '@mui/icons-material/Restore';
 import { useDispatch, useSelector } from 'react-redux'
 import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight'
 import { useEffect, useState } from 'react'
@@ -15,7 +16,7 @@ import './DemoPage.scss'
 import logo from 'assets/images/logo1.svg'
 import { badAmount } from 'shared/utils/bad-amount'
 
-import { selectBackdrop, selectDeposit, selectReadiness, selectInitials, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectTransfer, selectWalletAddress, selectWithdraw, selectRecovery, selectTransferModal, selectCanMint, selectCanWithdraw, selectCanDeposit, selectCanTransfer } from 'wallet/state/demo.selectors'
+import { selectBackdrop, selectDeposit, selectReadiness, selectInitials, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectTransfer, selectWalletAddress, selectWithdraw, selectRecovery, selectTransferModal, selectCanMint, selectCanWithdraw, selectCanDeposit, selectCanTransfer, selectTransactionLogModal, selectTransactions } from 'wallet/state/demo.selectors'
 import { demoActions } from 'wallet/state/demo.reducer'
 import { DemoDrowler } from 'wallet/components/DemoDrowler/DemoDrowler'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
@@ -24,6 +25,7 @@ import { Transfer } from 'wallet/components/Transfer/Transfer'
 import { TransferData } from 'shared/models'
 import { lowBalanceHelper } from 'wallet/state/helpers/low-balance.helper'
 import { NETWORK_FAUCET, NETWORK_NAME } from 'wallet/api/zeropool.api'
+import { Transactions } from 'wallet/containers/Transactions/Transactions'
 // tslint:enable: prettier max-line-length
 
 export const componentId = 'DemoPage'
@@ -48,10 +50,12 @@ export const DemoPage: React.FC<{}> = () => {
   const readiness = useSelector(selectReadiness)
   const recorevery = useSelector(selectRecovery)
   const transferModal = useSelector(selectTransferModal)
+  const transactionsModal = useSelector(selectTransactionLogModal)
   const canMint = useSelector(selectCanMint)
   const canWithdraw = useSelector(selectCanWithdraw)
   const canDeposit = useSelector(selectCanDeposit)
   const canTransfer = useSelector(selectCanTransfer)
+  const transactions = useSelector(selectTransactions)
 
   const [mintAmount, setMintAmount] = useState('')
   const [depositAmount, setDepositAmount] = useState('')
@@ -177,20 +181,31 @@ export const DemoPage: React.FC<{}> = () => {
             Withdraw
           </LoadingButton>
         </div>
+        <div className={bem('Buttons')}>
+          <LoadingButton
+            loading={false}
+            className={bem('Button', { Transfer: true })}
+            data-testid={bem('TransferButton')}
+            loadingPosition="start"
+            color="primary"
+            variant="contained"
+            startIcon={transfer ? <CircularProgress color="inherit" size={20} /> : <KeyboardDoubleArrowRight />}
+            disabled={false}
+            onClick={() => dispatch(demoActions.transferModal(true))}
+          >
+            Transfer
+          </LoadingButton>
 
-        <LoadingButton
-          loading={false}
-          className={bem('Button', { Transfer: true })}
-          data-testid={bem('TransferButton')}
-          loadingPosition="start"
-          color="primary"
-          variant="contained"
-          startIcon={transfer ? <CircularProgress color="inherit" size={20} /> : <KeyboardDoubleArrowRight />}
-          disabled={false}
-          onClick={() => dispatch(demoActions.transferModal(true))}
-        >
-          Transfer
-        </LoadingButton>
+          <Button
+            variant="contained"
+            color="primary"
+            className={bem('Button', { Log: true })}
+            startIcon={<RestoreIcon />}
+            onClick={() => dispatch(demoActions.transactionsModal(true))}
+          >
+            History
+          </Button>
+        </div>
       </div>
 
       <Paper className={bem('Info')} elevation={2}>
@@ -291,9 +306,27 @@ export const DemoPage: React.FC<{}> = () => {
         </DialogContent>
       </Dialog>
 
+      <Dialog
+        PaperProps={{
+          style: {
+            width: '550px',
+            margin: '10% 2%',
+          },
+        }}
+        open={transactionsModal}
+      >
+        <DialogContent>
+          <Transactions
+            onClose={() => dispatch(demoActions.transactionsModal(false))}
+            transactions={transactions}
+            address={walletAddress || ''}
+          />
+        </DialogContent>
+      </Dialog>
+
       <Backdrop sx={{ color: '#fff', zIndex: 1000 }} open={backdrop}>
         <CircularProgress color="inherit" />
       </Backdrop>
-    </div>
+    </div >
   )
 }

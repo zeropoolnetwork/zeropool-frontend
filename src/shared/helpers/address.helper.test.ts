@@ -54,5 +54,19 @@ describe('adress beautifyer', () => {
 
     expect(beautifyAmount(amount)).toBe(result)
   })
+
+  it('transforms amount 0.010000001666267316 to 0.01...', () => {
+    const amount = 0.010000001666267316
+    const result = '0.01...'
+
+    expect(beautifyAmount(amount)).toBe(result)
+  })
+
+  it('transforms amount 0.0105000000077 to 0.0105...', () => {
+    const amount = 0.0105000000077
+    const result = '0.0105...'
+
+    expect(beautifyAmount(amount)).toBe(result)
+  })
 })
 

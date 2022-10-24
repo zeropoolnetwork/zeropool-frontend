@@ -15,6 +15,8 @@ export type DemoState = {
   recovery: boolean
   transfer: boolean
   transferModal: boolean
+  transactions: Transaction[] | undefined
+  transactionsModal: boolean
   transactionStatus: TransactionStatus | undefined
   walletAddress: string | undefined
   withdraw: boolean
@@ -33,6 +35,8 @@ export const initialDemoState: DemoState = {
   recovery: false,
   transfer: false,
   transferModal: false,
+  transactions: undefined,
+  transactionsModal: false,
   transactionStatus: undefined,
   walletAddress: undefined,
   withdraw: false,
@@ -51,6 +55,7 @@ export const demoSlice = createSlice({
       state.readiness = false
       state.recovery = false
       state.transferModal = false
+      state.transactionsModal = false
       state.minting = false
       state.deposit = false
       state.withdraw = false
@@ -78,15 +83,15 @@ export const demoSlice = createSlice({
     },
     updateBalancesFailure: (state, action: PayloadAction<string>) => { },
 
-    getPublicBalance:(state, action: PayloadAction<number>) => {},
+    getPublicBalance: (state, action: PayloadAction<number>) => { },
     publicBalance: (state, action: PayloadAction<string>) => {
       state.publicBalance = action.payload
     },
-    getPrivateBalance:(state, action: PayloadAction<number>) => {},
+    getPrivateBalance: (state, action: PayloadAction<number>) => { },
     privateBalance: (state, action: PayloadAction<string>) => {
       state.privateBalance = action.payload
     },
-    getTokenBalance:(state, action: PayloadAction<number>) => {},
+    getTokenBalance: (state, action: PayloadAction<number>) => { },
     tokenBalance: (state, action: PayloadAction<string>) => {
       state.tokenBalance = action.payload
     },
@@ -167,8 +172,18 @@ export const demoSlice = createSlice({
 
     transferModal: (state, action: PayloadAction<boolean>) => {
       state.transferModal = action.payload
-    }
-  },
+    },
+
+    transactionsModal: (state, action: PayloadAction<boolean>) => {
+      state.transactionsModal = action.payload
+    },
+
+    getTransactions: (state, action: PayloadAction<null>) => { },
+    getTransactionsFailure: (state, action: PayloadAction<string>) => { },
+    getTransactionsSuccess: (state, action: PayloadAction<Transaction[]>) => {
+      state.transactions = action.payload
+    },
+  }
 })
 
 export const demoActions = demoSlice.actions

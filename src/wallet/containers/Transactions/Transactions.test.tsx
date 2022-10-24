@@ -35,7 +35,7 @@ describe('Transactions', () => {
     useSnackbarMock.mockImplementation(() => ({
       enqueueSnackbar: jest.fn(),
     }))
-    component = <Transactions wallet={_testWalletsEth[0]} />
+    component = <Transactions transactions={[]} address={''} onClose={() => { }} />
   })
 
   it('should render component', () => {

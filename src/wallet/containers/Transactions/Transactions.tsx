@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { cn } from '@bem-react/classname'
 import { useSnackbar } from 'notistack'
-import { CircularProgress } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { Button, CircularProgress } from '@mui/material'
 
 import './Transactions.scss'
 
@@ -10,28 +9,29 @@ import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { isErrorWithMessage } from 'shared/utils/is-error-with-message'
 
 import { SortedTransactions } from 'wallet/state/models/sorted-transactions'
-import { getTransactions } from 'wallet/state/wallet.selectors'
 import transactionHelper from 'wallet/state/helpers/transaction.helper'
-import { Transaction } from 'wallet/components/Transaction/Transaction'
-import { Wallet } from 'wallet/state/models'
+import { Transaction as TransactionRow } from 'wallet/components/Transaction/Transaction'
+import { Transaction } from 'shared/models/transaction'
+import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
 
 export const componentId = 'Transactions'
 
-const css = cn(componentId)
+const bem = cn(componentId)
 const test = testIdBuilder(componentId)
 
 export type TransactionsProps = {
-  wallet: Wallet
+  transactions: Transaction[] | undefined
+  address: string
+  onClose: () => void
 }
 
-export const Transactions: React.FC<TransactionsProps> = ({ wallet }) => {
+export const Transactions: React.FC<TransactionsProps> = ({ transactions, address, onClose }) => {
   let sorted: SortedTransactions[] = []
-  const transactions = useSelector(getTransactions)
   const { enqueueSnackbar } = useSnackbar()
   const [opened, setOpened] = useState<boolean[]>([])
 
   const incoming = (transaction: any) =>
-    wallet.address.toLowerCase() === transaction.to.toLocaleLowerCase()
+    address.toLowerCase() === transaction.to.toLocaleLowerCase()
 
   const openHandler = (index: number) => {
     const arr = [...opened]
@@ -59,47 +59,40 @@ export const Transactions: React.FC<TransactionsProps> = ({ wallet }) => {
   }
 
   return (
-    <div className={css()} data-testid={test()}>
-      {transactions ? (
-        sorted.map((day, i) => (
-          <div className={css('Day')} key={i}>
-            <div className={css('Date')}>
-              <span className={css('Arrow', { Down: opened[i] })} onClick={() => openHandler(i)}>
-                {'>'}
-              </span>
+    <div className={bem()} data-testid={test()}>
+      <div className={bem('Days')}>
+        {transactions ? (
+          sorted.map((day, i) => (
+            <div className={bem('Day')} key={i}>
+              <div className={bem('Date')}>
+                <span className={bem('Arrow', { Down: opened[i] })} onClick={() => openHandler(i)}>
+                  {'>'}
+                </span>
 
-              {' ' + day.date}
-            </div>
-
-            {day.transactions.map((transaction, j) => (
-              <div className={css('TransactionRow', { Open: opened[i] })} key={j}>
-                <Transaction transaction={transaction} key={j} wallet={wallet} />
+                {' ' + day.date}
               </div>
-              //   <span>{incoming(transaction) ? '<--  ' : '-->  '}</span>
 
-              //   {incoming(transaction) ? (
-              //     <span>
-              //       <b>From: </b>
-              //       {beautifyAddress(transaction.from)}
-              //     </span>
-              //   ) : (
-              //     <span>
-              //       <b>To: </b> {beautifyAddress(transaction.to)}
-              //     </span>
-              //   )}
+              {day.transactions.map((transaction, j) => (
+                <div className={bem('TransactionRow', { Open: opened[i] })} key={j}>
+                  <TransactionRow transaction={transaction} key={j} address={address} />
+                </div>
+              ))}
+            </div>
+          ))
+        ) : (
+          <CircularProgress sx={{ margin: "auto" }} />
+        )}
+      </div>
 
-              //   <span>
-              //     <b>
-              //       {' ' + transaction.amount} {wallet.token.symbol}
-              //     </b>
-              //   </span>
-              // </div>
-            ))}
-          </div>
-        ))
-      ) : (
-        <CircularProgress />
-      )}
+      <div className={bem('Close')}>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={onClose}
+        >
+          Close
+        </Button>
+      </div>
     </div>
   )
 }

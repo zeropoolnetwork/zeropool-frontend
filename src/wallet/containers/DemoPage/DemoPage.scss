@@ -58,16 +58,24 @@
     }
   }
 
+  &-Buttons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
   &-Button{
     @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
       font-size: $small-font-size !important;
       margin-left: 10px !important;
     }
 
-    &_Transfer {
-      margin: 26px auto 0 !important;;
+    &_Transfer, &_Log {
+      margin: 26px 10px 0 !important;
     }
   }
+
 
   &-TransferTo{
     margin-bottom: 8px;

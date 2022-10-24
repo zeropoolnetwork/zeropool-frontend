@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { MouseEvent } from 'react'
 import { cn } from '@bem-react/classname'
 import { Tooltip } from '@mui/material'
 import { CallMade } from '@mui/icons-material'
@@ -6,10 +6,11 @@ import { CallReceived } from '@mui/icons-material'
 
 import './Transaction.scss'
 
-import { Wallet } from 'wallet/state/models'
-
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { beautifyAddress, beautifyAmount } from 'shared/helpers/addres.helper'
+import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
+import { useSnackbar } from 'notistack'
+import { TransactionType } from 'wallet/components/TransactionType/TransactionType'
 
 export const componentId = 'Transaction'
 
@@ -18,13 +19,25 @@ const test = testIdBuilder(componentId)
 
 export type TransactionProps = {
   transaction: any
-  wallet: Wallet
+  address: string
 }
 
-export const Transaction: React.FC<TransactionProps> = ({ transaction, wallet }) => {
+export const Transaction: React.FC<TransactionProps> = ({ transaction, address }) => {
   let isIncoming: boolean
 
-  if (wallet.address.toLowerCase() === transaction.to.toLocaleLowerCase()) {
+  const { enqueueSnackbar } = useSnackbar()
+  const handleAddressClick = (event: MouseEvent<HTMLSpanElement>): void => {
+    const address = (event.target as HTMLElement).ariaLabel
+
+    copyToClipboard((address as string), 'Address', enqueueSnackbar)
+  }
+  function handleAmountClick() {
+    const amount = transaction.amount
+
+    copyToClipboard((amount as string), 'Amount', enqueueSnackbar)
+  }
+
+  if (address.toLowerCase() === transaction.to.toLocaleLowerCase()) {
     isIncoming = true
   } else {
     isIncoming = false
@@ -45,18 +58,24 @@ export const Transaction: React.FC<TransactionProps> = ({ transaction, wallet })
 
       <span className={css('Adress')}>
         {' '}
-        <Tooltip title={isIncoming ? transaction.from : transaction.to} placement="bottom">
-          <span>{beautifyAddress(isIncoming ? transaction.from : transaction.to, 6)}</span>
+        <Tooltip onClick={handleAddressClick} title={isIncoming ? transaction.from : transaction.to} placement="bottom">
+          <span style={{ cursor: 'pointer' }}>{beautifyAddress(isIncoming ? transaction.from : transaction.to, 6)}</span>
         </Tooltip>
       </span>
 
-      <span className={css('Amount')}>
+      <span className={css('Amount')} >
         {' '}
-        <Tooltip title={transaction.amount} placement="bottom">
-          <span>
-            {isIncoming ? '+' : '-'} {beautifyAmount(transaction.amount)} {wallet.token.symbol}
+        <Tooltip onClick={handleAmountClick} title={transaction.amount} placement="bottom">
+          <span style={{ cursor: 'pointer' }}>
+            {isIncoming ? '+' : '-'} {beautifyAmount(transaction.amount)}
           </span>
         </Tooltip>
+      </span>
+
+      <span className={css('TransactionType')}>
+        <TransactionType
+          transferType={transaction.type}
+        ></TransactionType>
       </span>
     </div>
   )

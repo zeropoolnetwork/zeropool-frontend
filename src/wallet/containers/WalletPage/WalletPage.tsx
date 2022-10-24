@@ -61,6 +61,7 @@ import { Receive } from 'wallet/components/Receive/Receive'
 import { Wallet } from 'wallet/state/models/wallet'
 import { Send } from 'wallet/components/Send/Send'
 import { total } from 'wallet/state/helpers/total.helper'
+import { transaction } from 'shared/models/transaction'
 
 export const componentId = 'WalletPage'
 
@@ -230,7 +231,7 @@ export const WalletPage: React.FC<WalletPageProps> = () => {
           />
         ) : null
       case WalletView.Transactions:
-        return wallet ? <Transactions wallet={wallet} /> : null
+        return wallet ? <Transactions transactions={[]} address={wallet.address} onClose={() => { }} /> : null
       case WalletView.About:
         return <AboutPage showBackButton={false} />
       case WalletView.Help:

@@ -1,6 +1,43 @@
 import moment from 'moment'
+
 import { SortedTransactions } from 'wallet/state/models/sorted-transactions'
-import { Transaction } from 'shared/models/transaction'
+
+import { Transaction, TransactionType } from 'shared/models/transaction'
+import { toPlainString } from 'shared/utils/toPlainString'
+import { fixTimestamp } from 'shared/utils/fix-timestamp'
+
+export type PrivateHistorySourceRecord = {
+  pending: boolean
+  type: number
+  amount: bigint
+  txHash: string
+  from: string
+  to: string
+  timestamp: number
+}
+
+export type PublicHistorySourceRecord = {
+  blockHash: string
+  blockNumber: string
+  confirmations: string
+  contractAddress: string
+  from: string
+  functionName: string
+  gas: string
+  gasPrice: string
+  gasUsed: string
+  hash: string
+  input: string
+  isError: string
+  methodId: string
+  nonce: string
+  timeStamp: string
+  to: string
+  transactionIndex: string
+  txreceipt_status: string
+  value: string
+  tokenName?: string
+}
 
 const sortByDays = (transactions: Transaction[]) => {
   const result: SortedTransactions[] = []
@@ -14,6 +51,7 @@ const sortByDays = (transactions: Transaction[]) => {
 
   transactions
     .slice(0)
+    .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
     .reverse()
     .forEach((transaction, index) => {
       if ((transaction.timestamp + '').length !== 13) {
@@ -27,7 +65,10 @@ const sortByDays = (transactions: Transaction[]) => {
         })
       } else {
         if (
-          isAfter(lastElement(lastElement(result).transactions).timestamp || 0, transaction.timestamp || 0)
+          isAfter(
+            lastElement(lastElement(result).transactions).timestamp || 0,
+            transaction.timestamp || 0,
+          )
         ) {
           result.push({
             date: m(transaction.timestamp).format('D MMM YYYY'),
@@ -42,8 +83,58 @@ const sortByDays = (transactions: Transaction[]) => {
   return result
 }
 
+const fromPrivateHistory = (
+  record: PrivateHistorySourceRecord,
+  fromBaseUnit: (value: string) => string,
+  denominator: bigint,
+): Transaction => ({
+  status: record.pending ? 'pending' : 'success',
+  type: getTransactionType(record.type),
+  amount: fromBaseUnit(toPlainString(Number(BigInt(record.amount) * denominator))),
+  blockHash: record.txHash,
+  from: record.from,
+  to: record.to,
+  timestamp: fixTimestamp(record.timestamp),
+})
+
+const fromPublicHistory = (
+  record: PublicHistorySourceRecord,
+  fromBaseUnit: (value: string) => string,
+  contractAddress: string,
+): Transaction => ({
+  status: 'success',
+  type: record.tokenName
+    ? record.to.toUpperCase() === contractAddress.toUpperCase()
+      ? getTransactionType(1)
+      : getTransactionType(2)
+    : getTransactionType(0),
+  amount: fromBaseUnit(record.value),
+  blockHash: record.hash,
+  from: record.from,
+  to: record.to,
+  timestamp: fixTimestamp(record.timeStamp),
+})
+
+function getTransactionType(type: number): TransactionType {
+  switch (type) {
+    case 1:
+      return 'publicToPrivate'
+    case 2:
+      return 'publicToPublic'
+    case 4:
+      return 'privateToPublic'
+    case 3:
+    case 5:
+      return 'privateToPrivate'
+    default:
+      return 'funds'
+  }
+}
+
 const helper = {
   sortByDays,
+  fromPrivateHistory,
+  fromPublicHistory,
 }
 
 export default helper

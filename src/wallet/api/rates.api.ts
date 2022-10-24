@@ -7,7 +7,7 @@ import { getHTTPData } from 'shared/operators/get-http-data.operator'
 import { Rate, Token } from 'shared/models'
 import { Provider } from 'shared/models/provider'
 
-import ratesMock from 'assets/mocks/rates.mock.json'
+import ratesMock from 'mocks/rates.mock.json'
 import proxy from 'assets/settings/proxy.json'
 
 const useMock = true
