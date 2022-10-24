@@ -50,6 +50,8 @@ export const walletActions = {
   edit: create<{ wallet: Wallet; name: string }>('wallet/edit'),
   send: create('wallet/send'),
 
+  setAccountId: create<string>('wallet/setAccountId'),
+
   setSeed: create<string>('wallet/setSeed'),
   setSeedSuccess: create('wallet/setSeedSuccess'),
   setSeedError: create<string>('wallet/setSeedError'),

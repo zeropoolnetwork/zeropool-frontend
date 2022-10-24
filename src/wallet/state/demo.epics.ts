@@ -44,7 +44,13 @@ const initApi = (action$: Action$, state$: State$) => {
       }),
     ),
     switchMap((initials) =>
-      from(api.init((initials as any).seed, (initials as any).password)).pipe(
+      from(
+        api.init(
+          (initials as any).seed,
+          (initials as any).password,
+          (initials as any).accountId || api.getAccountId(), // FIXME: sometimes it's undefined
+        ),
+      ).pipe(
         map(() => demoActions.initApiSuccess(null)),
         tap(() => toast.close('initApi')),
         tap(() => toast.success('Wallet initialized')),
@@ -409,7 +415,7 @@ const recowerWallet = (action$: Action$, state$: State$) => {
     filter(isNonNull),
     mergeMap((password) =>
       from(api.getSeed(password)).pipe(
-        map((seed) => demoActions.recoverWalletSuccess({ seed, password })),
+        map((seed) => demoActions.recoverWalletSuccess({ seed, password, accountId: api.getAccountId() })),
         catchError((errMsg: string) => {
           toast.error(errMsg)
 
@@ -451,12 +457,13 @@ const restoreSession = (action$: Action$, state$: State$) => {
     withLatestFrom(state$.pipe(map(selectInitials))),
     filter(([, initials]) => !initials),
     mergeMap(() => {
-      let seed, password
+      let seed, password, accountId
       seed = api.getDevSeed()
       password = api.getDevPassword()
+      accountId = api.getDevAccountId()
       if (seed && password) {
         return of(
-          demoActions.setSeedAndPasword({ seed, password }),
+          demoActions.setSeedAndPasword({ seed, password, accountId }),
           demoActions.initApi(null),
         )
       } else {

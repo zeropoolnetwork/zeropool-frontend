@@ -693,7 +693,7 @@ describe('demoEpics', () => {
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('--a', { a: demoActions.recoverWalletSuccess({ seed: 'seed', password: 'password' }) })
+        const expected$ = hot('--a', { a: demoActions.recoverWalletSuccess({ seed: 'seed', password: 'password', accountId: '' }) })
 
         fromMock.mockReturnValue(cold('-a', { a: 'seed' }))
 
@@ -727,11 +727,11 @@ describe('demoEpics', () => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.recoverWalletSuccess({ seed: 'seed', password: 'password' })
+          a: demoActions.recoverWalletSuccess({ seed: 'seed', password: 'password', accountId: 'test' })
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('-(ab)', { a: demoActions.setSeedAndPasword({ seed: 'seed', password: 'password' }), b: demoActions.initApi(null) })
+        const expected$ = hot('-(ab)', { a: demoActions.setSeedAndPasword({ seed: 'seed', password: 'password', accountId: 'test' }), b: demoActions.initApi(null) })
 
 
         expectObservable(result$).toEqual(expected$)
@@ -806,7 +806,7 @@ describe('demoEpics', () => {
         })
         const state$ = cold('a', { a: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('-(ab)', { a: demoActions.setSeedAndPasword({ seed: 'seed', password: 'password' }), b: demoActions.initApi(null) })
+        const expected$ = hot('-(ab)', { a: demoActions.setSeedAndPasword({ seed: 'seed', password: 'password', accountId: 'test' }), b: demoActions.initApi(null) })
 
         expectObservable(result$).toEqual(expected$)
       })

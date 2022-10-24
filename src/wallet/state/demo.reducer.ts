@@ -5,7 +5,7 @@ import { Transaction, TransactionStatus } from 'shared/models/transaction'
 export type DemoState = {
   backdrop: boolean
   deposit: boolean
-  initials: { seed: string, password: string } | null | undefined
+  initials: { seed: string, password: string, accountId: string } | null | undefined
   publicBalance: string | undefined
   privateBalance: string | undefined
   tokenBalance: string | undefined
@@ -47,8 +47,8 @@ export const demoSlice = createSlice({
   name: 'demo',
   initialState: initialDemoState,
   reducers: {
-    setSeedAndPasword: (state, action: PayloadAction<{ seed: string; password: string }>) => {
-      state.initials = { seed: action.payload.seed, password: action.payload.password }
+    setSeedAndPasword: (state, action: PayloadAction<{ seed: string; password: string, accountId: string }>) => {
+      state.initials = { seed: action.payload.seed, password: action.payload.password, accountId: action.payload.accountId }
     },
     initApi: (state, action: PayloadAction<null>) => {
       state.backdrop = true
@@ -145,7 +145,7 @@ export const demoSlice = createSlice({
       state.recovery = true
       state.readiness = true
     },
-    recoverWalletSuccess: (state, action: PayloadAction<{ seed: string, password: string }>) => {
+    recoverWalletSuccess: (state, action: PayloadAction<{ seed: string, password: string, accountId: string }>) => {
       state.recovery = false
     },
     recoverWalletFailure: (state, action: PayloadAction<string>) => { },

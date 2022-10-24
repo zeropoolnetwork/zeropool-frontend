@@ -4,7 +4,7 @@ describe('demo reducer', () => {
   it('handles setSeedAndPasword action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.setSeedAndPasword({ seed: 'seed', password: 'password' })
+      demoSlice.actions.setSeedAndPasword({ seed: 'seed', password: 'password', accountId: 'test' })
     )
 
     expect(newState.initials).toBeDefined()
@@ -44,7 +44,7 @@ describe('demo reducer', () => {
       {
         ...initialDemoState,
         backdrop: true,
-        initials: { seed: 'seed', password: 'password' },
+        initials: { seed: 'seed', password: 'password', accountId: 'test' },
         readiness: false,
       },
       demoSlice.actions.initApiSuccess(null)
@@ -60,7 +60,7 @@ describe('demo reducer', () => {
       {
         ...initialDemoState,
         backdrop: true,
-        initials: { seed: 'seed', password: 'password' },
+        initials: { seed: 'seed', password: 'password', accountId: 'test' },
       },
       demoSlice.actions.initApiFailure('error')
     )
@@ -306,7 +306,7 @@ describe('demo reducer', () => {
         ...initialDemoState,
         recovery: true,
       },
-      demoSlice.actions.recoverWalletSuccess({ seed: 'seed', password: 'password' })
+      demoSlice.actions.recoverWalletSuccess({ seed: 'seed', password: 'password', accountId: 'test' })
     )
 
     expect(newState.recovery).toBe(false)
