@@ -21,12 +21,11 @@ If blockchain node process halted remove it (from powershell if needed):
 First of all, in the project directory create static/assets/ folder and put there respective static files from [this repo](https://github.com/zeropoolnetwork/zeropool-frontend-static.git)
 
 Then in the project directory select the network you want to work with:
-##### Command prompt runninng as administrator:
-##### `mklink .env .env.near` - select NEAR (Windows command prompt)
-##### `ln -s .env.near .env` - select NEAR (Mac OS command prompt)
+##### `mklink .env .env.near` - select NEAR (Windows command prompt as admin)
+##### `ln -s .env.near .env` - select NEAR (Linux)
 
-##### `mklink .env .env.goerli` - select Goerli (Windows command prompt )
-##### `ln -s .env.goerli .env` - select Goerli (Mac OS command prompt )
+##### `mklink .env .env.goerli` - select Goerli (Windows command prompt as admin)
+##### `ln -s .env.goerli .env` - select Goerli (Linux)
 
 After that you can run the following commands:
 
