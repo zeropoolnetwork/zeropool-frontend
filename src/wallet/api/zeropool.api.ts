@@ -700,10 +700,15 @@ export const getPublicHistory = async (): Promise<Transaction[]> => {
       )
 
     return normalizedData
-  } catch (e) {
+  } catch (e: any) {
+    if (e?.message === 'unimplemented') {
+      return []
+    }
+
     toast.error(
       'Error reading public transactions history, please try again after 5 seconds',
     )
+
     return []
   }
 }
