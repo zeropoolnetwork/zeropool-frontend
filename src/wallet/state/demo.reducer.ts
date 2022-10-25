@@ -5,7 +5,7 @@ import { Transaction, TransactionStatus } from 'shared/models/transaction'
 export type DemoState = {
   backdrop: boolean
   deposit: boolean
-  initials: { seed: string, password: string, accountId: string } | null | undefined
+  initials: { seed: string; password: string; accountId?: string } | null | undefined
   publicBalance: string | undefined
   privateBalance: string | undefined
   tokenBalance: string | undefined
@@ -47,8 +47,15 @@ export const demoSlice = createSlice({
   name: 'demo',
   initialState: initialDemoState,
   reducers: {
-    setSeedAndPasword: (state, action: PayloadAction<{ seed: string; password: string, accountId: string }>) => {
-      state.initials = { seed: action.payload.seed, password: action.payload.password, accountId: action.payload.accountId }
+    setSeedAndPasword: (
+      state,
+      action: PayloadAction<{ seed: string; password: string; accountId?: string }>,
+    ) => {
+      state.initials = {
+        seed: action.payload.seed,
+        password: action.payload.password,
+        accountId: action.payload.accountId,
+      }
     },
     initApi: (state, action: PayloadAction<null>) => {
       state.backdrop = true
@@ -76,22 +83,25 @@ export const demoSlice = createSlice({
       state.initials = null
     },
 
-    updateBalances: (state, action: PayloadAction<null | { funds: number, tokens: number, private: number }>) => {
+    updateBalances: (
+      state,
+      action: PayloadAction<null | { funds: number; tokens: number; private: number }>,
+    ) => {
       state.privateBalance = undefined
       state.publicBalance = undefined
       state.tokenBalance = undefined
     },
-    updateBalancesFailure: (state, action: PayloadAction<string>) => { },
+    updateBalancesFailure: (state, action: PayloadAction<string>) => {},
 
-    getPublicBalance: (state, action: PayloadAction<number>) => { },
+    getPublicBalance: (state, action: PayloadAction<number>) => {},
     publicBalance: (state, action: PayloadAction<string>) => {
       state.publicBalance = action.payload
     },
-    getPrivateBalance: (state, action: PayloadAction<number>) => { },
+    getPrivateBalance: (state, action: PayloadAction<number>) => {},
     privateBalance: (state, action: PayloadAction<string>) => {
       state.privateBalance = action.payload
     },
-    getTokenBalance: (state, action: PayloadAction<number>) => { },
+    getTokenBalance: (state, action: PayloadAction<number>) => {},
     tokenBalance: (state, action: PayloadAction<string>) => {
       state.tokenBalance = action.payload
     },
@@ -145,12 +155,15 @@ export const demoSlice = createSlice({
       state.recovery = true
       state.readiness = true
     },
-    recoverWalletSuccess: (state, action: PayloadAction<{ seed: string, password: string, accountId: string }>) => {
+    recoverWalletSuccess: (
+      state,
+      action: PayloadAction<{ seed: string; password: string; accountId: string }>,
+    ) => {
       state.recovery = false
     },
-    recoverWalletFailure: (state, action: PayloadAction<string>) => { },
+    recoverWalletFailure: (state, action: PayloadAction<string>) => {},
 
-    getWalletAddress: (state, action: PayloadAction<null>) => { },
+    getWalletAddress: (state, action: PayloadAction<null>) => {},
     getWalletAddressSuccess: (state, action: PayloadAction<string>) => {
       state.walletAddress = action.payload
     },
@@ -158,7 +171,7 @@ export const demoSlice = createSlice({
       state.walletAddress = 'Cant get wallet address'
     },
 
-    getPrivateAddress: (state, action: PayloadAction<null>) => { },
+    getPrivateAddress: (state, action: PayloadAction<null>) => {},
     getPrivateAddressSuccess: (state, action: PayloadAction<string>) => {
       state.privateAddress = action.payload
     },
@@ -166,9 +179,9 @@ export const demoSlice = createSlice({
       state.privateAddress = 'Cant get private address'
     },
 
-    exportSeed: (state, action: PayloadAction<string>) => { },
-    exportSeedSuccess: (state, action: PayloadAction<string>) => { },
-    exportSeedFailure: (state, action: PayloadAction<string>) => { },
+    exportSeed: (state, action: PayloadAction<string>) => {},
+    exportSeedSuccess: (state, action: PayloadAction<string>) => {},
+    exportSeedFailure: (state, action: PayloadAction<string>) => {},
 
     transferModal: (state, action: PayloadAction<boolean>) => {
       state.transferModal = action.payload
@@ -178,12 +191,12 @@ export const demoSlice = createSlice({
       state.transactionsModal = action.payload
     },
 
-    getTransactions: (state, action: PayloadAction<null>) => { },
-    getTransactionsFailure: (state, action: PayloadAction<string>) => { },
+    getTransactions: (state, action: PayloadAction<null>) => {},
+    getTransactionsFailure: (state, action: PayloadAction<string>) => {},
     getTransactionsSuccess: (state, action: PayloadAction<Transaction[]>) => {
       state.transactions = action.payload
     },
-  }
+  },
 })
 
 export const demoActions = demoSlice.actions

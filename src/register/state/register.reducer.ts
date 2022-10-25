@@ -57,7 +57,10 @@ export const registerSlice = createSlice({
       state.stage = RegisterStage.IMPORT
       state.showSteps = false
     },
-    import: (state, action: PayloadAction<{ seed: string[]; password: string, accountId: string }>) => {
+    import: (
+      state,
+      action: PayloadAction<{ seed: string[]; password: string; accountId?: string }>,
+    ) => {
       state.stage = undefined
       state.showSteps = false
     },

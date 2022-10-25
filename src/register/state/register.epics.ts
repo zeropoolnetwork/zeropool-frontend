@@ -17,7 +17,14 @@ const importAccount = (action$: Observable<AnyAction>, state$: Observable<RootSt
     switchMap(({ payload }) => {
       const seed = payload.seed.join(' ')
 
-      return of(actions.reset(), demoActions.setSeedAndPasword({ seed, password: payload.password, accountId: payload.accountId }))
+      return of(
+        actions.reset(),
+        demoActions.setSeedAndPasword({
+          seed,
+          password: payload.password,
+          accountId: payload.accountId,
+        }),
+      )
     }),
   )
 
@@ -26,7 +33,14 @@ const register: Epic = (action$: Observable<AnyAction>, state$: Observable<RootS
     filter(actions.register.match),
     withLatestFrom(state$.pipe(map(selectSeed))),
     switchMap(([{ payload }, seed]) => {
-      return of(actions.reset(), demoActions.setSeedAndPasword({ seed: seed.join(' '), password: payload, accountId: '' }))
+      return of(
+        actions.reset(),
+        demoActions.setSeedAndPasword({
+          seed: seed.join(' '),
+          password: payload,
+          accountId: '',
+        }),
+      )
     }),
   )
 

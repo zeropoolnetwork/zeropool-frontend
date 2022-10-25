@@ -14,13 +14,14 @@ import { SeedPanel } from 'register/components/SeedPanel/SeedPanel'
 import './ImportAccount.scss'
 import { copyFromClipboard } from 'shared/utils/copy-from-clipboard'
 import { useSnackbar } from 'notistack'
+import { NETWORK } from 'wallet/api/zeropool.api'
 
 export const componentId = 'ImportAccount'
 const bem = cn(componentId)
 
 // #region INTERFACES
 interface FormData {
-  accountId: string
+  accountId?: string
   seed: string
   password: string
   confirm: string
@@ -28,7 +29,7 @@ interface FormData {
 
 export interface ImportAccountProps {
   onBack: () => void
-  onImport: (data: { seed: string[]; password: string, accountId: string }) => void
+  onImport: (data: { seed: string[]; password: string, accountId?: string }) => void
 }
 // #endregion
 
@@ -37,75 +38,77 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
   const [showPassword, setShowPassword] = useState(false)
 
   const { handleSubmit, register, control, formState: { errors }, getValues, setValue, watch } = useForm<FormData>()
-  const { onChange: onChangeSeed, onBlur: onBlurSeed, name: nameSeed, ref: refSeed } = register('seed', seedValidator)
   const { onChange: onChangeAccountId, onBlur: onBlurAccountId, name: nameAccountId, ref: refAccountId } = register('accountId', accountIdValidator)
+  const { onChange: onChangeSeed, onBlur: onBlurSeed, name: nameSeed, ref: refSeed } = register('seed', seedValidator)
   const { onChange: onChangePassword, onBlur: onBlurPassword, name: namePassword, ref: refPassword } = register('password', passwordValidator)
   const { onChange: onChangeConfirm, onBlur: onBlurConfirm, name: nameConfirm, ref: refConfirm } = register('confirm', confirmValidator(getValues))
-  const watchSeed = watch('seed', '')
   const watchAccountId = watch('accountId', '')
+  const watchSeed = watch('seed', '')
   const watchPassword = watch('password', '')
   const watchConfirm = watch('confirm', '')
   const { enqueueSnackbar } = useSnackbar()
   // tslint:enable: max-line-length prettier
+  
 
   return (
     <div className={bem()} data-testid={bem()}>
-      {process.env.NODE_ENV !== 'production' && <DevTool control={control} />}
+      {process.env.NODE_ENV === 'production' ? null : <DevTool control={control} />}
       <section>
-        {/* <SeedPanel classes={[bem('SeedPanel')]} seed={strToArray(watchSeed)} /> */}
-
         <form
           onSubmit={handleSubmit((data: FormData) => onImport({ password: data.password, seed: strToArray(watchSeed), accountId: data.accountId }))}
           className={bem('Form')}
         >
-          <FormControl className={bem('FormControl')} error={!!errors.accountId}>
-            <InputLabel color="secondary" className={bem('FormControlLabel')} htmlFor="accountId">
-              Near account id
-            </InputLabel>
+          {NETWORK === 'near' ? (
+            <FormControl className={bem('FormControl')} error={!!errors.accountId}>
+              <InputLabel color="secondary" className={bem('FormControlLabel')} htmlFor="accountId">
+                Near account id
+              </InputLabel>
 
-            <Input
-              id="accountId"
-              className={bem('AccountId')}
-              color="secondary"
-              inputProps={{ 'data-testid': bem('AccountId') }}
-              ref={refAccountId}
-              name={nameAccountId}
-              onChange={onChangeAccountId}
-              onBlur={onBlurAccountId}
-              type={'text'}
-              endAdornment={
-                <InputAdornment position="end">
-                  {watchAccountId.length ? (
+              <Input
+                id="accountId"
+                className={bem('AccountId')}
+                color="secondary"
+                inputProps={{ 'data-testid': bem('AccountId') }}
+                ref={refAccountId}
+                name={nameAccountId}
+                onChange={onChangeAccountId}
+                onBlur={onBlurAccountId}
+                type={'text'}
+                endAdornment={
+                  <InputAdornment position="end">
+                    {watchAccountId?.length ? (
+                      <IconButton
+                        tabIndex={-1}
+                        className={bem('FormControlButton')}
+                        aria-label="empty account id"
+                        onClick={() => {
+                          setValue('accountId', '')
+                          errors.accountId = undefined
+                        }}
+                        onMouseDown={(event) => event.preventDefault()}
+                      >
+                        <Close />
+                      </IconButton>
+                    ) : (
+                      <span />
+                    )}
                     <IconButton
-                      tabIndex={-1}
                       className={bem('FormControlButton')}
-                      aria-label="empty account id"
-                      onClick={() => {
-                        setValue('accountId', '')
-                        errors.accountId = undefined
-                      }}
-                      onMouseDown={(event) => event.preventDefault()}
+                      aria-label="paste"
+                      tabIndex={-1}
+                      onClick={() => copyFromClipboard('AccountId', enqueueSnackbar, accountId => {
+                        setValue('accountId', accountId);
+                        (document.getElementById('accountId') as any).focus();
+                      })}
                     >
-                      <Close />
+                      <CopyAll />
                     </IconButton>
-                  ) : (
-                    <span />
-                  )}
-                  <IconButton
-                    className={bem('FormControlButton')}
-                    aria-label="paste"
-                    tabIndex={-1}
-                    onClick={() => copyFromClipboard('AccountId', enqueueSnackbar, accountId => {
-                      setValue('accountId', accountId);
-                      (document.getElementById('accountId') as any).focus();
-                    })}
-                  >
-                    <CopyAll />
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+              ) : null 
+          }
 
           <FormControl className={bem('FormControl')} error={!!errors.seed}>
             <InputLabel color="secondary" className={bem('FormControlLabel')} htmlFor="seed">

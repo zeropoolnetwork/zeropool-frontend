@@ -1,7 +1,7 @@
 import { validateSeed } from 'register/state/helpers/seed.helper'
 
 export const accountIdValidator = {
-  required: 'Required',
+  required: false,
 }
 
 export const passwordValidator = {

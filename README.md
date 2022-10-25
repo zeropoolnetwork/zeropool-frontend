@@ -20,7 +20,12 @@ If blockchain node process halted remove it (from powershell if needed):
 
 First of all, in the project directory create static/assets/ folder and put there respective static files from [this repo](https://github.com/zeropoolnetwork/zeropool-frontend-static.git)
 
-Then, in the project directory, you can run the following commands:
+Then in the project directory select the network you want to work with:
+##### On Windows (command prompt runninng as administrator):
+##### `mklink .env .env.near` - select NEAR (Windows command prompt)
+##### `mklink .env .env.goerli` - select Goerli (Windows command prompt )
+
+After that you can run the following commands:
 
 ## `yarn start`
 
@@ -44,11 +49,3 @@ Build the test coverage report.
 ## `yarn coverage`
 
 Runs local server to show test coverage report.
-
-## `yarn build:local`
-
-Build the app to be tested on localhost.
-Then you can run the app (in VSCode):
-- install LiveServer plugin
-- open build/index.html in the VS Code editor
-- click on Live Server icon in the lower right corner
