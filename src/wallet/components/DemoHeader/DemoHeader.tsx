@@ -7,6 +7,7 @@ import './DemoHeader.scss'
 
 import { beautifyAddress, beautifyAmount } from 'shared/helpers/addres.helper'
 import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
+import { NETWORK } from 'wallet/api/zeropool.api'
 
 export const componentId = 'DemoHeader'
 const bem = cn(componentId)
@@ -61,7 +62,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
           </Tooltip>
         </div>
 
-        <div>
+        {NETWORK !== 'near' ? (<div>
           Public balance:&nbsp;
 
           <Tooltip title={publicBalance || ''}>
@@ -69,7 +70,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
               ? <CircularProgress className={bem('Progress')} color="inherit" />
               : <span onClick={handleAmountClick} style={{ cursor: 'pointer' }}>{beautifyAmount(publicBalance)}</span>}
           </Tooltip>
-        </div>
+        </div>) : null}
 
         <div>
           Token balance:&nbsp;

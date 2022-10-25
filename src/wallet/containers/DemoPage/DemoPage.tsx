@@ -24,7 +24,7 @@ import { Recovery } from 'wallet/components/Recovery/Recovery'
 import { Transfer } from 'wallet/components/Transfer/Transfer'
 import { TransferData } from 'shared/models'
 import { lowBalanceHelper } from 'wallet/state/helpers/low-balance.helper'
-import { NETWORK_FAUCET, NETWORK_NAME } from 'wallet/api/zeropool.api'
+import { NETWORK, NETWORK_FAUCET, NETWORK_NAME } from 'wallet/api/zeropool.api'
 import { Transactions } from 'wallet/containers/Transactions/Transactions'
 // tslint:enable: prettier max-line-length
 
@@ -208,7 +208,7 @@ export const DemoPage: React.FC<{}> = () => {
         </div>
       </div>
 
-      <Paper className={bem('Info')} elevation={2}>
+      {NETWORK !== 'near' ? (<Paper className={bem('Info')} elevation={2}>
         <Typography variant="h6" className={bem('InfoTitle')}>🚀 Mint test token</Typography>
 
         <div className={bem('Transaction', { Mint: true })}>
@@ -247,7 +247,7 @@ export const DemoPage: React.FC<{}> = () => {
           {/* <a href='https://fauceth.komputing.org/?chain=5' target={'_blank'}>Goerli Faucet</a> or&nbsp; */}
           <a href={NETWORK_FAUCET} target={'_blank'}>{NETWORK_NAME} Faucet</a> page to get free funds.
         </span>
-      </Paper>
+      </Paper>) : null}
 
       <div className={bem('Footer')}>
         <img className={bem('Logo')} src={logo} alt="ZeroPool" />
