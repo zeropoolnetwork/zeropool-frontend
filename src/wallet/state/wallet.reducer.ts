@@ -25,7 +25,7 @@ export type WalletState = {
   amounts: Record<TokenSymbol, number> | null
   pollSettings: PollSettings
   seed: string | null
-  accountId: string | null
+  accountId: string | undefined
   send: SendData | null
   supportedTokens: Token[]
   supportedTokensRecord: Record<TokenSymbol, Token>
@@ -46,7 +46,7 @@ export const initialWalletState: WalletState = {
   amounts: null,
   pollSettings: pollSettingsDefault,
   seed: null,
-  accountId: null,
+  accountId: undefined,
   send: null,
   supportedTokens: supportedTokens.supported,
   supportedTokensRecord: recordFromArray(supportedTokens.supported, 'symbol'),

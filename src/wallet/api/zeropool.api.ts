@@ -95,7 +95,7 @@ export const accountPresent = (): boolean => {
 export const init = async (
   mnemonic: string,
   password: string,
-  accountId: string | null,
+  accountId?: string,
 ): Promise<void> => {
   console.log('------------------------------------------------------')
   console.log('NETWORK: ', NETWORK)
@@ -148,12 +148,8 @@ export const init = async (
         transactionUrl: TRANSACTION_URL,
       })
     } else if (NETWORK == 'near') {
-      if (!accountId) {
-        throw new Error('Account id is required for Near network')
-      }
-
-      localStorage.setItem('zp.production.accountId', accountId)
-      sessionStorage.setItem('zp.development.password', accountId)
+      localStorage.setItem('zp.production.accountId', accountId || '')
+      sessionStorage.setItem('zp.development.password', accountId || '')
 
       network = new NearNetwork(RELAYER_URL)
 
@@ -165,7 +161,7 @@ export const init = async (
           helperUrl: 'https://helper.testnet.near.org',
         },
         CONTRACT_ADDRESS,
-        accountId,
+        accountId || '',
         mnemonic,
       )
     } else {
