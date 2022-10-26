@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 USERNAME=antonpegov
-IMAGE=zeropool-frontend-goerli
+IMAGE=zeropool-frontend
 
 yarn build && \
 docker build -f Dockerfile.prod -t $USERNAME/$IMAGE:latest . && \
