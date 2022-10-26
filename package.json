@@ -61,7 +61,7 @@
     "wallet.ts": "1.0.1",
     "webpack-version-file-plugin": "^0.4.0",
     "zeropool-client-js": "0.5.19",
-    "zeropool-support-js": "0.6.2"
+    "zeropool-support-js": "0.6.3"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^8.2.1",
