@@ -5,7 +5,7 @@ import { cn } from '@bem-react/classname'
 
 import './DemoHeader.scss'
 
-import { beautifyAddress, beautifyAmount } from 'shared/helpers/addres.helper'
+import { beautifyAddress, beautifyAmount } from 'shared/helpers/address.helper'
 import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
 import { NETWORK } from 'wallet/api/zeropool.api'
 
@@ -47,7 +47,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
           Public address:&nbsp;
           <Tooltip title={walletAddress || ''}>
             <span id="Public" onClick={handleAddressClick} style={{ cursor: 'pointer' }}>
-              {beautifyAddress(walletAddress || '')}
+              {beautifyAddress({ address: walletAddress || '' })}
             </span>
           </Tooltip>
         </div>
@@ -57,7 +57,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
 
           <Tooltip title={privateAddress || ''}>
             <span id="Private" onClick={handleAddressClick} style={{ cursor: 'pointer' }}>
-              {beautifyAddress(privateAddress || '')}
+              {beautifyAddress({ address: privateAddress || '' })}
             </span>
           </Tooltip>
         </div>

@@ -30,8 +30,20 @@ export const validateAddress = (address: string, symbol: TokenSymbol): boolean |
   return result
 }
 
-export const beautifyAddress = (address: string, limit = 6): string => {
+export type beautifyAddressProps = {
+  address: string
+  limit?: number
+}
+
+export const beautifyAddress = ({
+  address,
+  limit = 4,
+}: beautifyAddressProps): string => {
   let result = ''
+
+  if (address.includes('.') || address.toLocaleLowerCase().includes('private')) {
+    return address
+  }
 
   if (address.length > limit) {
     result = address.substring(0, limit) + '...' + address.substring(address.length - 4)

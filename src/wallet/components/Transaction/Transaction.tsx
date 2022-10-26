@@ -7,7 +7,7 @@ import { CallReceived } from '@mui/icons-material'
 import './Transaction.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-import { beautifyAddress, beautifyAmount } from 'shared/helpers/addres.helper'
+import { beautifyAddress, beautifyAmount } from 'shared/helpers/address.helper'
 import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
 import { useSnackbar } from 'notistack'
 import { TransactionType } from 'wallet/components/TransactionType/TransactionType'
@@ -59,7 +59,9 @@ export const Transaction: React.FC<TransactionProps> = ({ transaction, address }
       <span className={css('Adress')}>
         {' '}
         <Tooltip onClick={handleAddressClick} title={isIncoming ? transaction.from : transaction.to} placement="bottom">
-          <span style={{ cursor: 'pointer' }}>{beautifyAddress(isIncoming ? transaction.from : transaction.to, 6)}</span>
+          <span style={{ cursor: 'pointer' }}>
+            {beautifyAddress({ address: isIncoming ? transaction.from : transaction.to, limit: 9 })}
+          </span>
         </Tooltip>
       </span>
 

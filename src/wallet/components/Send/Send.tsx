@@ -7,7 +7,7 @@ import { cn } from '@bem-react/classname'
 import './Send.scss'
 
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
-import { validateAddress } from 'shared/helpers/addres.helper'
+import { validateAddress } from 'shared/helpers/address.helper'
 import logo from 'assets/images/logo_black.png'
 
 import * as api from 'wallet/api/zeropool.api'
@@ -89,7 +89,7 @@ export const Send: React.FC<SendProps> = ({ rate, wallet, onNextClick }) => {
           Paste
         </span>
 
-        <TextField 
+        <TextField
           data-testid={test('AmountInputRoot')}
           className={css('AmountInput', { Invalid: amount && !amountValid })}
           inputProps={{ 'data-testid': test('AmountInput') }}

@@ -1,4 +1,4 @@
-import { beautifyAddress, beautifyAmount } from 'shared/helpers/addres.helper'
+import { beautifyAddress, beautifyAmount } from 'shared/helpers/address.helper'
 
 jest.mock('shared/models')
 jest.mock('shared/helpers/validators/eth.validator', () => {
@@ -13,12 +13,28 @@ jest.mock('wallet/api/zeropool.api', () => ({
 
 describe('adress beautifyer', () => {
   it('transorms adress to 0x123...abcd', () => {
-    const address = '0xA646dc3DD68338Ee960eA131cfc798D9bF66070d'
+    const address = { address: '0xA646dc3DD68338Ee960eA131cfc798D9bF66070d' }
     const result = '0xA6...070d'
 
-    expect(beautifyAddress(address, 4)).toBe(result)
+    expect(beautifyAddress(address)).toBe(result)
   })
 
+  it('transorms doesnt transforms near address', () => {
+    const address = { address: 'near.address' }
+    const result = 'near.address'
+
+    expect(beautifyAddress(address)).toBe(result)
+  })
+
+  it(`transorms doesnt transforms "Private destination"`, () => {
+    const address = { address: 'Private destination' }
+    const result = 'Private destination'
+
+    expect(beautifyAddress(address)).toBe(result)
+  })
+})
+
+describe('amount beautifyer', () => {
   it('transforms amount 0.0000000000000003 to 0.0...0003', () => {
     const amount = '0.00000000000000003'
     const result = '0.0...0003'

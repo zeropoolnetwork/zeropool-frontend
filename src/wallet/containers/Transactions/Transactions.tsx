@@ -12,7 +12,6 @@ import { SortedTransactions } from 'wallet/state/models/sorted-transactions'
 import transactionHelper from 'wallet/state/helpers/transaction.helper'
 import { Transaction as TransactionRow } from 'wallet/components/Transaction/Transaction'
 import { Transaction } from 'shared/models/transaction'
-import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
 
 export const componentId = 'Transactions'
 

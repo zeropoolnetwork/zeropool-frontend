@@ -5,7 +5,7 @@ import { act, fireEvent, render } from '@testing-library/react'
 import { Send, componentId, SendProps } from './Send'
 
 import { _testWalletsEth, testIdBuilder } from 'shared/helpers/test'
-import { validateAddress } from 'shared/helpers/addres.helper'
+import { validateAddress } from 'shared/helpers/address.helper'
 import { addressShielded } from 'wallet/api/zeropool.api'
 
 let addressValid: boolean

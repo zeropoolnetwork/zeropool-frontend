@@ -5,7 +5,7 @@ import NumberFormat from 'react-number-format'
 
 import './TokenRow.scss'
 
-import { beautifyAmount } from 'shared/helpers/addres.helper'
+import { beautifyAmount } from 'shared/helpers/address.helper'
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { IconOption } from 'shared/components/Icon/IconOption'
 import { Token } from 'shared/models/token'

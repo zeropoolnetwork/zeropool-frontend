@@ -15,7 +15,7 @@ import { Icon } from 'shared/components/Icon/Icon'
 
 import { ExpandButton } from 'wallet/components/ExpandButton/ExpandButton'
 import { Wallet } from 'wallet/state/models/wallet'
-import { beautifyAmount } from 'shared/helpers/addres.helper'
+import { beautifyAmount } from 'shared/helpers/address.helper'
 
 export const componentId = 'WalletRow'
 
