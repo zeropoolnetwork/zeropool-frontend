@@ -11,3 +11,9 @@ export const debug = <T>() => {
     )
   }
 }
+
+export const debugMapper = <T>(data: any) => {
+  debugger
+
+  return data
+}

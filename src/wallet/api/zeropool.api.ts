@@ -45,8 +45,6 @@ import { isEvmBased, isSubstrateBased } from 'wallet/api/networks'
 
 import { transaction, Transaction } from 'shared/models/transaction'
 import { TransferData } from 'shared/models'
-import { debug } from 'shared/operators/debug.operator'
-import { transactionsMock } from 'mocks/transactions.mock'
 import { toast } from 'shared/helpers/toast.helper'
 
 const WORKER_ST_PATH = '/workerSt.js?' + process.env.CACHE_BUST
@@ -671,8 +669,7 @@ export const getPrivateHistory = async (): Promise<Transaction[]> => {
   ].history.getAllHistory()
 
   const normalizedData = data
-    // Filter out deposits
-    .filter((record) => record.type !== 1)
+    .map((record) => (record.type !== 1 ? record : { ...record, to: 'Private' }))
     .map((record) =>
       transactionHelper.fromPrivateHistory(
         record,
