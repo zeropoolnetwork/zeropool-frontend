@@ -670,6 +670,7 @@ export const getPrivateHistory = async (): Promise<Transaction[]> => {
 
   const normalizedData = data
     .map((record) => (record.type !== 1 ? record : { ...record, to: 'Private' }))
+    .map((record) => (record.type !== 4 ? record : { ...record, from: 'Private' }))
     .map((record) =>
       transactionHelper.fromPrivateHistory(
         record,
@@ -687,8 +688,9 @@ export const getPublicHistory = async (): Promise<Transaction[]> => {
     )
 
     const normalizedData = data
-      // Filter out withdrawals
+      // Filter out withdrawals and deposits
       .filter((record) => record.from.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
+      .filter((record) => record.to.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
       .map((record) =>
         transactionHelper.fromPublicHistory(
           record,
