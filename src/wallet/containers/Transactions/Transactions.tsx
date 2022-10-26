@@ -61,26 +61,29 @@ export const Transactions: React.FC<TransactionsProps> = ({ transactions, addres
   return (
     <div className={bem()} data-testid={test()}>
       <div className={bem('Days')}>
-        {transactions ? (
-          sorted.map((day, i) => (
-            <div className={bem('Day')} key={i}>
-              <div className={bem('Date')}>
-                <span className={bem('Arrow', { Down: opened[i] })} onClick={() => openHandler(i)}>
-                  {'>'}
-                </span>
-
-                {' ' + day.date}
-              </div>
-
-              {day.transactions.map((transaction, j) => (
-                <div className={bem('TransactionRow', { Open: opened[i] })} key={j}>
-                  <TransactionRow transaction={transaction} key={j} address={address} />
-                </div>
-              ))}
-            </div>
-          ))
-        ) : (
+        {!transactions ? (
           <CircularProgress sx={{ margin: "auto" }} />
+        ) : (
+          transactions.length == 0 ?
+            <div className={bem('Empty')}>No records yet</div>
+            :
+            (sorted.map((day, i) => (
+              <div className={bem('Day')} key={i}>
+                <div className={bem('Date')}>
+                  <span className={bem('Arrow', { Down: opened[i] })} onClick={() => openHandler(i)}>
+                    {'>'}
+                  </span>
+
+                  {' ' + day.date}
+                </div>
+
+                {day.transactions.map((transaction, j) => (
+                  <div className={bem('TransactionRow', { Open: opened[i] })} key={j}>
+                    <TransactionRow transaction={transaction} key={j} address={address} />
+                  </div>
+                ))}
+              </div>
+            )))
         )}
       </div>
 
