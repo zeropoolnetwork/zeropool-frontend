@@ -148,9 +148,6 @@ export const init = async (
         transactionUrl: TRANSACTION_URL,
       })
     } else if (NETWORK == 'near') {
-      localStorage.setItem('zp.production.accountId', accountId || '')
-      sessionStorage.setItem('zp.development.password', accountId || '')
-
       network = new NearNetwork(RELAYER_URL)
 
       zpSupport = await NearClient.create(
@@ -161,9 +158,13 @@ export const init = async (
           helperUrl: 'https://helper.testnet.near.org',
         },
         CONTRACT_ADDRESS,
-        accountId || '',
         mnemonic,
+        accountId,
       )
+
+      const address = await zpSupport.getAddress()
+      localStorage.setItem('zp.production.accountId', address)
+      sessionStorage.setItem('zp.development.password', address)
     } else {
       throw new Error(`Unknown network ${NETWORK}`)
     }

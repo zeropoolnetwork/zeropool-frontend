@@ -208,10 +208,10 @@ export const DemoPage: React.FC<{}> = () => {
         </div>
       </div>
 
-      {NETWORK !== 'near' ? (<Paper className={bem('Info')} elevation={2}>
-        <Typography variant="h6" className={bem('InfoTitle')}>🚀 Mint test token</Typography>
+      <Paper className={bem('Info')} elevation={2}>
 
-        <div className={bem('Transaction', { Mint: true })}>
+        { NETWORK !== 'near' ? (<div className={bem('Transaction', { Mint: true })}>
+          <Typography variant="h6" className={bem('InfoTitle')}>🚀 Mint test token</Typography>
           <Input
             id="mint-amount"
             className={bem('Input')}
@@ -238,7 +238,7 @@ export const DemoPage: React.FC<{}> = () => {
           >
             Mint
           </LoadingButton>
-        </div>
+        </div>) : null }
 
         <span className={bem('InfoText')}>To perform any action on this page you need to have enough funds on your public balance.</span>
 
@@ -247,7 +247,7 @@ export const DemoPage: React.FC<{}> = () => {
           {/* <a href='https://fauceth.komputing.org/?chain=5' target={'_blank'}>Goerli Faucet</a> or&nbsp; */}
           <a href={NETWORK_FAUCET} target={'_blank'}>{NETWORK_NAME} Faucet</a> page to get free funds.
         </span>
-      </Paper>) : null}
+      </Paper>
 
       <div className={bem('Footer')}>
         <img className={bem('Logo')} src={logo} alt="ZeroPool" />
