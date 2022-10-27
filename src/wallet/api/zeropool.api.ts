@@ -11,7 +11,6 @@ import transactionHelper, {
 import {
   catchError,
   concat,
-  concatMap,
   from,
   map,
   Observable,
@@ -145,7 +144,7 @@ export const init = async (
         rpcUrl: RPC_URL,
         transactionUrl: TRANSACTION_URL,
       })
-    } else if (NETWORK == 'near') {
+    } else if (NETWORK === 'near') {
       network = new NearNetwork(RELAYER_URL)
 
       zpSupport = await NearClient.create(

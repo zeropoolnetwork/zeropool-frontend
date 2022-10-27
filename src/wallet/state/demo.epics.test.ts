@@ -1,31 +1,25 @@
 import { from } from 'rxjs'
 import { TestScheduler } from 'rxjs/testing'
 
-import { demoActions, initialDemoState } from 'wallet/state/demo.reducer'
-import { getDevPassword, getDevSeed } from 'wallet/api/zeropool.api'
 import { demoEpics } from 'wallet/state/demo.epics'
-
-const fromMock = from as jest.Mock
-const getDevSeedMock = getDevSeed as jest.Mock
-const getDevPasswordMock = getDevPassword as jest.Mock
-
-var mockApiDeposit = jest.fn()
-var mockApiWithdraw = jest.fn()
-var mockApiTransfer = jest.fn()
-var mockToastInfo = jest.fn()
-var mockToastClose = jest.fn()
-var mockToastSuccess = jest.fn()
-var mockToastError = jest.fn()
-var clearSpy = jest.spyOn(window.localStorage.__proto__, 'clear')
-
+import { demoActions, initialDemoState } from 'wallet/state/demo.reducer'
+import {
+  getAccountId,
+  getDevAccountId,
+  getDevPassword,
+  getDevSeed,
+} from 'wallet/api/zeropool.api'
+//#region mocks
 jest.mock('wallet/api/zeropool.api', () => ({
   init: jest.fn(),
   mint: jest.fn(),
   deposit: () => mockApiDeposit(),
   withdraw: () => mockApiWithdraw(),
   transfer: () => mockApiTransfer(),
+  getAccountId: jest.fn(),
   getDevSeed: jest.fn(),
   getDevPassword: jest.fn(),
+  getDevAccountId: jest.fn(),
   getRegularBalance: jest.fn(),
   getShieldedBalances: jest.fn(),
   getTokenBalance: jest.fn(),
@@ -45,6 +39,22 @@ jest.mock('rxjs', () => ({
   ...jest.requireActual('rxjs'),
   from: jest.fn(),
 }))
+//#endregion
+const fromMock = from as jest.Mock
+const getDevSeedMock = getDevSeed as jest.Mock
+const getDevPasswordMock = getDevPassword as jest.Mock
+const getDevAccountIdMock = getDevAccountId as jest.Mock
+const getAccountIdMock = getAccountId as jest.Mock
+
+var mockApiDeposit = jest.fn()
+var mockApiWithdraw = jest.fn()
+var mockApiTransfer = jest.fn()
+var mockToastInfo = jest.fn()
+var mockToastClose = jest.fn()
+var mockToastSuccess = jest.fn()
+var mockToastError = jest.fn()
+var mockGetAccountId = jest.fn()
+var clearSpy = jest.spyOn(window.localStorage.__proto__, 'clear')
 
 describe('demoEpics', () => {
   afterEach(() => {
@@ -55,7 +65,10 @@ describe('demoEpics', () => {
       const testSheduler = new TestScheduler((actual, expected) => {
         expect(actual).toStrictEqual(expected)
         expect(mockToastInfo).toHaveBeenCalledTimes(1)
-        expect(mockToastInfo).toHaveBeenCalledWith(expect.anything(), { key: 'initApi', persist: true })
+        expect(mockToastInfo).toHaveBeenCalledWith(expect.anything(), {
+          key: 'initApi',
+          persist: true,
+        })
         expect(mockToastClose).toHaveBeenCalledTimes(1)
         expect(mockToastClose).toHaveBeenCalledWith('initApi')
         expect(mockToastSuccess).toHaveBeenCalledTimes(1)
@@ -64,7 +77,14 @@ describe('demoEpics', () => {
 
       testSheduler.run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', { a: demoActions.initApi(null) })
-        const state$ = cold('a', { a: { demo: { ...initialDemoState, initials: { seed: 'seed', password: 'password' } } } }) as any
+        const state$ = cold('a', {
+          a: {
+            demo: {
+              ...initialDemoState,
+              initials: { seed: 'seed', password: 'password' },
+            },
+          },
+        }) as any
         const expected$ = hot('-b', { b: demoActions.initApiSuccess(null) })
         const result$ = demoEpics(action$, state$, {})
 
@@ -75,6 +95,8 @@ describe('demoEpics', () => {
     })
 
     it('should dispath initApiFailure action', () => {
+      getDevAccountIdMock.mockReturnValue('test')
+
       const testSheduler = new TestScheduler((actual, expected) => {
         expect(actual).toStrictEqual(expected)
         expect(mockToastClose).toHaveBeenCalledTimes(1)
@@ -85,7 +107,14 @@ describe('demoEpics', () => {
 
       testSheduler.run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', { a: demoActions.initApi(null) })
-        const state$ = cold('a', { a: { demo: { ...initialDemoState, initials: { seed: 'seed', password: 'password' } } } }) as any
+        const state$ = cold('a', {
+          a: {
+            demo: {
+              ...initialDemoState,
+              initials: { seed: 'seed', password: 'password' },
+            },
+          },
+        }) as any
         const expected$ = hot('-b', { b: demoActions.initApiFailure('Api init failure') })
         const result$ = demoEpics(action$, state$, {})
 
@@ -101,7 +130,10 @@ describe('demoEpics', () => {
       const testSheduler = new TestScheduler((actual, expected) => {
         expect(actual).toStrictEqual(expected)
         expect(mockToastInfo).toHaveBeenCalledTimes(1)
-        expect(mockToastInfo).toHaveBeenCalledWith(expect.anything(), { key: 'mint', persist: true })
+        expect(mockToastInfo).toHaveBeenCalledWith(expect.anything(), {
+          key: 'mint',
+          persist: true,
+        })
         expect(mockToastClose).toHaveBeenCalledTimes(1)
         expect(mockToastClose).toHaveBeenCalledWith('mint')
         expect(mockToastSuccess).toHaveBeenCalledTimes(1)
@@ -124,7 +156,10 @@ describe('demoEpics', () => {
       const testSheduler = new TestScheduler((actual, expected) => {
         expect(actual).toStrictEqual(expected)
         expect(mockToastInfo).toHaveBeenCalledTimes(1)
-        expect(mockToastInfo).toHaveBeenCalledWith(expect.anything(), { key: 'mint', persist: true })
+        expect(mockToastInfo).toHaveBeenCalledWith(expect.anything(), {
+          key: 'mint',
+          persist: true,
+        })
         expect(mockToastClose).toHaveBeenCalledTimes(1)
         expect(mockToastClose).toHaveBeenCalledWith('mint')
         expect(mockToastSuccess).toHaveBeenCalledTimes(0)
@@ -139,7 +174,9 @@ describe('demoEpics', () => {
 
         fromMock.mockImplementation(() => cold('-#', {}, 'Mint Failed'))
 
-        expectObservable(result$).toBe('--a', { a: demoActions.mintFailure('Mint Failed') })
+        expectObservable(result$).toBe('--a', {
+          a: demoActions.mintFailure('Mint Failed'),
+        })
       })
     })
   })
@@ -149,7 +186,10 @@ describe('demoEpics', () => {
       const testSheduler = new TestScheduler((actual, expected) => {
         expect(actual).toStrictEqual(expected)
         expect(mockToastInfo).toHaveBeenCalledTimes(1)
-        expect(mockToastInfo).toHaveBeenCalledWith(expect.anything(), { key: 'deposit', persist: true })
+        expect(mockToastInfo).toHaveBeenCalledWith(expect.anything(), {
+          key: 'deposit',
+          persist: true,
+        })
       })
 
       testSheduler.run(({ hot, cold, expectObservable }) => {
@@ -157,9 +197,13 @@ describe('demoEpics', () => {
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
 
-        mockApiDeposit.mockReturnValue(cold('-a', { a: { status: 'started', type: 'deposit' } }))
+        mockApiDeposit.mockReturnValue(
+          cold('-a', { a: { status: 'started', type: 'deposit' } }),
+        )
 
-        expectObservable(result$).toBe('--a', { a: demoActions.transaction({ status: 'started', type: 'deposit' }) })
+        expectObservable(result$).toBe('--a', {
+          a: demoActions.transaction({ status: 'started', type: 'deposit' }),
+        })
       })
     })
     it('should dispatch transaction when deposit pending', () => {
@@ -175,9 +219,13 @@ describe('demoEpics', () => {
         const action$ = hot('-a', { a: demoActions.deposit('1') })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('--a', { a: demoActions.transaction({ status: 'pending', type: 'deposit' }) })
+        const expected$ = hot('--a', {
+          a: demoActions.transaction({ status: 'pending', type: 'deposit' }),
+        })
 
-        mockApiDeposit.mockReturnValue(cold('-a', { a: { status: 'pending', type: 'deposit' } }))
+        mockApiDeposit.mockReturnValue(
+          cold('-a', { a: { status: 'pending', type: 'deposit' } }),
+        )
 
         expectObservable(result$).toEqual(expected$)
       })
@@ -194,10 +242,12 @@ describe('demoEpics', () => {
         const result$ = demoEpics(action$, state$, {})
         const expected$ = hot('--(ab)', {
           a: demoActions.transaction({ status: 'success', type: 'deposit' }),
-          b: demoActions.depositSuccess('1')
+          b: demoActions.depositSuccess('1'),
         })
 
-        mockApiDeposit.mockReturnValue(cold('-a', { a: { status: 'success', type: 'deposit' } }))
+        mockApiDeposit.mockReturnValue(
+          cold('-a', { a: { status: 'success', type: 'deposit' } }),
+        )
 
         expectObservable(result$).toEqual(expected$)
       })
@@ -212,7 +262,9 @@ describe('demoEpics', () => {
         const action$ = hot('-a', { a: demoActions.deposit('1') })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('--a', { a: demoActions.depositFailure('Transaction failed') })
+        const expected$ = hot('--a', {
+          a: demoActions.depositFailure('Transaction failed'),
+        })
 
         mockApiDeposit.mockReturnValue(cold('-#', {}, 'Transaction failed'))
 
@@ -226,14 +278,21 @@ describe('demoEpics', () => {
       const testSheduler = new TestScheduler((actual, expected) => {
         expect(actual).toStrictEqual(expected)
         expect(mockToastInfo).toHaveBeenCalledTimes(1)
-        expect(mockToastInfo).toHaveBeenCalledWith(expect.anything(), { key: 'withdraw', persist: true })
+        expect(mockToastInfo).toHaveBeenCalledWith(expect.anything(), {
+          key: 'withdraw',
+          persist: true,
+        })
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', { a: demoActions.withdraw('1') })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('--a', { a: demoActions.transaction({ status: 'started', type: 'withdraw' }) })
+        const expected$ = hot('--a', {
+          a: demoActions.transaction({ status: 'started', type: 'withdraw' }),
+        })
 
-        mockApiWithdraw.mockReturnValue(cold('-a', { a: { status: 'started', type: 'withdraw' } }))
+        mockApiWithdraw.mockReturnValue(
+          cold('-a', { a: { status: 'started', type: 'withdraw' } }),
+        )
 
         expectObservable(result$).toEqual(expected$)
       })
@@ -250,9 +309,13 @@ describe('demoEpics', () => {
         const action$ = hot('-a', { a: demoActions.withdraw('1') })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('--a', { a: demoActions.transaction({ status: 'pending', type: 'withdraw' }) })
+        const expected$ = hot('--a', {
+          a: demoActions.transaction({ status: 'pending', type: 'withdraw' }),
+        })
 
-        mockApiWithdraw.mockReturnValue(cold('-a', { a: { status: 'pending', type: 'withdraw' } }))
+        mockApiWithdraw.mockReturnValue(
+          cold('-a', { a: { status: 'pending', type: 'withdraw' } }),
+        )
 
         expectObservable(result$).toEqual(expected$)
       })
@@ -269,10 +332,12 @@ describe('demoEpics', () => {
         const result$ = demoEpics(action$, state$, {})
         const expected$ = hot('--(ab)', {
           a: demoActions.transaction({ status: 'success', type: 'withdraw' }),
-          b: demoActions.withdrawSuccess('1')
+          b: demoActions.withdrawSuccess('1'),
         })
 
-        mockApiWithdraw.mockReturnValue(cold('-a', { a: { status: 'success', type: 'withdraw' } }))
+        mockApiWithdraw.mockReturnValue(
+          cold('-a', { a: { status: 'success', type: 'withdraw' } }),
+        )
 
         expectObservable(result$).toEqual(expected$)
       })
@@ -287,7 +352,9 @@ describe('demoEpics', () => {
         const action$ = hot('-a', { a: demoActions.withdraw('1') })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('--a', { a: demoActions.withdrawFailure('Transaction failed') })
+        const expected$ = hot('--a', {
+          a: demoActions.withdrawFailure('Transaction failed'),
+        })
 
         mockApiWithdraw.mockReturnValue(cold('-#', {}, 'Transaction failed'))
 
@@ -301,21 +368,28 @@ describe('demoEpics', () => {
       new TestScheduler((actual, expected) => {
         expect(actual).toStrictEqual(expected)
         expect(mockToastInfo).toHaveBeenCalledTimes(1)
-        expect(mockToastInfo).toHaveBeenCalledWith(expect.anything(), { key: 'transfer', persist: true })
+        expect(mockToastInfo).toHaveBeenCalledWith(expect.anything(), {
+          key: 'transfer',
+          persist: true,
+        })
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
           a: demoActions.transfer({
             to: 'to',
             amount: 'amount',
             id: 1,
-            type: 'funds'
-          })
+            type: 'funds',
+          }),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('--a', { a: demoActions.transaction({ status: 'started', type: 'funds' }) })
+        const expected$ = hot('--a', {
+          a: demoActions.transaction({ status: 'started', type: 'funds' }),
+        })
 
-        mockApiTransfer.mockReturnValue(cold('-a', { a: { status: 'started', type: 'funds' } }))
+        mockApiTransfer.mockReturnValue(
+          cold('-a', { a: { status: 'started', type: 'funds' } }),
+        )
 
         expectObservable(result$).toEqual(expected$)
       })
@@ -334,14 +408,18 @@ describe('demoEpics', () => {
             to: 'to',
             amount: 'amount',
             id: 1,
-            type: 'funds'
-          })
+            type: 'funds',
+          }),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('--a', { a: demoActions.transaction({ status: 'pending', type: 'funds' }) })
+        const expected$ = hot('--a', {
+          a: demoActions.transaction({ status: 'pending', type: 'funds' }),
+        })
 
-        mockApiTransfer.mockReturnValue(cold('-a', { a: { status: 'pending', type: 'funds' } }))
+        mockApiTransfer.mockReturnValue(
+          cold('-a', { a: { status: 'pending', type: 'funds' } }),
+        )
 
         expectObservable(result$).toEqual(expected$)
       })
@@ -358,14 +436,19 @@ describe('demoEpics', () => {
             to: 'to',
             amount: 'amount',
             id: 1,
-            type: 'funds'
-          })
+            type: 'funds',
+          }),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('--(ab)', { a: demoActions.transaction({ status: 'success', type: 'funds' }), b: demoActions.transferSuccess('funds') })
+        const expected$ = hot('--(ab)', {
+          a: demoActions.transaction({ status: 'success', type: 'funds' }),
+          b: demoActions.transferSuccess('funds'),
+        })
 
-        mockApiTransfer.mockReturnValue(cold('-a', { a: { status: 'success', type: 'funds' } }))
+        mockApiTransfer.mockReturnValue(
+          cold('-a', { a: { status: 'success', type: 'funds' } }),
+        )
 
         expectObservable(result$).toEqual(expected$)
       })
@@ -384,12 +467,14 @@ describe('demoEpics', () => {
             to: 'to',
             amount: 'amount',
             id: 1,
-            type: 'funds'
-          })
+            type: 'funds',
+          }),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('--a', { a: demoActions.transferFailure('Transaction failed') })
+        const expected$ = hot('--a', {
+          a: demoActions.transferFailure('Transaction failed'),
+        })
 
         mockApiTransfer.mockReturnValue(cold('-#', {}, 'Transaction failed'))
 
@@ -404,7 +489,7 @@ describe('demoEpics', () => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.getPublicBalance(0)
+          a: demoActions.getPublicBalance(0),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -423,7 +508,7 @@ describe('demoEpics', () => {
         expect(mockToastError).toHaveBeenCalledWith('Error')
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.getPublicBalance(0)
+          a: demoActions.getPublicBalance(0),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -442,7 +527,7 @@ describe('demoEpics', () => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.getTokenBalance(0)
+          a: demoActions.getTokenBalance(0),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -461,7 +546,7 @@ describe('demoEpics', () => {
         expect(mockToastError).toHaveBeenCalledWith('Error')
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.getTokenBalance(0)
+          a: demoActions.getTokenBalance(0),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -480,7 +565,7 @@ describe('demoEpics', () => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.getPrivateBalance(0)
+          a: demoActions.getPrivateBalance(0),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -499,7 +584,7 @@ describe('demoEpics', () => {
         expect(mockToastError).toHaveBeenCalledWith('Error')
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.getPrivateBalance(0)
+          a: demoActions.getPrivateBalance(0),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -518,11 +603,13 @@ describe('demoEpics', () => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.getWalletAddress(null)
+          a: demoActions.getWalletAddress(null),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('--a', { a: demoActions.getWalletAddressSuccess('address') })
+        const expected$ = hot('--a', {
+          a: demoActions.getWalletAddressSuccess('address'),
+        })
 
         fromMock.mockReturnValue(cold('-a', { a: 'address' }))
 
@@ -537,7 +624,7 @@ describe('demoEpics', () => {
         expect(mockToastError).toHaveBeenCalledWith('Error')
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.getWalletAddress(null)
+          a: demoActions.getWalletAddress(null),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -556,11 +643,13 @@ describe('demoEpics', () => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.getPrivateAddress(null)
+          a: demoActions.getPrivateAddress(null),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('--a', { a: demoActions.getPrivateAddressSuccess('address') })
+        const expected$ = hot('--a', {
+          a: demoActions.getPrivateAddressSuccess('address'),
+        })
 
         fromMock.mockReturnValue(cold('-a', { a: 'address' }))
 
@@ -575,7 +664,7 @@ describe('demoEpics', () => {
         expect(mockToastError).toHaveBeenCalledWith('Error')
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.getPrivateAddress(null)
+          a: demoActions.getPrivateAddress(null),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -594,11 +683,15 @@ describe('demoEpics', () => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.initApiSuccess(null)
+          a: demoActions.initApiSuccess(null),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('-(abc)', { a: demoActions.getWalletAddress(null), b: demoActions.getPrivateAddress(null), c: demoActions.updateBalances(null) })
+        const expected$ = hot('-(abc)', {
+          a: demoActions.getWalletAddress(null),
+          b: demoActions.getPrivateAddress(null),
+          c: demoActions.updateBalances(null),
+        })
 
         expectObservable(result$).toEqual(expected$)
       })
@@ -611,7 +704,7 @@ describe('demoEpics', () => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.mintSuccess(0)
+          a: demoActions.mintSuccess(0),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -628,7 +721,7 @@ describe('demoEpics', () => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.transaction({ status: 'success', type: 'funds' })
+          a: demoActions.transaction({ status: 'success', type: 'funds' }),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -637,7 +730,7 @@ describe('demoEpics', () => {
             funds: 0,
             tokens: 4000,
             private: 1000,
-          })
+          }),
         })
 
         expectObservable(result$).toEqual(expected$)
@@ -651,7 +744,7 @@ describe('demoEpics', () => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.exportSeed('seed')
+          a: demoActions.exportSeed('seed'),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -670,7 +763,7 @@ describe('demoEpics', () => {
         expect(mockToastError).toHaveBeenCalledWith('Error')
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.exportSeed('seed')
+          a: demoActions.exportSeed('seed'),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -685,15 +778,23 @@ describe('demoEpics', () => {
 
   describe('recoverWallet', () => {
     it('should dispatch recoverWalletSuccess when recoverWallet success', () => {
+      getAccountIdMock.mockReturnValue('test')
+
       new TestScheduler((actual, expected) => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.recoverWallet('password')
+          a: demoActions.recoverWallet('password'),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('--a', { a: demoActions.recoverWalletSuccess({ seed: 'seed', password: 'password', accountId: '' }) })
+        const expected$ = hot('--a', {
+          a: demoActions.recoverWalletSuccess({
+            seed: 'seed',
+            password: 'password',
+            accountId: 'test',
+          }),
+        })
 
         fromMock.mockReturnValue(cold('-a', { a: 'seed' }))
 
@@ -708,7 +809,7 @@ describe('demoEpics', () => {
         expect(mockToastError).toHaveBeenCalledWith('Error')
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.recoverWallet('password')
+          a: demoActions.recoverWallet('password'),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -727,12 +828,22 @@ describe('demoEpics', () => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.recoverWalletSuccess({ seed: 'seed', password: 'password', accountId: 'test' })
+          a: demoActions.recoverWalletSuccess({
+            seed: 'seed',
+            password: 'password',
+            accountId: 'test',
+          }),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('-(ab)', { a: demoActions.setSeedAndPasword({ seed: 'seed', password: 'password', accountId: 'test' }), b: demoActions.initApi(null) })
-
+        const expected$ = hot('-(ab)', {
+          a: demoActions.setSeedAndPasword({
+            seed: 'seed',
+            password: 'password',
+            accountId: 'test',
+          }),
+          b: demoActions.initApi(null),
+        })
 
         expectObservable(result$).toEqual(expected$)
       })
@@ -750,7 +861,7 @@ describe('demoEpics', () => {
         expect(mockToastSuccess).toHaveBeenCalledTimes(1)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.resetAccount(null)
+          a: demoActions.resetAccount(null),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -769,7 +880,7 @@ describe('demoEpics', () => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.initApi(null)
+          a: demoActions.initApi(null),
         })
         const state$ = cold('a', { a: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -785,7 +896,7 @@ describe('demoEpics', () => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.initApi(null)
+          a: demoActions.initApi(null),
         })
         const state$ = cold('a', { a: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
@@ -797,20 +908,27 @@ describe('demoEpics', () => {
     it('should dispatch setSeedAndPasword and initApi if no dev password present in local storage', () => {
       getDevPasswordMock.mockReturnValue('password')
       getDevSeedMock.mockReturnValue('seed')
+      getDevAccountIdMock.mockReturnValue('test')
 
       new TestScheduler((actual, expected) => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.initApi(null)
+          a: demoActions.initApi(null),
         })
         const state$ = cold('a', { a: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
-        const expected$ = hot('-(ab)', { a: demoActions.setSeedAndPasword({ seed: 'seed', password: 'password', accountId: 'test' }), b: demoActions.initApi(null) })
+        const expected$ = hot('-(ab)', {
+          a: demoActions.setSeedAndPasword({
+            seed: 'seed',
+            password: 'password',
+            accountId: 'test',
+          }),
+          b: demoActions.initApi(null),
+        })
 
         expectObservable(result$).toEqual(expected$)
       })
     })
-
   })
 })

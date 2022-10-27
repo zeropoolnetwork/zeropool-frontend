@@ -8,8 +8,9 @@ import { createClientRender, queryByAttribute } from 'shared/utils/render.js'
 
 const bem = cn(componentId)
 const getById = queryByAttribute.bind(null, 'id')
+const useSnackbarMock = useSnackbar as jest.Mock
 
-jest.mock('notistack', () => ({useSnackbar: jest.fn()}))
+jest.mock('notistack', () => ({ useSnackbar: jest.fn() }))
 jest.mock('register/state/helpers/seed.helper', () => ({
   validateSeed: jest.fn(),
 }))
@@ -20,7 +21,7 @@ describe('ImportAccount', () => {
   const render = createClientRender({ strict: false })
 
   beforeEach(() => {
-    (useSnackbar as jest.Mock).mockImplementation(() => ({enqueueSnackbar: jest.fn()}))
+    useSnackbarMock.mockImplementation(() => ({ enqueueSnackbar: jest.fn() }))
     outputSpy = jest.fn()
     component = <ImportAccount onImport={outputSpy} onBack={outputSpy} />
   })
