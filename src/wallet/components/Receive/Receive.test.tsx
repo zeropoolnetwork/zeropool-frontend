@@ -13,9 +13,7 @@ const getPrivateAddressSpy = jest.fn()
 const snackbarSpy = jest.fn()
 const clipboardSpy = jest.fn()
 
-jest.mock('notistack', () => ({
-  useSnackbar: jest.fn(),
-}))
+jest.mock('notistack', () => ({ useSnackbar: jest.fn() }))
 //#endregion
 describe('Receive view', () => {
   const factory = ({

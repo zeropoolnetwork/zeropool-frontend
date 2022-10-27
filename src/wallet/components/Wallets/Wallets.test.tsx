@@ -5,13 +5,6 @@ import { Wallets, componentId, WalletsProps } from './Wallets'
 
 import { _testToken } from 'shared/helpers/test/app-state.helper'
 
-
-jest.mock('shared/helpers/addres.helper', () => {
-  return {
-    beautifyAmount: jest.fn(),
-  }
-})
-
 describe('Wallets', () => {
   let outputSpy: jest.Mock
   let component: React.ReactElement<WalletsProps>

@@ -24,7 +24,7 @@ describe('TransactionType', () => {
 
       const { getByText } = render(createComponent(transferType))
 
-      expect(getByText('Public to Public')).toBeInTheDocument()
+      expect(getByText('Tokens')).toBeInTheDocument()
    })
 
    it('it renders component with Public to Private text', () => {
@@ -32,7 +32,7 @@ describe('TransactionType', () => {
 
       const { getByText } = render(createComponent(transferType))
 
-      expect(getByText('Public to Private')).toBeInTheDocument()
+      expect(getByText('Deposit')).toBeInTheDocument()
    })
 
    it('it renders component with Private to Public text', () => {
@@ -40,7 +40,7 @@ describe('TransactionType', () => {
 
       const { getByText } = render(createComponent(transferType))
 
-      expect(getByText('Private to Public')).toBeInTheDocument()
+      expect(getByText('Withdraw')).toBeInTheDocument()
    })
 
    it('it renders component with Private to Private text', () => {
@@ -48,7 +48,7 @@ describe('TransactionType', () => {
 
       const { getByText } = render(createComponent(transferType))
 
-      expect(getByText('Private to Private')).toBeInTheDocument()
+      expect(getByText('Transfer')).toBeInTheDocument()
    })
 
 })

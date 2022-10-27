@@ -73,28 +73,35 @@ describe('Convert transaction to Transaction type', () => {
   const denominator = BigInt(10 ** 9)
 
   it('shold convert privateToPublic(3) transaction', () => {
-
-    expect(transactionHelper.fromPrivateHistory(record, fromBaseUnit, denominator)).toEqual(result)
+    expect(
+      transactionHelper.fromPrivateHistory(record, fromBaseUnit, denominator),
+    ).toEqual(result)
   })
 
   it('shold convert privateToPrivate transaction', () => {
     const recordPTP3 = { ...record, type: 3 }
     const resultPTP3 = { ...result, type: 'privateToPrivate' }
 
-    expect(transactionHelper.fromPrivateHistory(recordPTP3, fromBaseUnit, denominator)).toEqual(resultPTP3)
+    expect(
+      transactionHelper.fromPrivateHistory(recordPTP3, fromBaseUnit, denominator),
+    ).toEqual(resultPTP3)
   })
 
-  it('shold convert privateToPrivate(2) transaction', () => {
+  it('shold convert publicToPublic(2) transaction', () => {
     const recordPTP2 = { ...record, type: 2 }
-    const resultPTP2 = { ...result, type: 'privateToPrivate' }
+    const resultPTP2 = { ...result, type: 'publicToPublic' }
 
-    expect(transactionHelper.fromPrivateHistory(recordPTP2, fromBaseUnit, denominator)).toEqual(resultPTP2)
+    expect(
+      transactionHelper.fromPrivateHistory(recordPTP2, fromBaseUnit, denominator),
+    ).toEqual(resultPTP2)
   })
 
   it('shold convert privateToPrivate(5) transaction', () => {
     const recordPTP5 = { ...record, type: 5 }
     const resultPTP5 = { ...result, type: 'privateToPrivate' }
 
-    expect(transactionHelper.fromPrivateHistory(recordPTP5, fromBaseUnit, denominator)).toEqual(resultPTP5)
+    expect(
+      transactionHelper.fromPrivateHistory(recordPTP5, fromBaseUnit, denominator),
+    ).toEqual(resultPTP5)
   })
 })

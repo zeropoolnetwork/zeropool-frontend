@@ -28,7 +28,7 @@ jest.mock('wallet/api/zeropool.api', () => ({
   addressShielded: jest.fn(),
 }))
 
-jest.mock('shared/helpers/addres.helper', () => ({
+jest.mock('shared/helpers/address.helper', () => ({
   validateAddress: jest.fn(),
 }))
 
