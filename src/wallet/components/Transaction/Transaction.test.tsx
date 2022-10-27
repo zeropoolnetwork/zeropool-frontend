@@ -1,15 +1,18 @@
 import React from 'react'
 import { render } from '@testing-library/react'
+import { useSnackbar } from 'notistack'
 
 import { Transaction, componentId, TransactionProps } from './Transaction'
 
-jest.mock('shared/helpers/addres.helper', () => {
+jest.mock('notistack', () => ({ useSnackbar: jest.fn() }))
+jest.mock('shared/helpers/address.helper', () => {
   return {
     beautifyAmount: jest.fn(),
     beautifyAddress: jest.fn(),
   }
 })
 
+const useSnackbarMock = useSnackbar as jest.Mock
 const tr1: any = {
   status: 0,
   amount: '0.21',
@@ -19,7 +22,6 @@ const tr1: any = {
   blockHash: '0x36ee558c0e10023ad3c2de8ee5fc6ee369809920edbe3fbbd7009a2f25d4c5a3',
   hash: '0x084d420dbc7cce7c756b19213f5b4b42b2b179c495d50a45514d0c0219d8b879',
 }
-
 const wallet = {
   address: '123',
   token: {
@@ -33,6 +35,7 @@ describe('Transaction', () => {
 
   beforeEach(() => {
     outputSpy = jest.fn()
+    useSnackbarMock.mockImplementation(() => ({ enqueueSnackbar: jest.fn() }))
     component = <Transaction transaction={tr1} address={wallet.address as any} />
   })
 

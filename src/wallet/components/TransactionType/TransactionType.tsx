@@ -13,28 +13,27 @@ export const TransactionType: React.FC<TransferTypeProps> = ({ transferType }) =
 
    const text = (transferType: TransferType) => {
       let result
-      console.log("Input:", transferType)
+      
       switch (transferType) {
          case 'funds':
-            result = 'funds'
+            result = 'Funds'
             break
          case 'publicToPublic':
-            result = 'public to public'
+            result = 'Tokens'
             break
          case 'publicToPrivate':
-            result = 'public to private'
+            result = 'Deposit'
             break
          case 'privateToPublic':
-            result = 'private to public'
+            result = 'Withdraw'
             break
          case 'privateToPrivate':
-            result = 'private to private'
+            result = 'Transfer'
             break
          default:
             result = 'unknown'
             break
       }
-      console.log("Output:", result)
 
       return result
    }

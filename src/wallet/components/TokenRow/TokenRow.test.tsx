@@ -7,7 +7,7 @@ import { TokenRow, componentId, TokenRowProps } from './TokenRow'
 
 jest.mock('shared/components/Icon/Icon')
 jest.mock('shared/components/Icon/IconOption')
-jest.mock('shared/helpers/addres.helper', () => {
+jest.mock('shared/helpers/address.helper', () => {
   return {
     beautifyAmount: jest.fn(),
   }
