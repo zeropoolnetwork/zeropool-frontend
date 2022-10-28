@@ -23,9 +23,8 @@ import { selectInitials } from 'wallet/state/demo.selectors'
 import { RootState } from 'state'
 
 import { toast } from 'shared/helpers/toast.helper'
-import { debug } from 'shared/operators/debug.operator'
 import { isNonNull } from 'shared/operators/is-not-null'
-import { transaction, Transaction } from 'shared/models/transaction'
+import { Transaction } from 'shared/models/transaction'
 // tslint:enable: prettier max-line-length
 
 type Action$ = Observable<PayloadAction>
@@ -48,7 +47,7 @@ const initApi = (action$: Action$, state$: State$) => {
         api.init(
           (initials as any).seed,
           (initials as any).password,
-          (initials as any).accountId || api.getAccountId(), // FIXME: sometimes it's undefined
+          (initials as any).accountId || api.getAccountId(),
         ),
       ).pipe(
         map(() => demoActions.initApiSuccess(null)),

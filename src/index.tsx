@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { PersistGate } from 'redux-persist/integration/react'
 import { ThemeProvider } from '@mui/material'
 import { SnackbarProvider } from 'notistack'
-import { HashRouter, BrowserRouter, Route, Navigate, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Navigate, Routes } from 'react-router-dom'
 
 import * as serviceWorker from './serviceWorker'
 import './index.css'
@@ -19,16 +19,19 @@ import { store, persistedStore } from 'state'
 import { CreateAccountPage } from 'register/containers/CreateAccount/CreateAccountPage'
 import { DemoPage } from 'wallet/containers/DemoPage/DemoPage'
 import { theme } from 'theme'
+import packageJson from '../package.json'
+
+export const version = packageJson.version
 
 const root = createRoot(document.getElementById('root'))
+let PUBLIC_URL: string
 
 setupInterceptors(http(), store)
 // console.log(`process.env.REACT_APP_PUBLIC_URL: ${process.env.REACT_APP_PUBLIC_URL}`)
 
-let PUBLIC_URL: string
-if (process.env.NODE_ENV == 'development') {
+if (process.env.NODE_ENV === 'development') {
   PUBLIC_URL = process.env.REACT_APP_PUBLIC_URL || '/'
-} else if (process.env.NODE_ENV == 'production') {
+} else if (process.env.NODE_ENV === 'production') {
   PUBLIC_URL = REACT_APP_PUBLIC_URL
 }
 

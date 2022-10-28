@@ -1,4 +1,4 @@
-import { PayloadAction, PayloadActionCreator } from '@reduxjs/toolkit'
+import { PayloadActionCreator } from '@reduxjs/toolkit'
 import { catchError } from 'rxjs/operators'
 import { merge, of } from 'rxjs'
 

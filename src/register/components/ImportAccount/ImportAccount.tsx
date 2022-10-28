@@ -8,7 +8,6 @@ import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment,
 
 import { accountIdValidator, confirmValidator, passwordValidator, seedValidator } from 'shared/utils/form-validators'
 import { strToArray } from 'shared/utils/str-to-array'
-import { SeedPanel } from 'register/components/SeedPanel/SeedPanel'
 // tslint:enable: max-line-length prettier
 
 import './ImportAccount.scss'

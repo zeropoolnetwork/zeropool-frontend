@@ -13,19 +13,20 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import { cn } from '@bem-react/classname'
 
 import './DemoPage.scss'
+import { version as VERSION } from 'index'
 import logo from 'assets/images/logo1.svg'
 import { badAmount } from 'shared/utils/bad-amount'
+import { TransferData } from 'shared/models'
 
 import { selectBackdrop, selectDeposit, selectReadiness, selectInitials, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectTransfer, selectWalletAddress, selectWithdraw, selectRecovery, selectTransferModal, selectCanMint, selectCanWithdraw, selectCanDeposit, selectCanTransfer, selectTransactionLogModal, selectTransactions } from 'wallet/state/demo.selectors'
+import { NETWORK, NETWORK_FAUCET, NETWORK_NAME } from 'wallet/api/zeropool.api'
+import { lowBalanceHelper } from 'wallet/state/helpers/low-balance.helper'
+import { Transactions } from 'wallet/containers/Transactions/Transactions'
 import { demoActions } from 'wallet/state/demo.reducer'
 import { DemoDrowler } from 'wallet/components/DemoDrowler/DemoDrowler'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
 import { Recovery } from 'wallet/components/Recovery/Recovery'
 import { Transfer } from 'wallet/components/Transfer/Transfer'
-import { TransferData } from 'shared/models'
-import { lowBalanceHelper } from 'wallet/state/helpers/low-balance.helper'
-import { NETWORK, NETWORK_FAUCET, NETWORK_NAME } from 'wallet/api/zeropool.api'
-import { Transactions } from 'wallet/containers/Transactions/Transactions'
 // tslint:enable: prettier max-line-length
 
 export const componentId = 'DemoPage'
@@ -245,11 +246,13 @@ export const DemoPage: React.FC<{}> = () => {
         <span className={bem('InfoText')}>
           Click on your public address and use it on the&nbsp;
           {/* <a href='https://fauceth.komputing.org/?chain=5' target={'_blank'}>Goerli Faucet</a> or&nbsp; */}
-          <a href={NETWORK_FAUCET} target={'_blank'}>{NETWORK_NAME} Faucet</a> page to get free funds.
+          <a href={NETWORK_FAUCET} target={'_blank'} rel="noreferrer">{NETWORK_NAME} Faucet</a> page to get free funds.
         </span>
       </Paper>
 
+
       <div className={bem('Footer')}>
+        <div className={bem('Version')}>{`v${VERSION}`}</div>
         <img className={bem('Logo')} src={logo} alt="ZeroPool" />
       </div>
 

@@ -29,9 +29,6 @@ export const Transactions: React.FC<TransactionsProps> = ({ transactions, addres
   const { enqueueSnackbar } = useSnackbar()
   const [opened, setOpened] = useState<boolean[]>([])
 
-  const incoming = (transaction: any) =>
-    address.toLowerCase() === transaction.to.toLocaleLowerCase()
-
   const openHandler = (index: number) => {
     const arr = [...opened]
 
@@ -63,7 +60,7 @@ export const Transactions: React.FC<TransactionsProps> = ({ transactions, addres
         {!transactions ? (
           <CircularProgress sx={{ margin: "auto" }} />
         ) : (
-          transactions.length == 0 ?
+          transactions.length === 0 ?
             <div className={bem('Empty')}>No records yet</div>
             :
             (sorted.map((day, i) => (
