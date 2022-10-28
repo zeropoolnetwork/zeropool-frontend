@@ -117,7 +117,7 @@
   }
 
   &-Footer{
-    background-color: #020941;
+    background-color: $primary;
     bottom: 0;
     display: flex;
     position: fixed;
@@ -136,6 +136,14 @@
     @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
       height: 40px;
     }
+  }
+
+  &-Version {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    font-size: 14px;
+    color: $blue-light;
   }
 
   &-AboutPage{

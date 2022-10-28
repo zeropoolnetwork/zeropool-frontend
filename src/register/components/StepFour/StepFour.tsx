@@ -14,7 +14,7 @@ export const componentId = 'StepFour'
 // tslint:enable: max-line-length prettier
 
 const bem = cn(componentId)
-
+/*
 const PasswordValodator = {
   required: 'Required',
   pattern: {
@@ -31,11 +31,11 @@ const ConfirmValodator = (getValues: () => any) => ({
   required: 'Required',
   validate: (value: string) => value === getValues().password,
 })
+*/
 interface FormData {
   password: string
   confirm: string
 }
-
 export interface StepFourProps {
   onRegister: (data: { password: string }) => void
   onBack: () => void

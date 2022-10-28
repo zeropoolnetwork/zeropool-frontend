@@ -1,6 +1,6 @@
+import React from 'react'
 import { cn } from '@bem-react/classname'
 import { Button } from '@mui/material'
-import React, { useState } from 'react'
 
 import './ConfirmReset.scss'
 
