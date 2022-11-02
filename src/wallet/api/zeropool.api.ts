@@ -668,12 +668,8 @@ export const getPrivateHistory = async (): Promise<Transaction[]> => {
   ].history.getAllHistory()
 
   const normalizedData = data
-    .map((record) =>
-      record.type !== 1 ? record : { ...record, to: record.to || 'Private' },
-    )
-    .map((record) =>
-      record.type !== 4 ? record : { ...record, from: record.from || 'Private' },
-    )
+    // .map((record) => (record.type !== 1 ? record : { ...record, to: 'Private' }))
+    .map((record) => (record.type === 3 ? record : { ...record, from: 'Private' }))
     .map((record) =>
       transactionHelper.fromPrivateHistory(
         record,

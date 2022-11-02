@@ -25,6 +25,10 @@
     font-size: 28px;
     position: relative;
     top: 3px;
+    
+    @media (max-width: 522px) {
+      font-size: 12px;
+   }
   }
 
   &-Amount {
