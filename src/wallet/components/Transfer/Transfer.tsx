@@ -10,6 +10,8 @@ import { badAmount } from 'shared/utils/bad-amount'
 import { copyFromClipboard } from 'shared/utils/copy-from-clipboard'
 import { TransferData, TransferType } from 'shared/models'
 
+import { NETWORK } from 'wallet/api/zeropool.api'
+
 
 export const componentId = 'Transfer'
 
@@ -63,7 +65,7 @@ export const Transfer: React.FC<TransferProps> = ({
       <div className={bem('Switches')}>
         <FormControlLabel
           className={bem('Switch')}
-          disabled={processing}
+          disabled={processing || NETWORK === 'near'}
           labelPlacement="top"
           control={<ZPSwitch sx={{ m: 1 }} defaultChecked={true} />}
           label={`${funds ? 'funds' : 'tokens'}`}
