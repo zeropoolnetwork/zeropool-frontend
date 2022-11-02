@@ -6,9 +6,17 @@ import { Transaction, TransactionType } from 'shared/models/transaction'
 import { toPlainString } from 'shared/utils/toPlainString'
 import { fixTimestamp } from 'shared/utils/fix-timestamp'
 
+export enum PrivateHistoryTransactionType {
+  Deposit = 1,
+  TransferIn,
+  TransferOut,
+  Withdrawal,
+  TransferLoopback,
+}
+
 export type PrivateHistorySourceRecord = {
   pending: boolean
-  type: number
+  type: PrivateHistoryTransactionType
   amount: bigint
   txHash: string
   from: string
@@ -105,9 +113,9 @@ const fromPublicHistory = (
   status: 'success',
   type: record.tokenName
     ? record.to.toUpperCase() === contractAddress.toUpperCase()
-      ? getTransactionType(1)
-      : getTransactionType(2)
-    : getTransactionType(0),
+      ? 'publicToPrivate'
+      : 'publicToPublic'
+    : 'funds',
   amount: fromBaseUnit(record.value),
   blockHash: record.hash,
   from: record.from,
@@ -115,19 +123,19 @@ const fromPublicHistory = (
   timestamp: fixTimestamp(record.timeStamp),
 })
 
-function getTransactionType(type: number): TransactionType {
+function getTransactionType(type: PrivateHistoryTransactionType): TransactionType {
+  debugger
   switch (type) {
     case 1:
-      return 'publicToPrivate'
+      return 'deposit'
     case 2:
-      return 'publicToPublic'
-    case 4:
-      return 'privateToPublic'
+      return 'privateToPrivateIn'
     case 3:
-    case 5:
-      return 'privateToPrivate'
+      return 'privateToPrivateOut'
+    case 4:
+      return 'withdraw'
     default:
-      return 'funds'
+      return 'loopback'
   }
 }
 

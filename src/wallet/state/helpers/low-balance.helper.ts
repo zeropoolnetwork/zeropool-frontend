@@ -10,7 +10,7 @@ export const lowBalanceHelper = (
   switch (transferType) {
     case 'funds':
       return !publicBalance || !amount || +publicBalance < +amount
-    case 'privateToPrivate':
+    case 'privateToPrivateOut':
     case 'privateToPublic':
       return !privateBalance || !amount || +privateBalance < +amount
     case 'publicToPrivate':
