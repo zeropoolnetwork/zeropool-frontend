@@ -43,7 +43,7 @@ export const Transfer: React.FC<TransferProps> = ({
 
   const getType = (): TransferType => {
     if (funds) { return 'funds' }
-    else if (fromPrivate) { return toPrivate ? 'privateToPrivate' : 'privateToPublic' }
+    else if (fromPrivate) { return toPrivate ? 'privateToPrivateOut' : 'privateToPublic' }
     else { return toPrivate ? 'publicToPrivate' : 'publicToPublic' }
   }
 

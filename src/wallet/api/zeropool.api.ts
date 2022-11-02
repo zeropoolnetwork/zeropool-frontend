@@ -437,7 +437,7 @@ export const transfer = (data: TransferData): Observable<Transaction> => {
       return transferPublicToPrivate(data.to, data.amount)
     case 'privateToPublic':
       return transferPrivateToPublic(data.to, data.amount)
-    case 'privateToPrivate':
+    case 'privateToPrivateOut':
       return transferPrivateToPrivate(data.to, data.amount)
     default:
       return from(
@@ -603,7 +603,7 @@ export const transferPrivateToPrivate = (
   to: string,
   tokens: string,
 ): Observable<Transaction> => {
-  const tr: Transaction = transaction('privateToPrivate', 'started')
+  const tr: Transaction = transaction('privateToPrivateOut', 'started')
   const tr$ = new Subject<Transaction>()
 
   const sub = apiCheck$()
@@ -668,8 +668,12 @@ export const getPrivateHistory = async (): Promise<Transaction[]> => {
   ].history.getAllHistory()
 
   const normalizedData = data
-    .map((record) => (record.type !== 1 ? record : { ...record, to: 'Private' }))
-    .map((record) => (record.type !== 4 ? record : { ...record, from: 'Private' }))
+    .map((record) =>
+      record.type !== 1 ? record : { ...record, to: record.to || 'Private' },
+    )
+    .map((record) =>
+      record.type !== 4 ? record : { ...record, from: record.from || 'Private' },
+    )
     .map((record) =>
       transactionHelper.fromPrivateHistory(
         record,

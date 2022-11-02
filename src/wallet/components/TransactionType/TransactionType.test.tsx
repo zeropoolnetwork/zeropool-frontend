@@ -44,7 +44,7 @@ describe('TransactionType', () => {
    })
 
    it('it renders component with Private to Private text', () => {
-      transferType = 'privateToPrivate'
+      transferType = 'privateToPrivateOut'
 
       const { getByText } = render(createComponent(transferType))
 

@@ -1,8 +1,15 @@
-export type TransferType = 'funds' | 'publicToPublic' | 'publicToPrivate' | 'privateToPublic' | 'privateToPrivate';
-export type TransferStatus = 'pending' | 'success' | 'failed';
+export type TransferType =
+  | 'funds'
+  | 'loopback'
+  | 'publicToPublic'
+  | 'publicToPrivate'
+  | 'privateToPublic'
+  | 'privateToPrivateIn'
+  | 'privateToPrivateOut'
+export type TransferStatus = 'pending' | 'success' | 'failed'
 export type TransferData = {
-  id: number;
-  type: TransferType;
-  amount: string;
-  to: string;
+  id: number
+  type: TransferType
+  amount: string
+  to: string
 }
