@@ -23,7 +23,8 @@ export type TransactionProps = {
 }
 
 export const Transaction: React.FC<TransactionProps> = ({ transaction, address }) => {
-  let isIncoming: boolean
+  let isIncoming = false
+  let isLocal = false
 
   const { enqueueSnackbar } = useSnackbar()
   const handleAddressClick = (event: MouseEvent<HTMLSpanElement>): void => {
@@ -39,8 +40,7 @@ export const Transaction: React.FC<TransactionProps> = ({ transaction, address }
   }
 
   const direction = () => {
-    debugger
-    if (transaction.type === 'withdraw' || transaction.type === 'deposit') {
+    if (isLocal) {
       return <Repeat className={css('Icon')} />
     } else if (isIncoming) {
       return <CallReceived className={css('Icon')} />
@@ -49,10 +49,12 @@ export const Transaction: React.FC<TransactionProps> = ({ transaction, address }
     }
   }
 
-  if (address.toLowerCase() === transaction.to.toLocaleLowerCase()) {
+  if (transaction.type === 'withdraw' || transaction.type === 'deposit') {
+    isLocal = true
+  }
+
+  if (transaction.type === 'privateToPrivateIn' || address.toLowerCase() === transaction.to.toLocaleLowerCase()) {
     isIncoming = true
-  } else {
-    isIncoming = false
   }
 
   return (
@@ -63,22 +65,26 @@ export const Transaction: React.FC<TransactionProps> = ({ transaction, address }
         {' '}
       </span>
 
-      <span className={css('Direction')}> {isIncoming ? 'From :' : 'To :'} </span>
+      {isLocal ? null : (
+        <span>
+          <span className={css('Direction')}> {isIncoming ? 'From :' : 'To :'} </span>
 
-      <span className={css('Adress')}>
-        {' '}
-        <Tooltip onClick={handleAddressClick} title={isIncoming ? transaction.from : transaction.to} placement="bottom">
-          <span style={{ cursor: 'pointer' }}>
-            {beautifyAddress({ address: isIncoming ? transaction.from : transaction.to, limit: 9 })}
+          <span className={css('Adress')}>
+            {' '}
+            <Tooltip onClick={handleAddressClick} title={isIncoming ? transaction.from : transaction.to} placement="bottom">
+              <span style={{ cursor: 'pointer' }}>
+                {beautifyAddress({ address: isIncoming ? transaction.from : transaction.to, limit: 9 })}
+              </span>
+            </Tooltip>
           </span>
-        </Tooltip>
-      </span>
+        </span>
+      )}
 
       <span className={css('Amount')} >
         {' '}
         <Tooltip onClick={handleAmountClick} title={transaction.amount} placement="bottom">
           <span style={{ cursor: 'pointer' }}>
-            {isIncoming ? '+' : '-'} {beautifyAmount(transaction.amount)}
+            {isLocal ? '' : isIncoming ? '+' : '-'} {beautifyAmount(transaction.amount)}
           </span>
         </Tooltip>
       </span>
