@@ -211,7 +211,7 @@ export const DemoPage: React.FC<{}> = () => {
 
       <Paper className={bem('Info')} elevation={2}>
 
-        { NETWORK !== 'near' ? (<div className={bem('Transaction', { Mint: true })}>
+        {NETWORK !== 'near' ? (<div className={bem('Transaction', { Mint: true })}>
           <Typography variant="h6" className={bem('InfoTitle')}>🚀 Mint test token</Typography>
           <Input
             id="mint-amount"
@@ -239,7 +239,7 @@ export const DemoPage: React.FC<{}> = () => {
           >
             Mint
           </LoadingButton>
-        </div>) : null }
+        </div>) : null}
 
         <span className={bem('InfoText')}>To perform any action on this page you need to have enough funds on your public balance.</span>
 

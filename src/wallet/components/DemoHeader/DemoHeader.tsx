@@ -63,7 +63,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
         </div>
 
         {NETWORK !== 'near' ? (<div>
-          Public balance:&nbsp;
+          Funds balance:&nbsp;
 
           <Tooltip title={publicBalance || ''}>
             {publicBalance === undefined
@@ -73,7 +73,7 @@ export const DemoHeader: React.FC<DemoHeaderProps> = ({
         </div>) : null}
 
         <div>
-          Token balance:&nbsp;
+          Public balance:&nbsp;
 
           <Tooltip title={tokenBalance || ''}>
             {tokenBalance === undefined

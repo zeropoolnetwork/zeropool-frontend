@@ -1,8 +1,7 @@
 import React, { MouseEvent } from 'react'
 import { cn } from '@bem-react/classname'
 import { Tooltip } from '@mui/material'
-import { CallMade } from '@mui/icons-material'
-import { CallReceived } from '@mui/icons-material'
+import { CallReceived, Repeat, CallMade } from '@mui/icons-material'
 
 import './Transaction.scss'
 
@@ -11,6 +10,7 @@ import { beautifyAddress, beautifyAmount } from 'shared/helpers/address.helper'
 import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
 import { useSnackbar } from 'notistack'
 import { TransactionType } from 'wallet/components/TransactionType/TransactionType'
+import { Transaction as Tr } from 'shared/models/transaction'
 
 export const componentId = 'Transaction'
 
@@ -18,7 +18,7 @@ const css = cn(componentId)
 const test = testIdBuilder(componentId)
 
 export type TransactionProps = {
-  transaction: any
+  transaction: Tr
   address: string
 }
 
@@ -31,10 +31,22 @@ export const Transaction: React.FC<TransactionProps> = ({ transaction, address }
 
     copyToClipboard((address as string), 'Address', enqueueSnackbar)
   }
-  function handleAmountClick() {
+
+  const handleAmountClick = () => {
     const amount = transaction.amount
 
     copyToClipboard((amount as string), 'Amount', enqueueSnackbar)
+  }
+
+  const direction = () => {
+    debugger
+    if (transaction.type === 'withdraw' || transaction.type === 'deposit') {
+      return <Repeat className={css('Icon')} />
+    } else if (isIncoming) {
+      return <CallReceived className={css('Icon')} />
+    } else {
+      return <CallMade className={css('Icon')} />
+    }
   }
 
   if (address.toLowerCase() === transaction.to.toLocaleLowerCase()) {
@@ -47,11 +59,8 @@ export const Transaction: React.FC<TransactionProps> = ({ transaction, address }
     <div className={css()} data-testid={test()}>
       <span>
         {' '}
-        {isIncoming ? (
-          <CallReceived className={css('Icon')} />
-        ) : (
-          <CallMade className={css('Icon')} />
-        )}{' '}
+        {direction()}
+        {' '}
       </span>
 
       <span className={css('Direction')}> {isIncoming ? 'From :' : 'To :'} </span>

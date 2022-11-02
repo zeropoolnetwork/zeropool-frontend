@@ -444,7 +444,7 @@ describe('demo reducer', () => {
   it('handles transaction action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.transaction({ status: 'pending', type: 'mint' }),
+      demoSlice.actions.transaction({ status: 'pending', type: 'mint', amount: '100', to: 'test', from: 'test' }),
     )
 
     expect(newState.transactionStatus).toBe('pending')

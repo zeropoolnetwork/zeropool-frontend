@@ -6,12 +6,12 @@ export type TransactionStatus = 'started' | 'pending' | 'success' | 'failed'
 export type Transaction = {
   status: TransactionStatus
   type: TransactionType
-  amount?: string
+  amount: string
   blockHash?: string
   error?: string
-  from?: string
+  from: string
   jobId?: string
-  to?: string
+  to: string
   timestamp?: number
 }
 
@@ -23,4 +23,7 @@ export const transaction = (
   error,
   status,
   type,
+  amount: '0',
+  from: '',
+  to: '',
 })
