@@ -11011,9 +11011,10 @@ hastscript@^6.0.0:
     property-information "^5.0.0"
     space-separated-tokens "^1.0.0"
 
-"hdwallet-babyjub@https://github.com/snjax/hdwallet-babyjub.git":
+hdwallet-babyjub@0.0.2:
   version "0.0.2"
-  resolved "https://github.com/snjax/hdwallet-babyjub.git#4702b2327cc2d0af82fdab6f6727c46295cc26dd"
+  resolved "https://registry.yarnpkg.com/hdwallet-babyjub/-/hdwallet-babyjub-0.0.2.tgz#761640be9c3d3678382eccd105a6aa3d44ccad23"
+  integrity sha512-W59pKHVr/QdB/3RbgkI+v9CLTlyGvOCuBUuYoE1/kBczd6Ob4K5tpd6rKXE6Lfy3buo+AR0U0f+Nkv78thZcTQ==
   dependencies:
     assert "^2.0.0"
     bigint-buffer "^1.1.2"
@@ -20614,16 +20615,16 @@ yup@^0.32.11:
     property-expr "^2.0.4"
     toposort "^2.0.2"
 
-zeropool-client-js@0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/zeropool-client-js/-/zeropool-client-js-0.6.2.tgz#886349fbdcee26adfa5ce8b62095a2f90a856ffe"
-  integrity sha512-5F35GNy6yRxgYkmMryQh7NLSU+42ZgUuIxWIAYzO3OVKfg2ERXmVUZPRPP/1WMsb3x+xYxuLDEjNd56uYFcPlA==
+zeropool-client-js@0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/zeropool-client-js/-/zeropool-client-js-0.7.2.tgz#a6074ea5072df0f0349390341378f8bfab67aa31"
+  integrity sha512-kTJt6x/cpewuUgIK8PQlB6qIEmoMPWvblytC8ATCCGVSnN0ALSjFhgy5Yzc7URqWeCH1MpNG1pLrt0gExqPMLQ==
   dependencies:
     borsh "^0.7.0"
     comlink "^4.3.1"
     ethereum-block-by-date "^1.4.5"
     ethereumjs-util "^7.1.5"
-    hdwallet-babyjub "https://github.com/snjax/hdwallet-babyjub.git"
+    hdwallet-babyjub "0.0.2"
     idb "^7.0.0"
     libzeropool-rs-wasm-web "0.8.1"
     libzeropool-rs-wasm-web-mt "0.8.1"
@@ -20634,10 +20635,10 @@ zeropool-client-js@0.6.2:
     web3 "^1.7.0"
     web3-utils "^1.7.0"
 
-zeropool-support-js@0.6.3:
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/zeropool-support-js/-/zeropool-support-js-0.6.3.tgz#4323e5696592f8a1bde7643e901a34ca23f7986d"
-  integrity sha512-BI5FQf27U1peG8xRVuk0rOEjEqxN0RuF8vQflJkfQANr9h01pwBYv/16soU+h9wpvSjjKHQtFiIxDC4BUY15sg==
+zeropool-support-js@0.6.5:
+  version "0.6.5"
+  resolved "https://registry.yarnpkg.com/zeropool-support-js/-/zeropool-support-js-0.6.5.tgz#11e22914f5642a4583c6db9ab6a5d495a3de34d2"
+  integrity sha512-lLx3W0rj1DkdiPfGs+SDG9p4UHQMRrAriZivNLloGkM3Rgt/fWPOqaoaSZ8sl4ff4UsZIgZxlSJ0+TpCpSH81Q==
   dependencies:
     "@ethereumjs/tx" "^3.2.1"
     "@polkadot/api" "^7.11.1"

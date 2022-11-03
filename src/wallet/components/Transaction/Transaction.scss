@@ -22,12 +22,12 @@
   }
 
   &-Icon {
-    font-size: 28px;
+    font-size: 18px !important;
     position: relative;
     top: 3px;
     
     @media (max-width: 522px) {
-      font-size: 12px;
+      font-size: 12px !important;
    }
   }
 
