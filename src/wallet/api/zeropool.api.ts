@@ -269,7 +269,10 @@ export const getTokenBalance = async (): Promise<string> => {
 
     const address = await zpSupport.getAddress()
     const tokenBalance = BigInt(await zpSupport.getTokenBalance(TOKEN_ADDRESS))
-    const pendingDelta = await zpClient.getOptimisticTokenBalanceDelta(TOKEN_ADDRESS, address)
+    const pendingDelta = await zpClient.getOptimisticTokenBalanceDelta(
+      TOKEN_ADDRESS,
+      address,
+    )
 
     return zpSupport.fromBaseUnit((tokenBalance + pendingDelta).toString())
   } catch (e: any) {
@@ -341,7 +344,7 @@ export const deposit = (tokens: string): Observable<Transaction> => {
       ),
       catchError((e) => {
         console.error(e)
-        tr$.next({ ...tr, status: 'failed', error: e.message })
+        tr$.next({ ...tr, status: 'failed', error: e.message || e })
         sub.unsubscribe()
 
         return of(false)
@@ -675,7 +678,7 @@ export const getPublicHistory = async (): Promise<Transaction[]> => {
     if (e?.message === 'unimplemented') {
       return []
     }
-
+    //TODO: move toast to epics
     toast.error(
       'Error reading public transactions history, please try again after 5 seconds',
     )
