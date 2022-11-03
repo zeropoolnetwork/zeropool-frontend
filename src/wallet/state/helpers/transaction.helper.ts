@@ -124,7 +124,6 @@ const fromPublicHistory = (
 })
 
 function getTransactionType(type: PrivateHistoryTransactionType): TransactionType {
-  debugger
   switch (type) {
     case 1:
       return 'deposit'

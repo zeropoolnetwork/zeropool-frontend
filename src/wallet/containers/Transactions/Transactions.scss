@@ -17,7 +17,7 @@
     position: relative;
     left: -7px;
 
-    @media (max-width: 500px) {
+    @media (max-width: 522px) {
       font-size: 18px;
    }
   }
@@ -37,17 +37,21 @@
   &-Arrow {
     cursor: pointer;
     display: inline-block;
-    font-weight: bold;
     font-family: monospace;
+    font-size: 22px;
+    font-weight: bold;
     user-select: none;
     position: relative;
     top: -1px;
-    color: $button-border-color;
 
+    @media (max-width: 522px) {
+      font-size: 18px;
+   }
  
     &_Down {
       transform: rotate(0.25turn);
-      color: $button-border-color;
+      top: 0;
+      left: 1px;
     }
   }
 
