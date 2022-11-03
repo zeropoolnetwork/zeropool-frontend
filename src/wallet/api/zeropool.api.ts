@@ -269,35 +269,7 @@ export const getTokenBalance = async (): Promise<string> => {
 
     const address = await zpSupport.getAddress()
     const tokenBalance = BigInt(await zpSupport.getTokenBalance(TOKEN_ADDRESS))
-    const history = await zpClient.getAllHistory(TOKEN_ADDRESS)
-    const pending = history.filter((h) => h.pending)
-
-    let pendingDeltaShielded = BigInt(0)
-
-    for (const h of pending) {
-      switch (h.type) {
-        case HistoryTransactionType.Deposit:
-        case HistoryTransactionType.TransferIn: {
-          pendingDeltaShielded -= h.amount
-          break
-        }
-        case HistoryTransactionType.Withdrawal: {
-          if (h.to.toLowerCase() === address.toLowerCase()) {
-            pendingDeltaShielded += h.amount
-          }
-          break
-        }
-        case HistoryTransactionType.TransferOut: {
-          pendingDeltaShielded += h.amount
-          break
-        }
-
-        default:
-          break
-      }
-    }
-
-    const pendingDelta = pendingDeltaShielded * zpClient.getDenominator(TOKEN_ADDRESS)
+    const pendingDelta = await zpClient.getOptimisticTokenBalanceDelta(TOKEN_ADDRESS, address)
 
     return zpSupport.fromBaseUnit((tokenBalance + pendingDelta).toString())
   } catch (e: any) {
