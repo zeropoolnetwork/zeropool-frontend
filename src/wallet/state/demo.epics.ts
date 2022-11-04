@@ -36,11 +36,15 @@ const initApi = (action$: Action$, state$: State$) => {
     withLatestFrom(state$.pipe(map(selectInitials))),
     map(([, initials]) => initials),
     filter((initials) => !!initials),
+    tap(() => toast.close('initApiError')),
     tap(() =>
-      toast.info('Initializing, it can take up to few minutes...', {
-        key: 'initApi',
-        persist: true,
-      }),
+      toast.info(
+        'Initializing, it can take up to 30 seconds, if more, try restart with F5 button.',
+        {
+          key: 'initApi',
+          persist: true,
+        },
+      ),
     ),
     switchMap((initials) =>
       from(
@@ -55,7 +59,7 @@ const initApi = (action$: Action$, state$: State$) => {
         tap(() => toast.success('Wallet initialized')),
         catchError((errMsg: string) => {
           toast.close('initApi')
-          toast.error(errMsg)
+          toast.error(errMsg, { key: 'initApiError', persist: true })
 
           return of(demoActions.initApiFailure(errMsg))
         }),
@@ -425,17 +429,20 @@ const recoverWalletSuccess = (action$: Action$, state$: State$) => {
 const resetAccount: Epic = (action$: Action$) => {
   return action$.pipe(
     filter(demoActions.resetAccount.match),
-    tap(() => {
+    tap(({ payload: hardReset }) => {
       sessionStorage.clear()
       localStorage.clear()
-      caches.keys().then((keys) => {
-        keys.forEach((key) => caches.delete(key))
-      })
-      indexedDB.databases().then((dbs) => {
-        dbs.forEach((db) => indexedDB.deleteDatabase((db as any).name))
-      })
+
+      if (hardReset) {
+        caches.keys().then((keys) => {
+          keys.forEach((key) => caches.delete(key))
+        })
+        indexedDB.databases().then((dbs) => {
+          dbs.forEach((db) => indexedDB.deleteDatabase((db as any).name))
+        })
+      }
     }),
-    tap((a) => toast.success('Wallet reseted and data cleared')),
+    tap((a) => toast.success('Wallet reseted')),
     ignoreElements(),
   )
 }
@@ -463,6 +470,12 @@ const restoreSession = (action$: Action$, state$: State$) => {
 
       return of(demoActions.initApiFailure(errMsg))
     }),
+  )
+}
+const resetOnError = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.initApiFailure.match),
+    map(() => demoActions.resetAccount(false)),
   )
 }
 
@@ -512,6 +525,7 @@ export const demoEpics: Epic = combineEpics(
   exportSeedSuccess,
   recowerWallet,
   recoverWalletSuccess,
+  resetOnError,
   callGetTransactionsOnTransactionsModalOpen,
   getTransactions,
   // updateBalancesAfterTransfer,

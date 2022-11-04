@@ -67,10 +67,10 @@ export const DemoPage: React.FC<{}> = () => {
   useEffect(() => {
     if (!readiness && !initials) {
       navigate('/register')
-    } else {
+    } else if (!readiness){
       dispatch(demoActions.initApi(null))
     }
-  }, [])
+  }, [initials])
 
   const toggleDrawer = (open?: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
@@ -264,7 +264,7 @@ export const DemoPage: React.FC<{}> = () => {
         <DemoDrowler
           toggle={toggleDrawer()}
           reset={() => {
-            dispatch(demoActions.resetAccount(null))
+            dispatch(demoActions.resetAccount(true))
             navigate('/register')
             closeDrawer()
           }}
@@ -285,7 +285,7 @@ export const DemoPage: React.FC<{}> = () => {
         <DialogContent dividers={true}>
           <Recovery
             data-testid={bem('Recovery')}
-            onReset={() => { dispatch(demoActions.resetAccount(null)); navigate('/register') }}
+            onReset={() => { dispatch(demoActions.resetAccount(true)); navigate('/register') }}
             onRecover={(password: string) => dispatch(demoActions.recoverWallet(password))}
           />
         </DialogContent>
