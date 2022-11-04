@@ -12,7 +12,7 @@ export type Transaction = {
   from: string
   jobId?: string
   to: string
-  timestamp?: number
+  timestamp: number
 }
 
 export const transaction = (
@@ -26,4 +26,5 @@ export const transaction = (
   amount: '0',
   from: '',
   to: '',
+  timestamp: 0,
 })

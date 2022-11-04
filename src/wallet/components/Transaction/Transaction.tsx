@@ -11,6 +11,7 @@ import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
 import { useSnackbar } from 'notistack'
 import { TransactionType } from 'wallet/components/TransactionType/TransactionType'
 import { Transaction as Tr } from 'shared/models/transaction'
+import { TransactionTime } from 'wallet/components/TransactionTime/TransactionTime'
 
 export const componentId = 'Transaction'
 
@@ -65,11 +66,17 @@ export const Transaction: React.FC<TransactionProps> = ({ transaction, address }
         {' '}
       </span>
 
+      <span className={css('Time')}>
+        <TransactionTime
+          time={transaction.timestamp}
+        ></TransactionTime>
+      </span>
+
       {isLocal ? null : (
         <span>
-          <span className={css('Direction')}> {isIncoming ? 'From :' : 'To :'} </span>
+          <span className={css('Direction')}> {isIncoming ? 'from:' : 'to:'} </span>
 
-          <span className={css('Adress')}>
+          <span className={css('Address')}>
             {' '}
             <Tooltip onClick={handleAddressClick} title={isIncoming ? transaction.from : transaction.to} placement="bottom">
               <span style={{ cursor: 'pointer' }}>
