@@ -70,7 +70,7 @@ export const DemoPage: React.FC<{}> = () => {
     } else if (!zpSupport){
       dispatch(demoActions.initApi(null))
     }
-  }, [initials])
+  }, [])
 
   const toggleDrawer = (open?: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
