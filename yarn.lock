@@ -20635,10 +20635,10 @@ zeropool-client-js@0.7.2:
     web3 "^1.7.0"
     web3-utils "^1.7.0"
 
-zeropool-support-js@0.6.6:
-  version "0.6.6"
-  resolved "https://registry.yarnpkg.com/zeropool-support-js/-/zeropool-support-js-0.6.6.tgz#2973146c18bd454f7a919cc392bc75c38b4cd3a9"
-  integrity sha512-Y8RQxR/ovp2AlUolV59XIdEb9UCs7QOvyEI52my494VIh02q/BVtGJTdFBLXo8t3aVVw5lOvd89ZaWtZlgSkuQ==
+zeropool-support-js@0.6.7:
+  version "0.6.7"
+  resolved "https://registry.yarnpkg.com/zeropool-support-js/-/zeropool-support-js-0.6.7.tgz#41e42e09ccc5452d18842dedb9162969e81abdc6"
+  integrity sha512-2aRJVlw5KS5S1PamNA/nwX+o4xOS1pRIDNhkm2zzIOJcCWeb1oJW54Kdf9fMywpl+Nw8a2bw+PYWiXmuQd12tQ==
   dependencies:
     "@ethereumjs/tx" "^3.2.1"
     "@polkadot/api" "^7.11.1"
