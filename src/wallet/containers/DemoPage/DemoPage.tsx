@@ -19,7 +19,7 @@ import { badAmount } from 'shared/utils/bad-amount'
 import { TransferData } from 'shared/models'
 
 import { selectBackdrop, selectDeposit, selectReadiness, selectInitials, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectTransfer, selectWalletAddress, selectWithdraw, selectRecovery, selectTransferModal, selectCanMint, selectCanWithdraw, selectCanDeposit, selectCanTransfer, selectTransactionLogModal, selectTransactions } from 'wallet/state/demo.selectors'
-import { NETWORK, NETWORK_FAUCET, NETWORK_NAME } from 'wallet/api/zeropool.api'
+import { NETWORK, NETWORK_FAUCET, NETWORK_NAME, zpSupport } from 'wallet/api/zeropool.api'
 import { lowBalanceHelper } from 'wallet/state/helpers/low-balance.helper'
 import { Transactions } from 'wallet/containers/Transactions/Transactions'
 import { demoActions } from 'wallet/state/demo.reducer'
@@ -67,7 +67,7 @@ export const DemoPage: React.FC<{}> = () => {
   useEffect(() => {
     if (!readiness && !initials) {
       navigate('/register')
-    } else if (!readiness){
+    } else if (!zpSupport){
       dispatch(demoActions.initApi(null))
     }
   }, [initials])
