@@ -202,13 +202,7 @@ describe('demoEpics', () => {
         )
 
         expectObservable(result$).toBe('--a', {
-          a: demoActions.transaction({
-            status: 'started',
-            type: 'deposit',
-            to: 'to',
-            amount: '0',
-            from: 'from',
-          }),
+          a: demoActions.transaction({ status: 'started', type: 'deposit', to: 'to', amount: '0', from: 'from', timestamp: Date.now() }),
         })
       })
     })
@@ -226,13 +220,7 @@ describe('demoEpics', () => {
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
         const expected$ = hot('--a', {
-          a: demoActions.transaction({
-            status: 'pending',
-            type: 'deposit',
-            to: 'to',
-            amount: '0',
-            from: 'from',
-          }),
+          a: demoActions.transaction({ status: 'pending', type: 'deposit', to: 'to', amount: '0', from: 'from', timestamp: Date.now() }),
         })
 
         mockApiDeposit.mockReturnValue(
@@ -253,13 +241,7 @@ describe('demoEpics', () => {
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
         const expected$ = hot('--(ab)', {
-          a: demoActions.transaction({
-            status: 'success',
-            type: 'deposit',
-            to: 'to',
-            amount: '0',
-            from: 'from',
-          }),
+          a: demoActions.transaction({ status: 'success', type: 'deposit', to: 'to', amount: '0', from: 'from', timestamp: Date.now() }),
           b: demoActions.depositSuccess('1'),
         })
 
@@ -305,13 +287,7 @@ describe('demoEpics', () => {
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
         const expected$ = hot('--a', {
-          a: demoActions.transaction({
-            status: 'started',
-            type: 'withdraw',
-            to: 'to',
-            amount: '0',
-            from: 'from',
-          }),
+          a: demoActions.transaction({ status: 'started', type: 'withdraw', to: 'to', amount: '0', from: 'from', timestamp: Date.now() }),
         })
 
         mockApiWithdraw.mockReturnValue(
@@ -334,13 +310,7 @@ describe('demoEpics', () => {
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
         const expected$ = hot('--a', {
-          a: demoActions.transaction({
-            status: 'pending',
-            type: 'withdraw',
-            to: 'to',
-            amount: '0',
-            from: 'from',
-          }),
+          a: demoActions.transaction({ status: 'pending', type: 'withdraw', to: 'to', amount: '0', from: 'from', timestamp: Date.now() }),
         })
 
         mockApiWithdraw.mockReturnValue(
@@ -361,13 +331,7 @@ describe('demoEpics', () => {
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
         const expected$ = hot('--(ab)', {
-          a: demoActions.transaction({
-            status: 'success',
-            type: 'withdraw',
-            to: 'to',
-            amount: '0',
-            from: 'from',
-          }),
+          a: demoActions.transaction({ status: 'success', type: 'withdraw', to: 'to', amount: '0', from: 'from', timestamp: Date.now() }),
           b: demoActions.withdrawSuccess('1'),
         })
 
@@ -420,13 +384,7 @@ describe('demoEpics', () => {
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
         const expected$ = hot('--a', {
-          a: demoActions.transaction({
-            status: 'started',
-            type: 'funds',
-            to: 'to',
-            amount: '0',
-            from: 'from',
-          }),
+          a: demoActions.transaction({ status: 'started', type: 'funds', to: 'to', amount: '0', from: 'from', timestamp: Date.now() }),
         })
 
         mockApiTransfer.mockReturnValue(
@@ -456,13 +414,7 @@ describe('demoEpics', () => {
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
         const expected$ = hot('--a', {
-          a: demoActions.transaction({
-            status: 'pending',
-            type: 'funds',
-            to: 'to',
-            amount: '0',
-            from: 'from',
-          }),
+          a: demoActions.transaction({ status: 'pending', type: 'funds', to: 'to', amount: '0', from: 'from', timestamp: Date.now() }),
         })
 
         mockApiTransfer.mockReturnValue(
@@ -490,13 +442,7 @@ describe('demoEpics', () => {
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})
         const expected$ = hot('--(ab)', {
-          a: demoActions.transaction({
-            status: 'success',
-            type: 'funds',
-            to: 'to',
-            amount: '0',
-            from: 'from',
-          }),
+          a: demoActions.transaction({ status: 'success', type: 'funds', to: 'to', amount: '0', from: 'from', timestamp: Date.now() }),
           b: demoActions.transferSuccess('funds'),
         })
 
@@ -775,13 +721,7 @@ describe('demoEpics', () => {
         expect(actual).toStrictEqual(expected)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.transaction({
-            status: 'success',
-            type: 'funds',
-            amount: '0',
-            to: '0x0',
-            from: '0x0',
-          }),
+          a: demoActions.transaction({ status: 'success', type: 'funds', amount: '0', to: '0x0', from: '0x0', timestamp: Date.now() }),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})

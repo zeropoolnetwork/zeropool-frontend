@@ -15,13 +15,15 @@
  }
   
   &-Direction {
+    font-size: 18px;
     padding: 0 4px;
     @media (max-width: 522px) {
       font-size: 15px;
-   }
+    }
   }
-
+  
   &-Icon {
+    color: $primary;
     font-size: 18px !important;
     position: relative;
     top: 3px;
@@ -29,6 +31,10 @@
     @media (max-width: 522px) {
       font-size: 12px !important;
    }
+  }
+
+  &-Address {
+    font-size: 18px;
   }
 
   &-Amount {
