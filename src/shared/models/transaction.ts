@@ -13,6 +13,7 @@ export type Transaction = {
   jobId?: string
   to: string
   timestamp: number
+
 }
 
 export const transaction = (

@@ -806,15 +806,9 @@ const _isPrivateAddress = (address: string, token: TokenSymbol) => {
 //   }))
 */
 
-const networkInitialized = (): boolean => {
-  return !!zpSupport
-}
-const zpInitialized = (): boolean => {
-  return !!zpClient
-}
-const apiCheck = (): boolean => {
-  if (!networkInitialized()) throw Error('Networt Client not available!')
-  else if (!zpInitialized()) throw Error('ZP client not available!')
+export const apiCheck = (): boolean => {
+  if (!zpSupport) throw Error('Networt Client not available!')
+  else if (!zpClient) throw Error('ZP client not available!')
 
   return true
 }

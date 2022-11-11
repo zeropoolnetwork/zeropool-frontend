@@ -19,7 +19,7 @@ import { badAmount } from 'shared/utils/bad-amount'
 import { TransferData } from 'shared/models'
 
 import { selectBackdrop, selectDeposit, selectReadiness, selectInitials, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectTransfer, selectWalletAddress, selectWithdraw, selectRecovery, selectTransferModal, selectCanMint, selectCanWithdraw, selectCanDeposit, selectCanTransfer, selectTransactionLogModal, selectTransactions } from 'wallet/state/demo.selectors'
-import { NETWORK, NETWORK_FAUCET, NETWORK_NAME } from 'wallet/api/zeropool.api'
+import { NETWORK, NETWORK_FAUCET, NETWORK_NAME, zpSupport } from 'wallet/api/zeropool.api'
 import { lowBalanceHelper } from 'wallet/state/helpers/low-balance.helper'
 import { Transactions } from 'wallet/containers/Transactions/Transactions'
 import { demoActions } from 'wallet/state/demo.reducer'
@@ -67,7 +67,7 @@ export const DemoPage: React.FC<{}> = () => {
   useEffect(() => {
     if (!readiness && !initials) {
       navigate('/register')
-    } else {
+    } else if (!zpSupport){
       dispatch(demoActions.initApi(null))
     }
   }, [])
@@ -264,7 +264,7 @@ export const DemoPage: React.FC<{}> = () => {
         <DemoDrowler
           toggle={toggleDrawer()}
           reset={() => {
-            dispatch(demoActions.resetAccount(null))
+            dispatch(demoActions.resetAccount(true))
             navigate('/register')
             closeDrawer()
           }}
@@ -285,7 +285,7 @@ export const DemoPage: React.FC<{}> = () => {
         <DialogContent dividers={true}>
           <Recovery
             data-testid={bem('Recovery')}
-            onReset={() => { dispatch(demoActions.resetAccount(null)); navigate('/register') }}
+            onReset={() => { dispatch(demoActions.resetAccount(true)); navigate('/register') }}
             onRecover={(password: string) => dispatch(demoActions.recoverWallet(password))}
           />
         </DialogContent>

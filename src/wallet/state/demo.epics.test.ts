@@ -861,7 +861,7 @@ describe('demoEpics', () => {
         expect(mockToastSuccess).toHaveBeenCalledTimes(1)
       }).run(({ hot, cold, expectObservable }) => {
         const action$ = hot('-a', {
-          a: demoActions.resetAccount(null),
+          a: demoActions.resetAccount(true),
         })
         const state$ = cold('b', { b: { demo: { ...initialDemoState } } }) as any
         const result$ = demoEpics(action$, state$, {})

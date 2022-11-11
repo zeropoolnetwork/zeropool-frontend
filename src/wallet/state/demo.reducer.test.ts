@@ -1,10 +1,14 @@
-import { demoSlice, initialDemoState } from 'wallet/state/demo.reducer';
+import { demoSlice, initialDemoState } from 'wallet/state/demo.reducer'
 
 describe('demo reducer', () => {
   it('handles setSeedAndPasword action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.setSeedAndPasword({ seed: 'seed', password: 'password', accountId: 'test' })
+      demoSlice.actions.setSeedAndPasword({
+        seed: 'seed',
+        password: 'password',
+        accountId: 'test',
+      }),
     )
 
     expect(newState.initials).toBeDefined()
@@ -13,7 +17,6 @@ describe('demo reducer', () => {
   })
 
   it('handles initApi action', () => {
-
     const newState = demoSlice.reducer(
       {
         ...initialDemoState,
@@ -26,7 +29,7 @@ describe('demo reducer', () => {
         withdraw: true,
         transfer: true,
       },
-      demoSlice.actions.initApi(null)
+      demoSlice.actions.initApi(null),
     )
 
     expect(newState.backdrop).toBe(true)
@@ -47,7 +50,7 @@ describe('demo reducer', () => {
         initials: { seed: 'seed', password: 'password', accountId: 'test' },
         readiness: false,
       },
-      demoSlice.actions.initApiSuccess(null)
+      demoSlice.actions.initApiSuccess(null),
     )
 
     expect(newState.backdrop).toBe(false)
@@ -62,7 +65,7 @@ describe('demo reducer', () => {
         backdrop: true,
         initials: { seed: 'seed', password: 'password', accountId: 'test' },
       },
-      demoSlice.actions.initApiFailure('error')
+      demoSlice.actions.initApiFailure('error'),
     )
 
     expect(newState.backdrop).toBe(false)
@@ -83,13 +86,12 @@ describe('demo reducer', () => {
     expect(newState.publicBalance).toBeUndefined()
     expect(newState.privateBalance).toBeUndefined()
     expect(newState.tokenBalance).toBeUndefined()
-
   })
 
   it('handles updateBalancesFailure action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.updateBalancesFailure('error')
+      demoSlice.actions.updateBalancesFailure('error'),
     )
 
     expect(newState).toEqual(initialDemoState)
@@ -101,7 +103,7 @@ describe('demo reducer', () => {
         ...initialDemoState,
         publicBalance: 'publicBalance',
       },
-      demoSlice.actions.publicBalance('newPublicBalance')
+      demoSlice.actions.publicBalance('newPublicBalance'),
     )
 
     expect(newState.publicBalance).toBe('newPublicBalance')
@@ -113,7 +115,7 @@ describe('demo reducer', () => {
         ...initialDemoState,
         privateBalance: 'privateBalance',
       },
-      demoSlice.actions.privateBalance('newPrivateBalance')
+      demoSlice.actions.privateBalance('newPrivateBalance'),
     )
 
     expect(newState.privateBalance).toBe('newPrivateBalance')
@@ -125,7 +127,7 @@ describe('demo reducer', () => {
         ...initialDemoState,
         tokenBalance: 'tokenBalance',
       },
-      demoSlice.actions.tokenBalance('newTokenBalance')
+      demoSlice.actions.tokenBalance('newTokenBalance'),
     )
 
     expect(newState.tokenBalance).toBe('newTokenBalance')
@@ -137,7 +139,7 @@ describe('demo reducer', () => {
         ...initialDemoState,
         minting: false,
       },
-      demoSlice.actions.mint('Minting')
+      demoSlice.actions.mint('Minting'),
     )
 
     expect(newState.minting).toBe(true)
@@ -149,7 +151,7 @@ describe('demo reducer', () => {
         ...initialDemoState,
         minting: true,
       },
-      demoSlice.actions.mintSuccess(1)
+      demoSlice.actions.mintSuccess(1),
     )
 
     expect(newState.minting).toBe(false)
@@ -161,7 +163,7 @@ describe('demo reducer', () => {
         ...initialDemoState,
         minting: true,
       },
-      demoSlice.actions.mintFailure('error')
+      demoSlice.actions.mintFailure('error'),
     )
 
     expect(newState.minting).toBe(false)
@@ -173,7 +175,7 @@ describe('demo reducer', () => {
         ...initialDemoState,
         deposit: false,
       },
-      demoSlice.actions.deposit('Deposit')
+      demoSlice.actions.deposit('Deposit'),
     )
 
     expect(newState.deposit).toBe(true)
@@ -185,7 +187,7 @@ describe('demo reducer', () => {
         ...initialDemoState,
         deposit: true,
       },
-      demoSlice.actions.depositSuccess('Deposit')
+      demoSlice.actions.depositSuccess('Deposit'),
     )
 
     expect(newState.deposit).toBe(false)
@@ -197,7 +199,7 @@ describe('demo reducer', () => {
         ...initialDemoState,
         deposit: true,
       },
-      demoSlice.actions.depositFailure('error')
+      demoSlice.actions.depositFailure('error'),
     )
 
     expect(newState.deposit).toBe(false)
@@ -209,7 +211,7 @@ describe('demo reducer', () => {
         ...initialDemoState,
         withdraw: false,
       },
-      demoSlice.actions.withdraw('Withdraw')
+      demoSlice.actions.withdraw('Withdraw'),
     )
 
     expect(newState.withdraw).toBe(true)
@@ -221,7 +223,7 @@ describe('demo reducer', () => {
         ...initialDemoState,
         withdraw: true,
       },
-      demoSlice.actions.withdrawSuccess('Withdraw')
+      demoSlice.actions.withdrawSuccess('Withdraw'),
     )
 
     expect(newState.withdraw).toBe(false)
@@ -233,7 +235,7 @@ describe('demo reducer', () => {
         ...initialDemoState,
         withdraw: true,
       },
-      demoSlice.actions.withdrawFailure('error')
+      demoSlice.actions.withdrawFailure('error'),
     )
 
     expect(newState.withdraw).toBe(false)
@@ -245,7 +247,12 @@ describe('demo reducer', () => {
         ...initialDemoState,
         transfer: false,
       },
-      demoSlice.actions.transfer({ id: 1, type: 'publicToPrivate', amount: '1', to: 'password' })
+      demoSlice.actions.transfer({
+        id: 1,
+        type: 'publicToPrivate',
+        amount: '1',
+        to: 'password',
+      }),
     )
 
     expect(newState.transfer).toBe(true)
@@ -257,7 +264,7 @@ describe('demo reducer', () => {
         ...initialDemoState,
         transfer: true,
       },
-      demoSlice.actions.transferSuccess('Success')
+      demoSlice.actions.transferSuccess('Success'),
     )
 
     expect(newState.transfer).toBe(false)
@@ -269,7 +276,7 @@ describe('demo reducer', () => {
         ...initialDemoState,
         transfer: true,
       },
-      demoSlice.actions.transferFailure('Error')
+      demoSlice.actions.transferFailure('Error'),
     )
 
     expect(newState.transfer).toBe(false)
@@ -278,7 +285,7 @@ describe('demo reducer', () => {
   it('handles resetAccount action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.resetAccount(null)
+      demoSlice.actions.resetAccount(true),
     )
 
     expect(newState).toEqual(initialDemoState)
@@ -292,7 +299,7 @@ describe('demo reducer', () => {
         backdrop: true,
         readiness: false,
       },
-      demoSlice.actions.recoverWallet('Recovering')
+      demoSlice.actions.recoverWallet('Recovering'),
     )
 
     expect(newState.recovery).toBe(true)
@@ -306,7 +313,11 @@ describe('demo reducer', () => {
         ...initialDemoState,
         recovery: true,
       },
-      demoSlice.actions.recoverWalletSuccess({ seed: 'seed', password: 'password', accountId: 'test' })
+      demoSlice.actions.recoverWalletSuccess({
+        seed: 'seed',
+        password: 'password',
+        accountId: 'test',
+      }),
     )
 
     expect(newState.recovery).toBe(false)
@@ -315,7 +326,7 @@ describe('demo reducer', () => {
   it('handles recoverWalletFailure action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.recoverWalletFailure('Error')
+      demoSlice.actions.recoverWalletFailure('Error'),
     )
 
     expect(newState).toEqual(initialDemoState)
@@ -324,7 +335,7 @@ describe('demo reducer', () => {
   it('handles getWlletAdress action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.getWalletAddress(null)
+      demoSlice.actions.getWalletAddress(null),
     )
 
     expect(newState).toEqual(initialDemoState)
@@ -333,7 +344,7 @@ describe('demo reducer', () => {
   it('handles getWalletAddressSuccess action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.getWalletAddressSuccess('address')
+      demoSlice.actions.getWalletAddressSuccess('address'),
     )
 
     expect(newState.walletAddress).toBe('address')
@@ -342,7 +353,7 @@ describe('demo reducer', () => {
   it('handles getWalletAddressFailure action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.getWalletAddressFailure('Error')
+      demoSlice.actions.getWalletAddressFailure('Error'),
     )
 
     expect(newState.walletAddress).toEqual('Cant get wallet address')
@@ -351,7 +362,7 @@ describe('demo reducer', () => {
   it('handles getPrivateAddress action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.getPrivateAddress(null)
+      demoSlice.actions.getPrivateAddress(null),
     )
 
     expect(newState).toEqual(initialDemoState)
@@ -360,7 +371,7 @@ describe('demo reducer', () => {
   it('handles getPrivateAddressSuccess action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.getPrivateAddressSuccess('address')
+      demoSlice.actions.getPrivateAddressSuccess('address'),
     )
 
     expect(newState.privateAddress).toBe('address')
@@ -369,7 +380,7 @@ describe('demo reducer', () => {
   it('handles getPrivateAddressFailure action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.getPrivateAddressFailure('Error')
+      demoSlice.actions.getPrivateAddressFailure('Error'),
     )
 
     expect(newState.privateAddress).toEqual('Cant get private address')
@@ -378,7 +389,7 @@ describe('demo reducer', () => {
   it('handles getPrivateAddress action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.getPrivateAddress(null)
+      demoSlice.actions.getPrivateAddress(null),
     )
 
     expect(newState).toEqual(initialDemoState)
@@ -387,7 +398,7 @@ describe('demo reducer', () => {
   it('handles getPrivateAddressSuccess action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.getPrivateAddressSuccess('address')
+      demoSlice.actions.getPrivateAddressSuccess('address'),
     )
 
     expect(newState.privateAddress).toBe('address')
@@ -396,7 +407,7 @@ describe('demo reducer', () => {
   it('handles getPrivateAddressFailure action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.getPrivateAddressFailure('Error')
+      demoSlice.actions.getPrivateAddressFailure('Error'),
     )
 
     expect(newState.privateAddress).toEqual('Cant get private address')
@@ -405,7 +416,7 @@ describe('demo reducer', () => {
   it('handles exportSeed action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.exportSeed('Exporting')
+      demoSlice.actions.exportSeed('Exporting'),
     )
 
     expect(newState).toEqual(initialDemoState)
@@ -414,7 +425,7 @@ describe('demo reducer', () => {
   it('handles exportSeedSuccess action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.exportSeedSuccess('Seed')
+      demoSlice.actions.exportSeedSuccess('Seed'),
     )
 
     expect(newState).toEqual(initialDemoState)
@@ -423,7 +434,7 @@ describe('demo reducer', () => {
   it('handles exportSeedFailure action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.exportSeedFailure('Error')
+      demoSlice.actions.exportSeedFailure('Error'),
     )
 
     expect(newState).toEqual(initialDemoState)
@@ -433,9 +444,9 @@ describe('demo reducer', () => {
     const newState = demoSlice.reducer(
       {
         ...initialDemoState,
-        transferModal: false
+        transferModal: false,
       },
-      demoSlice.actions.transferModal(true)
+      demoSlice.actions.transferModal(true),
     )
 
     expect(newState.transferModal).toBe(true)
