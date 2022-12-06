@@ -1,14 +1,14 @@
-@import "../../../styles/styles.scss";
+@import '../../../styles/styles.scss';
 
 .DemoPage {
-  background-color: white;
+  background-color: rgb(232, 240, 254);
   flex-grow: 1;
   flex-direction: column;
   display: flex;
   height: 100vh;
   min-width: 350px;
 
-  &-Toolbar{
+  &-Toolbar {
     align-items: flex-start;
     flex-direction: column;
     padding-top: 5px;
@@ -16,24 +16,24 @@
     padding-bottom: 0;
   }
 
-  &-ToolbarHeader{
+  &-ToolbarHeader {
     display: flex;
     border-bottom: grey 1px solid;
     width: 100%;
   }
 
-  &-ToolbarHeaderItems{
+  &-ToolbarHeaderItems {
     display: flex;
     flex-grow: 1;
     justify-content: flex-end;
     margin-right: -15px;
   }
 
-  &-ToolbarHeaderItemsEdgeStart{
+  &-ToolbarHeaderItemsEdgeStart {
     margin-left: -15px;
   }
 
-  &-ToolbarBody{
+  &-ToolbarBody {
     margin: auto;
     position: relative;
     width: 100%;
@@ -47,7 +47,7 @@
     }
   }
 
-  &-Input{
+  &-Input {
     width: 220px;
     margin-right: 10px;
 
@@ -58,31 +58,31 @@
     }
   }
 
-  &-Buttons{
+  &-Buttons {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
   }
 
-  &-Button{
+  &-Button {
     @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
       font-size: $small-font-size !important;
       margin-left: 10px !important;
     }
 
-    &_Transfer, &_Log {
+    &_Transfer,
+    &_Log {
       margin: 26px 10px 0 !important;
     }
   }
 
-
-  &-TransferTo{
+  &-TransferTo {
     margin-bottom: 8px;
     width: 355px;
   }
-  
-  &-Wrapper{
+
+  &-Wrapper {
     display: flex;
     margin: 50px auto;
     flex-direction: column;
@@ -92,7 +92,7 @@
     }
   }
 
-  &-Info{
+  &-Info {
     background-color: $blue-light !important;
     display: flex;
     flex-direction: column;
@@ -104,19 +104,19 @@
       margin: auto 10px 90px;
     }
   }
-  
-  &-InfoTitle{
-    @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
+
+  &-InfoTitle {
+    @media (max-width: $screen-xs-width), (max-height: $screen-s-heigh) {
       height: 0;
       overflow: hidden;
     }
   }
 
-  &-InfoText{
+  &-InfoText {
     margin-bottom: 6px;
   }
 
-  &-Footer{
+  &-Footer {
     background-color: $primary;
     bottom: 0;
     display: flex;
@@ -131,7 +131,7 @@
 
   &-Logo {
     margin: auto;
-    height: 60px; 
+    height: 60px;
 
     @media (max-width: $screen-xs-width), (max-height: $screen-xs-heigh) {
       height: 40px;
@@ -146,15 +146,15 @@
     color: $blue-light;
   }
 
-  &-AboutPage{
+  &-AboutPage {
     height: 50vh;
   }
 
-  &-ZeroPaddingRight{
+  &-ZeroPaddingRight {
     padding-right: 0;
   }
 
-  &-Transfer{
+  &-Transfer {
     padding: 22px 20px 30px 11px;
     border: 1px solid #d8dbf1;
     margin: 24px -28px;

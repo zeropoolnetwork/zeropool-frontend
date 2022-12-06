@@ -1,5 +1,13 @@
 // tslint:disable: prettier max-line-length
-import { switchMapTo, map, withLatestFrom, filter, switchMap, mergeMap, ignoreElements, tap } from 'rxjs/operators'
+import {
+  map,
+  withLatestFrom,
+  filter,
+  switchMap,
+  mergeMap,
+  ignoreElements,
+  tap,
+} from 'rxjs/operators'
 import { from, iif, Observable, of } from 'rxjs'
 import { Epic, combineEpics } from 'redux-observable'
 import { PayloadAction } from '@reduxjs/toolkit'
@@ -17,13 +25,11 @@ import {
   getSendData,
   getSupportedTokens,
   getWallets,
-  selectAccountId
+  selectAccountId,
 } from 'wallet/state/wallet.selectors'
 import { SendData, Wallet, WalletRecord, WalletView } from 'wallet/state/models'
 import { walletActions as actions } from 'wallet/state/wallet.actions'
-import { mapRatesToTokens } from 'wallet/state/helpers/map-rates-to-tokens'
 import { updateBalances } from 'wallet/state/helpers/update-balances.helper'
-import { RatesApi } from 'wallet/api/rates.api'
 import * as api from 'wallet/api/zeropool.api'
 
 import { RootState } from 'state'
@@ -34,21 +40,21 @@ import { RootState } from 'state'
 // const nextWalletId = (wallets: WalletRecord, token: Token) =>
 //   wallets[token.symbol][wallets[token.symbol].length - 1].id + 1
 
-const getRates$: Epic = (
-  action$: Observable<PayloadAction>,
-  state$: Observable<RootState>,
-) =>
-  action$.pipe(
-    filter(actions.getRates.match),
-    switchMapTo(
-      RatesApi.getRates().pipe(
-        withLatestFrom(state$.pipe(map(getSupportedTokens))),
-        map(([ratesData, tokens]) => mapRatesToTokens(ratesData, tokens)),
-        map((rates) => actions.getRatesSuccess(rates)),
-      ),
-    ),
-    handleEpicError(actions.getRatesError, 'Failed to get rates'),
-  )
+// const getRates$: Epic = (
+//   action$: Observable<PayloadAction>,
+//   state$: Observable<RootState>,
+// ) =>
+//   action$.pipe(
+//     filter(actions.getRates.match),
+//     switchMapTo(
+//       RatesApi.getRates().pipe(
+//         withLatestFrom(state$.pipe(map(getSupportedTokens))),
+//         map(([ratesData, tokens]) => mapRatesToTokens(ratesData, tokens)),
+//         map((rates) => actions.getRatesSuccess(rates)),
+//       ),
+//     ),
+//     handleEpicError(actions.getRatesError, 'Failed to get rates'),
+//   )
 
 // const redirectToTheWalletOnSetSeed$: Epic = (
 //   action$: Observable<PayloadAction>,
@@ -81,21 +87,14 @@ const initApi$: Epic = (
         of(_seed).pipe(
           filter((seed): seed is string => typeof seed === 'string'),
           switchMap((seed) =>
-            from(
-              api.init(
-                seed,
-                '123455678',
-                accountId,
-              ),
-            ).pipe(
+            from(api.init(seed, '123455678', accountId)).pipe(
               map(() => (!wallets ? actions.initWallets() : actions.updateBalances())),
             ),
           ),
         ),
         of(false).pipe(
           // tslint:disable-next-line: prettier
-          mergeMap(() => of(actions.setSeedError('Seed phrase not set')),
-          ),
+          mergeMap(() => of(actions.setSeedError('Seed phrase not set'))),
         ),
       ),
     ),
@@ -285,7 +284,7 @@ const handleErrorActions$: Epic = (action$: Observable<PayloadAction>) =>
 
 export const walletEpics: Epic = combineEpics(
   // addWallet$,
-  getRates$,
+  // getRates$,
   //   getTransactions$,
   callGetTransactionsOnOpenTransactionsView$,
   callGetTransactionsOnUpdateWallets$,

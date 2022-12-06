@@ -1,0 +1,33 @@
+@import '../../../styles/styles.scss';
+
+.Faucet {
+  background-color: $blue-light !important;
+  display: flex;
+  margin: 50px auto;
+  flex-direction: column;
+
+  @media (max-width: $screen-xs-width), (max-height: $screen-s-heigh) {
+    position: relative;
+    bottom: 50px;
+  }
+
+  &-Container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    min-width: 260px;
+    padding: 10px 0px;
+    width: 100%;
+  }
+
+  &-Button {
+    margin-top: 12px !important;
+  }
+
+  &-Input {
+    color: lightcoral !important;
+  }
+}
+

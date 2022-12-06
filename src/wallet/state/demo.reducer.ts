@@ -20,6 +20,7 @@ export type DemoState = {
   transactionStatus: TransactionStatus | undefined
   walletAddress: string | undefined
   withdraw: boolean
+  fauceting: boolean
 }
 
 export const initialDemoState: DemoState = {
@@ -40,6 +41,7 @@ export const initialDemoState: DemoState = {
   transactionStatus: undefined,
   walletAddress: undefined,
   withdraw: false,
+  fauceting: false,
 }
 
 // tslint:disable: no-empty
@@ -72,6 +74,7 @@ export const demoSlice = createSlice({
       state.tokenBalance = undefined
       state.walletAddress = undefined
       state.privateAddress = undefined
+      state.fauceting = false
     },
     initApiSuccess: (state, action: PayloadAction<null>) => {
       state.backdrop = false
@@ -196,6 +199,19 @@ export const demoSlice = createSlice({
     getTransactionsFailure: (state, action: PayloadAction<string>) => {},
     getTransactionsSuccess: (state, action: PayloadAction<Transaction[]>) => {
       state.transactions = action.payload
+    },
+
+    faucetRequest: (
+      state,
+      action: PayloadAction<{ address: string; amount: string }>,
+    ) => {
+      state.fauceting = true
+    },
+    faucetRequestSuccess: (state, action: PayloadAction<string>) => {
+      state.fauceting = false
+    },
+    faucetRequestFailure: (state, action: PayloadAction<string>) => {
+      state.fauceting = false
     },
   },
 })

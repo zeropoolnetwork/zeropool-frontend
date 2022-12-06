@@ -12,7 +12,6 @@ import './index.css'
 import { timeout } from 'shared/utils/timeout'
 import { AboutPage } from 'shared/components/AboutPage/AboutPage'
 import { LoadingBar } from 'shared/loading-bar/containers/loading-bar/loading-bar.component'
-import { http, setupInterceptors } from 'shared/http/http'
 import { SnackbarUtilsConfigurator } from 'shared/helpers/toast.helper'
 
 import { store, persistedStore } from 'state'
@@ -26,9 +25,6 @@ export const version = packageJson.version
 const root = createRoot(document.getElementById('root'))
 let PUBLIC_URL: string
 
-setupInterceptors(http(), store)
-// console.log(`process.env.REACT_APP_PUBLIC_URL: ${process.env.REACT_APP_PUBLIC_URL}`)
-
 if (process.env.NODE_ENV === 'development') {
   PUBLIC_URL = process.env.REACT_APP_PUBLIC_URL || '/'
 } else if (process.env.NODE_ENV === 'production') {
@@ -40,7 +36,10 @@ async function start() {
 
   root.render(
     <ThemeProvider theme={theme}>
-      <SnackbarProvider maxSnack={5} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+      <SnackbarProvider
+        maxSnack={5}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
         {/* <React.StrictMode> */}
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistedStore}>

@@ -1,6 +1,20 @@
 // tslint:disable: prettier max-line-length
-import { AppBar, Backdrop, CircularProgress, IconButton, Toolbar, Tooltip, Input, SwipeableDrawer, Dialog, DialogContent, Paper, Typography, Button } from '@mui/material'
-import RestoreIcon from '@mui/icons-material/Restore';
+import {
+  AppBar,
+  Backdrop,
+  CircularProgress,
+  IconButton,
+  Toolbar,
+  Tooltip,
+  Input,
+  SwipeableDrawer,
+  Dialog,
+  DialogContent,
+  Paper,
+  Typography,
+  Button,
+} from '@mui/material'
+import RestoreIcon from '@mui/icons-material/Restore'
 import { useDispatch, useSelector } from 'react-redux'
 import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight'
 import { useEffect, useState } from 'react'
@@ -13,12 +27,33 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import { cn } from '@bem-react/classname'
 
 import './DemoPage.scss'
-import { version as VERSION } from 'index'
 import logo from 'assets/images/logo1.svg'
 import { badAmount } from 'shared/utils/bad-amount'
 import { TransferData } from 'shared/models'
+import { version as VERSION } from 'index'
 
-import { selectBackdrop, selectDeposit, selectReadiness, selectInitials, selectMinting, selectPrivateAddress, selectPrivateBalance, selectPublicBalance, selectTokenBalance, selectTransfer, selectWalletAddress, selectWithdraw, selectRecovery, selectTransferModal, selectCanMint, selectCanWithdraw, selectCanDeposit, selectCanTransfer, selectTransactionLogModal, selectTransactions } from 'wallet/state/demo.selectors'
+import {
+  selectBackdrop,
+  selectDeposit,
+  selectReadiness,
+  selectInitials,
+  selectMinting,
+  selectPrivateAddress,
+  selectPrivateBalance,
+  selectPublicBalance,
+  selectTokenBalance,
+  selectTransfer,
+  selectWalletAddress,
+  selectWithdraw,
+  selectRecovery,
+  selectTransferModal,
+  selectCanMint,
+  selectCanWithdraw,
+  selectCanDeposit,
+  selectCanTransfer,
+  selectTransactionLogModal,
+  selectTransactions,
+} from 'wallet/state/demo.selectors'
 import { NETWORK, NETWORK_FAUCET, NETWORK_NAME, zpSupport } from 'wallet/api/zeropool.api'
 import { lowBalanceHelper } from 'wallet/state/helpers/low-balance.helper'
 import { Transactions } from 'wallet/containers/Transactions/Transactions'
@@ -27,6 +62,8 @@ import { DemoDrowler } from 'wallet/components/DemoDrowler/DemoDrowler'
 import { DemoHeader } from 'wallet/components/DemoHeader/DemoHeader'
 import { Recovery } from 'wallet/components/Recovery/Recovery'
 import { Transfer } from 'wallet/components/Transfer/Transfer'
+import { RootState } from 'state'
+import { Fauset } from 'wallet/containers/Fauset/Fauset'
 // tslint:enable: prettier max-line-length
 
 export const componentId = 'DemoPage'
@@ -38,7 +75,7 @@ export const DemoPage: React.FC<{}> = () => {
   const dispatch = useDispatch()
 
   const backdrop = useSelector(selectBackdrop)
-  const minting = useSelector(selectMinting)
+  const minting = useSelector((state: RootState) => state.demo.minting)
   const initials = useSelector(selectInitials)
   const publicBalance = useSelector(selectPublicBalance)
   const privateBalance = useSelector(selectPrivateBalance)
@@ -67,7 +104,7 @@ export const DemoPage: React.FC<{}> = () => {
   useEffect(() => {
     if (!readiness && !initials) {
       navigate('/register')
-    } else if (!zpSupport){
+    } else if (!zpSupport) {
       dispatch(demoActions.initApi(null))
     }
   }, [])
@@ -147,8 +184,15 @@ export const DemoPage: React.FC<{}> = () => {
             color="primary"
             variant="contained"
             startIcon={<KeyboardArrowRightIcon />}
-            disabled={!canDeposit || badAmount(depositAmount) || +depositAmount > (tokenBalance || 0)}
-            onClick={() => { dispatch(demoActions.deposit(depositAmount)); setDepositAmount('') }}
+            disabled={
+              !canDeposit ||
+              badAmount(depositAmount) ||
+              +depositAmount > (tokenBalance || 0)
+            }
+            onClick={() => {
+              dispatch(demoActions.deposit(depositAmount))
+              setDepositAmount('')
+            }}
           >
             Deposit
           </LoadingButton>
@@ -176,8 +220,15 @@ export const DemoPage: React.FC<{}> = () => {
             color="primary"
             variant="contained"
             startIcon={<KeyboardArrowLeft />}
-            disabled={!canWithdraw || badAmount(withdrawAmount) || +withdrawAmount > (privateBalance || 0)}
-            onClick={() => { dispatch(demoActions.withdraw(withdrawAmount)); setWithdrawAmount('') }}
+            disabled={
+              !canWithdraw ||
+              badAmount(withdrawAmount) ||
+              +withdrawAmount > (privateBalance || 0)
+            }
+            onClick={() => {
+              dispatch(demoActions.withdraw(withdrawAmount))
+              setWithdrawAmount('')
+            }}
           >
             Withdraw
           </LoadingButton>
@@ -190,7 +241,13 @@ export const DemoPage: React.FC<{}> = () => {
             loadingPosition="start"
             color="primary"
             variant="contained"
-            startIcon={transfer ? <CircularProgress color="inherit" size={20} /> : <KeyboardDoubleArrowRight />}
+            startIcon={
+              transfer ? (
+                <CircularProgress color="inherit" size={20} />
+              ) : (
+                <KeyboardDoubleArrowRight />
+              )
+            }
             disabled={false}
             onClick={() => dispatch(demoActions.transferModal(true))}
           >
@@ -209,47 +266,63 @@ export const DemoPage: React.FC<{}> = () => {
         </div>
       </div>
 
+      <div style={{ flex: 1 }}></div>
+
+      {NETWORK === 'near' ? <Fauset></Fauset> : null}
+
       <Paper className={bem('Info')} elevation={2}>
+        {NETWORK !== 'near' ? (
+          <div className={bem('Transaction', { Mint: true })}>
+            <Typography variant="h6" className={bem('InfoTitle')}>
+              🚀 Mint test token
+            </Typography>
 
-        {NETWORK !== 'near' ? (<div className={bem('Transaction', { Mint: true })}>
-          <Typography variant="h6" className={bem('InfoTitle')}>🚀 Mint test token</Typography>
-          <Input
-            id="mint-amount"
-            className={bem('Input')}
-            data-testid={bem('MintInput')}
-            sx={{ color: 'black' }}
-            color="primary"
-            value={mintAmount}
-            classes={{ input: bem('MintInput') }}
-            placeholder="Mint amount in tokens"
-            inputProps={{ 'data-testid': bem('Mint'), maxLength: 20 }}
-            onChange={(event) => setMintAmount(event.target.value)}
-          />
+            <Input
+              id="mint-amount"
+              className={bem('Input')}
+              data-testid={bem('MintInput')}
+              sx={{ color: 'black' }}
+              color="primary"
+              value={mintAmount}
+              classes={{ input: bem('MintInput') }}
+              placeholder="Mint amount in tokens"
+              inputProps={{ 'data-testid': bem('Mint'), maxLength: 20 }}
+              onChange={(event) => setMintAmount(event.target.value)}
+            />
 
-          <LoadingButton
-            loading={minting}
-            loadingPosition="start"
-            color="primary"
-            variant="contained"
-            className={bem('Button')}
-            data-testid={bem('MintButton')}
-            startIcon={<SoupKitchenIcon />}
-            disabled={!canMint || badAmount(mintAmount)}
-            onClick={() => { dispatch(demoActions.mint(mintAmount)); setMintAmount('') }}
-          >
-            Mint
-          </LoadingButton>
-        </div>) : null}
-
-        <span className={bem('InfoText')}>To perform any action on this page you need to have enough funds on your public balance.</span>
+            <LoadingButton
+              loading={minting}
+              loadingPosition="start"
+              color="primary"
+              variant="contained"
+              className={bem('Button')}
+              data-testid={bem('MintButton')}
+              startIcon={<SoupKitchenIcon />}
+              disabled={!canMint || badAmount(mintAmount)}
+              onClick={() => {
+                dispatch(demoActions.mint(mintAmount))
+                setMintAmount('')
+              }}
+            >
+              Mint
+            </LoadingButton>
+          </div>
+        ) : null}
 
         <span className={bem('InfoText')}>
-          Click on your public address and use it on the&nbsp;
+          To perform any action on this page you need to have enough funds on your public
+          balance.
+        </span>
+
+        <span className={bem('InfoText')}>
+          Click on your public address and use it on our or on the&nbsp;
           {/* <a href='https://fauceth.komputing.org/?chain=5' target={'_blank'}>Goerli Faucet</a> or&nbsp; */}
-          <a href={NETWORK_FAUCET} target={'_blank'} rel="noreferrer">{NETWORK_NAME} Faucet</a> page to get free funds.
+          <a href={NETWORK_FAUCET} target={'_blank'} rel="noreferrer">
+            {NETWORK_NAME} Faucet
+          </a>{' '}
+          page to get free funds.
         </span>
       </Paper>
-
 
       <div className={bem('Footer')}>
         <div className={bem('Version')}>{`v${VERSION}`}</div>
@@ -277,25 +350,22 @@ export const DemoPage: React.FC<{}> = () => {
         ></DemoDrowler>
       </SwipeableDrawer>
 
-      <Dialog
-        open={recorevery}
-        fullWidth={true}
-        maxWidth={'xs'}
-      >
+      <Dialog open={recorevery} fullWidth={true} maxWidth={'xs'}>
         <DialogContent dividers={true}>
           <Recovery
             data-testid={bem('Recovery')}
-            onReset={() => { dispatch(demoActions.resetAccount(true)); navigate('/register') }}
-            onRecover={(password: string) => dispatch(demoActions.recoverWallet(password))}
+            onReset={() => {
+              dispatch(demoActions.resetAccount(true))
+              navigate('/register')
+            }}
+            onRecover={(password: string) =>
+              dispatch(demoActions.recoverWallet(password))
+            }
           />
         </DialogContent>
       </Dialog>
 
-      <Dialog
-        open={transferModal}
-        fullWidth={true}
-        maxWidth={'xs'}
-      >
+      <Dialog open={transferModal} fullWidth={true} maxWidth={'xs'}>
         <DialogContent dividers={true}>
           <Transfer
             data-testid={bem('Transfer')}
@@ -303,7 +373,17 @@ export const DemoPage: React.FC<{}> = () => {
             canTransfer={!!canTransfer}
             onSubmit={(data: TransferData) => dispatch(demoActions.transfer(data))}
             onCancel={() => dispatch(demoActions.transferModal(false))}
-            onEdit={(type, amount) => { setLowBalance(lowBalanceHelper(type, amount, publicBalance, tokenBalance, privateBalance)) }}
+            onEdit={(type, amount) => {
+              setLowBalance(
+                lowBalanceHelper(
+                  type,
+                  amount,
+                  publicBalance,
+                  tokenBalance,
+                  privateBalance,
+                ),
+              )
+            }}
             balanceError={lowBalance}
           />
         </DialogContent>
@@ -330,6 +410,6 @@ export const DemoPage: React.FC<{}> = () => {
       <Backdrop sx={{ color: '#fff', zIndex: 1000 }} open={backdrop}>
         <CircularProgress color="inherit" />
       </Backdrop>
-    </div >
+    </div>
   )
 }

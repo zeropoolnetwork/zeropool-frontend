@@ -38,17 +38,12 @@
       ]
     },
   },
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript]": {
-    "editor.formatOnSave": true
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[typescript]": {
-    "editor.formatOnSave": true,
-    "quoteStyle": "single"
-  },
-  "[typescriptreact]": {
-    "editor.formatOnSave": true
-  },
+  "editor.tabSize": 2,
   "prettier.tslintIntegration": true,
   "prettier.eslintIntegration": true,
   "prettier.jsxSingleQuote": false,

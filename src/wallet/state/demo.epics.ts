@@ -24,6 +24,7 @@ import { RootState } from 'state'
 
 import { toast } from 'shared/helpers/toast.helper'
 import { isNonNull } from 'shared/operators/is-not-null'
+import { callFaucet } from 'wallet/api/faucet.api'
 import { Transaction } from 'shared/models/transaction'
 // tslint:enable: prettier max-line-length
 
@@ -503,6 +504,23 @@ const getTransactions = (action$: Action$, state$: State$) => {
   )
 }
 
+const callFauset = (action$: Action$, state$: State$) => {
+  return action$.pipe(
+    filter(demoActions.faucetRequest.match),
+    switchMap(({ payload }) =>
+      from(callFaucet({ amount: payload.amount, address: payload.address })).pipe(
+        tap((msg) => toast.success(msg)),
+        map((msg) => demoActions.faucetRequestSuccess(msg)),
+      ),
+    ),
+    catchError((errMsg: string) => {
+      toast.error(errMsg)
+
+      return of(demoActions.faucetRequestFailure(errMsg))
+    }),
+  )
+}
+
 export const demoEpics: Epic = combineEpics(
   initApi,
   mint,
@@ -528,5 +546,6 @@ export const demoEpics: Epic = combineEpics(
   resetOnError,
   callGetTransactionsOnTransactionsModalOpen,
   getTransactions,
+  callFauset,
   // updateBalancesAfterTransfer,
 )
