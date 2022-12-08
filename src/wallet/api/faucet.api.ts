@@ -1,13 +1,14 @@
 import axios from 'axios'
+import { promiceErrorHandler } from 'wallet/api/error.handlers'
 
-let URL: string
+let API: string
 let TOKEN: string
 
 if (process.env.NODE_ENV === 'development') {
-  URL = process.env.REACT_APP_FAUCET_URL as string
+  API = process.env.REACT_APP_NETWORK_FAUCET as string
   TOKEN = process.env.REACT_APP_TOKEN as string
 } else if (process.env.NODE_ENV === 'production') {
-  URL = REACT_APP_FAUCET_URL
+  API = REACT_APP_NETWORK_FAUCET
   TOKEN = REACT_APP_TOKEN
 }
 
@@ -18,28 +19,29 @@ export const callFaucet = ({
   address: string
   amount: string
 }): Promise<string> => {
-  const http = axios.create({
-    baseURL: URL,
-    headers: { 'Content-Type': 'application/json' },
-    withCredentials: false,
-  })
+  // const http = axios.create({
+  //   baseURL: API,
+  //   headers: { 'Content-Type': 'application/json' },
+  //   withCredentials: false,
+  // })
 
-  return new Promise<string>((resolve, reject) => {
-    setTimeout(() => {
-      resolve(`Successfuly requested ${amount} ${TOKEN} from faucet`)
-    }, 3000)
-  })
+  const url = `${API}/${TOKEN}/${address}`
 
-  return http
-    .post('/faucet', {
-      address,
-      amount,
-    })
+  // return new Promise<string>((resolve, reject) => {
+  //   setTimeout(() => {
+  //     resolve(`Successfuly requested ${amount} ${TOKEN} from faucet`)
+  //   }, 3000)
+  // })
+
+  return fetch(url, {
+    method: 'post',
+    body: JSON.stringify({ amount }),
+  })
     .then((response) => {
-      return response.data
+      return response.json()
     })
     .catch((error) => {
-      throw error
+      return Promise.reject(error.message)
     })
 }
 

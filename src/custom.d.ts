@@ -12,5 +12,4 @@ declare var REACT_APP_TOKEN_ADDRESS: string
 declare var REACT_APP_CONTRACT_ADDRESS: string
 declare var REACT_APP_PUBLIC_URL: string
 declare var REACT_APP_TRANSACTION_URL: string
-declare var REACT_APP_FAUCET_URL: string
 declare var REACT_APP_TOKEN: string

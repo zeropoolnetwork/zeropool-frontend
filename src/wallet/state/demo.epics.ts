@@ -508,7 +508,12 @@ const callFauset = (action$: Action$, state$: State$) => {
   return action$.pipe(
     filter(demoActions.faucetRequest.match),
     switchMap(({ payload }) =>
-      from(callFaucet({ amount: payload.amount, address: payload.address })).pipe(
+      from(
+        callFaucet({
+          amount: api.zpSupport.toBaseUnit(payload.amount),
+          address: payload.address,
+        }),
+      ).pipe(
         tap((msg) => toast.success(msg)),
         map((msg) => demoActions.faucetRequestSuccess(msg)),
       ),
