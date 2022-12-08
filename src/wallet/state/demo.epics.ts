@@ -507,22 +507,29 @@ const getTransactions = (action$: Action$, state$: State$) => {
 const callFauset = (action$: Action$, state$: State$) => {
   return action$.pipe(
     filter(demoActions.faucetRequest.match),
-    switchMap(({ payload }) =>
-      from(
-        callFaucet({
-          amount: api.zpSupport.toBaseUnit(payload.amount),
-          address: payload.address,
+    mergeMap(({ payload }) =>
+      of(payload).pipe(
+        switchMap(({ amount, address }) =>
+          from(
+            callFaucet({
+              userAmount: payload.amount,
+              amount: api.zpSupport.toBaseUnit(payload.amount),
+              address: payload.address,
+            }),
+          ).pipe(
+            tap((msg) => toast.success(msg)),
+            mergeMap((msg) =>
+              of(demoActions.faucetRequestSuccess(msg), demoActions.updateBalances(null)),
+            ),
+          ),
+        ),
+        catchError((errMsg: string) => {
+          toast.error(errMsg)
+
+          return of(demoActions.faucetRequestFailure(errMsg))
         }),
-      ).pipe(
-        tap((msg) => toast.success(msg)),
-        map((msg) => demoActions.faucetRequestSuccess(msg)),
       ),
     ),
-    catchError((errMsg: string) => {
-      toast.error(errMsg)
-
-      return of(demoActions.faucetRequestFailure(errMsg))
-    }),
   )
 }
 

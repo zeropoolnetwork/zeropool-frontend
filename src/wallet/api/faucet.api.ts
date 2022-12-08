@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { promiceErrorHandler } from 'wallet/api/error.handlers'
 
 let API: string
 let TOKEN: string
@@ -12,36 +11,28 @@ if (process.env.NODE_ENV === 'development') {
   TOKEN = REACT_APP_TOKEN
 }
 
-export const callFaucet = ({
+export const callFaucet = async ({
+  userAmount,
   address,
   amount,
 }: {
+  userAmount: string
   address: string
   amount: string
-}): Promise<string> => {
-  // const http = axios.create({
-  //   baseURL: API,
-  //   headers: { 'Content-Type': 'application/json' },
-  //   withCredentials: false,
-  // })
-
-  const url = `${API}/${TOKEN}/${address}`
-
-  // return new Promise<string>((resolve, reject) => {
-  //   setTimeout(() => {
-  //     resolve(`Successfuly requested ${amount} ${TOKEN} from faucet`)
-  //   }, 3000)
-  // })
-
-  return fetch(url, {
-    method: 'post',
-    body: JSON.stringify({ amount }),
+}): Promise<any> => {
+  const http = axios.create({
+    baseURL: API,
+    headers: { 'Content-Type': 'application/json' },
+    withCredentials: false,
   })
+
+  return http
+    .post(`${API}/${TOKEN}/${address}`, { amount })
     .then((response) => {
-      return response.json()
+      return Promise.resolve(`Successfuly requested ${userAmount} ${TOKEN} from faucet`)
     })
     .catch((error) => {
-      return Promise.reject(error.message)
+      return Promise.reject(error.response?.data?.error || 'Something went wrong')
     })
 }
 
