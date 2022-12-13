@@ -52,7 +52,6 @@ export const Fauset: React.FC<FaucetProps> = () => {
         <Typography variant="h6" className={bem('Title')}>
           🚀 Near Testnet Faucet
         </Typography>
-
         <Input
           value={address}
           color="primary"
@@ -60,10 +59,9 @@ export const Fauset: React.FC<FaucetProps> = () => {
           data-testid={bem('AddressInput')}
           classes={{ input: bem('Input') }}
           placeholder="Address"
-          inputProps={{ 'data-testid': bem('Address'), maxLength: 50 }}
+          inputProps={{ 'data-testid': bem('Address'), maxLength: 100 }}
           onChange={handleAddressChange}
         />
-
         <Input
           value={amount}
           color="primary"
@@ -74,7 +72,6 @@ export const Fauset: React.FC<FaucetProps> = () => {
           inputProps={{ 'data-testid': bem('Amount'), maxLength: 10 }}
           onChange={handleAmountChange}
         />
-
         <LoadingButton
           loading={processing}
           loadingPosition="start"
@@ -88,6 +85,8 @@ export const Fauset: React.FC<FaucetProps> = () => {
         >
           Request
         </LoadingButton>
+
+        <span className={bem('Limit')}>Limit: 5 tokens per day</span>
       </div>
     </Paper>
   )

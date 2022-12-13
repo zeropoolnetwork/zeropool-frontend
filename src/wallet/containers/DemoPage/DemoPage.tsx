@@ -314,14 +314,16 @@ export const DemoPage: React.FC<{}> = () => {
           balance.
         </span>
 
-        <span className={bem('InfoText')}>
-          Click on your public address and use it on our or on the&nbsp;
-          {/* <a href='https://fauceth.komputing.org/?chain=5' target={'_blank'}>Goerli Faucet</a> or&nbsp; */}
-          <a href={NETWORK_FAUCET} target={'_blank'} rel="noreferrer">
-            {NETWORK_NAME} Faucet
-          </a>{' '}
-          page to get free funds.
-        </span>
+        {NETWORK !== 'near' ? (
+          <span className={bem('InfoText')}>
+            Click on your public address and use it on our or on the&nbsp;
+            {/* <a href='https://fauceth.komputing.org/?chain=5' target={'_blank'}>Goerli Faucet</a> or&nbsp; */}
+            <a href={NETWORK_FAUCET} target={'_blank'} rel="noreferrer">
+              {NETWORK_NAME} Faucet
+            </a>{' '}
+            page to get free funds.
+          </span>
+        ) : null}
       </Paper>
 
       <div className={bem('Footer')}>

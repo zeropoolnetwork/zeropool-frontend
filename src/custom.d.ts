@@ -3,6 +3,7 @@ declare module '*.bin' {
   export default url
 }
 
+declare var REACT_APP_TOKEN: string
 declare var REACT_APP_NETWORK: string
 declare var REACT_APP_NETWORK_NAME: string
 declare var REACT_APP_NETWORK_FAUCET: string
@@ -12,4 +13,3 @@ declare var REACT_APP_TOKEN_ADDRESS: string
 declare var REACT_APP_CONTRACT_ADDRESS: string
 declare var REACT_APP_PUBLIC_URL: string
 declare var REACT_APP_TRANSACTION_URL: string
-declare var REACT_APP_TOKEN: string
