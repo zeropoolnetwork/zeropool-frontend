@@ -13,17 +13,15 @@ export type EditWalletProps = {
   onCancel: () => void
 }
 
-export const ConfirmReset: React.FC<EditWalletProps> = ({
-  onReset,
-  onCancel,
-}) => {
+export const ConfirmReset: React.FC<EditWalletProps> = ({ onReset, onCancel }) => {
   return (
     <div className={bem()} data-testid={bem()}>
       <p className={bem('Name')}>Confirm Reset</p>
 
       <div className={bem('Text')} data-testid={bem('Text')}>
-        You are about to reset all your data.
-        If you did not save your seed, you will lose all your funds.
+        You are about to reset all your data related to ZeroPool that being stored in this
+        browser (included encripted seed phrase). If you did not save your seed somevere
+        else, you will lose all your funds.
       </div>
 
       <Button

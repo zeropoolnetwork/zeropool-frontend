@@ -83,7 +83,7 @@ export const demoSlice = createSlice({
     },
     initApiFailure: (state, action: PayloadAction<string>) => {
       state.backdrop = false
-      state.initials = null
+      state.initials = undefined
     },
 
     updateBalances: (

@@ -62,6 +62,8 @@ const initApi = (action$: Action$, state$: State$) => {
           toast.close('initApi')
           toast.error(errMsg, { key: 'initApiError', persist: true })
 
+          setTimeout(() => window.location.reload(), 10000)
+
           return of(demoActions.initApiFailure(errMsg))
         }),
       ),
