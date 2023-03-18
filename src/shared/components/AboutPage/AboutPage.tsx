@@ -20,14 +20,14 @@ export const AboutPage: React.FC<AboutPageProps> = ({ showBackButton = true }) =
       <h2 className={bem('Header')}> ABOUT ZEROPOOL </h2>
 
       <p className={bem('Text')}>
-        ZeroPool is fully private multi-blokchain solution. Low transaction fees, atomic swaps and
-        common anonymity set. Balances and transaction graph are hidden and compatibility with
-        network identity hiding technologies, like Tor. You can deposit, transfer and withdraw
+        ZeroPool is a fully private multi-blockchain solution. Low transaction fees, atomic swaps, and
+        common anonymity set. Balances and transaction graphs are hidden and compatible with
+        network identity hiding technologies like Tor. You can deposit, transfer and withdraw
         tokens in our product.
       </p>
 
       <p className={bem('Text')}>
-        The projec was found at ethDenver by a group of reserchers and still developed as product
+        The project was found at ethDenver by a group of researchers and still developed as a product
         with strong scientific base.
       </p>
 
