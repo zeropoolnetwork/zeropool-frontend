@@ -269,10 +269,10 @@ export const getTokenBalance = async (): Promise<string> => {
 
     const address = await zpSupport.getAddress()
     const tokenBalance = BigInt(await zpSupport.getTokenBalance(TOKEN_ADDRESS))
-    const pendingDelta = await zpClient.getOptimisticTokenBalanceDelta(
+    const pendingDelta = BigInt(await zpClient.getOptimisticTokenBalanceDelta(
       TOKEN_ADDRESS,
       address,
-    )
+    ).toString())
 
     return zpSupport.fromBaseUnit((tokenBalance + pendingDelta).toString())
   } catch (e: any) {
@@ -649,7 +649,7 @@ export const getPrivateHistory = async (): Promise<Transaction[]> => {
       transactionHelper.fromPrivateHistory(
         record,
         zpSupport.fromBaseUnit.bind(zpSupport),
-        zpClient.getDenominator(TOKEN_ADDRESS),
+        BigInt(zpClient.getDenominator(TOKEN_ADDRESS).toString()),
       ),
     )
 
