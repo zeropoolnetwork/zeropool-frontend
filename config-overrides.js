@@ -52,7 +52,7 @@ module.exports = {
       new CopyPlugin({
         patterns: [
           { from: 'src/env.js' },
-          { from: '*', context: 'build-workers'}
+          { from: '*', context: 'workers'}
         ],
       }),
       new CompressionPlugin({ exclude: 'env.js' }),
