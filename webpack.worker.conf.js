@@ -1,5 +1,6 @@
-// Currently not used
 const path = require('path');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
 
 module.exports = {
   entry: {
@@ -7,14 +8,15 @@ module.exports = {
     workerMt: './node_modules/zeropool-client-js/lib/workerMt.js',
   },
   output: {
-    path: path.join(process.cwd(), 'build-workers'),
-    filename: '[name].js',
+    path: path.join(process.cwd(), 'workers'),
+    filename: '[name].[fullhash].js',
     assetModuleFilename: '[name][hash][ext]',
     publicPath: './',
   },
   target: 'webworker',
   mode: 'production',
-  resolve: {
-    extensions: ['.js'],
-  },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new WebpackManifestPlugin()
+  ]
 };

@@ -3,3 +3,8 @@ node_modules
 deps
 .parcel-cache
 build-workers
+# build
+build-workers
+.git
+static
+/params

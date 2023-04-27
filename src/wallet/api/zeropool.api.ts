@@ -46,8 +46,7 @@ import { transaction, Transaction } from 'shared/models/transaction'
 import { TransferData } from 'shared/models'
 import { toast } from 'shared/helpers/toast.helper'
 
-const WORKER_ST_PATH = '/workerSt.js?' + process.env.CACHE_BUST
-const WORKER_MT_PATH = '/workerMt.js?' + process.env.CACHE_BUST
+import workersManifest from 'manifest.json'
 
 // #region Initialization
 export let zpSupport: NetworkClient
@@ -107,15 +106,15 @@ export const init = async (
   let snarkParams
   const snarkParamsConfig = {
     transferParamsUrl: '/assets/transfer_params.bin',
-    treeParamsUrl: '/assets/tree_params.bin',
     transferVkUrl: '/assets/transfer_verification_key.json',
-    treeVkUrl: '/assets/tree_verification_key.json',
   }
 
   try {
     const initialized = await initZPClient(snarkParamsConfig as any, {
-      workerSt: WORKER_ST_PATH,
-      workerMt: WORKER_MT_PATH,
+      workerSt: workersManifest['workerSt.js'],
+      workerMt: workersManifest['workerMt.js'],
+      wasmSt: workersManifest['libzeropool_rs_wasm_bg.wasm'],
+      wasmMt: workersManifest['libzeropool_rs_wasm_mt_bg.wasm'],
     })
 
     worker = initialized.worker
@@ -131,7 +130,7 @@ export const init = async (
 
   try {
     if (isEvmBased(NETWORK)) {
-      const provider = new HDWalletProvider({
+      const provider: any = new HDWalletProvider({
         mnemonic,
         providerOrUrl: RPC_URL,
       })
@@ -184,7 +183,7 @@ export const init = async (
         relayerUrl: RELAYER_URL,
       },
     },
-    networkName: NETWORK,
+    networkName: NETWORK_NAME.toLowerCase(),
     network,
   })
 
@@ -269,12 +268,13 @@ export const getTokenBalance = async (): Promise<string> => {
 
     const address = await zpSupport.getAddress()
     const tokenBalance = BigInt(await zpSupport.getTokenBalance(TOKEN_ADDRESS))
-    const pendingDelta = BigInt(await zpClient.getOptimisticTokenBalanceDelta(
+    const pendingDelta = await zpClient.getOptimisticTokenBalanceDelta(
       TOKEN_ADDRESS,
       address,
-    ).toString())
+    )
+    const pendingDeltaBn = BigInt(pendingDelta.toString())
 
-    return zpSupport.fromBaseUnit((tokenBalance + pendingDelta).toString())
+    return zpSupport.fromBaseUnit((tokenBalance + pendingDeltaBn).toString())
   } catch (e: any) {
     console.error(e)
 
