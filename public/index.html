@@ -5,7 +5,6 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <script src="%PUBLIC_URL%/env.js?%CACHE_BUST%"></script>
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <title>ZeroPool</title>
 
@@ -24,7 +23,7 @@
         height: 100vh;
       }
       .loader-spinner {
-        background: url("%PUBLIC_URL%/logo.png") no-repeat;
+        background: url('%PUBLIC_URL%/logo.png') no-repeat;
         position: absolute;
         top: calc(50% - 6em);
         left: calc(50% - 2em);
@@ -66,4 +65,12 @@
       </div>
     </div>
   </body>
+
+  <script>
+    const randomNumber = Math.floor(Math.random() * 1000000000)
+    const envScript = document.createElement('script')
+
+    envScript.src = `%PUBLIC_URL%/env.js?${randomNumber}`
+    document.head.appendChild(envScript)
+  </script>
 </html>

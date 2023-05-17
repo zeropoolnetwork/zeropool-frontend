@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
 import { cn } from '@bem-react/classname'
 import { useSnackbar } from 'notistack'
+import React, { useState } from 'react'
 import { Button, CircularProgress } from '@mui/material'
 
 import './Transactions.scss'
@@ -8,9 +8,9 @@ import './Transactions.scss'
 import { testIdBuilder } from 'shared/helpers/test/test-id-builder.helper'
 import { isErrorWithMessage } from 'shared/utils/is-error-with-message'
 
+import { Transaction as TransactionRow } from 'wallet/components/Transaction/Transaction'
 import { SortedTransactions } from 'wallet/state/models/sorted-transactions'
 import transactionHelper from 'wallet/state/helpers/transaction.helper'
-import { Transaction as TransactionRow } from 'wallet/components/Transaction/Transaction'
 import { Transaction } from 'shared/models/transaction'
 
 export const componentId = 'Transactions'
@@ -24,7 +24,11 @@ export type TransactionsProps = {
   onClose: () => void
 }
 
-export const Transactions: React.FC<TransactionsProps> = ({ transactions, address, onClose }) => {
+export const Transactions: React.FC<TransactionsProps> = ({
+  transactions,
+  address,
+  onClose,
+}) => {
   let sorted: SortedTransactions[] = []
   const { enqueueSnackbar } = useSnackbar()
   const [opened, setOpened] = useState<boolean[]>([])
@@ -58,37 +62,35 @@ export const Transactions: React.FC<TransactionsProps> = ({ transactions, addres
     <div className={bem()} data-testid={test()}>
       <div className={bem('Days')}>
         {!transactions ? (
-          <CircularProgress sx={{ margin: "auto" }} />
+          <CircularProgress sx={{ margin: 'auto' }} />
+        ) : transactions.length === 0 ? (
+          <div className={bem('Empty')}>No records yet</div>
         ) : (
-          transactions.length === 0 ?
-            <div className={bem('Empty')}>No records yet</div>
-            :
-            (sorted.map((day, i) => (
-              <div className={bem('Day')} key={i}>
-                <div className={bem('Date')}>
-                  <span className={bem('Arrow', { Down: opened[i] })} onClick={() => openHandler(i)}>
-                    {'>'}
-                  </span>
+          sorted.map((day, i) => (
+            <div className={bem('Day')} key={i}>
+              <div className={bem('Date')}>
+                <span
+                  className={bem('Arrow', { Down: opened[i] })}
+                  onClick={() => openHandler(i)}
+                >
+                  {'>'}
+                </span>
 
-                  {' ' + day.date}
-                </div>
-
-                {day.transactions.map((transaction, j) => (
-                  <div className={bem('TransactionRow', { Open: opened[i] })} key={j}>
-                    <TransactionRow transaction={transaction} key={j} address={address} />
-                  </div>
-                ))}
+                {' ' + day.date}
               </div>
-            )))
+
+              {day.transactions.map((transaction, j) => (
+                <div className={bem('TransactionRow', { Open: opened[i] })} key={j}>
+                  <TransactionRow transaction={transaction} key={j} address={address} />
+                </div>
+              ))}
+            </div>
+          ))
         )}
       </div>
 
       <div className={bem('Close')}>
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={onClose}
-        >
+        <Button color="primary" variant="contained" onClick={onClose}>
           Close
         </Button>
       </div>

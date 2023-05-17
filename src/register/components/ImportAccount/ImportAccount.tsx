@@ -4,9 +4,22 @@ import { DevTool } from '@hookform/devtools'
 import { useForm } from 'react-hook-form'
 import React, { useState } from 'react'
 import { Close, Visibility, VisibilityOff, CopyAll } from '@mui/icons-material'
-import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
+import {
+  Button,
+  FormControl,
+  FormHelperText,
+  IconButton,
+  Input,
+  InputAdornment,
+  InputLabel,
+} from '@mui/material'
 
-import { accountIdValidator, confirmValidator, passwordValidator, seedValidator } from 'shared/utils/form-validators'
+import {
+  accountIdValidator,
+  confirmValidator,
+  passwordValidator,
+  seedValidator,
+} from 'shared/utils/form-validators'
 import { strToArray } from 'shared/utils/str-to-array'
 // tslint:enable: max-line-length prettier
 
@@ -28,7 +41,7 @@ interface FormData {
 
 export interface ImportAccountProps {
   onBack: () => void
-  onImport: (data: { seed: string[]; password: string, accountId?: string }) => void
+  onImport: (data: { seed: string[]; password: string; accountId?: string }) => void
 }
 // #endregion
 
@@ -36,30 +49,67 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
   // tslint:disable: max-line-length prettier
   const [showPassword, setShowPassword] = useState(false)
 
-  const { handleSubmit, register, control, formState: { errors }, getValues, setValue, watch } = useForm<FormData>()
-  const { onChange: onChangeAccountId, onBlur: onBlurAccountId, name: nameAccountId, ref: refAccountId } = register('accountId', accountIdValidator)
-  const { onChange: onChangeSeed, onBlur: onBlurSeed, name: nameSeed, ref: refSeed } = register('seed', seedValidator)
-  const { onChange: onChangePassword, onBlur: onBlurPassword, name: namePassword, ref: refPassword } = register('password', passwordValidator)
-  const { onChange: onChangeConfirm, onBlur: onBlurConfirm, name: nameConfirm, ref: refConfirm } = register('confirm', confirmValidator(getValues))
+  const {
+    handleSubmit,
+    register,
+    control,
+    formState: { errors },
+    getValues,
+    setValue,
+    watch,
+  } = useForm<FormData>()
+  const {
+    onChange: onChangeAccountId,
+    onBlur: onBlurAccountId,
+    name: nameAccountId,
+    ref: refAccountId,
+  } = register('accountId', accountIdValidator)
+  const {
+    onChange: onChangeSeed,
+    onBlur: onBlurSeed,
+    name: nameSeed,
+    ref: refSeed,
+  } = register('seed', seedValidator)
+  const {
+    onChange: onChangePassword,
+    onBlur: onBlurPassword,
+    name: namePassword,
+    ref: refPassword,
+  } = register('password', passwordValidator)
+  const {
+    onChange: onChangeConfirm,
+    onBlur: onBlurConfirm,
+    name: nameConfirm,
+    ref: refConfirm,
+  } = register('confirm', confirmValidator(getValues))
   const watchAccountId = watch('accountId', '')
   const watchSeed = watch('seed', '')
   const watchPassword = watch('password', '')
   const watchConfirm = watch('confirm', '')
   const { enqueueSnackbar } = useSnackbar()
   // tslint:enable: max-line-length prettier
-  
 
   return (
     <div className={bem()} data-testid={bem()}>
       {process.env.NODE_ENV === 'production' ? null : <DevTool control={control} />}
       <section>
         <form
-          onSubmit={handleSubmit((data: FormData) => onImport({ password: data.password, seed: strToArray(watchSeed), accountId: data.accountId }))}
+          onSubmit={handleSubmit((data: FormData) =>
+            onImport({
+              password: data.password,
+              seed: strToArray(watchSeed),
+              accountId: data.accountId,
+            }),
+          )}
           className={bem('Form')}
         >
           {NETWORK === 'near' ? (
             <FormControl className={bem('FormControl')} error={!!errors.accountId}>
-              <InputLabel color="secondary" className={bem('FormControlLabel')} htmlFor="accountId">
+              <InputLabel
+                color="secondary"
+                className={bem('FormControlLabel')}
+                htmlFor="accountId"
+              >
                 Near account id
               </InputLabel>
 
@@ -95,10 +145,12 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                       className={bem('FormControlButton')}
                       aria-label="paste"
                       tabIndex={-1}
-                      onClick={() => copyFromClipboard('AccountId', enqueueSnackbar, accountId => {
-                        setValue('accountId', accountId);
-                        (document.getElementById('accountId') as any).focus();
-                      })}
+                      onClick={() =>
+                        copyFromClipboard('AccountId', enqueueSnackbar, (accountId) => {
+                          setValue('accountId', accountId)
+                          document.getElementById('accountId')?.focus()
+                        })
+                      }
                     >
                       <CopyAll />
                     </IconButton>
@@ -106,11 +158,14 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                 }
               />
             </FormControl>
-              ) : null 
-          }
+          ) : null}
 
           <FormControl className={bem('FormControl')} error={!!errors.seed}>
-            <InputLabel color="secondary" className={bem('FormControlLabel')} htmlFor="seed">
+            <InputLabel
+              color="secondary"
+              className={bem('FormControlLabel')}
+              htmlFor="seed"
+            >
               Secret phrase
             </InputLabel>
 
@@ -146,10 +201,12 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
                     className={bem('FormControlButton')}
                     aria-label="paste"
                     tabIndex={-1}
-                    onClick={() => copyFromClipboard('Seed', enqueueSnackbar, seed => {
-                      setValue('seed', seed);
-                      (document.getElementById('seed') as any).focus();
-                    })}
+                    onClick={() =>
+                      copyFromClipboard('Seed', enqueueSnackbar, (seed) => {
+                        setValue('seed', seed)
+                        ;(document.getElementById('seed') as any).focus()
+                      })
+                    }
                   >
                     <CopyAll />
                   </IconButton>
@@ -159,7 +216,8 @@ export const ImportAccount: React.FC<ImportAccountProps> = ({ onBack, onImport }
 
             {errors.seed ? (
               <FormHelperText data-testid={bem('SeedError')}>
-                {errors.seed.message || 'Input 12 uniq words divided with comas or spaces'}
+                {errors.seed.message ||
+                  'Input 12 uniq words divided with comas or spaces'}
               </FormHelperText>
             ) : null}
           </FormControl>

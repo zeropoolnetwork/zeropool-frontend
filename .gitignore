@@ -16,6 +16,8 @@
 # production
 /build
 /build-workers
+/workers
+manifest.json
 
 #static
 /static
