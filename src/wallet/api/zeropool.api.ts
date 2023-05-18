@@ -91,7 +91,7 @@ export const accountPresent = (): boolean => {
 export const init = async (
   mnemonic: string,
   password: string,
-  accountId?: string,
+  accountId = '',
 ): Promise<void> => {
   console.log('------------------------------------------------------')
   console.log('NETWORK: ', NETWORK)

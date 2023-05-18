@@ -187,7 +187,7 @@ export const DemoPage: React.FC<{}> = () => {
             disabled={
               !canDeposit ||
               badAmount(depositAmount) ||
-              +depositAmount > (tokenBalance || 0)
+              +depositAmount > +(tokenBalance || 0)
             }
             onClick={() => {
               dispatch(demoActions.deposit(depositAmount))
@@ -223,7 +223,7 @@ export const DemoPage: React.FC<{}> = () => {
             disabled={
               !canWithdraw ||
               badAmount(withdrawAmount) ||
-              +withdrawAmount > (privateBalance || 0)
+              +withdrawAmount > +(privateBalance || 0)
             }
             onClick={() => {
               dispatch(demoActions.withdraw(withdrawAmount))

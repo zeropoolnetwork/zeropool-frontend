@@ -40,7 +40,7 @@ const initApi = (action$: Action$, state$: State$) => {
     tap(() => toast.close('initApiError')),
     tap(() =>
       toast.info(
-        'Initializing, it can take up to 30 seconds, if more, try restart with F5 button.',
+        'Initializing, it can take up to 30 seconds, if more, try restart with F5 button. Do not open DevTools to prevent lags.',
         {
           key: 'initApi',
           persist: true,
