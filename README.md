@@ -52,3 +52,10 @@ Build the test coverage report.
 ## `yarn coverage`
 
 Runs local server to show test coverage report.
+
+## Known issues
+
+### `yarn start` builds the app with outdated dependencies
+
+`rm -rf node_modules/.cache/` and then `yarn start` again
+If it doesn't help, try to remove `node_modules` folder and run `yarn install` again.

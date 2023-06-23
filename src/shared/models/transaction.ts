@@ -13,7 +13,6 @@ export type Transaction = {
   jobId?: string
   to: string
   timestamp: number
-
 }
 
 export const transaction = (
@@ -29,3 +28,15 @@ export const transaction = (
   to: '',
   timestamp: 0,
 })
+
+// Copy of Support JS lib Transaction interface
+export interface PublicTransactionSource {
+  hash: string
+  blockHash: string
+  status: 0 | 1 | 2
+  amount: string
+  from: string
+  to: string
+  /** UNIX timestamp in seconds */
+  timestamp: number
+}

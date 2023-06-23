@@ -69,7 +69,7 @@ describe('demo reducer', () => {
     )
 
     expect(newState.backdrop).toBe(false)
-    expect(newState.initials).toBe(null)
+    expect(newState.initials).toBe(undefined)
   })
 
   it('handles updateBalance action', () => {
@@ -455,7 +455,14 @@ describe('demo reducer', () => {
   it('handles transaction action', () => {
     const newState = demoSlice.reducer(
       initialDemoState,
-      demoSlice.actions.transaction({ status: 'pending', type: 'mint', amount: '100', to: 'test', from: 'test', timestamp: 0 }),
+      demoSlice.actions.transaction({
+        status: 'pending',
+        type: 'mint',
+        amount: '100',
+        to: 'test',
+        from: 'test',
+        timestamp: 0,
+      }),
     )
 
     expect(newState.transactionStatus).toBe('pending')

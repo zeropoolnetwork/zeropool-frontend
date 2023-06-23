@@ -20,6 +20,7 @@
     "build-storybook": "build-storybook -s public",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "lint": "tslint -c tslint.json src/**/*.{ts,tsx} --fix --format verbose",
+    "prestart": "rm -rf node_modules/.cache/",
     "coverage": "./node_modules/.bin/http-server -c-1 -o -p 9875 ./coverage/lcov-report/"
   },
   "dependencies": {
@@ -59,7 +60,7 @@
     "typescript": "^4.3.5",
     "wallet.ts": "1.0.1",
     "webpack-version-file-plugin": "^0.4.0",
-    "zeropool-client-js": "file:../zeropool-client-js",
+    "zeropool-client-js": "0.9.3",
     "zeropool-support-js": "0.6.11"
   },
   "devDependencies": {
@@ -91,6 +92,7 @@
     "compression-webpack-plugin": "^10.0.0",
     "constants-browserify": "^1.0.0",
     "copy-webpack-plugin": "^11.0.0",
+    "cra-build-watch": "^3.4.0",
     "crypto-browserify": "^3.12.0",
     "dotenv-webpack": "^7.1.0",
     "electron": "^19.0.4",

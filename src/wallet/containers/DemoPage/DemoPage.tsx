@@ -310,8 +310,8 @@ export const DemoPage: React.FC<{}> = () => {
         ) : null}
 
         <span className={bem('InfoText')}>
-          To perform any action on this page you need to have enough funds on your public
-          balance.
+          To perform any action on this page you need to have enough funds. Request them
+          using faucet if you don't have any.
         </span>
 
         {NETWORK !== 'near' ? (

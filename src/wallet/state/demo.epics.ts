@@ -105,11 +105,13 @@ const deposit: Epic = (action$, state$) => {
               })
 
               return of(demoActions.transaction(transaction))
+
             case 'pending':
               toast.close('deposit')
               toast.success('Deposit success')
 
               return of(demoActions.transaction(transaction))
+
             case 'success':
               toast.success(`Deposit confirmed`, {
                 key: transaction.jobId,
@@ -120,6 +122,7 @@ const deposit: Epic = (action$, state$) => {
                 demoActions.transaction(transaction),
                 demoActions.depositSuccess(payload),
               )
+
             default:
               throw transaction.error || 'Deposit failed'
           }
@@ -148,11 +151,13 @@ const withdraw: Epic = (action$, state$) => {
               })
 
               return of(demoActions.transaction(transaction))
+
             case 'pending':
               toast.close('withdraw')
               toast.success('Withdraw success')
 
               return of(demoActions.transaction(transaction))
+
             case 'success':
               toast.success(`Withdraw confirmed`)
 
@@ -191,11 +196,13 @@ const transfer: Epic = (action$, state$) => {
           switch (transaction.status) {
             case 'started':
               return of(demoActions.transaction(transaction))
+
             case 'pending':
               toast.close('transfer')
               toast.success('Transfer success')
 
               return of(demoActions.transaction(transaction))
+
             case 'success':
               toast.success(`Transfer confirmed`)
 
@@ -486,23 +493,63 @@ const callGetTransactionsOnTransactionsModalOpen = (action$: Action$, state$: St
   return action$.pipe(
     filter(demoActions.transactionsModal.match),
     filter((action) => action.payload),
-    map(() => demoActions.getTransactions(null)),
+    map(() => demoActions.getTransactions()),
   )
 }
+
+const getPublicHistory$ = of('').pipe(
+  switchMap(() =>
+    api.getPublicHistory().pipe(
+      catchError((err: Error) => {
+        toast.error(err.message)
+
+        return of([])
+      }),
+    ),
+  ),
+  catchError((err: Error) => {
+    toast.error(err.message)
+
+    return of([])
+  }),
+)
+
+const getPrivateHistory$ = of('').pipe(
+  switchMap(() =>
+    api.getPrivateHistory().pipe(
+      catchError((err: Error) => {
+        toast.error(err.message)
+
+        return of([])
+      }),
+    ),
+  ),
+  catchError((err: Error) => {
+    toast.error(err.message)
+
+    return of([])
+  }),
+)
 
 const getTransactions = (action$: Action$, state$: State$) => {
   return action$.pipe(
     filter(demoActions.getTransactions.match),
-    switchMap(() =>
-      from(Promise.all([api.getPrivateHistory(), api.getPublicHistory()])).pipe(
-        map(([t1, t2]) => demoActions.getTransactionsSuccess(t1.concat(t2))),
+    mergeMap(() =>
+      getPublicHistory$.pipe(
+        switchMap((publicHistory: Transaction[]) =>
+          getPrivateHistory$.pipe(
+            map((privateHistory: Transaction[]) =>
+              demoActions.getTransactionsSuccess(publicHistory.concat(privateHistory)),
+            ),
+          ),
+        ),
+        catchError((err: Error) => {
+          toast.error(err.message)
+
+          return of(demoActions.getTransactionsFailure(err.message || 'Unknown error'))
+        }),
       ),
     ),
-    catchError((errMsg: string) => {
-      toast.error(errMsg)
-
-      return of(demoActions.getTransactionsFailure(errMsg))
-    }),
   )
 }
 
@@ -561,5 +608,4 @@ export const demoEpics: Epic = combineEpics(
   callGetTransactionsOnTransactionsModalOpen,
   getTransactions,
   callFauset,
-  // updateBalancesAfterTransfer,
 )

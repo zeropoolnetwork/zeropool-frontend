@@ -3,25 +3,19 @@ import moment from 'moment'
 import { SortedTransactions } from 'wallet/state/models/sorted-transactions'
 
 import { Transaction, TransactionType } from 'shared/models/transaction'
-import { toPlainString } from 'shared/utils/toPlainString'
 import { fixTimestamp } from 'shared/utils/fix-timestamp'
+import { HistoryTransactionType } from 'wallet/api/zeropool.api'
 
-export enum PrivateHistoryTransactionType {
-  Deposit = 1,
-  TransferIn,
-  TransferOut,
-  Withdrawal,
-  TransferLoopback,
-}
-
+// Copy of Client JS lib HistoryRecord interface
 export type PrivateHistorySourceRecord = {
-  pending: boolean
-  type: PrivateHistoryTransactionType
-  amount: bigint
-  txHash: string
+  type: HistoryTransactionType
+  timestamp: number
   from: string
   to: string
-  timestamp: number
+  amount: any // bigint
+  fee: any //bigint
+  txHash: string
+  pending: boolean
 }
 
 export type PublicHistorySourceRecord = {
@@ -95,15 +89,19 @@ const fromPrivateHistory = (
   record: PrivateHistorySourceRecord,
   fromBaseUnit: (value: string) => string,
   denominator: bigint,
-): Transaction => ({
-  status: record.pending ? 'pending' : 'success',
-  type: getTransactionType(record.type),
-  amount: fromBaseUnit(toPlainString(Number(BigInt(record.amount) * denominator))),
-  blockHash: record.txHash,
-  from: record.from,
-  to: record.to,
-  timestamp: fixTimestamp(record.timestamp),
-})
+): Transaction => {
+  debugger
+
+  return {
+    status: record.pending ? 'pending' : 'success',
+    type: getTransactionType(record.type),
+    amount: fromBaseUnit((BigInt(record.amount) * denominator).toString()),
+    blockHash: record.txHash,
+    from: record.from,
+    to: record.to,
+    timestamp: fixTimestamp(record.timestamp),
+  }
+}
 
 const fromPublicHistory = (
   record: PublicHistorySourceRecord,
@@ -123,7 +121,7 @@ const fromPublicHistory = (
   timestamp: fixTimestamp(record.timeStamp),
 })
 
-function getTransactionType(type: PrivateHistoryTransactionType): TransactionType {
+function getTransactionType(type: HistoryTransactionType): TransactionType {
   switch (type) {
     case 1:
       return 'deposit'

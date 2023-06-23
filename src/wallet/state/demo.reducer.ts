@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Action, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TransferData } from 'shared/models'
 import { Transaction, TransactionStatus } from 'shared/models/transaction'
 
@@ -195,8 +195,10 @@ export const demoSlice = createSlice({
       state.transactions = undefined
     },
 
-    getTransactions: (state, action: PayloadAction<null>) => {},
-    getTransactionsFailure: (state, action: PayloadAction<string>) => {},
+    getTransactions: (state, action: Action) => {},
+    getTransactionsFailure: (state, action: PayloadAction<string>) => {
+      state.transactions = initialDemoState.transactions
+    },
     getTransactionsSuccess: (state, action: PayloadAction<Transaction[]>) => {
       state.transactions = action.payload
     },

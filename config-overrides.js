@@ -1,14 +1,13 @@
-
 const webpack = require('webpack')
 const CopyPlugin = require('copy-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
+
 // const WebpackVersionFilePlugin = require('webpack-version-file-plugin')
 // const execa = require('execa')
 
 // const gitHash = execa.sync('git', ['rev-parse', '--short', 'HEAD']).stdout
 // const gitNumCommits = Number(execa.sync('git', ['rev-list', 'HEAD', '--count']).stdout)
 // const gitDirty = execa.sync('git', ['status', '-s', '-uall']).stdout.length > 0
-
 
 module.exports = {
   webpack: function override(config, env) {
@@ -28,20 +27,20 @@ module.exports = {
     }
 
     config.resolve.fallback = {
-      'fs': false,
-      'net': false,
-      'tls': false,
-      'tty': false,
-      'url': require.resolve('url'),
-      'assert': require.resolve('assert'),
-      'constants': require.resolve('constants-browserify'),
-      'crypto': require.resolve('crypto-browserify'),
-      'http': require.resolve('stream-http'),
-      'https': require.resolve('https-browserify'),
-      'os': require.resolve('os-browserify/browser'),
-      'path': require.resolve('path-browserify'),
-      'stream': require.resolve('stream-browserify'),
-      'zlib': require.resolve('browserify-zlib'),
+      fs: false,
+      net: false,
+      tls: false,
+      tty: false,
+      url: require.resolve('url'),
+      assert: require.resolve('assert'),
+      constants: require.resolve('constants-browserify'),
+      crypto: require.resolve('crypto-browserify'),
+      http: require.resolve('stream-http'),
+      https: require.resolve('https-browserify'),
+      os: require.resolve('os-browserify/browser'),
+      path: require.resolve('path-browserify'),
+      stream: require.resolve('stream-browserify'),
+      zlib: require.resolve('browserify-zlib'),
     }
 
     config.plugins = (config.plugins || []).concat([
@@ -50,10 +49,7 @@ module.exports = {
         process: 'process',
       }),
       new CopyPlugin({
-        patterns: [
-          { from: 'src/env.js' },
-          { from: '*', context: 'workers'}
-        ],
+        patterns: [{ from: 'src/env.js' }, { from: '*', context: 'workers' }],
       }),
       new CompressionPlugin({ exclude: 'env.js' }),
       new webpack.DefinePlugin({
@@ -91,7 +87,7 @@ module.exports = {
     // a starting configuration to then modify instead of having to create a config from scratch.
     return function (proxy, allowedHost) {
       // Create the default config by calling configFunction with the proxy/allowedHost parameters
-      const config = configFunction(proxy, allowedHost);
+      const config = configFunction(proxy, allowedHost)
 
       // Change the https certificate options to match your certificate, using the .env file to
       // set the file paths & passphrase.
@@ -118,7 +114,7 @@ module.exports = {
       // config.writeToDisk = true
 
       // Return your customised Webpack Development Server config.
-      return config;
-    };
+      return config
+    }
   },
 }

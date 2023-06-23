@@ -19,8 +19,10 @@ import {
   switchMap,
   take,
   tap,
+  throwError,
   withLatestFrom,
 } from 'rxjs'
+
 import {
   EthereumClient,
   PolkadotClient,
@@ -42,11 +44,15 @@ import { NearNetwork } from 'zeropool-client-js/lib/networks/near'
 import { apiErrorHandler } from 'wallet/api/error.handlers'
 import { isEvmBased, isSubstrateBased } from 'wallet/api/networks'
 
-import { transaction, Transaction } from 'shared/models/transaction'
+import {
+  PublicTransactionSource,
+  transaction,
+  Transaction,
+} from 'shared/models/transaction'
 import { TransferData } from 'shared/models'
-import { toast } from 'shared/helpers/toast.helper'
 
 import workersManifest from 'manifest.json'
+export { HistoryTransactionType } from 'zeropool-client-js'
 
 // #region Initialization
 export let zpSupport: NetworkClient
@@ -144,7 +150,12 @@ export const init = async (
         transactionUrl: TRANSACTION_URL,
       })
     } else if (NETWORK === 'near') {
-      network = new NearNetwork(RELAYER_URL)
+      network = new NearNetwork(
+        RELAYER_URL,
+        RPC_URL,
+        RELAYER_URL,
+        10, // TODO: Make it configurable (requestsPerSecond)
+      )
 
       zpSupport = await NearClient.create(
         {
@@ -204,10 +215,10 @@ export const mint = async (tokens: string): Promise<void> => {
     const amount = zpSupport.toBaseUnit(tokens)
 
     return await zpSupport.mint(TOKEN_ADDRESS, amount)
-  } catch (e: any) {
-    console.error(e)
+  } catch (err: unknown) {
+    console.error((err as Error).message)
 
-    return Promise.reject(e.message)
+    return Promise.reject((err as Error).message || 'Unknown error')
   }
 }
 export const getDevSeed = (): string => {
@@ -637,54 +648,69 @@ export const getAddress = async (): Promise<string> => {
 
   return address || Promise.reject(`No address found for withdrawal`)
 }
-export const getPrivateHistory = async (): Promise<Transaction[]> => {
-  const data: PrivateHistorySourceRecord[] = await (zpClient as any).zpStates[
-    TOKEN_ADDRESS
-  ].history.getAllHistory()
 
-  const normalizedData = data
-    // .map((record) => (record.type !== 1 ? record : { ...record, to: 'Private' }))
-    .map((record) => (record.type === 3 ? record : { ...record, from: 'Private' }))
-    .map((record) =>
-      transactionHelper.fromPrivateHistory(
-        record,
-        zpSupport.fromBaseUnit.bind(zpSupport),
-        BigInt(zpClient.getDenominator(TOKEN_ADDRESS).toString()),
-      ),
-    )
+export const getPrivateHistory = (): Observable<Transaction[]> => {
+  if (NETWORK === 'near')
+    return throwError(() => new Error('Private history not implemented for NEAR'))
+
+  const data: Promise<PrivateHistorySourceRecord[]> = zpClient
+    .getState(TOKEN_ADDRESS)
+    .history.getAllHistory()
+
+  const normalizedData = from(data).pipe(
+    tap((records) => {
+      console.log('private history', records)
+    }),
+    map((records) =>
+      records
+        // .map((record) => (record.type !== 1 ? record : { ...record, to: 'Private' }))
+        .map((record) => (record.type === 3 ? record : { ...record, from: 'Private' }))
+        .map((record) =>
+          transactionHelper.fromPrivateHistory(
+            record,
+            zpSupport.fromBaseUnit.bind(zpSupport),
+            BigInt(zpClient.getDenominator(TOKEN_ADDRESS).toString()),
+          ),
+        ),
+    ),
+    catchError((e) => {
+      console.error(e)
+      return throwError(() => new Error('Error getting private history'))
+    }),
+  )
 
   return normalizedData
 }
-export const getPublicHistory = async (): Promise<Transaction[]> => {
-  try {
-    const data: PublicHistorySourceRecord[] = await (zpSupport as any).getAllHistory(
-      TOKEN_ADDRESS,
-    )
+export const getPublicHistory = (): Observable<Transaction[]> => {
+  if (NETWORK === 'near')
+    return throwError(() => new Error('Public history not implemented for NEAR'))
 
-    const normalizedData = data
-      // Filter out withdrawals and deposits
-      .filter((record) => record.from.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
-      .filter((record) => record.to.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
-      .map((record) =>
-        transactionHelper.fromPublicHistory(
-          record,
-          zpSupport.fromBaseUnit.bind(zpSupport),
-          CONTRACT_ADDRESS,
+  const data: Promise<PublicTransactionSource[]> = zpSupport.getAllHistory(TOKEN_ADDRESS)
+
+  const normalizedData = from(data).pipe(
+    tap((records) => {
+      console.log('public history', records)
+    }),
+    map((records) =>
+      records
+        // Filter out withdrawals and deposits from public history
+        .filter((record) => record.from?.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
+        .filter((record) => record.to?.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
+        .map((record) =>
+          transactionHelper.fromPublicHistory(
+            record as any,
+            zpSupport.fromBaseUnit.bind(zpSupport),
+            CONTRACT_ADDRESS,
+          ),
         ),
-      )
+    ),
+    catchError((e) => {
+      console.error(e)
+      return throwError(() => new Error('Error getting public history'))
+    }),
+  )
 
-    return normalizedData
-  } catch (e: any) {
-    if (e?.message === 'unimplemented') {
-      return []
-    }
-    //TODO: move toast to epics
-    toast.error(
-      'Error reading public transactions history, please try again after 5 seconds',
-    )
-
-    return []
-  }
+  return normalizedData
 }
 
 /*

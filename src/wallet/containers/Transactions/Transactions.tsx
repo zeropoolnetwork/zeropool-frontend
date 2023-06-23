@@ -64,7 +64,7 @@ export const Transactions: React.FC<TransactionsProps> = ({
         {!transactions ? (
           <CircularProgress sx={{ margin: 'auto' }} />
         ) : transactions.length === 0 ? (
-          <div className={bem('Empty')}>No records yet</div>
+          <div className={bem('Empty')}>No records</div>
         ) : (
           sorted.map((day, i) => (
             <div className={bem('Day')} key={i}>

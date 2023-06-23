@@ -44,8 +44,8 @@ describe('Sort transactions by days', () => {
   })
 })
 
-describe('Convert transaction to Transaction type', () => {
-  const record: any = {
+describe('Convert transaction type from number to TransactionType type value', () => {
+  const transaction: any = {
     pending: false,
     amount: 1000000000n,
     fee: 0n,
@@ -56,9 +56,9 @@ describe('Convert transaction to Transaction type', () => {
     type: 4,
   }
 
-  const result: Transaction = {
+  const out: Transaction = {
     status: 'success',
-    type: 'privateToPublic',
+    type: 'withdraw',
     amount: '1',
     blockHash: '0x123',
     from: '0x123',
@@ -72,36 +72,39 @@ describe('Convert transaction to Transaction type', () => {
 
   const denominator = BigInt(10 ** 9)
 
-  it('shold convert privateToPublic(3) transaction', () => {
+  it('shold convert withdraw(4) transaction type', () => {
+    const source = transaction
+    const result = out
+
     expect(
-      transactionHelper.fromPrivateHistory(record, fromBaseUnit, denominator),
+      transactionHelper.fromPrivateHistory(source, fromBaseUnit, denominator),
     ).toEqual(result)
   })
 
-  it('shold convert privateToPrivate transaction', () => {
-    const recordPTP3 = { ...record, type: 3 }
-    const resultPTP3 = { ...result, type: 'privateToPrivate' }
+  it('shold convert privateToPrivateOut transaction type', () => {
+    const source = { ...transaction, type: 3 }
+    const result = { ...out, type: 'privateToPrivateOut' }
 
     expect(
-      transactionHelper.fromPrivateHistory(recordPTP3, fromBaseUnit, denominator),
-    ).toEqual(resultPTP3)
+      transactionHelper.fromPrivateHistory(source, fromBaseUnit, denominator),
+    ).toEqual(result)
   })
 
-  it('shold convert publicToPublic(2) transaction', () => {
-    const recordPTP2 = { ...record, type: 2 }
-    const resultPTP2 = { ...result, type: 'publicToPublic' }
+  it('shold convert privateToPrivateIn(2) transaction type', () => {
+    const source = { ...transaction, type: 2 }
+    const result = { ...out, type: 'privateToPrivateIn' }
 
     expect(
-      transactionHelper.fromPrivateHistory(recordPTP2, fromBaseUnit, denominator),
-    ).toEqual(resultPTP2)
+      transactionHelper.fromPrivateHistory(source, fromBaseUnit, denominator),
+    ).toEqual(result)
   })
 
-  it('shold convert privateToPrivate(5) transaction', () => {
-    const recordPTP5 = { ...record, type: 5 }
-    const resultPTP5 = { ...result, type: 'privateToPrivate' }
+  it('shold convert loopback(5) transaction type', () => {
+    const source = { ...transaction, type: 5 }
+    const result = { ...out, type: 'loopback' }
 
     expect(
-      transactionHelper.fromPrivateHistory(recordPTP5, fromBaseUnit, denominator),
-    ).toEqual(resultPTP5)
+      transactionHelper.fromPrivateHistory(source, fromBaseUnit, denominator),
+    ).toEqual(result)
   })
 })
