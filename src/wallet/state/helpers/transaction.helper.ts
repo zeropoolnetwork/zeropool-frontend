@@ -90,7 +90,6 @@ const fromPrivateHistory = (
   fromBaseUnit: (value: string) => string,
   denominator: bigint,
 ): Transaction => {
-  debugger
 
   return {
     status: record.pending ? 'pending' : 'success',

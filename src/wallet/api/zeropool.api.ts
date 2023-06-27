@@ -650,9 +650,6 @@ export const getAddress = async (): Promise<string> => {
 }
 
 export const getPrivateHistory = (): Observable<Transaction[]> => {
-  if (NETWORK === 'near')
-    return throwError(() => new Error('Private history not implemented for NEAR'))
-
   const data: Promise<PrivateHistorySourceRecord[]> = zpClient
     .getState(TOKEN_ADDRESS)
     .history.getAllHistory()
@@ -682,9 +679,6 @@ export const getPrivateHistory = (): Observable<Transaction[]> => {
   return normalizedData
 }
 export const getPublicHistory = (): Observable<Transaction[]> => {
-  if (NETWORK === 'near')
-    return throwError(() => new Error('Public history not implemented for NEAR'))
-
   const data: Promise<PublicTransactionSource[]> = zpSupport.getAllHistory(TOKEN_ADDRESS)
 
   const normalizedData = from(data).pipe(
@@ -712,125 +706,6 @@ export const getPublicHistory = (): Observable<Transaction[]> => {
 
   return normalizedData
 }
-
-/*
-const _getWalletBalance = (token: Token, walletId: string) => {
-  // clientCheck()
-  // const coin = hdWallet.getCoin(token.name as CoinType)
-  // if (!coin) {
-  //   throw Error(`Can not access ${token.name} data!`)
-  // }
-  // return from(coin.getBalances(1, walletId).catch(promiceErrorHandler<Balance[]>([]))).pipe(
-  //   map((balances: any[]) => balances[0]),
-  //   map((balance: any) => ({
-  //     ...balance,
-  //     balance: coin.fromBaseUnit(balance.balance),
-  //   })),
-  // )
-}
-
-const _getPrivateAddress = (token: Token) => {
-  // if (!hdWallet) {
-  //   throw Error('API not available!')
-  // }
-  // const coin = hdWallet.getCoin(token.name as CoinType)
-  // if (!coin) {
-  //   throw Error(`Can't estimate fee for ${token.symbol}`)
-  // }
-  // return from([coin.generatePrivateAddress()])
-}
-
-const _getAllBalances = (amount: number, offset = 0) => {
-  // if (!hdWallet) {
-  //   throw Error('API not available!')
-  // }
-  // return from(hdWallet.getBalances(amount, offset).catch(promiceErrorHandler({})))
-}
-
-const _getNetworkFee = (token: Token) => {
-  // if (!hdWallet) {
-  //   throw Error('API not available!')
-  // }
-  // const coin = hdWallet.getCoin(token.name as CoinType)
-  // const e = `Can't estimate fee for ${token.name}`
-  // if (!coin) {
-  //   throw Error(`Can't estimate fee for ${token.symbol}`)
-  // }
-  // return from(coin.estimateTxFee().catch(promiceErrorHandler<{ fee: string }>({ fee: '' }, e)))
-}
-
-const _getWalletTransactions = (token: Token, walletId: number, mocked = false) => {
-  // if (!hdWallet) {
-  //   throw Error('API not available!')
-  // }
-  // const coin = hdWallet.getCoin(token.name as CoinType)
-  // const e = `Can't get transactions for ${token.name}`
-  // if (!coin) {
-  //   throw Error(`Can't connect to ${token.symbol}`)
-  // }
-  // //#region TODO: Fix after implementing private transactions history
-  // if (walletId === 0) {
-  //   return of([])
-  // }
-  // walletId -= 1
-  // //#endregion ---------------------------------------------------------
-  // const tr =
-  //   token.symbol === 'ETH'
-  //     ? from(
-  //         getEthTransactions(coin.getAddress(walletId), mocked).catch(
-  //           promiceErrorHandler<Transaction[]>([], e),
-  //         ),
-  //       )
-  //     : mocked
-  //     ? of(mocks.transactions[token.symbol])
-  //     : from(coin.getTransactions(walletId, 10, 0).catch(promiceErrorHandler<Transaction[]>([], e)))
-  // return tr.pipe(map(convertValues(coin)))
-}
-
-const _transfer = (account: number, to: string, amount: number, token: Token) => {
-  // if (!hdWallet) {
-  //   throw Error('API not available!')
-  // }
-  // const coin = hdWallet.getCoin(token.name as CoinType)
-  // const e = `Can't transfer ${token.name}`
-  // if (!coin) {
-  //   throw Error(`Can't estimate fee for ${token.symbol}`)
-  // }
-  // if (isPrivateAddress(to, token.symbol)) {
-  //   if (isPrivateAddress(account.toString(), token.symbol)) {
-  //     throw Error(`Not implemented.`)
-  //     // return from(
-  //     //   coin.updatePrivateState().then(() =>
-  //     //     coin.withdrawPrivate(+to, amount.toString())
-  //     //   )
-  //     // )
-  //   }
-  //   return from(
-  //     coin.updatePrivateState().then(() => {
-  //       return coin.depositShielded(account, coin.toBaseUnit(amount.toString()))
-  //     }),
-  //   )
-  // }
-  // if (isPrivateAddress(account.toString(), token.symbol)) {
-  //   throw Error(`Private local to public remote transactions are not implemented.`)
-  // }
-  // return from(coin.transfer(account, to, coin.toBaseUnit(amount.toString())))
-}
-
-const _isPrivateAddress = (address: string, token: TokenSymbol) => {
-  // if (!hdWallet) {
-  //   throw Error('API not available!')
-  // }
-  // return validateAddress(address)
-}
-
-// const _convertValues = (coin: Coin) => (transactions: Transaction[]) =>
-//   transactions.map((transaction) => ({
-//     ...transaction,
-//     amount: coin.fromBaseUnit(transaction.amount),
-//     timestamp: fixTimestamp(transaction.timestamp),
-//   }))
-*/
 
 export const apiCheck = (): boolean => {
   if (!zpSupport) throw Error('Networt Client not available!')
