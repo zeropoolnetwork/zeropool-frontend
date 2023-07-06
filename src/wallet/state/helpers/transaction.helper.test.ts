@@ -66,8 +66,8 @@ describe('Convert transaction type from number to TransactionType type value', (
     timestamp: 1664897388000,
   }
 
-  const fromBaseUnit = (value: string) => {
-    return (Number(value) / 10 ** 18).toString()
+  const fromBaseUnit = (value: string): Promise<string> => {
+    return Promise.resolve((Number(value) / 10 ** 18).toString())
   }
 
   const denominator = BigInt(10 ** 9)

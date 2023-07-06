@@ -18,7 +18,7 @@ export const callFaucet = async ({
 }: {
   userAmount: string
   address: string
-  amount: string
+  amount: Promise<string>
 }): Promise<any> => {
   const http = axios.create({
     baseURL: API,
@@ -26,8 +26,10 @@ export const callFaucet = async ({
     withCredentials: false,
   })
 
+  const amountString = await amount
+
   return http
-    .post(`${API}/${TOKEN}/${address}`, { amount })
+    .post(`${API}/${TOKEN}/${address}`, { amount: amountString })
     .then((response) => {
       return Promise.resolve(`Successfuly requested ${userAmount} ${TOKEN} from faucet`)
     })

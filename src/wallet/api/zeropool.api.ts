@@ -11,8 +11,10 @@ import transactionHelper, {
 import {
   catchError,
   concat,
+  forkJoin,
   from,
   map,
+  mergeMap,
   Observable,
   of,
   Subject,
@@ -27,7 +29,7 @@ import {
   EthereumClient,
   PolkadotClient,
   NearClient,
-  Client as NetworkClient,
+  Client as SupportClient,
 } from 'zeropool-support-js'
 
 import {
@@ -55,7 +57,7 @@ import workersManifest from 'manifest.json'
 export { HistoryTransactionType } from 'zeropool-client-js'
 
 // #region Initialization
-export let zpSupport: NetworkClient
+export let zpSupport: SupportClient
 export let zpClient: ZeropoolClient
 export let account: string
 
@@ -212,7 +214,7 @@ export const init = async (
 export const mint = async (tokens: string): Promise<void> => {
   try {
     apiCheck()
-    const amount = zpSupport.toBaseUnit(tokens)
+    const amount = await zpSupport.toBaseUnit(tokens)
 
     return await zpSupport.mint(TOKEN_ADDRESS, amount)
   } catch (err: unknown) {
@@ -322,7 +324,7 @@ export const deposit = (tokens: string): Observable<Transaction> => {
   const tr$ = new Subject<Transaction>()
   const sub = apiCheck$()
     .pipe(
-      map(() => zpSupport.toBaseUnit(tokens)),
+      switchMap(() => from(zpSupport.toBaseUnit(tokens))),
       switchMap((amount) =>
         from(approve(amount)).pipe(
           tap(() => tr$.next(tr)),
@@ -376,7 +378,7 @@ export const withdraw = (tokens: string): Observable<Transaction> => {
 
   const sub = apiCheck$()
     .pipe(
-      map(() => zpSupport.toBaseUnit(tokens)),
+      switchMap(() => from(zpSupport.toBaseUnit(tokens))),
       switchMap((amount) =>
         from(getAddress()).pipe(
           tap(() => tr$.next(tr)),
@@ -495,7 +497,7 @@ export const transferPublicToPrivate = (
   const tr$ = new Subject<Transaction>()
   const sub = apiCheck$()
     .pipe(
-      map(() => zpSupport.toBaseUnit(tokens)),
+      switchMap(() => from(zpSupport.toBaseUnit(tokens))),
       switchMap((amount) =>
         from(approve(amount)).pipe(
           // tap(() => tr$.next(tr)),
@@ -553,7 +555,7 @@ export const transferPrivateToPublic = (
   const sub = apiCheck$()
     .pipe(
       // tap(() => tr$.next(tr)),
-      map(() => zpSupport.toBaseUnit(tokens)),
+      switchMap(() => from(zpSupport.toBaseUnit(tokens))),
       switchMap((amount) =>
         from(zpClient.withdraw(TOKEN_ADDRESS, to, BigInt(amount))).pipe(
           tap((jobId: any) => tr$.next({ ...tr, status: 'pending', jobId })),
@@ -594,7 +596,7 @@ export const transferPrivateToPrivate = (
 
   const sub = apiCheck$()
     .pipe(
-      map(() => zpSupport.toBaseUnit(tokens)),
+      switchMap(() => from(zpSupport.toBaseUnit(tokens))),
       switchMap((amount) => {
         tr$.next(tr) //TODO: NOT WORKING!
 
@@ -658,17 +660,19 @@ export const getPrivateHistory = (): Observable<Transaction[]> => {
     tap((records) => {
       console.log('private history', records)
     }),
-    map((records) =>
-      records
-        // .map((record) => (record.type !== 1 ? record : { ...record, to: 'Private' }))
-        .map((record) => (record.type === 3 ? record : { ...record, from: 'Private' }))
-        .map((record) =>
-          transactionHelper.fromPrivateHistory(
-            record,
-            zpSupport.fromBaseUnit.bind(zpSupport),
-            BigInt(zpClient.getDenominator(TOKEN_ADDRESS).toString()),
+    map((i) => i.map((r) => (r.type === 3 ? r : { ...r, from: 'Private' }))),
+    mergeMap((records) =>
+      forkJoin(
+        records.map((record) =>
+          from(
+            transactionHelper.fromPrivateHistory(
+              record,
+              zpSupport.fromBaseUnit.bind(zpSupport),
+              BigInt(zpClient.getDenominator(TOKEN_ADDRESS).toString()),
+            ),
           ),
         ),
+      ),
     ),
     catchError((e) => {
       console.error(e)
@@ -685,18 +689,22 @@ export const getPublicHistory = (): Observable<Transaction[]> => {
     tap((records) => {
       console.log('public history', records)
     }),
-    map((records) =>
-      records
-        // Filter out withdrawals and deposits from public history
-        .filter((record) => record.from?.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
-        .filter((record) => record.to?.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
-        .map((record) =>
-          transactionHelper.fromPublicHistory(
-            record as any,
-            zpSupport.fromBaseUnit.bind(zpSupport),
-            CONTRACT_ADDRESS,
+    mergeMap((records) =>
+      forkJoin(
+        records
+          // Filter out withdrawals and deposits from public history
+          .filter((r) => r.from?.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
+          .filter((r) => r.to?.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
+          .map((record) =>
+            from(
+              transactionHelper.fromPublicHistory(
+                record as any,
+                zpSupport.fromBaseUnit.bind(zpSupport),
+                CONTRACT_ADDRESS,
+              ),
+            ),
           ),
-        ),
+      ),
     ),
     catchError((e) => {
       console.error(e)
