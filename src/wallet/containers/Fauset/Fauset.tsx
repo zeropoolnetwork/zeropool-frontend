@@ -13,6 +13,7 @@ import { demoActions } from 'wallet/state/demo.reducer'
 export const componentId = 'Faucet'
 
 const bem = cn(componentId)
+const network = 'near'
 
 type FaucetProps = {}
 type FaucetState = {
@@ -41,7 +42,7 @@ export const Fauset: React.FC<FaucetProps> = () => {
 
   const handleFaucet = () => {
     setFaucet({ ...faucet })
-    dispatch(demoActions.faucetRequest({ address, amount }))
+    dispatch(demoActions.faucetRequest({ address, amount, network }))
   }
 
   const handleFaucetReset = () => setFaucet(InitialFaucetState)

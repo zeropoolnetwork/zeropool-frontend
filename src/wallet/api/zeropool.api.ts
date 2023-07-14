@@ -434,14 +434,15 @@ export const transfer = (data: TransferData): Observable<Transaction> => {
   }
 }
 
-export const transferFunds = (to: string, amount: string): Observable<Transaction> => {
+export const transferFunds = (to: string, funds: string): Observable<Transaction> => {
   const type = 'funds'
 
   return apiCheck$().pipe(
-    switchMap(() =>
+    switchMap(() => from(zpSupport.toBaseUnit(funds))),
+    switchMap((tokens) =>
       concat(
         of(transaction(type, 'started')),
-        from(zpSupport.transfer(to, String(zpSupport.toBaseUnit(amount)))).pipe(
+        from(zpSupport.transfer(to, tokens)).pipe(
           map(() => transaction(type, 'pending')),
           catchError((e) => {
             throw Error(apiErrorHandler(e.message))
@@ -459,21 +460,16 @@ export const transferFunds = (to: string, amount: string): Observable<Transactio
 }
 export const transferPublicToPublic = (
   to: string,
-  amount: string,
+  tokens: string,
 ): Observable<Transaction> => {
   const type = 'publicToPublic'
 
   return apiCheck$().pipe(
-    switchMap(() =>
+    switchMap(() => from(zpSupport.toBaseUnit(tokens))),
+    switchMap((amount) =>
       concat(
         of(transaction(type, 'started')),
-        from(
-          zpSupport.transferToken(
-            TOKEN_ADDRESS,
-            to,
-            String(zpSupport.toBaseUnit(amount)),
-          ),
-        ).pipe(
+        from(zpSupport.transferToken(TOKEN_ADDRESS, to, amount)).pipe(
           map(() => transaction(type, 'pending')),
           catchError((e) => {
             throw Error(apiErrorHandler(e.message))

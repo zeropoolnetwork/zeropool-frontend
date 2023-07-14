@@ -558,12 +558,13 @@ const callFauset = (action$: Action$, state$: State$) => {
     filter(demoActions.faucetRequest.match),
     mergeMap(({ payload }) =>
       of(payload).pipe(
-        switchMap(({ amount, address }) =>
+        switchMap(({ amount, address, network }) =>
           from(
             callFaucet({
-              userAmount: payload.amount,
-              amount: api.zpSupport.toBaseUnit(payload.amount),
-              address: payload.address,
+              userAmount: amount,
+              amount: api.zpSupport.toBaseUnit(amount),
+              address,
+              network,
             }),
           ).pipe(
             tap((msg) => toast.success(msg)),

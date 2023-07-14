@@ -205,7 +205,7 @@ export const demoSlice = createSlice({
 
     faucetRequest: (
       state,
-      action: PayloadAction<{ address: string; amount: string }>,
+      action: PayloadAction<{ address: string; amount: string; network: string }>,
     ) => {
       state.fauceting = true
     },
