@@ -66,7 +66,7 @@ describe('Convert transaction type from number to TransactionType type value', (
     timestamp: 1664897388000,
   }
 
-  const fromBaseUnit = (value: string) => {
+  const fromBaseUnit = async (value: string) => {
     return (Number(value) / 10 ** 18).toString()
   }
 

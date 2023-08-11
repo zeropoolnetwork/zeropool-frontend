@@ -85,17 +85,17 @@ const sortByDays = (transactions: Transaction[]) => {
   return result
 }
 
-const fromPrivateHistory = (
+const fromPrivateHistory = async (
   record: PrivateHistorySourceRecord,
-  fromBaseUnit: (value: string) => string,
+  fromBaseUnit: (value: string) => Promise<string>,
   denominator: bigint,
-): Transaction => {
+): Promise<Transaction> => {
   debugger
 
   return {
     status: record.pending ? 'pending' : 'success',
     type: getTransactionType(record.type),
-    amount: fromBaseUnit((BigInt(record.amount) * denominator).toString()),
+    amount: await fromBaseUnit((BigInt(record.amount) * denominator).toString()),
     blockHash: record.txHash,
     from: record.from,
     to: record.to,
@@ -103,18 +103,18 @@ const fromPrivateHistory = (
   }
 }
 
-const fromPublicHistory = (
+const fromPublicHistory = async (
   record: PublicHistorySourceRecord,
-  fromBaseUnit: (value: string) => string,
+  fromBaseUnit: (value: string) => Promise<string>,
   contractAddress: string,
-): Transaction => ({
+): Promise<Transaction> => ({
   status: 'success',
   type: record.tokenName
     ? record.to.toUpperCase() === contractAddress.toUpperCase()
       ? 'publicToPrivate'
       : 'publicToPublic'
     : 'funds',
-  amount: fromBaseUnit(record.value),
+  amount: await fromBaseUnit(record.value),
   blockHash: record.hash,
   from: record.from,
   to: record.to,
