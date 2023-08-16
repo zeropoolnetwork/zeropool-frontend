@@ -54,6 +54,7 @@ import {
 import { TransferData } from 'shared/models'
 
 import workersManifest from 'manifest.json'
+import { getAllHistory } from 'wallet/api/nearblocks.api'
 export { HistoryTransactionType } from 'zeropool-client-js'
 
 // #region Initialization
@@ -155,7 +156,7 @@ export const init = async (
       network = new NearNetwork(
         RELAYER_URL,
         RPC_URL,
-        RELAYER_URL,
+        CONTRACT_ADDRESS,
         10, // TODO: Make it configurable (requestsPerSecond)
       )
 
@@ -679,7 +680,10 @@ export const getPrivateHistory = (): Observable<Transaction[]> => {
   return normalizedData
 }
 export const getPublicHistory = (): Observable<Transaction[]> => {
-  const data: Promise<PublicTransactionSource[]> = zpSupport.getAllHistory(TOKEN_ADDRESS)
+  const data: Promise<PublicTransactionSource[]> =
+    TOKEN_ADDRESS === 'near'
+      ? getAllHistory(TOKEN_ADDRESS)
+      : zpSupport.getAllHistory(TOKEN_ADDRESS)
 
   const normalizedData = from(data).pipe(
     tap((records) => {
