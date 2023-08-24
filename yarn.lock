@@ -13551,15 +13551,15 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-libzeropool-rs-wasm-web-mt@0.9.1:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web-mt/-/libzeropool-rs-wasm-web-mt-0.9.1.tgz#c994119ca9ecb077686cd06f4a485926b703317d"
-  integrity sha512-EYyuuBmjQGl5eJhSEbKok2IC0le5jcglK5MWXPiJMmAgNRpbT/ES1NxHkOvoaE4bR14WCi/ydiuSq0ksYz/7Nw==
+libzeropool-rs-wasm-web-mt@0.9.2:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web-mt/-/libzeropool-rs-wasm-web-mt-0.9.2.tgz#d3af6a6843e621640c2cd542c2a3eac597b134c9"
+  integrity sha512-tNgrHbWBsCevQ2xO+p/0uyzuW1238JcwyAVIRQS1FqB0I3sGLE7mb9FW5/wY3iQG9mHAkAF8xoaBAI3hjJy+6w==
 
-libzeropool-rs-wasm-web@0.9.1:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web/-/libzeropool-rs-wasm-web-0.9.1.tgz#419de2c88ae48ff1daf9b56968a76d020cf6c2a8"
-  integrity sha512-5zn9eC43uG6wopjS9/XBdPlKLRJ463jhGbCZu8sZaONeW5JjpHMnqYJegxrKRcxoT5jeXWY9b00epr0W/yhpOw==
+libzeropool-rs-wasm-web@0.9.2:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web/-/libzeropool-rs-wasm-web-0.9.2.tgz#b9e820f1430d82ecce046f9866c865b14f741898"
+  integrity sha512-/ZAg9Oh9A/lAVYHghKxRfpVYgXqap4jSQeR4etDgZVAtkzICc5t9QYGdfwo0NQGv2r4r19rJPGirxbyAjrkLig==
 
 lilconfig@^2.0.3, lilconfig@^2.0.5:
   version "2.0.6"
@@ -20947,10 +20947,10 @@ yup@^0.32.11:
     property-expr "^2.0.4"
     toposort "^2.0.2"
 
-zeropool-client-js@0.9.3:
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/zeropool-client-js/-/zeropool-client-js-0.9.3.tgz#781637be82dc494e84c37187f31575dbfcf976eb"
-  integrity sha512-iTyaPeNV3u5n5iiVAamPxz783DKSv3GRCQKdvzzE0zPi7nEt9ERpNiiyYjQwpIjz3g7hAF44864j9edK1ClU4A==
+zeropool-client-js@0.9.6:
+  version "0.9.6"
+  resolved "https://registry.yarnpkg.com/zeropool-client-js/-/zeropool-client-js-0.9.6.tgz#7330323c37eac505070a6ad593c852caa01fd001"
+  integrity sha512-cFcTx2eFqwGhjo5FoFOoNBvjSEyT2km2Gviv7yrRCXg1KmXdPNmoYHMkSvDYMGPzbo6JWSKmoNs/IHZhNgDkAA==
   dependencies:
     "@waves/ts-lib-crypto" "^1.4.4-beta.1"
     bn.js "^5.2.1"
@@ -20959,8 +20959,8 @@ zeropool-client-js@0.9.3:
     ethereumjs-util "^7.1.5"
     hdwallet-babyjub "0.0.2"
     idb "^7.1.1"
-    libzeropool-rs-wasm-web "0.9.1"
-    libzeropool-rs-wasm-web-mt "0.9.1"
+    libzeropool-rs-wasm-web "0.9.2"
+    libzeropool-rs-wasm-web-mt "0.9.2"
     near-api-js "^2.1.4"
     promise-throttle "^1.1.2"
     regenerator-runtime "^0.13.11"
