@@ -26,6 +26,7 @@ import { toast } from 'shared/helpers/toast.helper'
 import { isNonNull } from 'shared/operators/is-not-null'
 import { callFaucet } from 'wallet/api/faucet.api'
 import { Transaction } from 'shared/models/transaction'
+import { debug } from 'shared/operators/debug.operator'
 // tslint:enable: prettier max-line-length
 
 type Action$ = Observable<PayloadAction>
@@ -536,8 +537,10 @@ const getTransactions = (action$: Action$, state$: State$) => {
     filter(demoActions.getTransactions.match),
     mergeMap(() =>
       getPublicHistory$.pipe(
+        debug(),
         switchMap((publicHistory: Transaction[]) =>
           getPrivateHistory$.pipe(
+            debug(),
             map((privateHistory: Transaction[]) =>
               demoActions.getTransactionsSuccess(publicHistory.concat(privateHistory)),
             ),
@@ -558,12 +561,13 @@ const callFauset = (action$: Action$, state$: State$) => {
     filter(demoActions.faucetRequest.match),
     mergeMap(({ payload }) =>
       of(payload).pipe(
-        switchMap(({ amount, address }) =>
+        switchMap(({ amount, address, network }) =>
           from(
             callFaucet({
-              userAmount: payload.amount,
-              amount: api.zpSupport.toBaseUnit(payload.amount),
-              address: payload.address,
+              userAmount: amount,
+              amount: api.zpSupport.toBaseUnit(amount),
+              address,
+              network,
             }),
           ).pipe(
             tap((msg) => toast.success(msg)),

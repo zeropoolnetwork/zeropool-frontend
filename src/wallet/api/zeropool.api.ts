@@ -11,8 +11,10 @@ import transactionHelper, {
 import {
   catchError,
   concat,
+  forkJoin,
   from,
   map,
+  mergeMap,
   Observable,
   of,
   Subject,
@@ -27,7 +29,7 @@ import {
   EthereumClient,
   PolkadotClient,
   NearClient,
-  Client as NetworkClient,
+  Client as SupportClient,
 } from 'zeropool-support-js'
 
 import {
@@ -52,10 +54,11 @@ import {
 import { TransferData } from 'shared/models'
 
 import workersManifest from 'manifest.json'
+import { getAllHistory } from 'wallet/api/nearblocks.api'
 export { HistoryTransactionType } from 'zeropool-client-js'
 
 // #region Initialization
-export let zpSupport: NetworkClient
+export let zpSupport: SupportClient
 export let zpClient: ZeropoolClient
 export let account: string
 
@@ -153,7 +156,7 @@ export const init = async (
       network = new NearNetwork(
         RELAYER_URL,
         RPC_URL,
-        RELAYER_URL,
+        CONTRACT_ADDRESS,
         10, // TODO: Make it configurable (requestsPerSecond)
       )
 
@@ -212,7 +215,7 @@ export const init = async (
 export const mint = async (tokens: string): Promise<void> => {
   try {
     apiCheck()
-    const amount = zpSupport.toBaseUnit(tokens)
+    const amount = await zpSupport.toBaseUnit(tokens)
 
     return await zpSupport.mint(TOKEN_ADDRESS, amount)
   } catch (err: unknown) {
@@ -322,7 +325,7 @@ export const deposit = (tokens: string): Observable<Transaction> => {
   const tr$ = new Subject<Transaction>()
   const sub = apiCheck$()
     .pipe(
-      map(() => zpSupport.toBaseUnit(tokens)),
+      switchMap(() => from(zpSupport.toBaseUnit(tokens))),
       switchMap((amount) =>
         from(approve(amount)).pipe(
           tap(() => tr$.next(tr)),
@@ -376,7 +379,7 @@ export const withdraw = (tokens: string): Observable<Transaction> => {
 
   const sub = apiCheck$()
     .pipe(
-      map(() => zpSupport.toBaseUnit(tokens)),
+      switchMap(() => from(zpSupport.toBaseUnit(tokens))),
       switchMap((amount) =>
         from(getAddress()).pipe(
           tap(() => tr$.next(tr)),
@@ -432,14 +435,15 @@ export const transfer = (data: TransferData): Observable<Transaction> => {
   }
 }
 
-export const transferFunds = (to: string, amount: string): Observable<Transaction> => {
+export const transferFunds = (to: string, funds: string): Observable<Transaction> => {
   const type = 'funds'
 
   return apiCheck$().pipe(
-    switchMap(() =>
+    switchMap(() => from(zpSupport.toBaseUnit(funds))),
+    switchMap((tokens) =>
       concat(
         of(transaction(type, 'started')),
-        from(zpSupport.transfer(to, String(zpSupport.toBaseUnit(amount)))).pipe(
+        from(zpSupport.transfer(to, tokens)).pipe(
           map(() => transaction(type, 'pending')),
           catchError((e) => {
             throw Error(apiErrorHandler(e.message))
@@ -457,21 +461,16 @@ export const transferFunds = (to: string, amount: string): Observable<Transactio
 }
 export const transferPublicToPublic = (
   to: string,
-  amount: string,
+  tokens: string,
 ): Observable<Transaction> => {
   const type = 'publicToPublic'
 
   return apiCheck$().pipe(
-    switchMap(() =>
+    switchMap(() => from(zpSupport.toBaseUnit(tokens))),
+    switchMap((amount) =>
       concat(
         of(transaction(type, 'started')),
-        from(
-          zpSupport.transferToken(
-            TOKEN_ADDRESS,
-            to,
-            String(zpSupport.toBaseUnit(amount)),
-          ),
-        ).pipe(
+        from(zpSupport.transferToken(TOKEN_ADDRESS, to, amount)).pipe(
           map(() => transaction(type, 'pending')),
           catchError((e) => {
             throw Error(apiErrorHandler(e.message))
@@ -495,7 +494,7 @@ export const transferPublicToPrivate = (
   const tr$ = new Subject<Transaction>()
   const sub = apiCheck$()
     .pipe(
-      map(() => zpSupport.toBaseUnit(tokens)),
+      switchMap(() => from(zpSupport.toBaseUnit(tokens))),
       switchMap((amount) =>
         from(approve(amount)).pipe(
           // tap(() => tr$.next(tr)),
@@ -553,7 +552,7 @@ export const transferPrivateToPublic = (
   const sub = apiCheck$()
     .pipe(
       // tap(() => tr$.next(tr)),
-      map(() => zpSupport.toBaseUnit(tokens)),
+      switchMap(() => from(zpSupport.toBaseUnit(tokens))),
       switchMap((amount) =>
         from(zpClient.withdraw(TOKEN_ADDRESS, to, BigInt(amount))).pipe(
           tap((jobId: any) => tr$.next({ ...tr, status: 'pending', jobId })),
@@ -594,7 +593,7 @@ export const transferPrivateToPrivate = (
 
   const sub = apiCheck$()
     .pipe(
-      map(() => zpSupport.toBaseUnit(tokens)),
+      switchMap(() => from(zpSupport.toBaseUnit(tokens))),
       switchMap((amount) => {
         tr$.next(tr) //TODO: NOT WORKING!
 
@@ -650,28 +649,27 @@ export const getAddress = async (): Promise<string> => {
 }
 
 export const getPrivateHistory = (): Observable<Transaction[]> => {
-  if (NETWORK === 'near')
-    return throwError(() => new Error('Private history not implemented for NEAR'))
-
   const data: Promise<PrivateHistorySourceRecord[]> = zpClient
     .getState(TOKEN_ADDRESS)
     .history.getAllHistory()
 
-  const normalizedData = from(data).pipe(
+  const normalizedData$ = from(data).pipe(
     tap((records) => {
       console.log('private history', records)
     }),
-    map((records) =>
-      records
-        // .map((record) => (record.type !== 1 ? record : { ...record, to: 'Private' }))
-        .map((record) => (record.type === 3 ? record : { ...record, from: 'Private' }))
-        .map((record) =>
-          transactionHelper.fromPrivateHistory(
-            record,
-            zpSupport.fromBaseUnit.bind(zpSupport),
-            BigInt(zpClient.getDenominator(TOKEN_ADDRESS).toString()),
+    map((i) => i.map((r) => (r.type === 3 ? r : { ...r, from: 'Private' }))),
+    mergeMap((records) =>
+      from(
+        Promise.all(
+          records.map((record) =>
+            transactionHelper.fromPrivateHistory(
+              record,
+              zpSupport.fromBaseUnit.bind(zpSupport),
+              BigInt(zpClient.getDenominator(TOKEN_ADDRESS).toString()),
+            ),
           ),
         ),
+      ),
     ),
     catchError((e) => {
       console.error(e)
@@ -679,30 +677,34 @@ export const getPrivateHistory = (): Observable<Transaction[]> => {
     }),
   )
 
-  return normalizedData
+  return normalizedData$
 }
 export const getPublicHistory = (): Observable<Transaction[]> => {
-  if (NETWORK === 'near')
-    return throwError(() => new Error('Public history not implemented for NEAR'))
-
-  const data: Promise<PublicTransactionSource[]> = zpSupport.getAllHistory(TOKEN_ADDRESS)
+  const data: Promise<PublicTransactionSource[]> =
+    TOKEN_ADDRESS === 'near'
+      ? getAllHistory(TOKEN_ADDRESS, getAccountId())
+      : zpSupport.getAllHistory(TOKEN_ADDRESS)
 
   const normalizedData = from(data).pipe(
     tap((records) => {
-      console.log('public history', records)
+      console.log('Public history source:', records)
     }),
-    map((records) =>
-      records
-        // Filter out withdrawals and deposits from public history
-        .filter((record) => record.from?.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
-        .filter((record) => record.to?.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
-        .map((record) =>
-          transactionHelper.fromPublicHistory(
-            record as any,
-            zpSupport.fromBaseUnit.bind(zpSupport),
-            CONTRACT_ADDRESS,
-          ),
+    mergeMap((records) =>
+      from(
+        Promise.all(
+          records
+            // Filter out withdrawals and deposits from public history
+            .filter((r) => r.from?.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
+            .filter((r) => r.to?.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
+            .map((record) =>
+              transactionHelper.fromPublicHistory(
+                record as any,
+                zpSupport.fromBaseUnit.bind(zpSupport),
+                CONTRACT_ADDRESS,
+              ),
+            ),
         ),
+      ),
     ),
     catchError((e) => {
       console.error(e)
@@ -712,125 +714,6 @@ export const getPublicHistory = (): Observable<Transaction[]> => {
 
   return normalizedData
 }
-
-/*
-const _getWalletBalance = (token: Token, walletId: string) => {
-  // clientCheck()
-  // const coin = hdWallet.getCoin(token.name as CoinType)
-  // if (!coin) {
-  //   throw Error(`Can not access ${token.name} data!`)
-  // }
-  // return from(coin.getBalances(1, walletId).catch(promiceErrorHandler<Balance[]>([]))).pipe(
-  //   map((balances: any[]) => balances[0]),
-  //   map((balance: any) => ({
-  //     ...balance,
-  //     balance: coin.fromBaseUnit(balance.balance),
-  //   })),
-  // )
-}
-
-const _getPrivateAddress = (token: Token) => {
-  // if (!hdWallet) {
-  //   throw Error('API not available!')
-  // }
-  // const coin = hdWallet.getCoin(token.name as CoinType)
-  // if (!coin) {
-  //   throw Error(`Can't estimate fee for ${token.symbol}`)
-  // }
-  // return from([coin.generatePrivateAddress()])
-}
-
-const _getAllBalances = (amount: number, offset = 0) => {
-  // if (!hdWallet) {
-  //   throw Error('API not available!')
-  // }
-  // return from(hdWallet.getBalances(amount, offset).catch(promiceErrorHandler({})))
-}
-
-const _getNetworkFee = (token: Token) => {
-  // if (!hdWallet) {
-  //   throw Error('API not available!')
-  // }
-  // const coin = hdWallet.getCoin(token.name as CoinType)
-  // const e = `Can't estimate fee for ${token.name}`
-  // if (!coin) {
-  //   throw Error(`Can't estimate fee for ${token.symbol}`)
-  // }
-  // return from(coin.estimateTxFee().catch(promiceErrorHandler<{ fee: string }>({ fee: '' }, e)))
-}
-
-const _getWalletTransactions = (token: Token, walletId: number, mocked = false) => {
-  // if (!hdWallet) {
-  //   throw Error('API not available!')
-  // }
-  // const coin = hdWallet.getCoin(token.name as CoinType)
-  // const e = `Can't get transactions for ${token.name}`
-  // if (!coin) {
-  //   throw Error(`Can't connect to ${token.symbol}`)
-  // }
-  // //#region TODO: Fix after implementing private transactions history
-  // if (walletId === 0) {
-  //   return of([])
-  // }
-  // walletId -= 1
-  // //#endregion ---------------------------------------------------------
-  // const tr =
-  //   token.symbol === 'ETH'
-  //     ? from(
-  //         getEthTransactions(coin.getAddress(walletId), mocked).catch(
-  //           promiceErrorHandler<Transaction[]>([], e),
-  //         ),
-  //       )
-  //     : mocked
-  //     ? of(mocks.transactions[token.symbol])
-  //     : from(coin.getTransactions(walletId, 10, 0).catch(promiceErrorHandler<Transaction[]>([], e)))
-  // return tr.pipe(map(convertValues(coin)))
-}
-
-const _transfer = (account: number, to: string, amount: number, token: Token) => {
-  // if (!hdWallet) {
-  //   throw Error('API not available!')
-  // }
-  // const coin = hdWallet.getCoin(token.name as CoinType)
-  // const e = `Can't transfer ${token.name}`
-  // if (!coin) {
-  //   throw Error(`Can't estimate fee for ${token.symbol}`)
-  // }
-  // if (isPrivateAddress(to, token.symbol)) {
-  //   if (isPrivateAddress(account.toString(), token.symbol)) {
-  //     throw Error(`Not implemented.`)
-  //     // return from(
-  //     //   coin.updatePrivateState().then(() =>
-  //     //     coin.withdrawPrivate(+to, amount.toString())
-  //     //   )
-  //     // )
-  //   }
-  //   return from(
-  //     coin.updatePrivateState().then(() => {
-  //       return coin.depositShielded(account, coin.toBaseUnit(amount.toString()))
-  //     }),
-  //   )
-  // }
-  // if (isPrivateAddress(account.toString(), token.symbol)) {
-  //   throw Error(`Private local to public remote transactions are not implemented.`)
-  // }
-  // return from(coin.transfer(account, to, coin.toBaseUnit(amount.toString())))
-}
-
-const _isPrivateAddress = (address: string, token: TokenSymbol) => {
-  // if (!hdWallet) {
-  //   throw Error('API not available!')
-  // }
-  // return validateAddress(address)
-}
-
-// const _convertValues = (coin: Coin) => (transactions: Transaction[]) =>
-//   transactions.map((transaction) => ({
-//     ...transaction,
-//     amount: coin.fromBaseUnit(transaction.amount),
-//     timestamp: fixTimestamp(transaction.timestamp),
-//   }))
-*/
 
 export const apiCheck = (): boolean => {
   if (!zpSupport) throw Error('Networt Client not available!')
