@@ -26,6 +26,7 @@ import { toast } from 'shared/helpers/toast.helper'
 import { isNonNull } from 'shared/operators/is-not-null'
 import { callFaucet } from 'wallet/api/faucet.api'
 import { Transaction } from 'shared/models/transaction'
+import { debug } from 'shared/operators/debug.operator'
 // tslint:enable: prettier max-line-length
 
 type Action$ = Observable<PayloadAction>
@@ -536,8 +537,10 @@ const getTransactions = (action$: Action$, state$: State$) => {
     filter(demoActions.getTransactions.match),
     mergeMap(() =>
       getPublicHistory$.pipe(
+        debug(),
         switchMap((publicHistory: Transaction[]) =>
           getPrivateHistory$.pipe(
+            debug(),
             map((privateHistory: Transaction[]) =>
               demoActions.getTransactionsSuccess(publicHistory.concat(privateHistory)),
             ),

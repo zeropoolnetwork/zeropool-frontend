@@ -653,15 +653,15 @@ export const getPrivateHistory = (): Observable<Transaction[]> => {
     .getState(TOKEN_ADDRESS)
     .history.getAllHistory()
 
-  const normalizedData = from(data).pipe(
+  const normalizedData$ = from(data).pipe(
     tap((records) => {
       console.log('private history', records)
     }),
     map((i) => i.map((r) => (r.type === 3 ? r : { ...r, from: 'Private' }))),
     mergeMap((records) =>
-      forkJoin(
-        records.map((record) =>
-          from(
+      from(
+        Promise.all(
+          records.map((record) =>
             transactionHelper.fromPrivateHistory(
               record,
               zpSupport.fromBaseUnit.bind(zpSupport),
@@ -677,33 +677,33 @@ export const getPrivateHistory = (): Observable<Transaction[]> => {
     }),
   )
 
-  return normalizedData
+  return normalizedData$
 }
 export const getPublicHistory = (): Observable<Transaction[]> => {
   const data: Promise<PublicTransactionSource[]> =
     TOKEN_ADDRESS === 'near'
-      ? getAllHistory(TOKEN_ADDRESS)
+      ? getAllHistory(TOKEN_ADDRESS, getAccountId())
       : zpSupport.getAllHistory(TOKEN_ADDRESS)
 
   const normalizedData = from(data).pipe(
     tap((records) => {
-      console.log('public history', records)
+      console.log('Public history source:', records)
     }),
     mergeMap((records) =>
-      forkJoin(
-        records
-          // Filter out withdrawals and deposits from public history
-          .filter((r) => r.from?.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
-          .filter((r) => r.to?.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
-          .map((record) =>
-            from(
+      from(
+        Promise.all(
+          records
+            // Filter out withdrawals and deposits from public history
+            .filter((r) => r.from?.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
+            .filter((r) => r.to?.toUpperCase() !== CONTRACT_ADDRESS.toUpperCase())
+            .map((record) =>
               transactionHelper.fromPublicHistory(
                 record as any,
                 zpSupport.fromBaseUnit.bind(zpSupport),
                 CONTRACT_ADDRESS,
               ),
             ),
-          ),
+        ),
       ),
     ),
     catchError((e) => {

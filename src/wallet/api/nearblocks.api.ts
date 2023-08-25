@@ -51,11 +51,11 @@ export const fetchTransactions = (
   )
 
 export const getAllHistory = async (
-  tokenAddress?: string,
+  tokenAddtess: string,
+  walletAddress: string,
   apiKey?: string,
 ): Promise<any[]> => {
-  const address = await Promise.resolve(tokenAddress || 'near')
-  const fundTransactions = await fetchTransactions(address, apiKey)
+  const fundTransactions = await fetchTransactions(walletAddress, apiKey)
 
   return fundTransactions
 }
@@ -72,7 +72,7 @@ export const convertToPublicTransactionSource = (
     transactionIndex: '0',
     from: tx.predecessor_account_id,
     to: tx.receiver_account_id,
-    value: tx.actions_agg.deposit.toString(),
+    value: convertNumberToString(tx.actions_agg.deposit),
     gas: '0',
     gasPrice: '0',
     input: '',
@@ -86,7 +86,29 @@ export const convertToPublicTransactionSource = (
   }
 }
 
-const sepoliaExample = {
+// Converts big numbers like 2e24 to string like '2000000000000000000000000'
+export const convertNumberToString = (num: number): string => {
+  const numString = num.toString()
+  const numStringArray = numString.split('e')
+  const numStringArrayLength = numStringArray.length
+
+  if (numStringArrayLength === 1) return numStringArray[0]
+
+  let [base, exponent] = numStringArray
+  let e = +exponent
+  let result = ''
+  let counter = 0
+
+  while (counter < e) {
+    result += '0'
+    counter++
+  }
+  return base + result
+}
+
+// #region Examples of PublicHistorySourceRecord
+
+const sepoliaExample: PublicHistorySourceRecord = {
   blockNumber: '7809762',
   blockHash: '0x71c2cd9dc87389ab5b6d12f1d13186be35e9e38e527b30f20cbcba2177a105fa',
   timeStamp: '1666376844',
@@ -103,14 +125,13 @@ const sepoliaExample = {
   methodId: '0x095ea7b3',
   functionName: 'approve(address spender, uint256 tokens)',
   contractAddress: '',
-  cumulativeGasUsed: '298921',
   txreceipt_status: '1',
   gasUsed: '46608',
   confirmations: '1535075',
   isError: '0',
 }
 
-export const mockedResponse = {
+const mockedResponse = {
   txns: [
     {
       receipt_id: '5YfapHf2JKQZGHywc19FUCLFyrieQMZCbvib5rCDZTei',
@@ -789,4 +810,6 @@ export const mockedResponse = {
     },
   ],
 }
+
+// #endregion
 
