@@ -30,7 +30,11 @@ import './DemoPage.scss'
 import logo from 'assets/images/logo1.svg'
 import { badAmount } from 'shared/utils/bad-amount'
 import { TransferData } from 'shared/models'
-import { version as VERSION } from 'index'
+import {
+  version as VERSION,
+  supportVersion as SUPPORT,
+  clientVersion as CLIENT,
+} from 'index'
 
 import {
   selectBackdrop,
@@ -327,7 +331,9 @@ export const DemoPage: React.FC<{}> = () => {
       </Paper>
 
       <div className={bem('Footer')}>
-        <div className={bem('Version')}>{`v${VERSION}`}</div>
+        <div className={bem('Version1')}>{`wallet v${VERSION}`}</div>
+        <div className={bem('Version2')}>{`client v${CLIENT}`}</div>
+        <div className={bem('Version3')}>{`support v${SUPPORT}`}</div>
         <img className={bem('Logo')} src={logo} alt="ZeroPool" />
       </div>
 

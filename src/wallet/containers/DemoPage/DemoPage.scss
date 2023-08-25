@@ -138,12 +138,22 @@
     }
   }
 
-  &-Version {
+  &-Version1,
+  &-Version2,
+  &-Version3 {
     position: absolute;
     top: 4px;
     right: 8px;
     font-size: 14px;
     color: $blue-light;
+  }
+
+  &-Version2 {
+    top: 20px;
+  }
+
+  &-Version3 {
+    top: 36px;
   }
 
   &-AboutPage {

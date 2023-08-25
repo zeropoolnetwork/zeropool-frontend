@@ -21,6 +21,8 @@ import { theme } from 'theme'
 import packageJson from '../package.json'
 
 export const version = packageJson.version
+export const clientVersion = packageJson.client
+export const supportVersion = packageJson.support
 
 const root = createRoot(document.getElementById('root'))
 let PUBLIC_URL: string
