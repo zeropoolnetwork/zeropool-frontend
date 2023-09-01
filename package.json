@@ -1,6 +1,6 @@
 {
   "name": "zeropool-frontend",
-  "version": "0.23.7dev",
+  "version": "0.23.8dev",
   "client": "0.9.6",
   "support": "0.7.2",
   "license": "MIT",
@@ -9,7 +9,7 @@
     "bdd": "cucumber-js --publish",
     "start": "webpack --config webpack.worker.conf.js && mv ./workers/manifest.json src && react-app-rewired start",
     "build": "set \"PUBLIC_URL=/\" && webpack --config webpack.worker.conf.js && mv ./workers/manifest.json src && env-cmd react-app-rewired build",
-    "publish": "set VERSION=0.23.7 && env-cmd ./publish-docker",
+    "publish": "set VERSION=0.23.8 && env-cmd ./publish-docker",
     "publish:dev": "set VERSION=DEV && env-cmd ./publish-docker",
     "publish:test": "set VERSION=TEST && env-cmd ./publish-docker",
     "publish:release": "set VERSION=RELEASE && env-cmd ./publish-docker",

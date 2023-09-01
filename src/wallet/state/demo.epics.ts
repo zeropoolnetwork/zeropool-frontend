@@ -537,10 +537,8 @@ const getTransactions = (action$: Action$, state$: State$) => {
     filter(demoActions.getTransactions.match),
     mergeMap(() =>
       getPublicHistory$.pipe(
-        debug(),
         switchMap((publicHistory: Transaction[]) =>
           getPrivateHistory$.pipe(
-            debug(),
             map((privateHistory: Transaction[]) =>
               demoActions.getTransactionsSuccess(publicHistory.concat(privateHistory)),
             ),

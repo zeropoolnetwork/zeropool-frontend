@@ -47,6 +47,7 @@ export const fetchTransactions = (
       .then((response) => response.txns)
       .then((data) => data.filter((tr: any) => tr.actions_agg?.deposit !== 0))
       .then((data) => data.filter((tr: any) => tr.actions[0]?.action === 'TRANSFER'))
+      .then((data) => data.filter((tr: any) => tr.predecessor_account_id !== 'system'))
       .then((data) => data.map(convertToPublicTransactionSource)),
   )
 
@@ -812,4 +813,3 @@ const mockedResponse = {
 }
 
 // #endregion
-
