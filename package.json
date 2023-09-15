@@ -1,6 +1,6 @@
 {
   "name": "zeropool-frontend",
-  "version": "0.23.8dev",
+  "version": "0.23.8",
   "client": "0.9.6",
   "support": "0.7.2",
   "license": "MIT",
