@@ -75,7 +75,10 @@ const mint: Epic = (action$, state$) => {
   return action$.pipe(
     filter(demoActions.mint.match),
     tap(({ payload }) =>
-      toast.info(`Minting ${payload} tokens...`, { key: 'mint', persist: true }),
+      toast.info(`Minting ${payload} tokens, it can take up to few minutes...`, {
+        key: 'mint',
+        persist: true,
+      }),
     ),
     switchMap(({ payload }) =>
       from(api.mint(payload)).pipe(

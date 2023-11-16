@@ -320,14 +320,20 @@ export const DemoPage: React.FC<{}> = () => {
 
         {NETWORK !== 'near' ? (
           <span className={bem('InfoText')}>
-            Click on your public address and use it on our or on the&nbsp;
+            Click on your public address and use it on &nbsp;
             {/* <a href='https://fauceth.komputing.org/?chain=5' target={'_blank'}>Goerli Faucet</a> or&nbsp; */}
             <a href={NETWORK_FAUCET} target={'_blank'} rel="noreferrer">
               {NETWORK_NAME} Faucet
             </a>{' '}
-            page to get free funds.
+            page to get free funds. You can get test tokens on your public address by
+            pressing Mint button.
           </span>
         ) : null}
+
+        <span>
+          Then you can transfer tokens to your private addressn and back using Deposit and
+          Withdrow buttons.
+        </span>
       </Paper>
 
       <div className={bem('Footer')}>

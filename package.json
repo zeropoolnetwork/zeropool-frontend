@@ -1,8 +1,8 @@
 {
   "name": "zeropool-frontend",
-  "version": "0.23.8dev",
-  "client": "0.9.6",
-  "support": "0.7.2",
+  "version": "0.23.11dev",
+  "client": "0.9.7",
+  "support": "0.7.7",
   "license": "MIT",
   "private": false,
   "scripts": {
@@ -62,8 +62,8 @@
     "typescript": "^4.3.5",
     "wallet.ts": "1.0.1",
     "webpack-version-file-plugin": "^0.4.0",
-    "zeropool-client-js": "0.9.6",
-    "zeropool-support-js": "0.7.2"
+    "zeropool-client-js": "0.9.7",
+    "zeropool-support-js": "0.7.7"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^8.2.1",
