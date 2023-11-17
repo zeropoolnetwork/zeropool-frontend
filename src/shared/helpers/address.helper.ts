@@ -2,7 +2,10 @@ import { isEthereumAddress } from 'shared/helpers/validators/eth.validator'
 import { TokenSymbol } from 'shared/models'
 import { toPlainString } from 'shared/utils/toPlainString'
 
-export const validateAddress = (address: string, symbol: TokenSymbol): boolean | undefined => {
+export const validateAddress = (
+  address: string,
+  symbol: TokenSymbol,
+): boolean | undefined => {
   let result
   const supportedSymbols = ['ETH', 'WAVES', 'NEAR']
 
@@ -35,10 +38,7 @@ export type beautifyAddressProps = {
   limit?: number
 }
 
-export const beautifyAddress = ({
-  address,
-  limit = 4,
-}: beautifyAddressProps): string => {
+export const beautifyAddress = ({ address, limit = 4 }: beautifyAddressProps): string => {
   let result = ''
 
   if (address.includes('.') || address.toLocaleLowerCase().includes('private')) {
@@ -53,7 +53,6 @@ export const beautifyAddress = ({
 }
 
 export const beautifyAmount = (amount: string | number): string => {
-
   if (typeof amount === 'number') {
     amount = toPlainString(amount)
   }
@@ -78,7 +77,7 @@ export const beautifyAmount = (amount: string | number): string => {
     const prefix = amount.slice(0, prefixLength)
 
     return `${prefix.replace(/0+$/g, '')}...`
-  } else if (amountNum > 9999999) {
+  } else if (amountNum > 99999999) {
     const prefixLength = 8
     const prefix = amount.slice(0, prefixLength)
 
