@@ -56,7 +56,6 @@ describe('amount beautifyer', () => {
     expect(beautifyAmount(amount)).toBe(result)
   })
 
-
   it('transforms amount 999.123456789 to 999.123...', () => {
     const amount = '999.123456789'
     const result = '999.123...'
@@ -84,5 +83,18 @@ describe('amount beautifyer', () => {
 
     expect(beautifyAmount(amount)).toBe(result)
   })
-})
 
+  it('transforms amount of 232342349 withot changes', () => {
+    const amount = '232342349'
+    const result = '23234234...'
+
+    expect(beautifyAmount(amount)).toBe(result)
+  })
+
+  it('returns amount of 23234234 withot changes', () => {
+    const amount = '23234234'
+    const result = '23234234'
+
+    expect(beautifyAmount(amount)).toBe(result)
+  })
+})
