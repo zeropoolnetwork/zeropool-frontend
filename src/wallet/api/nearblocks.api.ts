@@ -108,7 +108,7 @@ export const convertNumberToString = (num: number): string => {
 }
 
 // #region Examples of PublicHistorySourceRecord
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const sepoliaExample: PublicHistorySourceRecord = {
   blockNumber: '7809762',
   blockHash: '0x71c2cd9dc87389ab5b6d12f1d13186be35e9e38e527b30f20cbcba2177a105fa',
@@ -132,6 +132,7 @@ const sepoliaExample: PublicHistorySourceRecord = {
   isError: '0',
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const mockedResponse = {
   txns: [
     {

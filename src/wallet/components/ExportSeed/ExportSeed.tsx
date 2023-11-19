@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
 import { cn } from '@bem-react/classname'
-import { Button, FormControl, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
+import {
+  Button,
+  FormControl,
+  IconButton,
+  Input,
+  InputAdornment,
+  InputLabel,
+} from '@mui/material'
 
 import './ExportSeed.scss'
 
@@ -15,13 +22,19 @@ export type EditWalletProps = {
   onCancel: () => void
 }
 
-export const ExportSeed: React.FC<EditWalletProps> = ({
-  onExport,
-  onCancel,
-}) => {
+export const ExportSeed: React.FC<EditWalletProps> = ({ onExport, onCancel }) => {
   const [showPassword, setShowPassword] = useState(false)
   const [password, setPassword] = useState('')
   const minLength = 4
+
+  const handleInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && password.length >= minLength) {
+      onExport(password)
+      e.preventDefault()
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+    }
+  }
 
   return (
     <form className={bem()} data-testid={bem()}>
@@ -40,6 +53,7 @@ export const ExportSeed: React.FC<EditWalletProps> = ({
           onChange={(event) => {
             setPassword(event.target.value)
           }}
+          onKeyDown={handleInput}
           endAdornment={
             <InputAdornment position="end">
               <IconButton

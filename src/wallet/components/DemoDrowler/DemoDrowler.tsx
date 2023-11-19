@@ -1,7 +1,14 @@
 import { cn } from '@bem-react/classname'
 import React, { useState } from 'react'
 import { FileCopy, Logout } from '@mui/icons-material'
-import { Dialog, DialogContent, List, ListItem, ListItemIcon, ListItemText } from '@mui/material'
+import {
+  Dialog,
+  DialogContent,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material'
 
 import './DemoDrowler.scss'
 
@@ -20,10 +27,15 @@ export type DemoDrowlerProps = {
   cancelExport: () => void
 }
 
-export const DemoDrowler: React.FC<DemoDrowlerProps> = ({ toggle, reset, exportSeed, cancelReset, cancelExport }) => {
+export const DemoDrowler: React.FC<DemoDrowlerProps> = ({
+  toggle,
+  reset,
+  exportSeed,
+  cancelReset,
+  cancelExport,
+}) => {
   const [resetDialog, setResetDialog] = useState(false)
   const [seedDialog, setSeedDialog] = useState(false)
-  
 
   return (
     <div
@@ -78,7 +90,7 @@ export const DemoDrowler: React.FC<DemoDrowlerProps> = ({ toggle, reset, exportS
           />
         </DialogContent>
       </Dialog>
-      
+
       <Dialog
         onClose={() => setSeedDialog(false)}
         open={seedDialog}
@@ -88,7 +100,10 @@ export const DemoDrowler: React.FC<DemoDrowlerProps> = ({ toggle, reset, exportS
         <DialogContent dividers={true}>
           <ExportSeed
             data-testid={bem('ConfirmSeed')}
-            onExport={(password) => exportSeed(password)}
+            onExport={(password) => {
+              setSeedDialog(false)
+              exportSeed(password)
+            }}
             onCancel={() => {
               setSeedDialog(false)
               cancelExport()

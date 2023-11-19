@@ -45,8 +45,6 @@ export const Fauset: React.FC<FaucetProps> = () => {
     dispatch(demoActions.faucetRequest({ address, amount, network }))
   }
 
-  const handleFaucetReset = () => setFaucet(InitialFaucetState)
-
   return (
     <Paper className={bem()} elevation={2}>
       <div className={bem('Container')}>
@@ -92,4 +90,3 @@ export const Fauset: React.FC<FaucetProps> = () => {
     </Paper>
   )
 }
-
