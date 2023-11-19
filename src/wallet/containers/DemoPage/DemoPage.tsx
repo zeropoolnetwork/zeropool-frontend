@@ -41,7 +41,6 @@ import {
   selectDeposit,
   selectReadiness,
   selectInitials,
-  selectMinting,
   selectPrivateAddress,
   selectPrivateBalance,
   selectPublicBalance,

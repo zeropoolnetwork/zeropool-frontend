@@ -1,4 +1,3 @@
-// tslint:disable: prettier max-line-length
 import {
   catchError,
   delay,
@@ -26,8 +25,8 @@ import { toast } from 'shared/helpers/toast.helper'
 import { isNonNull } from 'shared/operators/is-not-null'
 import { callFaucet } from 'wallet/api/faucet.api'
 import { Transaction } from 'shared/models/transaction'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { debug } from 'shared/operators/debug.operator'
-// tslint:enable: prettier max-line-length
 
 type Action$ = Observable<PayloadAction>
 type State$ = Observable<RootState>

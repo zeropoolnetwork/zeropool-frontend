@@ -5,13 +5,11 @@ import HDWalletProvider from '@truffle/hdwallet-provider'
 
 import transactionHelper, {
   PrivateHistorySourceRecord,
-  PublicHistorySourceRecord,
 } from 'wallet/state/helpers/transaction.helper'
 
 import {
   catchError,
   concat,
-  forkJoin,
   from,
   map,
   mergeMap,
