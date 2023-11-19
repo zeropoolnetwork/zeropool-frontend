@@ -56,7 +56,7 @@ describe('Convert transaction type from number to TransactionType type value', (
     type: 4,
   }
 
-  const out: Transaction = {
+  const outSource: Record<string, string | number> = {
     status: 'success',
     type: 'withdraw',
     amount: '1',
@@ -66,6 +66,14 @@ describe('Convert transaction type from number to TransactionType type value', (
     timestamp: 1664897388000,
   }
 
+  const out = (
+    mod: Record<string, string | number> = {},
+  ): Promise<Record<string, string | number>> =>
+    new Promise((resolve) => ({
+      ...outSource,
+      ...mod,
+    }))
+
   const fromBaseUnit = (value: string): Promise<string> => {
     return Promise.resolve((Number(value) / 10 ** 18).toString())
   }
@@ -74,37 +82,33 @@ describe('Convert transaction type from number to TransactionType type value', (
 
   it('shold convert withdraw(4) transaction type', () => {
     const source = transaction
-    const result = out
 
     expect(
       transactionHelper.fromPrivateHistory(source, fromBaseUnit, denominator),
-    ).toEqual(result)
+    ).toEqual(out())
   })
 
   it('shold convert privateToPrivateOut transaction type', () => {
     const source = { ...transaction, type: 3 }
-    const result = { ...out, type: 'privateToPrivateOut' }
 
     expect(
       transactionHelper.fromPrivateHistory(source, fromBaseUnit, denominator),
-    ).toEqual(result)
+    ).toEqual(out({ type: 'privateToPrivateOut' }))
   })
 
   it('shold convert privateToPrivateIn(2) transaction type', () => {
     const source = { ...transaction, type: 2 }
-    const result = { ...out, type: 'privateToPrivateIn' }
 
     expect(
       transactionHelper.fromPrivateHistory(source, fromBaseUnit, denominator),
-    ).toEqual(result)
+    ).toEqual(out({ type: 'privateToPrivateIn' }))
   })
 
   it('shold convert loopback(5) transaction type', () => {
     const source = { ...transaction, type: 5 }
-    const result = { ...out, type: 'loopback' }
 
     expect(
       transactionHelper.fromPrivateHistory(source, fromBaseUnit, denominator),
-    ).toEqual(result)
+    ).toEqual(out({ type: 'loopback' }))
   })
 })

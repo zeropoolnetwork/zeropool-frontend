@@ -1,6 +1,6 @@
 # Zero Pool Wallet
 
-version: 0.23.10
+version: 0.23.11
 
 ## Supported networks
 
