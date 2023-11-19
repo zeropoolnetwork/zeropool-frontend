@@ -325,7 +325,7 @@ export const DemoPage: React.FC<{}> = () => {
             <a href={NETWORK_FAUCET} target={'_blank'} rel="noreferrer">
               {NETWORK_NAME} Faucet
             </a>{' '}
-            page to get free funds. You can get test tokens on your public address by
+            page to get free Eth. Then you can get test tokens on your public address by
             pressing Mint button.
           </span>
         ) : null}
