@@ -61,3 +61,5 @@ Runs local server to show test coverage report.
 If it doesn't help, try to remove `node_modules` folder and run `yarn install` again.
 
 ## Deployment
+
+1. `yarn publish[:dev/:test/:release]` - publishes docker container with built application to the registry

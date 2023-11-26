@@ -1,18 +1,20 @@
 services:
-  kovan:
-    image: antonpegov/zeropool-frontend
-    container_name: kovan
+  wallet:
+    image: antonpegov/zeropool-frontend:DEV
+    container_name: zeropool-wallet-dev
     restart: always
     ports:
-      - "80:80"
+      - '80:80'
     environment:
-      - REACT_APP_NETWORK=ethereum
-      - REACT_APP_RPC_URL=https://kovan.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161
-      - REACT_APP_RELAYER_URL=https://kovan.testnet.relayer.v2.zeropool.network/
-      - REACT_APP_TOKEN_ADDRESS=0xcda2B3489aCDB31A428bd33fcAEE5c7c50919b35
-      - REACT_APP_CONTRACT_ADDRESS=0xC40Dd5B1250F4A7E70E1823d1D8eAbEA247cB1B3
+      - REACT_APP_TOKEN=eth
       - REACT_APP_PUBLIC_URL='/'
-      - PUBLIC_URL='/'
-      - REACT_APP_TRANSACTION_URL='https://kovan.etherscan.io/tx/{{hash}}'
+      - REACT_APP_NETWORK=ethereum
+      - REACT_APP_NETWORK_NAME=Sepolia
+      - REACT_APP_NETWORK_FAUCET=https://sepoliafaucet.com/
+      - REACT_APP_RPC_URL=https://sepolia.rpc.zeropool.network
+      - REACT_APP_RELAYER_URL=https://sepolia.testnet.relayer.v2.zeropool.network
+      - REACT_APP_TOKEN_ADDRESS=0x25004028Dd2743FF487454eAB2216d3495667189
+      - REACT_APP_CONTRACT_ADDRESS=0xEcbD5fabA99139B2cA25f19B568fF74991a01eD3
+      - REACT_APP_TRANSACTION_URL='https://sepolia.etherscan.io/tx/{{hash}}'
     volumes:
       - ./static/assets:/usr/share/nginx/html/assets

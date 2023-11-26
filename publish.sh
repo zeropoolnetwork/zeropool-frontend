@@ -4,7 +4,7 @@ USERNAME=antonpegov
 IMAGE=zeropool-frontend
 
 yarn build && \
-docker build -f Dockerfile.prod -t $USERNAME/$IMAGE:latest . && \
+docker build -f ./docker/Dockerfile -t $USERNAME/$IMAGE:latest . && \
 docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$VERSION && \
 docker push $USERNAME/$IMAGE:latest && \
 docker push $USERNAME/$IMAGE:$VERSION
