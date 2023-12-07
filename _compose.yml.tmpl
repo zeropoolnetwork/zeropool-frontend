@@ -1,0 +1,26 @@
+services:
+  wallet:
+    image: antonpegov/zeropool-frontend:${VERSION}
+    container_name: wallet-${NETWORK_NAME}
+    restart: always
+    environment:
+      - REACT_APP_TOKEN=${TOKEN_NAME}
+      - REACT_APP_NETWORK=${NETWORK}
+      - REACT_APP_NETWORK_NAME=${NETWORK_NAME}
+      - REACT_APP_NETWORK_FAUCET=${FAUCET}
+      - REACT_APP_RPC_URL=${RPC_HOST}
+      - REACT_APP_RELAYER_URL=${RELAYER}
+      - REACT_APP_TOKEN_ADDRESS=${TOKEN}
+      - REACT_APP_CONTRACT_ADDRESS=${CONTRACT}
+      - REACT_APP_PUBLIC_URL=/
+      - REACT_APP_TRANSACTION_URL=${TRANSACTION}
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - LETSENCRYPT_HOST=${VIRTUAL_HOST}
+      - LETSENCRYPT_EMAIL=mail@test.com
+    volumes:
+      - /root/params:/usr/share/nginx/html/assets
+
+networks:
+  default:
+    external: true
+    name: zeropool-testnet

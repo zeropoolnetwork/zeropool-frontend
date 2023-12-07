@@ -1,13 +1,15 @@
+# local compose file for testing
+
 services:
   wallet:
-    image: antonpegov/zeropool-frontend:DEV
+    image: antonpegov/zeropool-frontend:latest
     container_name: zeropool-wallet-dev
     restart: always
     ports:
       - '80:80'
     environment:
       - REACT_APP_TOKEN=eth
-      - REACT_APP_PUBLIC_URL='/'
+      - REACT_APP_PUBLIC_URL=/
       - REACT_APP_NETWORK=ethereum
       - REACT_APP_NETWORK_NAME=Sepolia
       - REACT_APP_NETWORK_FAUCET=https://sepoliafaucet.com/

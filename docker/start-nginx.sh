@@ -15,3 +15,5 @@ echo "Changed ${original} (${tmp})"
 cat $original && echo "\n"
 
 nginx -g 'daemon off;'
+
+
