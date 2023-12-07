@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# ------------------------------------------------------------------
+# [Author] Anton Pegov
+#          Publish the new version of the app to the Docker Hub
+# ------------------------------------------------------------------
 
 set -e
 
@@ -10,11 +14,9 @@ SEPARATOR="_"
 # Get the current Git branch
 GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
-# If the current branch is master, then use "latest" as a tag
+# If the current branch is not master, then use it's name as a tag
 if [ "$GIT_BRANCH" != "master" ]; then
   VERSION="$GIT_BRANCH"
-
-  echo "Current branch is $GIT_BRANCH"
 
   # Get the list of tags for the Docker image from Docker Hub
   TAGS=$(curl -s https://registry.hub.docker.com/v2/repositories/$USERNAME/$IMAGE/tags)
@@ -22,12 +24,8 @@ if [ "$GIT_BRANCH" != "master" ]; then
   # Extract the tags that match the version format [MY_VERSION]___[ANY_NUMBER]
   MATCHING_TAGS=$(echo $TAGS | jq -r '.results[] | select(.name | test("^'$VERSION$SEPARATOR'\\d+$")) | .name')
 
-  echo "MATCHING_TAGS: $MATCHING_TAGS"
-
   # Get the last tag by splitting the tags by newline and taking the last one
   LAST_TAG=$(echo "$MATCHING_TAGS" | sort -t $SEPARATOR -k 2 -n | tail -n 1)
-
-  echo "LAST_TAG: $LAST_TAG"
 
   if [ -z "$LAST_TAG" ]; then
       echo "No image with tag format $VERSION$SEPARATOR[ANY_NUMBER] exists"
@@ -47,4 +45,4 @@ docker tag $USERNAME/$IMAGE:$VERSION $USERNAME/$IMAGE:latest && \
 docker push $USERNAME/$IMAGE:$VERSION && \
 docker push $USERNAME/$IMAGE:latest
 
-echo $USERNAME/$IMAGE:$VERSION
+echo $VERSION

@@ -1,4 +1,4 @@
-RPC_HOST     = "sepolia.rpc.zeropool.network"
+RPC_HOST     = "https://sepolia.rpc.zeropool.network"
 VIRTUAL_HOST = "sepolia.testnet.frontend.ENV.v2.zeropool.network"
 
 NETWORK_NAME = "Sepolia" # TODO: rename to "sepolia"

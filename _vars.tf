@@ -1,7 +1,7 @@
 
 variable "RPC_HOST" {
   type    = string
-  default = "sepolia.rpc.zeropool.network"
+  default = "https://sepolia.rpc.zeropool.network"
 }
 
 variable "VIRTUAL_HOST" {

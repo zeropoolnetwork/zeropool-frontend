@@ -21,4 +21,4 @@ case "$1" in
     ;;
 esac
 
-terraform apply -auto-approve -replace="null_resource.this" -var-file='_sepolia.tfvars' -var="VERSION=$1" -var="ENV=$2"
+terraform apply -auto-approve -replace="null_resource.this" -var-file='_sepolia.tfvars' -var="VERSION=$2" -var="ENV=$1"
