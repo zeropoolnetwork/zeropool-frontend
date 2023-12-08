@@ -89,7 +89,7 @@ export const DemoPage: React.FC<{}> = () => {
   const withdraw = useSelector(selectWithdraw)
   const transfer = useSelector(selectTransfer)
   const readiness = useSelector(selectReadiness)
-  const recorevery = useSelector(selectRecovery)
+  const recovery = useSelector(selectRecovery)
   const transferModal = useSelector(selectTransferModal)
   const transactionsModal = useSelector(selectTransactionLogModal)
   const canMint = useSelector(selectCanMint)
@@ -154,11 +154,11 @@ export const DemoPage: React.FC<{}> = () => {
 
           <div className={bem('ToolbarBody')}>
             <DemoHeader
-              walletAddress={backdrop || recorevery ? '-' : walletAddress}
-              privateAddress={backdrop || recorevery ? '-' : privateAddress}
-              publicBalance={backdrop || recorevery ? '-' : publicBalance}
-              privateBalance={backdrop || recorevery ? '-' : privateBalance}
-              tokenBalance={backdrop || recorevery ? '-' : tokenBalance}
+              walletAddress={backdrop || recovery ? '-' : walletAddress}
+              privateAddress={backdrop || recovery ? '-' : privateAddress}
+              publicBalance={backdrop || recovery ? '-' : publicBalance}
+              privateBalance={backdrop || recovery ? '-' : privateBalance}
+              tokenBalance={backdrop || recovery ? '-' : tokenBalance}
             />
           </div>
         </Toolbar>
@@ -363,7 +363,7 @@ export const DemoPage: React.FC<{}> = () => {
         ></DemoDrowler>
       </SwipeableDrawer>
 
-      <Dialog open={recorevery} fullWidth={true} maxWidth={'xs'}>
+      <Dialog open={recovery} fullWidth={true} maxWidth={'xs'}>
         <DialogContent dividers={true}>
           <Recovery
             data-testid={bem('Recovery')}
@@ -403,13 +403,13 @@ export const DemoPage: React.FC<{}> = () => {
       </Dialog>
 
       <Dialog
+        open={transactionsModal}
         PaperProps={{
           style: {
             width: '550px',
             margin: '10% 2%',
           },
         }}
-        open={transactionsModal}
       >
         <DialogContent>
           <Transactions
